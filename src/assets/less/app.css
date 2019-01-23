@@ -1,0 +1,78 @@
+.siderWrapper {
+  width: auto !important;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  background: linear-gradient(135deg, #2F4050 0%, #3a4753 100%);
+}
+.siderWrapper ul {
+  flex: 1;
+  overflow: auto;
+  background: linear-gradient(135deg, #2F4050 0%, #3a4753 100%) !important;
+}
+.siderWrapper .el-submenu__title:hover {
+  cursor: pointer;
+  background: linear-gradient(135deg, transparent 0%, #2c3b4b 50%, transparent 100%);
+}
+.siderWrapper .el-menu {
+  border-right: 0;
+  overflow: hidden;
+}
+.siderWrapper .el-menu i {
+  font-size: 14px;
+  margin-right: 5px;
+  color: #eee;
+}
+.siderWrapper .el-menu-item {
+  background: #202c36;
+}
+.siderWrapper .el-menu-item:hover {
+  color: #1CC09F !important;
+}
+.siderWrapper .el-menu-item.is-active {
+  color: #1CC09F !important;
+  font-weight: bold;
+}
+.siderWrapper .logoWrap {
+  width: 200px;
+  text-align: center;
+  z-index: 100;
+  right: 0;
+  top: 0;
+  padding: 5px;
+  position: absolute;
+}
+.siderWrapper .isCollapse-group {
+  font-size: 18px;
+  text-align: center;
+  display: inline-block;
+  background: #304151;
+  color: #fff;
+  height: 40px;
+  line-height: 40px;
+}
+.siderWrapper .isCollapse-group:hover {
+  background: #42596e;
+}
+.el-container,
+.mainContentWrapper {
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+.el-footer {
+  height: 30px !important;
+  border-top: solid 1px #eee;
+  line-height: 30px;
+  text-align: right;
+  font-size: 14px;
+  color: #666;
+}
+.el-submenu__title {
+  color: #eee;
+}
+.siderWrapper .el-menu-item {
+  color: #eee;
+  width: 190px;
+}

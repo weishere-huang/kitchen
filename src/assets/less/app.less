@@ -1,0 +1,87 @@
+.siderWrapper {
+    width: auto !important;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    background: linear-gradient(135deg, #2F4050 0%, rgb(58, 71, 83) 100%);
+    ul {
+        flex: 1;
+        overflow: auto; //height: 100%; //background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
+        //-webkit-transition: all .2s linear !important;
+        //background-color: #2F4050 !important;
+        background: linear-gradient(135deg, #2F4050 0%, rgb(58, 71, 83) 100%) !important;
+    }
+    .el-submenu__title {
+        //-webkit-transition: all 1s linear !important;
+        &:hover {
+            cursor: pointer;
+            background: linear-gradient(135deg, transparent 0%, rgb(44, 59, 75) 50%, transparent 100%)
+        }
+    }
+    .el-menu {
+        border-right: 0;
+        overflow: hidden;
+        i {
+            font-size: 14px;
+            margin-right: 5px;
+            color: #eee;
+        }
+    }
+    .el-menu-item {
+        background: #202c36;
+        &:hover {
+            color: #1CC09F !important; //background: linear-gradient(135deg, transparent 0%, rgb(38, 52, 65) 50%, transparent 100%)
+        }
+        &.is-active {
+            color: #1CC09F !important;
+            font-weight: bold //background: linear-gradient(135deg, transparent 0%, rgb(38, 52, 65) 50%, transparent 100%)
+        }
+    }
+    .logoWrap {
+        width: 200px;
+        text-align: center;
+        z-index: 100;
+        right: 0;
+        top: 0;
+        padding: 5px;
+        position: absolute
+    }
+    .isCollapse-group {
+        font-size: 18px; //padding: 3px 5px;
+        text-align: center;
+        display: inline-block;
+        background: #304151;
+        color: #fff;
+        height: 40px;
+        line-height: 40px;
+        &:hover {
+            background: #42596e;
+        }
+    }
+}
+
+.el-container,
+.mainContentWrapper {
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.el-footer {
+    height: 30px !important;
+    border-top: solid 1px #eee;
+    line-height: 30px;
+    text-align: right;
+    font-size: 14px;
+    color: #666;
+}
+
+.el-submenu__title {
+    color: #eee;
+}
+
+.siderWrapper .el-menu-item {
+    color: #eee;
+    width: 190px;
+}

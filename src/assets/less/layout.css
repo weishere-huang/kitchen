@@ -1,0 +1,68 @@
+@font-face {
+  font-family: 'iconfont';
+  /* project id 1025433 */
+  src: url('//at.alicdn.com/t/font_1025433_dhikycjq3ad.eot');
+  src: url('//at.alicdn.com/t/font_1025433_dhikycjq3ad.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_1025433_dhikycjq3ad.woff2') format('woff2'), url('//at.alicdn.com/t/font_1025433_dhikycjq3ad.woff') format('woff'), url('//at.alicdn.com/t/font_1025433_dhikycjq3ad.ttf') format('truetype'), url('//at.alicdn.com/t/font_1025433_dhikycjq3ad.svg#iconfont') format('svg');
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 14px;
+  font-style: normal;
+  color: #eee;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h4 {
+  font-size: 16px;
+}
+.el-breadcrumb__item:last-child .el-breadcrumb__inner {
+  color: white;
+}
+.el-breadcrumb__inner,
+.is-link {
+  color: white !important;
+  font-weight: normal !important;
+}
+.el-button--text {
+  color: #1cc09f;
+}
+.el-button--text:hover {
+  color: #3cdfbe;
+  text-decoration: underline;
+}
+.el-button--text:focus {
+  color: #3cdfbe;
+}
+.el-button--text:active {
+  color: #3cdfbe;
+}
+.el-button--primary {
+  font-size: 14px;
+  background-color: #1cc09f;
+  color: white;
+}
+.el-button--primary:hover {
+  background-color: #53d4bb;
+  color: white;
+}
+.el-button--primary:focus {
+  background-color: #53d4bb;
+  color: white;
+}
+.el-button--primary:active {
+  color: white;
+  border-color: #53d4bb;
+  outline: 0;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #1cc09f;
+  color: #fff;
+}
+.el-pagination {
+  font-weight: normal;
+}
+.el-table--mini,
+.el-table--small,
+.el-table__expand-icon {
+  font-size: 14px;
+}
