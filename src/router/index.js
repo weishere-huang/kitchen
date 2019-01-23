@@ -3,12 +3,9 @@ import Router from 'vue-router'
 import Home from '@/components/home/index'
 import Order from '@/components/order/index'
 import Store from '@/components/store/index'
-
+import Details from '@/components/order/Details'
 
 Vue.use(Router)
-
-
-
 const router = new Router({
   mode: 'history',
   routes: [{
@@ -36,7 +33,17 @@ const router = new Router({
       meta: {
         requireAuth: false,
       },
-      children: []
+      children: [{
+        path: 'Details',
+        name: 'Details',
+        component: Details,
+        props: {
+          pageName: '订单详情'
+        },
+        meta: {
+          requireAuth: false,
+        },
+      }]
     },
     {
       path: '/Store',

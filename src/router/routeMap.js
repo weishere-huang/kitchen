@@ -23,6 +23,12 @@ export default [{
         defaultDock: true,
         permissionCode: 'order_look_up'
       },
+      {
+        menu: '订单详情',
+        route: '/Order/Details',
+        defaultDock: true,
+        permissionCode: 'order_details_look_up'
+      },
     ]
   },
   {
