@@ -1,0 +1,92 @@
+//主要为全部菜单结构和权限的配置，visible=true不在菜单显示，defaultDock=true会跳过lookUp权限默认在菜单显示
+//permissionCode为权限映射码，若permissionCode未对应到用户权限则不显示也无跳转访问权限
+//route和routeReg为匹配路由，二者必须有一个，若都有则为“或”逻辑
+export default [{
+    menu: '平台主页',
+    permissionCode: 'home',
+    defaultDock: true,
+    icon: '&#xe626;',
+    subMenu: [{
+      menu: '首页',
+      route: '/Home',
+      permissionCode: ''
+    }]
+  },
+  {
+    menu: '订单管理',
+    permissionCode: 'order',
+    defaultDock: true,
+    icon: '&#xe60d;',
+    subMenu: [{
+        menu: '订单列表',
+        route: '/Order',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+    ]
+  },
+  {
+    menu: '商城管理',
+    permissionCode: 'store',
+    defaultDock: true,
+    icon: '&#xe634;',
+    subMenu: [{
+      menu: '订单列表',
+      route: '/Store',
+      permissionCode: ''
+    }]
+  },
+  {
+    menu: '菜谱管理',
+    permissionCode: 'cookbook',
+    defaultDock: true,
+    icon: '&#xe640;',
+    subMenu: []
+  },
+  {
+    menu: '文章管理',
+    permissionCode: 'article',
+    defaultDock: true,
+    icon: '&#xe67d;',
+    subMenu: []
+  },
+  {
+    menu: '用户管理',
+    permissionCode: 'user',
+    defaultDock: true,
+    icon: '&#xe646;',
+    subMenu: []
+  },
+  {
+    menu: '系统管理',
+    permissionCode: 'system',
+    defaultDock: true,
+    icon: '&#xe633;',
+    subMenu: []
+  },
+
+  //预留样式模板
+  // {
+  //   menu: '员工管理',
+  //   permissionCode: 'personnel"',
+  //   icon: '&#xe68d;',
+  //   subMenu: [{
+  //       menu: '员工管理',
+  //       route: '/Personnel',
+  //       permissionCode: 'employee_lookup'
+  //     },
+  //     {
+  //       menu: '员工详情',
+  //       routeReg: /^\/Personnel\/Modification\/\d{1,}$/i,
+  //       visible: true,
+  //       permissionCode: 'employee_modification_lookup'
+  //     },
+  //     {
+  //       menu: '添加员工',
+  //       route: "/Personnel/PersnnelAdd",
+  //       visible: true,
+  //       permissionCode: 'employee_add_lookup'
+  //     }
+  //   ]
+  // },
+]
