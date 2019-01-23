@@ -33,17 +33,18 @@ const router = new Router({
       meta: {
         requireAuth: false,
       },
-      children: [{
-        path: 'Details',
-        name: 'Details',
-        component: Details,
-        props: {
-          pageName: '订单详情'
-        },
-        meta: {
-          requireAuth: false,
-        },
-      }]
+      children: []
+    },
+    {
+      path: '/Details',
+      name: 'Details',
+      component: Details,
+      props: {
+        pageName: '订单详情'
+      },
+      meta: {
+        requireAuth: false,
+      },
     },
     {
       path: '/Store',

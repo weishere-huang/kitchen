@@ -1,5 +1,5 @@
 <template>
-  <div class="order_list">
+  <div  class="order_list">
     <div class="top_case">
       <div class="top_title">
         <h4>订单列表</h4>
@@ -87,6 +87,7 @@
           :rowDblclick="getRow"
           :handle="100"
           :detalisShow="true"
+          :handleShow="true"
         ></table-list>
         <div style="margin-top:20px;float:left;padding-left:10px;">
           <el-button size="small">发货</el-button>
@@ -405,7 +406,7 @@ export default {
           paly: "支付宝",
           state: "待付款 | 待发货"
         }
-      ],
+      ]
       // userIds: ""
     };
   },
@@ -425,8 +426,8 @@ export default {
       }
       if (params.type === "detalis") {
         console.log(params);
-        // this.userIds = params.rowData.order;
-        // this.$router.push({ path: "/Order/Details/" + this.userIds });
+        this.userIds = params.rowData.order;
+        this.$router.push({ path: "/Order/Details/" + this.userIds });
       }
     },
     handleSelectionChange(selection) {

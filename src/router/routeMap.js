@@ -25,7 +25,8 @@ export default [{
       },
       {
         menu: '订单详情',
-        route: '/Order/Details',
+        route: '/Details',
+        // routeReg: /^\/Order\/Details\/\d{1,}$/i,
         defaultDock: true,
         permissionCode: 'order_details_look_up'
       },
