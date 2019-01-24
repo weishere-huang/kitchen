@@ -38,10 +38,21 @@ export default [{
     defaultDock: true,
     icon: '&#xe634;',
     subMenu: [{
-      menu: '订单列表',
-      route: '/Store',
-      permissionCode: ''
-    }]
+        menu: '商品列表',
+        route: '/Store',
+        permissionCode: ''
+      },
+      {
+        menu: '商品分类',
+        route: '/Classify',
+        permissionCode: ''
+      },
+      {
+        menu: '添加商品',
+        route: '/AddMenu',
+        permissionCode: ''
+      }
+    ]
   },
   {
     menu: '菜谱管理',

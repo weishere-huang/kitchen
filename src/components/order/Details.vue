@@ -134,7 +134,7 @@
               >打印订单</el-button>
             </el-form-item>
             <el-form-item label="备注信息：">
-              <el-input type="textarea"></el-input>
+              <el-input type="textarea" rows="6"></el-input>
             </el-form-item>
             <el-form-item label="">
               <el-button

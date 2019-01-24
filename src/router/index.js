@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import Home from '@/components/home/index'
 import Order from '@/components/order/index'
 import Store from '@/components/store/index'
+import Classify from '@/components/store/Classify'
 import Details from '@/components/order/Details'
+import AddMenu from '@/components/store/AddMenu'
 
 Vue.use(Router)
 const router = new Router({
@@ -52,6 +54,28 @@ const router = new Router({
       component: Store,
       props: {
         pageName: '订单列表'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Classify',
+      name: 'Classify',
+      component: Classify,
+      props: {
+        pageName: '商品分类'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/AddMenu',
+      name: 'AddMenu',
+      component: AddMenu,
+      props: {
+        pageName: '添加商品'
       },
       meta: {
         requireAuth: false,
