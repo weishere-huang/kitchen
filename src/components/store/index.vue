@@ -247,9 +247,10 @@
 </template>
 <script>
 export default {
+  inject:['reload'],
   data() {
     return {
-      currentPage:1,
+      currentPage: 1,
       value: "",
       options: [
         {

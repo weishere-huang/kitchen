@@ -1,5 +1,5 @@
 <template>
-  <div class="area_case">
+  <div class="area_list">
     <div class="province_case">
       <ul>
         <li
@@ -19,16 +19,37 @@
         >{{city}}</el-checkbox>
       </el-checkbox-group>
     </div>
+    <div
+      class="district_case"
+      v-if="districtShow"
+    >
+      <el-checkbox-group v-model="checkedCities">
+        <el-checkbox
+          v-for="city in distric"
+          :label="city"
+          :key="city"
+        >{{city}}</el-checkbox>
+      </el-checkbox-group>
+    </div>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    districtShow: {},
+    // province:{},
+    // cities:{},
+    // distric:{}
+    // getMsg:{}
+  },
   data() {
     return {
       activeIndex: "0",
       checkedCities: [],
-      cities: ["成都市", "遂宁市", "泸州市", "雅安市", "绵阳市", "南充市","成都市", "遂宁市", "泸州市", "雅安市", "绵阳市", "南充市"],
-      province: ["四川", "北京", "云南", "西藏", "湖北", "湖南", "广东","四川", "北京", "云南", "西藏", "湖北", "湖南", "广东"]
+      cities: ["成都市", "遂宁市", "泸州市", "雅安市", "绵阳市", "南充市"],
+      province: ["四川", "北京", "云南", "西藏", "湖北", "湖南", "广东"],
+      distric:[],
+      // districtShow: [],
     };
   },
   methods: {
@@ -46,13 +67,17 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.area_case {
+.area_list {
+  display: flex;
+  // flex-direction: row;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
   font-size: 14px;
   color: @font-normal;
   overflow: hidden;
-  padding: 10px 30px;
+  padding: 10px 0;
   .province_case {
-    float: left;
+    // float: left;
     width: 140px;
     height: 200px;
     overflow: scroll;
@@ -73,7 +98,39 @@ export default {
   }
   .city_case {
     width: 140px;
-    float: right;
+    // float: left;
+    border: @border;
+    border-radius: 5px;
+    padding: 5px;
+    height: 200px;
+    overflow: scroll;
+    // margin-left: 20px;
+    .el-checkbox + .el-checkbox {
+      margin-left: 0px;
+    }
+    .el-checkbox {
+      display: block;
+      line-height: 20px;
+      margin-bottom: 5px;
+      padding: 0 10px;
+    }
+    .el-checkbox__input {
+      float: right;
+      line-height: 23px;
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner,
+    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+      background-color: #1cc09f;
+      border-color: #1cc09f;
+    }
+    .el-checkbox__input.is-checked + .el-checkbox__label {
+      color: @font-normal;
+    }
+  }
+  .district_case {
+    // margin-left: 20px;
+    width: 140px;
+    // float: left;
     border: @border;
     border-radius: 5px;
     padding: 5px;
@@ -97,8 +154,8 @@ export default {
       background-color: #1cc09f;
       border-color: #1cc09f;
     }
-    .el-checkbox__input.is-checked+.el-checkbox__label{
-        color: @font-normal;
+    .el-checkbox__input.is-checked + .el-checkbox__label {
+      color: @font-normal;
     }
   }
   .active_class {

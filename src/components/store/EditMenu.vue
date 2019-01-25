@@ -9,7 +9,7 @@
     </div>
     <div class="bottom_list">
       <div class="top_title">
-        <h4>添加商品</h4>
+        <h4>修改商品</h4>
       </div>
       <el-form label-width="200px">
         <el-form-item label="商品名称：">
@@ -129,7 +129,15 @@
         </el-form-item>
         <el-form-item label="销售区域：">
           <div class="area_case">
-            <div class="top_case">支持一下区域：<span><i class="el-icon-edit-outline"></i></span></div>
+            <div class="top_case">支持一下区域：
+              <span>
+                <i
+                  class="el-icon-edit-outline"
+                  @click="areaShow=true"
+                ></i>
+                <i class="iconfont">&#xe623;</i>
+              </span>
+            </div>
             <div class="content_case">
               <ul>
                 <li>
@@ -149,17 +157,11 @@
           </div>
         </el-form-item>
         <el-form-item label="详细内容：">
-          <div
-            class=""
-            style="width:800px;"
-          >
-            <ueditor
-              :defaultMsg=defaultMsg
-              :config=config
-              ref="ue"
-            ></ueditor>
-
-          </div>
+          <el-input
+            type="textarea"
+            rows="5"
+            style="width:600px;"
+          ></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button
@@ -174,13 +176,36 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog
+      title="选择销售区域"
+      :visible.sync="areaShow"
+      width="360px"
+    >
+      <area-list></area-list>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="areaShow = false"
+          size="small"
+        >取 消</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="areaShow = false"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import ueditor from "../public/Ue";
+import areaList from "../public/Area";
 export default {
   data() {
     return {
+      areaShow: false,
       radio5: "",
       defaultMsg: "",
       config: {
@@ -203,13 +228,7 @@ export default {
   },
   methods: {
     getUEContent() {
-      let content = this.$refs.ue.getUEContent();
-      this.$notify({
-        title: "获取成功，可在控制台查看！",
-        message: content,
-        type: "success"
-      });
-      console.log(content);
+      
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -218,18 +237,12 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    submits() {
-      this.uedata.push(UE.getEditor("editor").getContent());
-      console.log(this.uedata);
-    },
-    xieru() {
-      UE.getEditor("editor").setContent("欢迎使用ueditor");
-    }
   },
 
   mounted() {},
   components: {
-    ueditor
+    ueditor,
+    areaList
   }
 };
 </script>
@@ -280,9 +293,11 @@ export default {
             font-size: 16px;
             float: right;
             line-height: 40px;
-            cursor: pointer;
-            &:hover {
-              i {
+            color: #333333;
+            i {
+              cursor: pointer;
+              color: #333333;
+              &:hover {
                 color: #1cc09f;
               }
             }
@@ -302,15 +317,23 @@ export default {
       }
       .el-radio-button__inner:focus {
         background-color: #1cc09f;
-         border-color: #1cc09f;
+        border-color: #1cc09f;
       }
       .el-radio-button__inner:active {
         background-color: #1cc09f;
-         border-color: #1cc09f;
+        border-color: #1cc09f;
       }
       .el-radio-button__orig-radio:checked + .el-radio-button__inner {
         background-color: #1cc09f;
-         border-color: #1cc09f;
+        border-color: #1cc09f;
+      }
+      .el-checkbox__input.is-checked .el-checkbox__inner,
+      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+        background-color: #1cc09f;
+        border-color: #1cc09f;
+      }
+      .el-checkbox__input.is-checked + .el-checkbox__label {
+        color: #1cc09f;
       }
     }
   }

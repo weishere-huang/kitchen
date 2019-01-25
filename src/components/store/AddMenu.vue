@@ -129,7 +129,13 @@
         </el-form-item>
         <el-form-item label="销售区域：">
           <div class="area_case">
-            <div class="top_case">支持一下区域：<span @click="areaShow=true"><i class="el-icon-edit-outline"></i></span></div>
+            <div class="top_case">支持一下区域：
+              <span>
+                <i
+                  class="el-icon-edit-outline"
+                  @click="areaShow=true"
+                ></i>
+                <i class="iconfont">&#xe623;</i></span></div>
             <div class="content_case">
               <ul>
                 <li>
@@ -149,17 +155,11 @@
           </div>
         </el-form-item>
         <el-form-item label="详细内容：">
-          <div
-            class=""
-            style="width:800px;"
-          >
-            <ueditor
-              :defaultMsg=defaultMsg
-              :config=config
-              ref="ue"
-            ></ueditor>
-
-          </div>
+          <el-input
+            type="textarea"
+            rows="5"
+            style="width:600px;"
+          ></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button
@@ -177,9 +177,9 @@
     <el-dialog
       title="选择销售区域"
       :visible.sync="areaShow"
-      width="400px"
+      width="360px"
     >
-      <area-list></area-list>
+      <area-list :districtShow="false"></area-list>
       <span
         slot="footer"
         class="dialog-footer"
@@ -304,9 +304,10 @@ export default {
             font-size: 16px;
             float: right;
             line-height: 40px;
-            cursor: pointer;
-            &:hover {
-              i {
+            i {
+              cursor: pointer;
+              color: #333333;
+              &:hover {
                 color: #1cc09f;
               }
             }
@@ -318,6 +319,11 @@ export default {
             list-style-type: none;
             line-height: 30px;
           }
+        }
+      }
+      .ue_box {
+        .el-form-item__content {
+          line-height: 20px;
         }
       }
       .el-radio-button__inner:hover {
@@ -336,7 +342,18 @@ export default {
         background-color: #1cc09f;
         border-color: #1cc09f;
       }
+      .el-checkbox__input.is-checked .el-checkbox__inner,
+      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+        background-color: #1cc09f;
+        border-color: #1cc09f;
+      }
+      .el-checkbox__input.is-checked + .el-checkbox__label {
+        color: #1cc09f;
+      }
     }
   }
+}
+.dddd{
+  min-width: 400px;
 }
 </style>

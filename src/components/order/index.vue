@@ -427,7 +427,7 @@ export default {
       if (params.type === "detalis") {
         console.log(params);
         this.userIds = params.rowData.order;
-        this.$router.push({ path: "/Order/Details/" + this.userIds });
+        // this.$router.push({ path: "/Order/Details/" + this.userIds });
       }
     },
     handleSelectionChange(selection) {

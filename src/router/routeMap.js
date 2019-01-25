@@ -51,6 +51,11 @@ export default [{
         menu: '添加商品',
         route: '/AddMenu',
         permissionCode: ''
+      },
+      {
+        menu: '修改商品',
+        route: '/EditMenu',
+        permissionCode: ''
       }
     ]
   },
@@ -60,6 +65,32 @@ export default [{
     defaultDock: true,
     icon: '&#xe640;',
     subMenu: []
+  },
+  {
+    menu: '信息管理',
+    permissionCode: 'msg',
+    defaultDock: true,
+    icon: '&#xe629;',
+    subMenu: [
+       {
+         menu: '服务网点',
+         route: '/Service',
+         permissionCode: ''
+       }
+    ]
+  },
+  {
+    menu: '销售区域',
+    permissionCode: 'area',
+    defaultDock: true,
+    icon: '&#xe605;',
+    subMenu: [
+      {
+      menu: '销售区域',
+      route: '/SalesArea',
+      permissionCode: ''
+      }
+    ]
   },
   {
     menu: '文章管理',

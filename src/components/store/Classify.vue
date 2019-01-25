@@ -309,6 +309,9 @@ export default {
   .el-radio__inner:hover {
     border-color: #1cc09f;
   }
+  .el-dialog__footer {
+    padding: 10px 50px 20px;
+  }
 }
 </style>
 
