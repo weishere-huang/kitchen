@@ -20,6 +20,10 @@ import VueRippler from 'vue-rippler'
 import global from './components/global/Global'
 import './assets/less/app.less'
 import './assets/less/layout.less'
+import '../static/UE/ueditor.config'
+import '../static/UE/ueditor.all'
+import '../static/UE/ueditor.parse'
+// import '../static/UE/lang/zh-cn/zh-cn'
 Vue.prototype.global = global;
 import {
   VTable,
@@ -49,7 +53,7 @@ Vue.prototype.axios = axios;
 Vue.prototype.Axios = Axios;
 axios.defaults.withCredentials = true;
 window.EventBus = new Vue();
-let permissionUrl=[];
+let permissionUrl = [];
 var instance = axios.create({});
 //弹框消失
 Vue.directive('clickoutside', {

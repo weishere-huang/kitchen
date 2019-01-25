@@ -72,6 +72,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       inject: true,
       chunks: ['login']
     }),
+    new HtmlWebpackPlugin({
+      filename: 'forgetpassword.html',
+      template: 'forgetpassword.html',
+      inject: true,
+      chunks: ['forgetpassword']
+    }),
     // new HtmlWebpackPlugin({
     //   template: '/src/assets/image/favicon.ico',
     //   favicon: './favicon.ico'

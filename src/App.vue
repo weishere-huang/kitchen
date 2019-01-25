@@ -331,6 +331,8 @@ export default {
   &:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
+    // max-width: 90vh;
+    overflow: scroll;
   }
 }
 
