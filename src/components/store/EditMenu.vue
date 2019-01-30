@@ -5,6 +5,7 @@
         size="small"
         type="primary"
         class="el-icon-arrow-left"
+        @click="$router.back(-1)"
       >返回</el-button>
     </div>
     <div class="bottom_list">
@@ -61,25 +62,25 @@
             size="small"
           >
             <el-radio-button label="1"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe612;</i></el-radio-button>
+              class="iconfont"
+              style="color:red;"
+            >&#xe612;</i></el-radio-button>
             <el-radio-button label="2"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe613;</i></el-radio-button>
+              class="iconfont"
+              style="color:red;"
+            >&#xe613;</i></el-radio-button>
             <el-radio-button label="3"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe614;</i></el-radio-button>
+              class="iconfont"
+              style="color:red;"
+            >&#xe614;</i></el-radio-button>
             <el-radio-button label="4"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe612;</i></el-radio-button>
+              class="iconfont"
+              style="color:red;"
+            >&#xe612;</i></el-radio-button>
             <el-radio-button label="5"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe612;</i></el-radio-button>
+              class="iconfont"
+              style="color:red;"
+            >&#xe612;</i></el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="净含量：">
@@ -200,142 +201,163 @@
   </div>
 </template>
 <script>
-import ueditor from "../public/Ue";
-import areaList from "../public/Area";
-export default {
-  data() {
-    return {
-      areaShow: false,
-      radio5: "",
-      defaultMsg: "",
-      config: {
-        initialFrameWidth: null,
-        initialFrameHeight: 350
+  import ueditor from "../public/Ue";
+  import areaList from "../public/Area";
+  export default {
+    data() {
+      return {
+        areaShow: false,
+        radio5: "",
+        defaultMsg: "",
+        config: {
+          initialFrameWidth: null,
+          initialFrameHeight: 350
+        },
+        newMeny: "",
+        hotMenu: "",
+        up: "",
+        classifyValue: "",
+        classify: [
+          {
+            value: "1",
+            label: "炒菜"
+          }
+        ],
+        dialogImageUrl: "",
+        dialogVisible: false
+      };
+    },
+    methods: {
+      getUEContent() {
+        this.editfood();
       },
-      newMeny: "",
-      hotMenu: "",
-      up: "",
-      classifyValue: "",
-      classify: [
-        {
-          value: "1",
-          label: "炒菜"
-        }
-      ],
-      dialogImageUrl: "",
-      dialogVisible: false
-    };
-  },
-  methods: {
-    getUEContent() {
-      
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-  },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      editfood(){
+        let qs = require("qs");
+        let data = qs.stringify({
 
-  mounted() {},
-  components: {
-    ueditor,
-    areaList
-  }
-};
+        });
+        this.Axios({
+          params:data,
+          url:"",
+          type:"post",
+          option:{
+            successMsg:"编辑成功"
+          }
+        },this).then(result=>{
+          console.log(result.data);
+          if(result.data.code===200){
+            this.$router.push('/store');
+          }else{
+            this.$message.error("编辑失败,请重新尝试")
+          }
+        })
+      }
+    },
+
+    mounted() {},
+    components: {
+      ueditor,
+      areaList
+    }
+  };
 </script>
 <style lang="less">
-@main-color: #1cc09f;
-@bgColor: #f0f2f5;
-@font-normal: #333333;
-@font-subsidiary: #999999;
-@font-special: #1cc09f;
-@border: 1px solid #dde2eb;
-.add_menu {
-  font-size: 14px;
-  color: @font-normal;
-  .top_list {
-    background-color: white;
-    padding: 10px;
-  }
-  .bottom_list {
-    background-color: white;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    overflow: hidden;
-    .top_title {
-      padding: 0 10px;
-      line-height: 60px;
-      overflow: hidden;
-      border-bottom: @border;
-      h4 {
-        float: left;
-      }
+  @main-color: #1cc09f;
+  @bgColor: #f0f2f5;
+  @font-normal: #333333;
+  @font-subsidiary: #999999;
+  @font-special: #1cc09f;
+  @border: 1px solid #dde2eb;
+  .add_menu {
+    font-size: 14px;
+    color: @font-normal;
+    .top_list {
+      background-color: white;
+      padding: 10px;
     }
-    .el-form {
-      margin-top: 20px;
-      .el-dialog__body {
-        padding: 0;
-        font-size: 0;
-        line-height: 0;
+    .bottom_list {
+      background-color: white;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      overflow: hidden;
+      .top_title {
+        padding: 0 10px;
+        line-height: 60px;
+        overflow: hidden;
+        border-bottom: @border;
+        h4 {
+          float: left;
+        }
       }
-      .area_case {
-        width: 600px;
-        border: @border;
-        border-radius: 5px;
-        .top_case {
-          line-height: 40px;
-          padding: 0 15px;
-          border-bottom: @border;
-          span {
-            font-size: 16px;
-            float: right;
+      .el-form {
+        margin-top: 20px;
+        .el-dialog__body {
+          padding: 0;
+          font-size: 0;
+          line-height: 0;
+        }
+        .area_case {
+          width: 600px;
+          border: @border;
+          border-radius: 5px;
+          .top_case {
             line-height: 40px;
-            color: #333333;
-            i {
-              cursor: pointer;
+            padding: 0 15px;
+            border-bottom: @border;
+            span {
+              font-size: 16px;
+              float: right;
+              line-height: 40px;
               color: #333333;
-              &:hover {
-                color: #1cc09f;
+              i {
+                cursor: pointer;
+                color: #333333;
+                &:hover {
+                  color: #1cc09f;
+                }
               }
             }
           }
-        }
-        .content_case {
-          padding: 0px 15px;
-          li {
-            list-style-type: none;
-            line-height: 30px;
+          .content_case {
+            padding: 0px 15px;
+            li {
+              list-style-type: none;
+              line-height: 30px;
+            }
           }
         }
-      }
-      .el-radio-button__inner:hover {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
-      }
-      .el-radio-button__inner:focus {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
-      }
-      .el-radio-button__inner:active {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
-      }
-      .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
-      }
-      .el-checkbox__input.is-checked .el-checkbox__inner,
-      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
-      }
-      .el-checkbox__input.is-checked + .el-checkbox__label {
-        color: #1cc09f;
+        .el-radio-button__inner:hover {
+          background-color: #1cc09f;
+          border-color: #1cc09f;
+        }
+        .el-radio-button__inner:focus {
+          background-color: #1cc09f;
+          border-color: #1cc09f;
+        }
+        .el-radio-button__inner:active {
+          background-color: #1cc09f;
+          border-color: #1cc09f;
+        }
+        .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+          background-color: #1cc09f;
+          border-color: #1cc09f;
+        }
+        .el-checkbox__input.is-checked .el-checkbox__inner,
+        .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+          background-color: #1cc09f;
+          border-color: #1cc09f;
+        }
+        .el-checkbox__input.is-checked + .el-checkbox__label {
+          color: #1cc09f;
+        }
       }
     }
   }
-}
 </style>

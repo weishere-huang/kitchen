@@ -6,7 +6,8 @@
         type="primary"
         class="el-icon-circle-plus-outline"
         @click="dialogVisible=true"
-      >添加分类</el-button>
+      >添加分类
+      </el-button>
     </div>
     <div class="bottom_list">
       <div class="top_title">
@@ -83,12 +84,14 @@
                 type="text"
                 size="mini"
                 @click.stop.prevent="handleEdit(scope.$index, scope.row)"
-              >修改</el-button>
+              >修改
+              </el-button>
               <el-button
                 type="text"
                 size="mini"
                 @click.stop.prevent="handleDelete(scope.$index, scope.row)"
-              >删除</el-button>
+              >删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -125,11 +128,13 @@
           <el-radio
             v-model="isShow"
             label="1"
-          >是</el-radio>
+          >是
+          </el-radio>
           <el-radio
             v-model="isShow"
             label="2"
-          >否</el-radio>
+          >否
+          </el-radio>
         </el-form-item>
       </el-form>
       <span
@@ -177,11 +182,13 @@
           <el-radio
             v-model="isShow"
             label="1"
-          >是</el-radio>
+          >是
+          </el-radio>
           <el-radio
             v-model="isShow"
             label="2"
-          >否</el-radio>
+          >否
+          </el-radio>
         </el-form-item>
       </el-form>
       <span
@@ -202,116 +209,136 @@
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      editClassify: false,
-      isShow: "1",
-      dialogVisible: false,
-      value: "",
-      tableData: [
-        {
-          name: "炒菜",
-          price: "9.8",
-          classify: "素菜",
-          number: "10",
-          time: "5",
-          content: "400克",
-          show: "0",
-          new: "0",
-          hot: "1",
-          sort: "100"
+  export default {
+    data() {
+      return {
+        editClassify: false,
+        isShow: "1",
+        dialogVisible: false,
+        value: "",
+        tableData: [
+          {
+            name: "炒菜",
+            price: "9.8",
+            classify: "素菜",
+            number: "10",
+            time: "5",
+            content: "400克",
+            show: "0",
+            new: "0",
+            hot: "1",
+            sort: "100"
+          }
+        ]
+      };
+    },
+    methods: {
+      handleEdit(index, rowData) {
+        let params = {type: "edit", index: index, rowData: rowData};
+        console.log(params);
+        this.editClassify = true;
+      },
+      handleDelete(index, rowData) {
+        let params = {type: "delete", index: index, rowData: rowData};
+        console.log(params);
+      },
+      changeUp(index, val) {
+        console.log(val.new);
+        if (val.up === "1") {
+          this.tableData[index].up = "0";
+        } else {
+          this.tableData[index].up = "1";
         }
-      ]
-    };
-  },
-  methods: {
-    handleEdit(index, rowData) {
-      let params = { type: "edit", index: index, rowData: rowData };
-      console.log(params);
-      this.editClassify = true;
-    },
-    handleDelete(index, rowData) {
-      let params = { type: "delete", index: index, rowData: rowData };
-      console.log(params);
-    },
-    changeUp(index, val) {
-      console.log(val.new);
-      if (val.up === "1") {
-        this.tableData[index].up = "0";
-      } else {
-        this.tableData[index].up = "1";
+      },
+      getClassfy() {
+        this.Axios(
+          {
+            params: {},
+            option: {},
+            type: "get",
+            url: ""
+          },
+          this
+        ).then(
+          result => {
+            this.tableData = result.data.data.content;
+          },
+          ({type, info}) => {
+          }
+        );
       }
+    },
+    created(){
+      this.getClassfy();
     }
-  }
-};
+  };
 </script>
 
 <style lang="less">
-@main-color: #1cc09f;
-@bgColor: #f0f2f5;
-@font-normal: #333333;
-@font-subsidiary: #999999;
-@font-special: #1cc09f;
-@border: 1px solid #dde2eb;
-.classify_list {
-  font-size: 14px;
-  color: @font-normal;
-  .top_list {
-    // line-height: 60px;
-    background-color: white;
-    padding: 10px;
-  }
-  .bottom_list {
-    background-color: white;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    overflow: hidden;
-    .top_title {
-      padding: 0 10px;
-      line-height: 60px;
-      overflow: hidden;
-      border-bottom: @border;
-      h4 {
-        float: left;
-      }
-      .top_search {
-        width: 400px;
-        float: right;
-      }
-    }
-    .table_list {
-      overflow: hidden;
+  @main-color: #1cc09f;
+  @bgColor: #f0f2f5;
+  @font-normal: #333333;
+  @font-subsidiary: #999999;
+  @font-special: #1cc09f;
+  @border: 1px solid #dde2eb;
+  .classify_list {
+    font-size: 14px;
+    color: @font-normal;
+    .top_list {
+      // line-height: 60px;
+      background-color: white;
       padding: 10px;
-      .el-input__inner {
-        padding: 0;
-        border: none;
-        &:focus {
-          border: 1px solid #1cc09f;
+    }
+    .bottom_list {
+      background-color: white;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      overflow: hidden;
+      .top_title {
+        padding: 0 10px;
+        line-height: 60px;
+        overflow: hidden;
+        border-bottom: @border;
+        h4 {
+          float: left;
+        }
+        .top_search {
+          width: 400px;
+          float: right;
+        }
+      }
+      .table_list {
+        overflow: hidden;
+        padding: 10px;
+        .el-input__inner {
+          padding: 0;
+          border: none;
+          &:focus {
+            border: 1px solid #1cc09f;
+          }
         }
       }
     }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    .el-radio__input.is-checked .el-radio__inner {
+      border-color: #1cc09f;
+      background: #1cc09f;
+    }
+    .el-radio__input.is-checked + .el-radio__label {
+      color: #1cc09f;
+    }
+    .el-radio__inner:hover {
+      border-color: #1cc09f;
+    }
+    .el-dialog__footer {
+      padding: 10px 50px 20px;
+    }
   }
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
-  .el-radio__input.is-checked .el-radio__inner {
-    border-color: #1cc09f;
-    background: #1cc09f;
-  }
-  .el-radio__input.is-checked + .el-radio__label {
-    color: #1cc09f;
-  }
-  .el-radio__inner:hover {
-    border-color: #1cc09f;
-  }
-  .el-dialog__footer {
-    padding: 10px 50px 20px;
-  }
-}
 </style>
 
