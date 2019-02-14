@@ -80,9 +80,9 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="[15, 30, 100]"
-          :page-size="100"
+          :page-size="10"
           layout="sizes, prev, pager, next"
-          :total="1000"
+          :total="total"
         >
         </el-pagination>
       </div>
@@ -101,12 +101,12 @@ export default {
       items: [
         {
           label: "网点名称",
-          prop: "name",
+          prop: "title",
           width: 120
         },
         {
           label: "地区",
-          prop: "area",
+          prop: "areaCode",
           width: 80
         },
         {
@@ -116,17 +116,17 @@ export default {
         },
         {
           label: "服务热线",
-          prop: "service",
+          prop: "phone",
           width: 80
         },
         {
           label: "工作时间",
-          prop: "workTime",
+          prop: "workingHours",
           width: 70
         },
         {
           label: "服务范围",
-          prop: "range",
+          prop: "serviceMode",
           width: 60
         }
       ],
@@ -139,15 +139,23 @@ export default {
           workTime: "09:00 - 18:00",
           range: "送修、寄修",
         }
-      ]
+      ],
+      pageIndex:1,
+      pageSize:10,
+      total:10
     };
   },
   methods: {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.pageIndex=1;
+      this.pageSize=val;
+      this.getServiceList();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.pageIndex=val;
+      this.getServiceList();
     },
     handlechange(params) {
       if (params.type === "edit") {
@@ -167,7 +175,33 @@ export default {
     },
     getRow(row, event) {
       console.log(row);
+    },
+    getServiceList(){
+      this.Axios(
+        {
+          params: {
+            page: this.pageIndex,
+            size: this.pageSize,
+          },
+          option: {
+
+          },
+          type: "get",
+          url: "/api-platform/network/list"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.tableData = result.data.data.content;
+          this.total=result.data.data.totalElement;
+        },
+        ({ type, info }) => {}
+      );
     }
+  },
+  created(){
+    this.getServiceList();
   },
   components: {
     tableList

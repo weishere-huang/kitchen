@@ -5,6 +5,7 @@
         size="small"
         type="primary"
         class="el-icon-arrow-left"
+        @click="$router.back(-1)"
       >返回</el-button>
     </div>
     <div class="bottom_list">
@@ -14,6 +15,7 @@
       <el-form label-width="200px">
         <el-form-item label="商品名称：">
           <el-input
+
             type="text"
             size="small"
             style="width:300px;"
@@ -226,13 +228,14 @@ export default {
   },
   methods: {
     getUEContent() {
-      let content = this.$refs.ue.getUEContent();
-      this.$notify({
-        title: "获取成功，可在控制台查看！",
-        message: content,
-        type: "success"
-      });
-      console.log(content);
+      // let content = this.$refs.ue.getUEContent();
+      // this.$notify({
+      //   title: "获取成功，可在控制台查看！",
+      //   message: content,
+      //   type: "success"
+      // });
+      // console.log(content);
+      this.savespu();
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -247,6 +250,27 @@ export default {
     },
     xieru() {
       UE.getEditor("editor").setContent("欢迎使用ueditor");
+    },
+    savespu(){
+      let qs = require("qs");
+      let data = qs.stringify({
+
+      });
+      this.Axios({
+        params:data,
+        url:"",
+        type:"post",
+        option:{
+          successMsg:"保存成功"
+        }
+      },this).then(result=>{
+        console.log(result.data);
+        if(result.data.code===200){
+          this.$router.push('/store');
+        }else{
+          this.$message.error("出库失败,请重新尝试")
+        }
+      })
     }
   },
 
