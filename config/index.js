@@ -14,7 +14,7 @@ module.exports = {
       '/api': {
         //target: 'http://www.hyazi.com:9881',
         //target: 'http://localhost:8888',
-        target:'http://192.168.1.104:9880',
+        target:'http://192.168.1.104:8861',
         pathRewrite: {
           "^/api": ""
         },
@@ -51,6 +51,7 @@ module.exports = {
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
     login: path.resolve(__dirname, '../dist/login.html'),
+    forgetpassword: path.resolve(__dirname, '../dist/forgetpassword.html'),
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',

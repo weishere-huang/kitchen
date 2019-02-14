@@ -5,6 +5,7 @@
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
+        @click="$router.push('/AddMenu')"
       >添加商品</el-button>
     </div>
     <div class="bottom_list">
@@ -37,13 +38,14 @@
               size="small"
               style="width:100%;"
               placeholder=""
+              v-model="keyword"
             ></el-input>
           </el-col>
           <el-col
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small">搜索</el-button>
+            <el-button size="small" @click="">搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -209,17 +211,17 @@
               <el-button
                 type="text"
                 size="mini"
-                @click="handleDetails(scope.$index, scope.row)"
+                @click.stop.prevent="handleDetails(scope.$index, scope.row)"
               >查看</el-button>
               <el-button
                 type="text"
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)"
+                @click.stop.prevent="handleEdit(scope.$index, scope.row)"
               >修改</el-button>
               <el-button
                 type="text"
                 size="mini"
-                @click="handleDelete(scope.$index, scope.row)"
+                @click.stop.prevent="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -236,9 +238,9 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="[15, 30, 100]"
-          :page-size="100"
+          :page-size="10"
           layout="sizes, prev, pager, next"
-          :total="1000"
+          :total="total"
         >
         </el-pagination>
       </div>
@@ -247,9 +249,10 @@
 </template>
 <script>
 export default {
+  inject:['reload'],
   data() {
     return {
-      currentPage:1,
+      currentPage: 1,
       value: "",
       options: [
         {
@@ -286,7 +289,11 @@ export default {
           hot: "1",
           sort: "100"
         }
-      ]
+      ],
+      pageIndex:1,
+      pageSize:10,
+      keyword:"",
+      total:0,
     };
   },
   methods: {
@@ -304,9 +311,14 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.pageIndex=1;
+      this.pageSize=val;
+      this.foodlist();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.pageIndex=val;
+      this.foodlist();
     },
     changeNew(index, val) {
       console.log(val.new);
@@ -331,7 +343,32 @@ export default {
       } else {
         this.tableData[index].hot = "1";
       }
+    },
+    foodlist(){
+      this.Axios(
+        {
+          params: {
+            page: this.pageIndex,
+            size: this.pageSize,
+          },
+          option: {
+          },
+          type: "get",
+          url: "/api-mall/showItem"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.tableData = result.data.data.content;
+          this.total = result.data.data.totalElement;
+        },
+        ({ type, info }) => {}
+      );
     }
+  },
+  created(){
+    this.foodlist();
   }
 };
 </script>

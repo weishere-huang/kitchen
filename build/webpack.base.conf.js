@@ -15,7 +15,8 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
     app: ["babel-polyfill", './src/main.js'],
-    login:'./src/js/login.js'
+    login: './src/js/login.js',
+    forgetpassword: './src/js/forgetpassword.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -81,7 +82,7 @@ module.exports = {
     child_process: 'empty'
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    //new webpack.optimize.CommonsChunkPlugin('common.js'),
     new webpack.ProvidePlugin({
       jQuery: "jquery",
       $: "jquery"

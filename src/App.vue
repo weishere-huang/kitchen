@@ -46,7 +46,7 @@
         </div> -->
       </el-aside>
       <el-container>
-        <el-header>
+        
           <el-header style="background-color:#1CC09F;">
             <div class="breadcrumbWrap">
               <breadCrumb></breadCrumb>
@@ -116,7 +116,7 @@
               </ul>
             </div>
           </el-header>
-        </el-header>
+       
         <el-main
           class="mainContentWrapper"
           style="padding:8px;font-size:14px;"
@@ -331,6 +331,8 @@ export default {
   &:not(.el-menu--collapse) {
     width: 200px;
     min-height: 400px;
+    // max-width: 90vh;
+    overflow: scroll;
   }
 }
 
