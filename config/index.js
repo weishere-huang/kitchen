@@ -14,7 +14,7 @@ module.exports = {
       '/api': {
         //target: 'http://www.hyazi.com:9881',
         //target: 'http://localhost:8888',
-        target:'http://192.168.1.104:9880',
+        target:'http://192.168.1.104:8861',
         pathRewrite: {
           "^/api": ""
         },

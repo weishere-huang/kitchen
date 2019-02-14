@@ -9,6 +9,7 @@ import AddMenu from '@/components/store/AddMenu'
 import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
 import SalesArea from '@/components/salesArea/index'
+import Administrator from '@/components/system/Administrator'
 
 Vue.use(Router)
 const router = new Router({
@@ -112,6 +113,17 @@ const router = new Router({
       component: SalesArea,
       props: {
         pageName: '销售区域'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Administrator',
+      name: 'Administrator',
+      component: Administrator,
+      props: {
+        pageName: '管理员列表'
       },
       meta: {
         requireAuth: false,

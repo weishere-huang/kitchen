@@ -111,7 +111,14 @@ export default [{
     permissionCode: 'system',
     defaultDock: true,
     icon: '&#xe633;',
-    subMenu: []
+    subMenu: [
+      {
+        menu: '管理员列表',
+        route: '/Administrator',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+    ]
   },
 
   //预留样式模板

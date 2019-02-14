@@ -6,7 +6,8 @@
         type="primary"
         class="el-icon-circle-plus-outline"
         @click="areaShow=true"
-      >添加区域</el-button>
+      >添加区域
+      </el-button>
     </div>
     <div class="bottom_list">
       <div class="top_title">
@@ -64,9 +65,9 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="[15, 30, 100]"
-          :page-size="15"
+          :page-size="10"
           layout="sizes, prev, pager, next"
-          :total="1000"
+          :total="total"
         >
         </el-pagination>
       </div>
@@ -116,127 +117,158 @@
   </div>
 </template>
 <script>
-import areaList from "../public/Area";
-import tableList from "../public/table";
-export default {
-  data() {
-    return {
-      editAreaShow: false,
-      areaShow: false,
-      province: [],
-      cities: [],
-      currentPage: 1,
-      value: "",
-      items: [
-        {
-          label: "省份",
-          prop: "province",
-          width: 80
-        },
-        {
-          label: "城市",
-          prop: "cities",
-          width: 80
-        },
-        {
-          label: "支持区域",
-          prop: "district",
-          width: 180
+  import areaList from "../public/Area";
+  import tableList from "../public/table";
+
+  export default {
+    data() {
+      return {
+        editAreaShow: false,
+        areaShow: false,
+        province: [],
+        cities: [],
+        currentPage: 1,
+        value: "",
+        items: [
+          {
+            label: "省份",
+            prop: "province",
+            width: 80
+          },
+          {
+            label: "城市",
+            prop: "cities",
+            width: 80
+          },
+          {
+            label: "支持区域",
+            prop: "district",
+            width: 180
+          }
+        ],
+        tableData: [
+          {
+            province: "四川省",
+            cities: "成都市",
+            district: "青羊区、锦江区、金牛区、武侯区、成华区"
+          }
+        ],
+        total: 0,
+        pageIndex: 1,
+        pageSize: 10
+      };
+    },
+    methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pageIndex = 1;
+        this.pageSize = val;
+        this.getarea();
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.pageIndex = val;
+        this.getarea();
+      },
+      handlechange(params) {
+        if (params.type === "edit") {
+          console.log(params);
+          this.editAreaShow = true
         }
-      ],
-      tableData: [
-        {
-          province: "四川省",
-          cities: "成都市",
-          district: "青羊区、锦江区、金牛区、武侯区、成华区"
+        if (params.type === "delete") {
+          console.log(params);
         }
-      ]
-    };
-  },
-  methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+
+      },
+      handleSelectionChange(selection) {
+        console.log(selection);
+      },
+      getRow(row, event) {
+        console.log(row);
+      },
+      getarea() {
+        this.Axios(
+          {
+            params: {},
+            option: {},
+            type: "get",
+            url: ""
+
+          },
+          this
+        ).then(
+          result => {
+            this.tableData = result.data.data.content;
+            this.total = result.data.data.totalElement;
+          },
+          ({type, info}) => {
+          }
+        );
+      },
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    created() {
+      this.getarea();
     },
-    handlechange(params) {
-      if (params.type === "edit") {
-        console.log(params);
-        this.editAreaShow=true
-      }
-      if (params.type === "delete") {
-        console.log(params);
-      }
-     
-    },
-    handleSelectionChange(selection) {
-      console.log(selection);
-    },
-    getRow(row, event) {
-      console.log(row);
+    components: {
+      tableList,
+      areaList
     }
-  },
-  components: {
-    tableList,
-    areaList
-  }
-};
+  };
 </script>
 
 <style lang="less">
-@main-color: #1cc09f;
-@bgColor: #f0f2f5;
-@font-normal: #333333;
-@font-subsidiary: #999999;
-@font-special: #1cc09f;
-@border: 1px solid #dde2eb;
-.store_list {
-  font-size: 14px;
-  color: @font-normal;
+  @main-color: #1cc09f;
+  @bgColor: #f0f2f5;
+  @font-normal: #333333;
+  @font-subsidiary: #999999;
+  @font-special: #1cc09f;
+  @border: 1px solid #dde2eb;
+  .store_list {
+    font-size: 14px;
+    color: @font-normal;
 
-  .top_list {
-    // line-height: 60px;
-    background-color: white;
-    padding: 10px;
-  }
-  .bottom_list {
-    background-color: white;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    overflow: hidden;
-    .top_title {
-      padding: 0 10px;
-      line-height: 60px;
-      overflow: hidden;
-      border-bottom: @border;
-      h4 {
-        float: left;
-      }
-      .top_search {
-        width: 400px;
-        float: right;
-      }
-    }
-    .table_list {
-      overflow: hidden;
+    .top_list {
+      // line-height: 60px;
+      background-color: white;
       padding: 10px;
-      .el-input__inner {
-        padding: 0;
-        border: none;
-        &:focus {
-          border: 1px solid #1cc09f;
+    }
+    .bottom_list {
+      background-color: white;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      overflow: hidden;
+      .top_title {
+        padding: 0 10px;
+        line-height: 60px;
+        overflow: hidden;
+        border-bottom: @border;
+        h4 {
+          float: left;
+        }
+        .top_search {
+          width: 400px;
+          float: right;
+        }
+      }
+      .table_list {
+        overflow: hidden;
+        padding: 10px;
+        .el-input__inner {
+          padding: 0;
+          border: none;
+          &:focus {
+            border: 1px solid #1cc09f;
+          }
         }
       }
     }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
   }
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
-}
 </style>
 
