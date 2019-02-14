@@ -209,17 +209,17 @@
               <el-button
                 type="text"
                 size="mini"
-                @click="handleDetails(scope.$index, scope.row)"
+                @click.stop.prevent="handleDetails(scope.$index, scope.row)"
               >查看</el-button>
               <el-button
                 type="text"
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)"
+                @click.stop.prevent="handleEdit(scope.$index, scope.row)"
               >修改</el-button>
               <el-button
                 type="text"
                 size="mini"
-                @click="handleDelete(scope.$index, scope.row)"
+                @click.stop.prevent="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -247,9 +247,10 @@
 </template>
 <script>
 export default {
+  inject:['reload'],
   data() {
     return {
-      currentPage:1,
+      currentPage: 1,
       value: "",
       options: [
         {

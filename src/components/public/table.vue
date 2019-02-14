@@ -28,25 +28,26 @@
       <el-table-column
         label="操作"
         :width="handle"
+        v-if="handleShow"
       >
-        <template slot-scope="scope">
+        <template slot-scope="scope" @click.stop>
           <el-button
             v-if="detalisShow"
             size="mini"
             type="text"
-            @click="handleDetails(scope.$index, scope.row)"
+            @click.stop.prevent="handleDetails(scope.$index, scope.row)"
           >查看</el-button>
           <el-button
             v-if="editShow"
             size="mini"
             type="text"
-            @click="handleEdit(scope.$index, scope.row)"
+            @click.stop.prevent="handleEdit(scope.$index, scope.row)"
           >修改</el-button>
           <el-button
             v-if="deleteShow"
             size="mini"
             type="text"
-            @click="handleDelete(scope.$index, scope.row)"
+            @click.stop.prevent="handleDelete(scope.$index, scope.row)"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -61,6 +62,7 @@ export default {
     return {};
   },
   props: {
+    handleShow:{},
     detalisShow:{},
     editShow:{},
     deleteShow:{},

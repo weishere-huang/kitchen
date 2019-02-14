@@ -25,7 +25,8 @@ export default [{
       },
       {
         menu: '订单详情',
-        route: '/Order/Details',
+        route: '/Details',
+        // routeReg: /^\/Order\/Details\/\d{1,}$/i,
         defaultDock: true,
         permissionCode: 'order_details_look_up'
       },
@@ -37,10 +38,26 @@ export default [{
     defaultDock: true,
     icon: '&#xe634;',
     subMenu: [{
-      menu: '订单列表',
-      route: '/Store',
-      permissionCode: ''
-    }]
+        menu: '商品列表',
+        route: '/Store',
+        permissionCode: ''
+      },
+      {
+        menu: '商品分类',
+        route: '/Classify',
+        permissionCode: ''
+      },
+      {
+        menu: '添加商品',
+        route: '/AddMenu',
+        permissionCode: ''
+      },
+      {
+        menu: '修改商品',
+        route: '/EditMenu',
+        permissionCode: ''
+      }
+    ]
   },
   {
     menu: '菜谱管理',
@@ -48,6 +65,32 @@ export default [{
     defaultDock: true,
     icon: '&#xe640;',
     subMenu: []
+  },
+  {
+    menu: '信息管理',
+    permissionCode: 'msg',
+    defaultDock: true,
+    icon: '&#xe629;',
+    subMenu: [
+       {
+         menu: '服务网点',
+         route: '/Service',
+         permissionCode: ''
+       }
+    ]
+  },
+  {
+    menu: '销售区域',
+    permissionCode: 'area',
+    defaultDock: true,
+    icon: '&#xe605;',
+    subMenu: [
+      {
+      menu: '销售区域',
+      route: '/SalesArea',
+      permissionCode: ''
+      }
+    ]
   },
   {
     menu: '文章管理',
