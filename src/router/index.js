@@ -10,6 +10,10 @@ import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
 import SalesArea from '@/components/salesArea/index'
 import Administrator from '@/components/system/Administrator'
+import RoleManagement from '@/components/system/RoleManagement'
+import AddRole from '@/components/system/addOrEditRole/AddRole'
+import EditRole from '@/components/system/addOrEditRole/EditRole'
+import CookbookClassify from '@/components/cookbook/Classify'
 
 Vue.use(Router)
 const router = new Router({
@@ -124,6 +128,50 @@ const router = new Router({
       component: Administrator,
       props: {
         pageName: '管理员列表'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/RoleManagement',
+      name: 'RoleManagement',
+      component: RoleManagement,
+      props: {
+        pageName: '角色管理'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/AddRole',
+      name: 'AddRole',
+      component: AddRole,
+      props: {
+        pageName: '添加角色'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/EditRole',
+      name: 'EditRole',
+      component: EditRole,
+      props: {
+        pageName: '修改角色'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/CookbookClassify',
+      name: 'CookbookClassify',
+      component: CookbookClassify,
+      props: {
+        pageName: '菜谱分类'
       },
       meta: {
         requireAuth: false,

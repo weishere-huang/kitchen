@@ -1,16 +1,15 @@
 <template>
-  <div class="administrator_list">
+  <div class="role_management">
     <div class="top_list">
       <el-button
         size="small"
         type="primary"
-        @click="dialogVisible=true"
         class="el-icon-circle-plus-outline"
-      >添加管理员</el-button>
+      >添加角色</el-button>
     </div>
     <div class="bottom_list">
       <div class="top_title">
-        <h4>管理员列表</h4>
+        <h4>角色列表</h4>
       </div>
       <div class="table_list">
         <table-list
@@ -44,100 +43,47 @@
         </el-pagination>
       </div>
     </div>
-    <el-dialog
-      title="添加管理员"
-      :visible.sync="dialogVisible"
-      width="460px"
-    >
-      <add :addInfo="userMsg"></add>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          @click="dialogVisible = false"
-          size="small"
-        >取 消</el-button>
-        <el-button
-          type="primary"
-          @click="dialogVisible = false"
-          size="small"
-        >确 定</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      title="修改管理员"
-      :visible.sync="edit"
-      width="460px"
-    >
-      <add :addInfo="editUserMsg"></add>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          @click="edit = false"
-          size="small"
-        >取 消</el-button>
-        <el-button
-          type="primary"
-          @click="edit = false"
-          size="small"
-        >确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
 import tableList from "../public/table";
-import Add from "./adminAdd&edit/Add&Edit";
 export default {
   inject: ["reload"],
   data() {
     return {
-      userMsg: {},
-      editUserMsg:{},
-      dialogVisible: false,
-      edit:false,
       items: [
         {
-          label: "管理员",
+          label: "角色名",
           prop: "admin",
           width: 100
         },
         {
-          label: "绑定手机",
+          label: "角色描述",
           prop: "phone",
           width: 90
         },
-        {
-          label: "创建时间",
-          prop: "time",
-          width: 140
-        }
+      
       ],
       tableData: [
         {
-          admin: "roulen",
-          phone: "13888489527",
-          time: "2019-01-23 14:53:31"
+          admin: "商城管理员",
+          phone: "张小红专用",
         }
       ],
       pageIndex: 1,
       pageSize: 10,
       currentPage: 1,
-      total: 100
+      total: 100,
     };
   },
   methods: {
-    handleSelectionChange() {},
+    handleSelectionChange(){},
     getRow(row, event) {
       console.log(row);
     },
     handlechange(params) {
       if (params.type === "edit") {
         console.log(params);
-        this.edit=true
       }
       if (params.type === "delete") {
         console.log(params);
@@ -152,17 +98,16 @@ export default {
       console.log(`每页 ${val} 条`);
       this.pageIndex = 1;
       this.pageSize = val;
-      //   this.listOrder();
+    //   this.listOrder();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.pageIndex = val;
-      //   this.listOrder();
+    //   this.listOrder();
     }
   },
   components: {
-    tableList,
-    Add
+    tableList
   }
 };
 </script>
@@ -174,7 +119,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.administrator_list {
+.role_management {
   font-size: 14px;
   color: @font-normal;
   .top_list {
@@ -211,9 +156,6 @@ export default {
         }
       }
     }
-  }
-  .el-form-item {
-    margin-bottom: 18px;
   }
 }
 </style>

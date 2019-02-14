@@ -1,0 +1,91 @@
+<template>
+  <div calss="admin_add">
+    <el-form
+      label-width="100px"
+      style="margin-top:20px;"
+    >
+      <el-form-item label="登录名：">
+        <el-input
+          placeholder="6~20位字符组成，以字母开头"
+          size="small"
+          style="width:95%"
+          v-model="addInfo.userName"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="登录密码：">
+        <el-input
+          placeholder="6~20位字符组成，区分大小写"
+          size="small"
+          style="width:95%"
+          v-model="addInfo.password"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码：">
+        <el-input
+          placeholder="请再次输入登录密码"
+          size="small"
+          style="width:95%"
+          v-model="addInfo.confirmPassword"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="绑定手机：">
+        <el-input
+          placeholder="输入11位手机号码（可用于登录）"
+          size="small"
+          style="width:95%"
+          v-model="addInfo.phone"
+        ></el-input>
+      </el-form-item>
+      <el-form-item
+        label="角色选择："
+        style="margin-bottom:5px;"
+      >
+        <el-select
+          v-model="addInfo.role"
+          placeholder="请选择"
+          style="width:95%"
+          size="small"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      options: {}
+    };
+  },
+  props: {
+    addInfo: {
+      userName: {},
+      password: {},
+      confirmPassword: {},
+      phone: {},
+      role: {}
+    }
+  }
+};
+</script>
+
+<style lang="less">
+@main-color: #1cc09f;
+@bgColor: #f0f2f5;
+@font-normal: #333333;
+@font-subsidiary: #999999;
+@font-special: #1cc09f;
+@border: 1px solid #dde2eb;
+.admin_add {
+  font-size: 14px;
+  color: @font-normal;
+}
+</style>

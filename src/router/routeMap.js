@@ -64,33 +64,34 @@ export default [{
     permissionCode: 'cookbook',
     defaultDock: true,
     icon: '&#xe640;',
-    subMenu: []
+    subMenu: [{
+      menu: '菜谱分类',
+      route: '/CookbookClassify',
+      defaultDock: true,
+      permissionCode: 'order_look_up'
+    }, ]
   },
   {
     menu: '信息管理',
     permissionCode: 'msg',
     defaultDock: true,
     icon: '&#xe629;',
-    subMenu: [
-       {
-         menu: '服务网点',
-         route: '/Service',
-         permissionCode: ''
-       }
-    ]
+    subMenu: [{
+      menu: '服务网点',
+      route: '/Service',
+      permissionCode: ''
+    }]
   },
   {
     menu: '销售区域',
     permissionCode: 'area',
     defaultDock: true,
     icon: '&#xe605;',
-    subMenu: [
-      {
+    subMenu: [{
       menu: '销售区域',
       route: '/SalesArea',
       permissionCode: ''
-      }
-    ]
+    }]
   },
   {
     menu: '文章管理',
@@ -111,10 +112,27 @@ export default [{
     permissionCode: 'system',
     defaultDock: true,
     icon: '&#xe633;',
-    subMenu: [
-      {
+    subMenu: [{
         menu: '管理员列表',
         route: '/Administrator',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+      {
+        menu: '角色管理',
+        route: '/RoleManagement',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+      {
+        menu: '添加角色',
+        route: '/AddRole',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+      {
+        menu: '修改角色',
+        route: '/EditRole',
         defaultDock: true,
         permissionCode: 'order_look_up'
       },
