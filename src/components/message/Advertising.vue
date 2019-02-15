@@ -5,7 +5,30 @@
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
+        @click="dialogAdd=true"
       >添加广告</el-button>
+      <el-dialog
+        :close-on-click-modal="false"
+        title="添加广告"
+        :visible.sync="dialogAdd"
+        width="600px"
+      >
+        <add-advertising :addMsg="addMsg"></add-advertising>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            @click="dialogAdd = false"
+            size="small"
+          >取 消</el-button>
+          <el-button
+            type="primary"
+            @click="dialogAdd = false"
+            size="small"
+          >确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
     <div class="bottom_list">
       <div class="top_title">
@@ -103,12 +126,65 @@
       </div>
       <div class="hint">提示：最多可添加6条广告。</div>
     </div>
+    <el-dialog
+      :close-on-click-modal="false"
+      title="修改广告"
+      :visible.sync="dialogEdit"
+      width="600px"
+    >
+      <add-advertising :addMsg="editMsg"></add-advertising>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="dialogEdit = false"
+          size="small"
+        >取 消</el-button>
+        <el-button
+          type="primary"
+          @click="dialogEdit = false"
+          size="small"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
+import addAdvertising from "./advertisingAdd/AddAdvertising";
 export default {
   data() {
     return {
+      editMsg: {
+        title: "",
+        pic: "",
+        picContent: "",
+        isShow: 0,
+        startTime: {
+          date: "",
+          time: ""
+        },
+        endTime: {
+          date: "",
+          time: ""
+        }
+      },
+      addMsg: {
+        title: "",
+        pic: "",
+        picContent: "",
+        isShow: 0,
+        startTime: {
+          date: "",
+          time: ""
+        },
+        endTime: {
+          date: "",
+          time: ""
+        }
+      },
+      dialogEdit: false,
+      dialogAdd: false,
       currentPage: 1,
       tableData: [
         {
@@ -131,13 +207,17 @@ export default {
     handleEdit(index, rowData) {
       let params = { type: "edit", index: index, rowData: rowData };
       console.log(params);
+      this.dialogEdit = true;
     },
     handleDelete(index, rowData) {
       let params = { type: "delete", index: index, rowData: rowData };
       console.log(params);
     }
   },
-  created() {}
+  created() {},
+  components: {
+    addAdvertising
+  }
 };
 </script>
 <style lang="less">
