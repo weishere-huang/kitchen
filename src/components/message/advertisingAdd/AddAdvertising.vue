@@ -146,7 +146,7 @@ export default {
   font-size: 14px;
   color: @font-normal;
   .el-form {
-    padding-top: 20px;
+    padding-top: 16px;
   }
   .el-form-item {
     margin-bottom: 12px;
