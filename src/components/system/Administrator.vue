@@ -158,7 +158,29 @@ export default {
       console.log(`当前页: ${val}`);
       this.pageIndex = val;
       //   this.listOrder();
+    },
+    getlist(){
+      this.Axios(
+        {
+          params: {
+            page:this.pageIndex,
+            size:this.pageSize
+          },
+          type: "get",
+          url: "/api-platform/employee/findAll"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.tableData = result.data.data.content;
+          this.total = result.data.data.totalElement;
+        },
+        ({type, info}) => {});
     }
+  },
+  created(){
+    this.getlist();
   },
   components: {
     tableList,
