@@ -1,19 +1,19 @@
 <template>
-  <div class="server_list">
+  <div class="problems_list">
     <div class="top_list">
       <el-button
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
         @click="dialogAdd=true"
-      >添加网点</el-button>
+      >添加信息</el-button>
       <el-dialog
         :close-on-click-modal="false"
-        title="添加网点"
+        title="添加信息"
         :visible.sync="dialogAdd"
-        width="500px"
+        width="800px"
       >
-        <add-servive :addMsg="addMsg"></add-servive>
+        <add-problem :addMsg="addMsg"></add-problem>
         <span
           slot="footer"
           class="dialog-footer"
@@ -40,11 +40,11 @@
           >
             <el-select
               v-model="value"
-              placeholder="———省———"
+              placeholder="请选择"
               size="small"
             >
               <el-option
-                v-for="item in province"
+                v-for="item in classify"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -56,19 +56,7 @@
             :span="10"
             style="padding:0 5px;"
           >
-            <el-select
-              v-model="value"
-              placeholder="———市———"
-              size="small"
-            >
-              <el-option
-                v-for="item in cities"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
+            <el-input size="small"></el-input>
           </el-col>
           <el-col
             :span="4"
@@ -112,11 +100,11 @@
     </div>
     <el-dialog
       :close-on-click-modal="false"
-      title="修改网点"
+      title="修改信息"
       :visible.sync="dialogEdit"
-      width="500px"
+      width="800px"
     >
-      <add-servive :addMsg="editMsg"></add-servive>
+      <add-problem :addMsg="addMsg"></add-problem>
       <span
         slot="footer"
         class="dialog-footer"
@@ -136,74 +124,52 @@
 </template>
 <script>
 import tableList from "../public/table";
-import addServive from "./serviceAdd/Add";
+import addProblem from "./problemsAdd/addProblem";
 export default {
   data() {
     return {
       addMsg: {
-        province: "",
-        city: "",
-        name: "",
-        address: "",
-        tel: "",
-        time: "",
-        range: []
+        title: "",
+        calssify: "",
+        content: ""
       },
       editMsg: {
-        province: "",
-        city: "",
-        name: "",
-        address: "",
-        tel: "",
-        time: "",
-        range: []
+        title: "",
+        calssify: "",
+        content: ""
       },
       dialogAdd: false,
       dialogEdit: false,
-      province: [],
+      classify: [
+        { label: "订单问题", value: "订单问题" },
+        { label: "支付问题", value: "支付问题" },
+        { label: "其他问题", value: "其他问题" }
+      ],
       cities: [],
       currentPage: 1,
       value: "",
       items: [
         {
-          label: "网点名称",
+          label: "标题",
           prop: "title",
-          width: 120
+          width: 400
         },
         {
-          label: "地区",
-          prop: "areaCode",
+          label: "分类",
+          prop: "classify",
           width: 80
         },
         {
-          label: "详细地址",
-          prop: "address",
+          label: "发布时间",
+          prop: "time",
           width: 140
-        },
-        {
-          label: "服务热线",
-          prop: "phone",
-          width: 80
-        },
-        {
-          label: "工作时间",
-          prop: "workingHours",
-          width: 70
-        },
-        {
-          label: "服务范围",
-          prop: "serviceMode",
-          width: 60
         }
       ],
       tableData: [
         {
-          name: "成都金牛区售后服务中心（授权）",
-          area: "四川省 - 成都市",
-          address: "四川省成都市武侯区华兴街道一环路南二段X号营业楼",
-          service: "028-12345678",
-          workTime: "09:00 - 18:00",
-          range: "送修、寄修"
+          title: "在线支付的过程中，订单显示未支付成功，款项却被扣了，怎么办？",
+          classify: "常见问题",
+          time: "2018-12-01 13:32:48"
         }
       ],
       pageIndex: 1,
@@ -226,7 +192,7 @@ export default {
     handlechange(params) {
       if (params.type === "edit") {
         console.log(params);
-        this.dialogEdit=true
+        this.dialogEdit = true;
       }
       if (params.type === "delete") {
         console.log(params);
@@ -242,35 +208,12 @@ export default {
     },
     getRow(row, event) {
       console.log(row);
-    },
-    getServiceList() {
-      this.Axios(
-        {
-          params: {
-            page: this.pageIndex,
-            size: this.pageSize
-          },
-          option: {},
-          type: "get",
-          url: "/api-platform/network/list"
-        },
-        this
-      ).then(
-        result => {
-          console.log(result.data);
-          this.tableData = result.data.data.content;
-          this.total = result.data.data.totalElement;
-        },
-        ({ type, info }) => {}
-      );
     }
   },
-  created() {
-    this.getServiceList();
-  },
+  created() {},
   components: {
     tableList,
-    addServive
+    addProblem
   }
 };
 </script>
@@ -282,7 +225,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.server_list {
+.problems_list {
   font-size: 14px;
   color: @font-normal;
   .top_list {
@@ -322,4 +265,3 @@ export default {
   }
 }
 </style>
-

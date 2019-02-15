@@ -77,10 +77,21 @@ export default [{
     defaultDock: true,
     icon: '&#xe629;',
     subMenu: [{
-      menu: '服务网点',
-      route: '/Service',
-      permissionCode: ''
-    }]
+        menu: '服务网点',
+        route: '/Service',
+        permissionCode: ''
+      },
+      {
+        menu: '常见问题',
+        route: '/Problems',
+        permissionCode: ''
+      },
+      {
+        menu: '广告列表',
+        route: '/Advertising',
+        permissionCode: ''
+      }
+    ]
   },
   {
     menu: '销售区域',

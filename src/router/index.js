@@ -8,6 +8,8 @@ import Details from '@/components/order/Details'
 import AddMenu from '@/components/store/AddMenu'
 import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
+import Problems from '@/components/message/Problems'
+import Advertising from '@/components/message/Advertising'
 import SalesArea from '@/components/salesArea/index'
 import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
@@ -172,6 +174,28 @@ const router = new Router({
       component: CookbookClassify,
       props: {
         pageName: '菜谱分类'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Problems',
+      name: 'Problems',
+      component: Problems,
+      props: {
+        pageName: '常见问题'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Advertising',
+      name: 'Advertising',
+      component: Advertising,
+      props: {
+        pageName: '广告列表'
       },
       meta: {
         requireAuth: false,
