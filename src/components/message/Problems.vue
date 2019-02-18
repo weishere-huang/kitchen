@@ -130,12 +130,12 @@ export default {
     return {
       addMsg: {
         title: "",
-        calssify: "",
+        classify: "",
         content: ""
       },
       editMsg: {
         title: "",
-        calssify: "",
+        classify: "",
         content: ""
       },
       dialogAdd: false,
