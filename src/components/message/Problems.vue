@@ -136,12 +136,12 @@ export default {
     return {
       addMsg: {
         title: "",
-        faqType: "",
+        calssify: "",
         content: ""
       },
       editMsg: {
         title: "",
-        faqType: "",
+        calssify: "",
         content: ""
       },
       dialogAdd: false,
@@ -234,11 +234,7 @@ export default {
       ).then(
         result => {
           console.log(result.data)
-          result.data.data.content.forEach(item => {
-            if(item.faqType===1)item.faqType="订单问题"
-            if(item.faqType===2)item.faqType="支付问题"
-            if(item.faqType===3)item.faqType="其他问题"
-          })
+
           this.tableData = result.data.data.content;
           this.total=result.data.data.totalElement;
         },

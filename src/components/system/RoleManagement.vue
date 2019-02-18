@@ -113,27 +113,7 @@ export default {
       this.pageIndex = val;
     //   this.listOrder();
     },
-    getRoleList(){
-      this.Axios(
-        {
-          params: {
-            page:this.pageIndex,
-            size:this.pageSize
-          },
-          option: {},
-          type: "get",
-          url: "/api-platform/role/listAllRole"
-        },
-        this
-      ).then(
-        result => {
-          console.log(result.data);
-          this.tableData = result.data.data;
-        },
-        ({type, info}) => {
-        }
-      );
-    },
+
     deleteRole(id){
       let qs = require("qs");
       let data = qs.stringify({
