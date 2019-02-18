@@ -27,7 +27,7 @@
       >添加人群</el-button>
     </div>
     <div class="bottom_list">
-      <el-tabs
+      <!-- <el-tabs
         tab-position="left"
         @tab-click="handleClick"
       >
@@ -243,7 +243,46 @@
             </span>
           </el-tree>
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
+      <div class="top_list">
+        <h2>分类</h2>
+      </div>
+      <div style="padding:10px;overflow:hidden">
+        <div class="tree_title">
+          <span style="padding-left:8px;">分类名称</span>
+          <span style="display:inline-block;width:190px;">操作</span>
+        </div>
+        <el-tree
+          :data="classifyData"
+          node-key="id"
+          default-expand-all
+          :expand-on-click-node="false"
+        >
+          <span
+            class="custom-tree-node"
+            slot-scope="{ node, data }"
+          >
+            <span>{{ node.label }}</span>
+            <span style="display:inline-block;width:190px;">
+              <el-button
+                type="text"
+                size="mini"
+                @click="() => append(data)"
+              >
+                修改
+              </el-button>
+              <el-button
+                type="text"
+                size="mini"
+                @click="() => remove(node, data)"
+              >
+                删除
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
+      </div>
+
     </div>
   </div>
 </template>
@@ -309,6 +348,12 @@ export default {
     background-color: white;
     margin-top: 10px;
     padding: 10px 0;
+    .top_list {
+      padding: 0 10px;
+      line-height: 60px;
+      overflow: hidden;
+      border-bottom: @border;
+    }
     .tree_title {
       flex: 1;
       display: flex;
@@ -318,25 +363,6 @@ export default {
       padding-right: 8px;
       line-height: 40px;
       background-color: #f1f1f1;
-    }
-    .el-tabs__item {
-      width: 180px;
-      text-align: left !important;
-      &:hover {
-        background-color: #cdfcf5;
-      }
-      &:active {
-        background-color: #cdfcf5;
-      }
-    }
-    .el-tabs__item.is-active {
-      background-color: #cdfcf5;
-    }
-    .el-tabs--left .el-tabs__active-bar.is-left,
-    .el-tabs--left .el-tabs__active-bar.is-right,
-    .el-tabs--right .el-tabs__active-bar.is-left,
-    .el-tabs--right .el-tabs__active-bar.is-right {
-      width: 4px;
     }
     .el-tree-node__content {
       height: 40px;
