@@ -145,28 +145,30 @@ const router = new Router({
       meta: {
         requireAuth: false,
       },
-    },
-    {
-      path: '/AddRole',
-      name: 'AddRole',
-      component: AddRole,
-      props: {
-        pageName: '添加角色'
-      },
-      meta: {
-        requireAuth: false,
-      },
-    },
-    {
-      path: '/EditRole',
-      name: 'EditRole',
-      component: EditRole,
-      props: {
-        pageName: '修改角色'
-      },
-      meta: {
-        requireAuth: false,
-      },
+      children:[
+        {
+          path: 'AddRole',
+          name: 'AddRole',
+          component: AddRole,
+          props: {
+            pageName: '添加角色'
+          },
+          meta: {
+            requireAuth: false,
+          },
+        },
+        {
+          path: 'EditRole/:id/',
+          name: 'EditRole',
+          component: EditRole,
+          props: {
+            pageName: '修改角色'
+          },
+          meta: {
+            requireAuth: false,
+          },
+        }
+      ]
     },
     {
       path: '/CookbookClassify',

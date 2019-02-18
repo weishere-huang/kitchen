@@ -137,13 +137,13 @@ export default [{
       },
       {
         menu: '添加角色',
-        route: '/AddRole',
+        route: '/RoleManagement/AddRole',
         defaultDock: true,
         permissionCode: 'order_look_up'
       },
       {
         menu: '修改角色',
-        route: '/EditRole',
+        routeReg:/^\/RoleManagement\/EditRole\/\d{1,}$/i,
         defaultDock: true,
         permissionCode: 'order_look_up'
       },

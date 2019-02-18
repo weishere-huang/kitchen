@@ -102,7 +102,7 @@ export default {
       items: [
         {
           label: "管理员",
-          prop: "admin",
+          prop: "name",
           width: 100
         },
         {
@@ -112,7 +112,7 @@ export default {
         },
         {
           label: "创建时间",
-          prop: "time",
+          prop: "gmtCreate",
           width: 140
         }
       ],
@@ -126,7 +126,7 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       currentPage: 1,
-      total: 100
+      total: 0
     };
   },
   methods: {
@@ -141,6 +141,7 @@ export default {
       }
       if (params.type === "delete") {
         console.log(params);
+        this.deleteEMP(params.rowData.id);
       }
       if (params.type === "detalis") {
         console.log(params);
@@ -177,6 +178,25 @@ export default {
           this.total = result.data.data.totalElement;
         },
         ({type, info}) => {});
+    },
+    deleteEMP(id){
+      let qs = require("qs");
+      let data = qs.stringify({
+        employeeIds:id,
+        enableOrDisable:1
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/employee/updateState",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        console.log(result.data);
+        if(result.data.code===200){
+          this.reload();
+        }
+      })
     }
   },
   created(){

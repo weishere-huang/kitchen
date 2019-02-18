@@ -1,13 +1,15 @@
 <template>
   <div class="role_management">
-    <div class="top_list">
+    <router-view></router-view>
+    <div class="top_list" :class="['hidden']">
       <el-button
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
+        @click="$router.push({path:'/RoleManagement/AddRole'})"
       >添加角色</el-button>
-    </div>
-    <div class="bottom_list">
+    </div >
+    <div class="bottom_list" :class="[{hide:isHideList}]">
       <div class="top_title">
         <h4>角色列表</h4>
       </div>
@@ -47,6 +49,7 @@
 </template>
 <script>
 import tableList from "../public/table";
+
 export default {
   inject: ["reload"],
   data() {
@@ -54,15 +57,15 @@ export default {
       items: [
         {
           label: "角色名",
-          prop: "admin",
+          prop: "name",
           width: 100
         },
         {
           label: "角色描述",
-          prop: "phone",
+          prop: "description",
           width: 90
         },
-      
+
       ],
       tableData: [
         {
@@ -73,7 +76,10 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       currentPage: 1,
-      total: 100,
+      total: 0,
+      isHideList: this.$route.params.id !== undefined
+        ? hidden
+        : false,
     };
   },
   methods: {
@@ -84,9 +90,11 @@ export default {
     handlechange(params) {
       if (params.type === "edit") {
         console.log(params);
+        this.$router.push("/RoleManagement/EditRole/"+params.rowData.id);
       }
       if (params.type === "delete") {
         console.log(params);
+        this.deleteRole(params.rowData.id);
       }
       if (params.type === "detalis") {
         console.log(params);
@@ -104,11 +112,60 @@ export default {
       console.log(`当前页: ${val}`);
       this.pageIndex = val;
     //   this.listOrder();
-    }
+    },
+    getRoleList(){
+      this.Axios(
+        {
+          params: {
+            page:this.pageIndex,
+            size:this.pageSize
+          },
+          option: {},
+          type: "get",
+          url: "/api-platform/role/listAllRole"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.tableData = result.data.data;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+    deleteRole(id){
+      let qs = require("qs");
+      let data = qs.stringify({
+        roleId:id
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/role/delete",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        console.log(result.data);
+        if(result.data.code===200){
+          this.reload();
+        }
+      })
+    },
+  },
+  created(){
+    this.getRoleList();
   },
   components: {
     tableList
-  }
+  },
+  watch: {
+    $route() {
+      let a=this.$route.matched.find(item=>(item.name==="AddRole"))?true:false;
+      let b=this.$route.params.id !== undefined ? true : false;
+      this.isHideList = a||b ?true:false;
+    }
+  },
 };
 </script>
 

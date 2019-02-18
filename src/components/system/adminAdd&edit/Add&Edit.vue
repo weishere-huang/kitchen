@@ -73,6 +73,14 @@ export default {
       phone: {},
       role: {}
     }
+  },
+  methods:{
+    clickContro(){
+
+    }
+  },
+  created(){
+
   }
 };
 </script>
