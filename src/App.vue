@@ -330,9 +330,9 @@ export default {
   margin-top: 60px !important;
   &:not(.el-menu--collapse) {
     width: 200px;
-    min-height: 400px;
+    // min-height: 400px;
     // max-width: 90vh;
-    overflow: scroll;
+    overflow: scroll !important;
   }
 }
 
