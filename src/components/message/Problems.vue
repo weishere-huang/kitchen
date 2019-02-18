@@ -7,6 +7,11 @@
         class="el-icon-circle-plus-outline"
         @click="dialogAdd=true"
       >添加信息</el-button>
+      <el-button
+        size="small"
+        type="primary"
+        @click="reload()"
+      >立即刷新</el-button>
       <el-dialog
         :close-on-click-modal="false"
         title="添加信息"
@@ -39,7 +44,7 @@
             style="padding:0 5px;"
           >
             <el-select
-              v-model="value"
+              v-model="faqType"
               placeholder="请选择"
               size="small"
             >
@@ -56,13 +61,13 @@
             :span="10"
             style="padding:0 5px;"
           >
-            <el-input size="small"></el-input>
+            <el-input size="small" v-model="keyword"></el-input>
           </el-col>
           <el-col
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small">搜索</el-button>
+            <el-button size="small" @click="search">搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -126,6 +131,7 @@
 import tableList from "../public/table";
 import addProblem from "./problemsAdd/addProblem";
 export default {
+  inject: ["reload"],
   data() {
     return {
       addMsg: {
@@ -141,9 +147,9 @@ export default {
       dialogAdd: false,
       dialogEdit: false,
       classify: [
-        { label: "订单问题", value: "订单问题" },
-        { label: "支付问题", value: "支付问题" },
-        { label: "其他问题", value: "其他问题" }
+        { label: "订单问题", value: 1 },
+        { label: "支付问题", value: 2 },
+        { label: "其他问题", value: 3 }
       ],
       cities: [],
       currentPage: 1,
@@ -156,12 +162,12 @@ export default {
         },
         {
           label: "分类",
-          prop: "classify",
+          prop: "faqType",
           width: 80
         },
         {
           label: "发布时间",
-          prop: "time",
+          prop: "gmtCreate",
           width: 140
         }
       ],
@@ -174,7 +180,9 @@ export default {
       ],
       pageIndex: 1,
       pageSize: 10,
-      total: 10
+      total: 0,
+      faqType:null,
+      keyword:null
     };
   },
   methods: {
@@ -208,9 +216,46 @@ export default {
     },
     getRow(row, event) {
       console.log(row);
-    }
+    },
+    getfaqList(){
+      this.Axios(
+        {
+          params: {
+            page:this.pageIndex,
+            size:this.pageSize,
+            faqType:this.faqType,
+            keyword:this.keyword
+          },
+          option: {},
+          type: "get",
+          url: "/api-platform/faq/faqlist"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data)
+          result.data.data.content.forEach(item => {
+            if(item.faqType===1)item.faqType="订单问题"
+            if(item.faqType===2)item.faqType="支付问题"
+            if(item.faqType===3)item.faqType="其他问题"
+          })
+          this.tableData = result.data.data.content;
+          this.total=result.data.data.totalElement;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+    search(){
+      this.pageIndex=1
+      this.pageSize=15
+      this.getfaqList();
+    },
+
   },
-  created() {},
+  created() {
+    this.getfaqList();
+  },
   components: {
     tableList,
     addProblem
