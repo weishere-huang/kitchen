@@ -1,8 +1,8 @@
 /*
  * @Author: weisheres.huang
  * @Date: 2018-11-28 15:31:51
- * @Last Modified by: weisheres.huang
- * @Last Modified time: 2018-12-05 10:12:21
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-02-14 09:58:14
  */
 import axios from 'axios';
 import global from './components/global/Global';

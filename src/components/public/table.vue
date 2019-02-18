@@ -33,19 +33,19 @@
         <template slot-scope="scope" @click.stop>
           <el-button
             v-if="detalisShow"
-            size="mini"
+            size="small"
             type="text"
             @click.stop.prevent="handleDetails(scope.$index, scope.row)"
           >查看</el-button>
           <el-button
             v-if="editShow"
-            size="mini"
+            size="small"
             type="text"
             @click.stop.prevent="handleEdit(scope.$index, scope.row)"
           >修改</el-button>
           <el-button
             v-if="deleteShow"
-            size="mini"
+            size="small"
             type="text"
             @click.stop.prevent="handleDelete(scope.$index, scope.row)"
           >删除</el-button>

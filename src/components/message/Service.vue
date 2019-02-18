@@ -1,11 +1,34 @@
 <template>
-  <div class="store_list">
+  <div class="server_list">
     <div class="top_list">
       <el-button
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
+        @click="dialogAdd=true"
       >添加网点</el-button>
+      <el-dialog
+        :close-on-click-modal="false"
+        title="添加网点"
+        :visible.sync="dialogAdd"
+        width="500px"
+      >
+        <add-servive :addMsg="addMsg"></add-servive>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            @click="dialogAdd = false"
+            size="small"
+          >取 消</el-button>
+          <el-button
+            type="primary"
+            @click="dialogAdd = false"
+            size="small"
+          >确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
     <div class="bottom_list">
       <div class="top_title">
@@ -87,13 +110,56 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog
+      :close-on-click-modal="false"
+      title="修改网点"
+      :visible.sync="dialogEdit"
+      width="500px"
+    >
+      <add-servive :addMsg="editMsg"></add-servive>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="dialogEdit = false"
+          size="small"
+        >取 消</el-button>
+        <el-button
+          type="primary"
+          @click="dialogEdit = false"
+          size="small"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import tableList from "../public/table";
+import addServive from "./serviceAdd/Add";
 export default {
   data() {
     return {
+      addMsg: {
+        province: "",
+        city: "",
+        name: "",
+        address: "",
+        tel: "",
+        time: "",
+        range: []
+      },
+      editMsg: {
+        province: "",
+        city: "",
+        name: "",
+        address: "",
+        tel: "",
+        time: "",
+        range: []
+      },
+      dialogAdd: false,
+      dialogEdit: false,
       province: [],
       cities: [],
       currentPage: 1,
@@ -137,29 +203,30 @@ export default {
           address: "四川省成都市武侯区华兴街道一环路南二段X号营业楼",
           service: "028-12345678",
           workTime: "09:00 - 18:00",
-          range: "送修、寄修",
+          range: "送修、寄修"
         }
       ],
-      pageIndex:1,
-      pageSize:10,
-      total:10
+      pageIndex: 1,
+      pageSize: 10,
+      total: 10
     };
   },
   methods: {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      this.pageIndex=1;
-      this.pageSize=val;
+      this.pageIndex = 1;
+      this.pageSize = val;
       this.getServiceList();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.pageIndex=val;
+      this.pageIndex = val;
       this.getServiceList();
     },
     handlechange(params) {
       if (params.type === "edit") {
         console.log(params);
+        this.dialogEdit=true
       }
       if (params.type === "delete") {
         console.log(params);
@@ -176,16 +243,14 @@ export default {
     getRow(row, event) {
       console.log(row);
     },
-    getServiceList(){
+    getServiceList() {
       this.Axios(
         {
           params: {
             page: this.pageIndex,
-            size: this.pageSize,
+            size: this.pageSize
           },
-          option: {
-
-          },
+          option: {},
           type: "get",
           url: "/api-platform/network/list"
         },
@@ -194,17 +259,18 @@ export default {
         result => {
           console.log(result.data);
           this.tableData = result.data.data.content;
-          this.total=result.data.data.totalElement;
+          this.total = result.data.data.totalElement;
         },
         ({ type, info }) => {}
       );
     }
   },
-  created(){
+  created() {
     this.getServiceList();
   },
   components: {
-    tableList
+    tableList,
+    addServive
   }
 };
 </script>
@@ -216,7 +282,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.store_list {
+.server_list {
   font-size: 14px;
   color: @font-normal;
   .top_list {
@@ -253,13 +319,6 @@ export default {
         }
       }
     }
-  }
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
   }
 }
 </style>

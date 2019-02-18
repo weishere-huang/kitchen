@@ -8,7 +8,14 @@ import Details from '@/components/order/Details'
 import AddMenu from '@/components/store/AddMenu'
 import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
+import Problems from '@/components/message/Problems'
+import Advertising from '@/components/message/Advertising'
 import SalesArea from '@/components/salesArea/index'
+import Administrator from '@/components/system/Administrator'
+import RoleManagement from '@/components/system/RoleManagement'
+import AddRole from '@/components/system/addOrEditRole/AddRole'
+import EditRole from '@/components/system/addOrEditRole/EditRole'
+import CookbookClassify from '@/components/cookbook/Classify'
 
 Vue.use(Router)
 const router = new Router({
@@ -112,6 +119,85 @@ const router = new Router({
       component: SalesArea,
       props: {
         pageName: '销售区域'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Administrator',
+      name: 'Administrator',
+      component: Administrator,
+      props: {
+        pageName: '管理员列表'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/RoleManagement',
+      name: 'RoleManagement',
+      component: RoleManagement,
+      props: {
+        pageName: '角色管理'
+      },
+      meta: {
+        requireAuth: false,
+      },
+      children:[
+        {
+          path: 'AddRole',
+          name: 'AddRole',
+          component: AddRole,
+          props: {
+            pageName: '添加角色'
+          },
+          meta: {
+            requireAuth: false,
+          },
+        },
+        {
+          path: 'EditRole/:id/',
+          name: 'EditRole',
+          component: EditRole,
+          props: {
+            pageName: '修改角色'
+          },
+          meta: {
+            requireAuth: false,
+          },
+        }
+      ]
+    },
+    {
+      path: '/CookbookClassify',
+      name: 'CookbookClassify',
+      component: CookbookClassify,
+      props: {
+        pageName: '菜谱分类'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Problems',
+      name: 'Problems',
+      component: Problems,
+      props: {
+        pageName: '常见问题'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Advertising',
+      name: 'Advertising',
+      component: Advertising,
+      props: {
+        pageName: '广告列表'
       },
       meta: {
         requireAuth: false,
