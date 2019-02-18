@@ -197,10 +197,32 @@ export default {
           this.reload();
         }
       })
-    }
+    },
+    getRoleList(){
+      this.Axios(
+        {
+          params: {
+
+          },
+          option: {},
+          type: "get",
+          url: "/api-platform/role/listAllRole"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.userMsg = result.data.data;
+          this.editUserMsg = result.data.data;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
   },
   created(){
     this.getlist();
+    this.getRoleList();
   },
   components: {
     tableList,

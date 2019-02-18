@@ -42,9 +42,9 @@ export default {
   data() {
     return {
       classify: [
-        { label: "订单问题", value: "订单问题" },
-        { label: "支付问题", value: "支付问题" },
-        { label: "其他问题", value: "其他问题" }
+        { label: "订单问题", value: 1 },
+        { label: "支付问题", value: 2 },
+        { label: "其他问题", value: 3 }
       ]
     };
   },
@@ -53,6 +53,14 @@ export default {
       title: {},
       classify: {},
       content: {},
+    }
+  },
+  methods:{
+    beforeadd(){
+      
+    },
+    addfaq(){
+
     }
   }
 };
