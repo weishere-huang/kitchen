@@ -4,9 +4,14 @@
       <el-button
         size="small"
         type="primary"
-        @click="dialogVisible=true"
+        @click="$router.back(-1)"
         class="el-icon-arrow-left"
       >返回</el-button>
+      <el-button
+        size="small"
+        type="primary"
+        @click="addContro"
+      >确认添加</el-button>
     </div>
     <div class="bottom_list">
       <div class="top_title">
@@ -16,13 +21,14 @@
         <el-col :span="16">
           <el-form label-width="200px">
             <el-form-item label="角色名：">
-              <el-input size="small"></el-input>
+              <el-input size="small" v-model="name"></el-input>
             </el-form-item>
-            <el-form-item label="角色名：">
+            <el-form-item label="描述：">
               <el-input
                 type="textarea"
                 rows="6"
                 size="small"
+                v-model="description"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -42,9 +48,15 @@
           ref="tree"
           highlight-current
           :props="defaultProps"
-      
-          
         >
+          <span
+            class="custom-tree-node"
+            slot-scope="{ node, data }"
+          >
+                <span :title="data.name" class="listcontent">
+                  {{ data.name +"　("+data.dataUrl+")"}}
+                </span >
+          </span>
         </el-tree>
 
       </div>
@@ -78,8 +90,76 @@ export default {
       defaultProps: {
         children: "children",
         label: "label"
-      }
+      },
+      name:null,
+      description:null,
+      permissionIds:null
     };
+  },
+  methods:{
+    addContro(){
+      this.addRole();
+    },
+    addRole(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        name:this.name,
+        description:this.description,
+        // permissionIds:this.permissionIds
+        permissionIds:"1,2,3,4,5,6,7,8"
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/role/add",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        console.log(result.data);
+        if(result.data.data.code===200){
+          this.$message.success();
+        }
+      })
+    },
+    getAllpermission(){
+      this.Axios(
+        {
+          params: {},
+          option: {},
+          type: "get",
+          url: "/api-platform/permission/listAllPermission"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data)
+          let code = Math.min.apply(null, (result.data.data).map((item)=>{return item.parentCode}));
+          this.role = this.filterArray(result.data.data,code);
+          console.log(this.role)
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+    filterArray(data, parent) {
+      let vm = this;
+      var tree = [];
+      var temp;
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].parentCode == parent) {
+          var obj = data[i];
+          temp = this.filterArray(data, data[i].id);
+          if (temp.length > 0) {
+            obj.children = temp;
+          }
+          tree.push(obj);
+        }
+      }
+      return tree;
+    },
+  },
+  created(){
+    this.getAllpermission();
   }
 };
 </script>
