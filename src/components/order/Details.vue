@@ -33,7 +33,7 @@
           :span="12"
           class="form_case"
         >
-          <el-form label-width="30%">
+          <el-form label-width="200px">
             <el-form-item label="订单编号：">
               <span>22222</span>
             </el-form-item>
@@ -84,7 +84,7 @@
           :span="12"
           class="form_case"
         >
-          <el-form label-width="30%">
+          <el-form label-width="200px">
             <el-form-item label="收货人：">
               <span>22222</span>
             </el-form-item>
@@ -114,7 +114,7 @@
       </div>
       <div class="table_list">
         <el-col :span="12">
-          <el-form label-width="30%">
+          <el-form label-width="200px">
             <el-form-item label="当前可执行操作：">
               <el-button
                 size="small"

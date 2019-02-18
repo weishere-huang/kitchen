@@ -128,6 +128,9 @@ input[type="number"] {
   height: 80px;
   line-height: 80px;
 }
+.el-upload-list--picture-card .el-upload-list__item {
+  margin: 0 8px 0px 0;
+}
 .el-icon-upload-success {
   position: absolute !important;
   top: 0px !important;
@@ -166,4 +169,15 @@ input[type="number"] {
 .el-button--small,
 .el-button--mini {
   font-size: 14px;
+}
+.el-button--default:focus,
+.el-button--default:hover {
+  color: #1cc09f;
+  border-color: #c6e2ff;
+  background-color: #ecf5ff;
+}
+.el-button--default:active {
+  color: #1cc09f;
+  border-color: #1cc09f;
+  outline: 0;
 }

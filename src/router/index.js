@@ -16,6 +16,11 @@ import RoleManagement from '@/components/system/RoleManagement'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
 import EditRole from '@/components/system/addOrEditRole/EditRole'
 import CookbookClassify from '@/components/cookbook/Classify'
+import Cookbook from '@/components/cookbook/index'
+import AddCookbook from '@/components/cookbook/addCookbook/AddCookbook'
+import EditCookbook from '@/components/cookbook/addCookbook/EditCookbook'
+import User from '@/components/user/User'
+import GuestBook from '@/components/user/GuestBook'
 
 Vue.use(Router)
 const router = new Router({
@@ -182,6 +187,39 @@ const router = new Router({
       },
     },
     {
+      path: '/Cookbook',
+      name: 'Cookbook',
+      component: Cookbook,
+      props: {
+        pageName: '菜谱列表'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/AddCookbook',
+      name: 'AddCookbook',
+      component: AddCookbook,
+      props: {
+        pageName: '添加菜谱'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/EditCookbook',
+      name: 'EditCookbook',
+      component: EditCookbook,
+      props: {
+        pageName: '修改菜谱'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
       path: '/Problems',
       name: 'Problems',
       component: Problems,
@@ -198,6 +236,28 @@ const router = new Router({
       component: Advertising,
       props: {
         pageName: '广告列表'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/User',
+      name: 'User',
+      component: User,
+      props: {
+        pageName: '用户列表'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/GuestBook',
+      name: 'GuestBook',
+      component: GuestBook,
+      props: {
+        pageName: '留言与反馈'
       },
       meta: {
         requireAuth: false,
