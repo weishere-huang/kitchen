@@ -16,6 +16,9 @@ import RoleManagement from '@/components/system/RoleManagement'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
 import EditRole from '@/components/system/addOrEditRole/EditRole'
 import CookbookClassify from '@/components/cookbook/Classify'
+import Cookbook from '@/components/cookbook/index'
+import AddCookbook from '@/components/cookbook/addCookbook/AddCookbook'
+import EditCookbook from '@/components/cookbook/addCookbook/EditCookbook'
 
 Vue.use(Router)
 const router = new Router({
@@ -174,6 +177,39 @@ const router = new Router({
       component: CookbookClassify,
       props: {
         pageName: '菜谱分类'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/Cookbook',
+      name: 'Cookbook',
+      component: Cookbook,
+      props: {
+        pageName: '菜谱列表'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/AddCookbook',
+      name: 'AddCookbook',
+      component: AddCookbook,
+      props: {
+        pageName: '添加菜谱'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/EditCookbook',
+      name: 'EditCookbook',
+      component: EditCookbook,
+      props: {
+        pageName: '修改菜谱'
       },
       meta: {
         requireAuth: false,

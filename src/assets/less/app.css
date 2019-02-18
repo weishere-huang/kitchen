@@ -12,6 +12,13 @@
   overflow: auto;
   background: linear-gradient(135deg, #2F4050 0%, #3a4753 100%) !important;
 }
+.siderWrapper .singleMenuItem {
+  background: linear-gradient(135deg, #2F4050 0%, #3a4753 100%) !important;
+}
+.siderWrapper .singleMenuItem:hover {
+  cursor: pointer;
+  background: linear-gradient(135deg, transparent 0%, #2c3b4b 50%, transparent 100%) !important;
+}
 .siderWrapper .el-submenu__title:hover {
   cursor: pointer;
   background: linear-gradient(135deg, transparent 0%, #2c3b4b 50%, transparent 100%);

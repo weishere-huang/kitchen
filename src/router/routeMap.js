@@ -65,11 +65,30 @@ export default [{
     defaultDock: true,
     icon: '&#xe640;',
     subMenu: [{
-      menu: '菜谱分类',
-      route: '/CookbookClassify',
-      defaultDock: true,
-      permissionCode: 'order_look_up'
-    }, ]
+        menu: '菜谱列表',
+        route: '/Cookbook',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+      {
+        menu: '添加菜谱',
+        route: '/AddCookbook',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+      {
+        menu: '修改菜谱',
+        route: '/EditCookbook',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+      {
+        menu: '菜谱分类',
+        route: '/CookbookClassify',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+    ]
   },
   {
     menu: '信息管理',
@@ -104,13 +123,13 @@ export default [{
       permissionCode: ''
     }]
   },
-  {
-    menu: '文章管理',
-    permissionCode: 'article',
-    defaultDock: true,
-    icon: '&#xe67d;',
-    subMenu: []
-  },
+  // {
+  //   menu: '文章管理',
+  //   permissionCode: 'article',
+  //   defaultDock: true,
+  //   icon: '&#xe67d;',
+  //   subMenu: []
+  // },
   {
     menu: '用户管理',
     permissionCode: 'user',

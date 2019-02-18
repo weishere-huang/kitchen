@@ -14,7 +14,7 @@
       </div>
       <div class="role_case">
         <el-col :span="16">
-          <el-form label-width="240px">
+          <el-form label-width="200px">
             <el-form-item label="角色名：">
               <el-input size="small"></el-input>
             </el-form-item>
