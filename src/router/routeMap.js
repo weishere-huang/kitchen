@@ -135,7 +135,18 @@ export default [{
     permissionCode: 'user',
     defaultDock: true,
     icon: '&#xe646;',
-    subMenu: []
+    subMenu: [
+      {
+        menu: '用户列表',
+        route: '/User',
+        permissionCode: ''
+      },
+      {
+        menu: '留言与反馈',
+        route: '/GuestBook',
+        permissionCode: ''
+      }
+    ]
   },
   {
     menu: '系统管理',

@@ -170,3 +170,14 @@ input[type="number"] {
 .el-button--mini {
   font-size: 14px;
 }
+.el-button--default:focus,
+.el-button--default:hover {
+  color: #1cc09f;
+  border-color: #c6e2ff;
+  background-color: #ecf5ff;
+}
+.el-button--default:active {
+  color: #1cc09f;
+  border-color: #1cc09f;
+  outline: 0;
+}
