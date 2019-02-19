@@ -24,6 +24,7 @@
         :prop="item.prop"
         show-overflow-tooltip
         :formatter="item.formatter"
+        :class-name="item.className"
       >
       </el-table-column>
       <el-table-column
