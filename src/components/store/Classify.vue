@@ -49,12 +49,12 @@
               <div @click.stop.prevent="changeUp(scope.$index, scope.row)">
                 <i
                   class="iconfont"
-                  v-if="scope.row.show==='0'"
+                  v-if="scope.row.show=='0'"
                   style="color:green;cursor: pointer;"
                 >&#xe659;</i>
                 <i
                   class="iconfont"
-                  v-if="scope.row.show==='1'"
+                  v-if="scope.row.show=='1'"
                   style="color:red;cursor: pointer;"
                 >&#xe658;</i>
               </div>
@@ -67,17 +67,24 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <el-input
-                size="small"
-                type="number"
-                v-model="scope.row.sort"
-                style="width:80px;padding:0;"
-              ></el-input>
+              <el-tooltip
+                class="item"
+                effect="light"
+                content="数值越大排序越靠前"
+                placement="top"
+              >
+                <el-input
+                  size="small"
+                  type="number"
+                  v-model="scope.row.sort"
+                  style="width:80px;padding:0;"
+                ></el-input>
+              </el-tooltip>
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
-            min-width="150"
+            width="150"
           >
             <template slot-scope="scope">
               <el-button
@@ -209,136 +216,135 @@
   </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        editClassify: false,
-        isShow: "1",
-        dialogVisible: false,
-        value: "",
-        tableData: [
-          {
-            name: "炒菜",
-            price: "9.8",
-            classify: "素菜",
-            number: "10",
-            time: "5",
-            content: "400克",
-            show: "0",
-            new: "0",
-            hot: "1",
-            sort: "100"
-          }
-        ]
-      };
-    },
-    methods: {
-      handleEdit(index, rowData) {
-        let params = {type: "edit", index: index, rowData: rowData};
-        console.log(params);
-        this.editClassify = true;
-      },
-      handleDelete(index, rowData) {
-        let params = {type: "delete", index: index, rowData: rowData};
-        console.log(params);
-      },
-      changeUp(index, val) {
-        console.log(val.new);
-        if (val.up === "1") {
-          this.tableData[index].up = "0";
-        } else {
-          this.tableData[index].up = "1";
+export default {
+  data() {
+    return {
+      editClassify: false,
+      isShow: "1",
+      dialogVisible: false,
+      value: "",
+      tableData: [
+        {
+          name: "炒菜",
+          price: "9.8",
+          classify: "素菜",
+          number: "10",
+          time: "5",
+          content: "400克",
+          show: "0",
+          new: "0",
+          hot: "1",
+          sort: "100"
         }
-      },
-      getClassfy() {
-        this.Axios(
-          {
-            params: {},
-            option: {},
-            type: "get",
-            url: ""
-          },
-          this
-        ).then(
-          result => {
-            this.tableData = result.data.data.content;
-          },
-          ({type, info}) => {
-          }
-        );
+      ]
+    };
+  },
+  methods: {
+    handleEdit(index, rowData) {
+      let params = { type: "edit", index: index, rowData: rowData };
+      console.log(params);
+      this.editClassify = true;
+    },
+    handleDelete(index, rowData) {
+      let params = { type: "delete", index: index, rowData: rowData };
+      console.log(params);
+    },
+    changeUp(index, val) {
+      console.log(val);
+      if (val.show == "1") {
+        this.tableData[index].show = "0";
+      } else {
+        this.tableData[index].show = "1";
       }
     },
-    created(){
-      this.getClassfy();
+    getClassfy() {
+      this.Axios(
+        {
+          params: {},
+          option: {},
+          type: "get",
+          url: ""
+        },
+        this
+      ).then(
+        result => {
+          this.tableData = result.data.data.content;
+        },
+        ({ type, info }) => {}
+      );
     }
-  };
+  },
+  created() {
+    this.getClassfy();
+  }
+};
 </script>
 
 <style lang="less">
-  @main-color: #1cc09f;
-  @bgColor: #f0f2f5;
-  @font-normal: #333333;
-  @font-subsidiary: #999999;
-  @font-special: #1cc09f;
-  @border: 1px solid #dde2eb;
-  .classify_list {
-    font-size: 14px;
-    color: @font-normal;
-    .top_list {
-      // line-height: 60px;
-      background-color: white;
-      padding: 10px;
-    }
-    .bottom_list {
-      background-color: white;
-      margin-top: 10px;
-      padding-bottom: 10px;
+@main-color: #1cc09f;
+@bgColor: #f0f2f5;
+@font-normal: #333333;
+@font-subsidiary: #999999;
+@font-special: #1cc09f;
+@border: 1px solid #dde2eb;
+.classify_list {
+  font-size: 14px;
+  color: @font-normal;
+  .top_list {
+    // line-height: 60px;
+    background-color: white;
+    padding: 10px;
+  }
+  .bottom_list {
+    background-color: white;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    .top_title {
+      padding: 0 10px;
+      line-height: 60px;
       overflow: hidden;
-      .top_title {
-        padding: 0 10px;
-        line-height: 60px;
-        overflow: hidden;
-        border-bottom: @border;
-        h4 {
-          float: left;
-        }
-        .top_search {
-          width: 400px;
-          float: right;
-        }
+      border-bottom: @border;
+      h4 {
+        float: left;
       }
-      .table_list {
-        overflow: hidden;
-        padding: 10px;
-        .el-input__inner {
-          padding: 0;
-          border: none;
-          &:focus {
-            border: 1px solid #1cc09f;
-          }
-        }
+      .top_search {
+        width: 400px;
+        float: right;
       }
     }
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-    }
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-    .el-radio__input.is-checked .el-radio__inner {
-      border-color: #1cc09f;
-      background: #1cc09f;
-    }
-    .el-radio__input.is-checked + .el-radio__label {
-      color: #1cc09f;
-    }
-    .el-radio__inner:hover {
-      border-color: #1cc09f;
-    }
-    .el-dialog__footer {
-      padding: 10px 50px 20px;
+    .table_list {
+      overflow: hidden;
+      padding: 10px;
+      .el-input__inner {
+        padding: 0;
+        border: none;
+        &:focus {
+          border: 1px solid #1cc09f;
+        }
+      }
     }
   }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  .el-radio__input.is-checked .el-radio__inner {
+    border-color: #1cc09f;
+    background: #1cc09f;
+  }
+  .el-radio__input.is-checked + .el-radio__label {
+    color: #1cc09f;
+  }
+  .el-radio__inner:hover {
+    border-color: #1cc09f;
+  }
+  .el-dialog__footer {
+    padding: 10px 50px 20px;
+  }
+}
 </style>
 
