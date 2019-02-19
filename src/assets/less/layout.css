@@ -181,3 +181,6 @@ input[type="number"] {
   border-color: #1cc09f;
   outline: 0;
 }
+.el-upload--picture-card i {
+  line-height: 80px;
+}
