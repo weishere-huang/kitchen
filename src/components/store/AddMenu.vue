@@ -15,7 +15,6 @@
       <el-form label-width="200px">
         <el-form-item label="商品名称：">
           <el-input
-
             type="text"
             size="small"
             style="width:300px;"
@@ -40,28 +39,35 @@
           <el-input
             type="text"
             size="small"
-            style="width:199px;"
-          ></el-input>元
+            style="width:192px;"
+            placeholder="单位：元"
+          ></el-input>
         </el-form-item>
         <el-form-item label="商品库存：">
           <el-input
             type="text"
             size="small"
-            style="width:199px;"
+            style="width:192px;"
           ></el-input>
         </el-form-item>
         <el-form-item label="烹饪时长：">
           <el-input
             type="text"
             size="small"
-            style="width:199px;"
-          ></el-input>分钟
+            style="width:192px;"
+            placeholder="单位：分钟"
+          ></el-input>
         </el-form-item>
         <el-form-item label="参考辣度：">
           <el-radio-group
             v-model="radio5"
             size="small"
+            style="width:192px;"
           >
+            <el-radio-button label="0"><i
+                class="iconfont"
+                style="color:#999999;"
+              >&#xe612;</i></el-radio-button>
             <el-radio-button label="1"><i
                 class="iconfont"
                 style="color:red;"
@@ -74,28 +80,22 @@
                 class="iconfont"
                 style="color:red;"
               >&#xe614;</i></el-radio-button>
-            <el-radio-button label="4"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe612;</i></el-radio-button>
-            <el-radio-button label="5"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe612;</i></el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="净含量：">
           <el-input
             type="text"
             size="small"
-            style="width:199px;"
-          ></el-input>克
+            style="width:192px;"
+            placeholder="单位：克"
+          ></el-input>
         </el-form-item>
         <el-form-item label="食材搭配：">
           <el-input
             type="text"
             size="small"
             style="width:300px;"
+            placeholder=" 如：精选五花肉，青椒，蒜片，姜片"
           ></el-input>
         </el-form-item>
         <el-form-item label="商品图片：">
@@ -129,33 +129,6 @@
           <el-checkbox v-model="hotMenu">热销</el-checkbox>
           <el-checkbox v-model="newMeny">新品</el-checkbox>
         </el-form-item>
-        <el-form-item label="销售区域：">
-          <div class="area_case">
-            <div class="top_case">支持一下区域：
-              <span>
-                <i
-                  class="el-icon-edit-outline"
-                  @click="areaShow=true"
-                ></i>
-                <i class="iconfont">&#xe623;</i></span></div>
-            <div class="content_case">
-              <ul>
-                <li>
-                  1231233123123
-                </li>
-                <li>
-                  1231233123123
-                </li>
-                <li>
-                  1231233123123
-                </li>
-                <li>
-                  1231233123123
-                </li>
-              </ul>
-            </div>
-          </div>
-        </el-form-item>
         <el-form-item label="详细内容：">
           <el-input
             type="textarea"
@@ -176,27 +149,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-dialog
-      title="选择销售区域"
-      :visible.sync="areaShow"
-      width="360px"
-    >
-      <area-list :districtShow="false"></area-list>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          @click="areaShow = false"
-          size="small"
-        >取 消</el-button>
-        <el-button
-          type="primary"
-          size="small"
-          @click="areaShow = false"
-        >确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -251,26 +203,27 @@ export default {
     xieru() {
       UE.getEditor("editor").setContent("欢迎使用ueditor");
     },
-    savespu(){
+    savespu() {
       let qs = require("qs");
-      let data = qs.stringify({
-
-      });
-      this.Axios({
-        params:data,
-        url:"",
-        type:"post",
-        option:{
-          successMsg:"保存成功"
-        }
-      },this).then(result=>{
+      let data = qs.stringify({});
+      this.Axios(
+        {
+          params: data,
+          url: "",
+          type: "post",
+          option: {
+            successMsg: "保存成功"
+          }
+        },
+        this
+      ).then(result => {
         console.log(result.data);
-        if(result.data.code===200){
-          this.$router.push('/store');
-        }else{
-          this.$message.error("出库失败,请重新尝试")
+        if (result.data.code === 200) {
+          this.$router.push("/store");
+        } else {
+          this.$message.error("出库失败,请重新尝试");
         }
-      })
+      });
     }
   },
 
@@ -376,8 +329,12 @@ export default {
       }
     }
   }
-}
-.dddd{
-  min-width: 400px;
+  .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+    -webkit-box-shadow: -1px 0 0 0 #1cc09f;
+    box-shadow: -1px 0 0 0 #1cc09f;
+  }
+  .el-form-item {
+    margin-bottom: 12px;
+  }
 }
 </style>

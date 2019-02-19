@@ -45,7 +45,10 @@
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small" @click="">搜索</el-button>
+            <el-button
+              size="small"
+              plain
+            >搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -58,11 +61,6 @@
           tooltip-effect="light"
           :header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
         >
-          <el-table-column
-            type="selection"
-            width="30"
-          >
-          </el-table-column>
           <el-table-column
             label="名称"
             min-width="100"
@@ -82,15 +80,17 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="单价（元）"
+            label="*单价（元）"
             min-width="100"
           >
             <template slot-scope="scope">
               ￥<el-input
                 size="small"
                 type="number"
+                step="0.01"
                 v-model="scope.row.price"
                 style="width:60px;padding:0;"
+                @change="handleInput(scope.row.price,scope.$index)"
               ></el-input>
             </template>
           </el-table-column>
@@ -104,7 +104,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="烹饪时长(分钟)"
+            label="*烹饪时长(分钟)"
             min-width="110"
             show-overflow-tooltip
           >
@@ -127,7 +127,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="上架"
+            label="*上架"
             min-width="60"
             show-overflow-tooltip
           >
@@ -148,7 +148,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="新品"
+            label="*新品"
             min-width="60"
             show-overflow-tooltip
           >
@@ -169,7 +169,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="热销"
+            label="*热销"
             min-width="60"
             show-overflow-tooltip
           >
@@ -190,29 +190,32 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="排序"
+            label="*排序"
             min-width="80"
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <el-input
-                size="small"
-                type="number"
-                v-model="scope.row.sort"
-                style="width:60px;padding:0;"
-              ></el-input>
+              <el-tooltip
+                class="item"
+                effect="light"
+                content="数值越大排序越靠前"
+                placement="top"
+              >
+                <el-input
+                  size="small"
+                  type="number"
+                  step="0.01"
+                  v-model="scope.row.sort"
+                  style="width:60px;padding:0;"
+                ></el-input>
+              </el-tooltip>
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
-            min-width="150"
+            min-width="100"
           >
             <template slot-scope="scope">
-              <el-button
-                type="text"
-                size="mini"
-                @click.stop.prevent="handleDetails(scope.$index, scope.row)"
-              >查看</el-button>
               <el-button
                 type="text"
                 size="mini"
@@ -244,12 +247,13 @@
         >
         </el-pagination>
       </div>
+      <div style="margin-top:10px;line-height:32px;padding-left:10px;color:#999999">提示：带“*”字段可以实时编辑</div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  inject:['reload'],
+  inject: ["reload"],
   data() {
     return {
       currentPage: 1,
@@ -290,16 +294,18 @@ export default {
           sort: "100"
         }
       ],
-      pageIndex:1,
-      pageSize:10,
-      keyword:"",
-      total:0,
+      pageIndex: 1,
+      pageSize: 10,
+      keyword: "",
+      total: 0
     };
   },
   methods: {
-    handleDetails(index, rowData) {
-      let params = { type: "detalis", index: index, rowData: rowData };
-      console.log(params);
+    handleInput(e, index) {
+      console.log(e);
+      console.log(index);
+      this.tableData[index].price = e.match(/^\d*(\.?\d{0,2})/g)[0] || null;
+      console.log(e.match(/^\d*(\.?\d{0,2})/g)[0]);
     },
     handleEdit(index, rowData) {
       let params = { type: "edit", index: index, rowData: rowData };
@@ -311,13 +317,13 @@ export default {
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      this.pageIndex=1;
-      this.pageSize=val;
+      this.pageIndex = 1;
+      this.pageSize = val;
       this.foodlist();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.pageIndex=val;
+      this.pageIndex = val;
       this.foodlist();
     },
     changeNew(index, val) {
@@ -344,15 +350,14 @@ export default {
         this.tableData[index].hot = "1";
       }
     },
-    foodlist(){
+    foodlist() {
       this.Axios(
         {
           params: {
             page: this.pageIndex,
-            size: this.pageSize,
+            size: this.pageSize
           },
-          option: {
-          },
+          option: {},
           type: "get",
           url: "/api-mall/showItem"
         },
@@ -367,7 +372,7 @@ export default {
       );
     }
   },
-  created(){
+  created() {
     this.foodlist();
   }
 };

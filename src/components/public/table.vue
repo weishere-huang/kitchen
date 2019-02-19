@@ -23,6 +23,7 @@
         :min-width="item.width"
         :prop="item.prop"
         show-overflow-tooltip
+        :formatter="item.formatter"
       >
       </el-table-column>
       <el-table-column
