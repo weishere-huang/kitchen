@@ -169,12 +169,14 @@ export default [{
         menu: '添加角色',
         route: '/RoleManagement/AddRole',
         defaultDock: true,
+        visible: true,
         permissionCode: 'order_look_up'
       },
       {
         menu: '修改角色',
         routeReg:/^\/RoleManagement\/EditRole\/\d{1,}$/i,
         defaultDock: true,
+        visible: true,
         permissionCode: 'order_look_up'
       },
     ]
