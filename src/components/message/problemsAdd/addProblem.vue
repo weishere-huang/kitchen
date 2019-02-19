@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item label="分类：">
         <el-select
-          v-model="addMsg.classify"
+          v-model="addMsg.faqType"
           placeholder="请选择"
           style="width:49%"
           size="small"
@@ -51,17 +51,18 @@ export default {
   props: {
     addMsg: {
       title: {},
-      classify: {},
+      faqType: {},
       content: {},
     }
   },
   methods:{
     beforeadd(){
-      
+
     },
     addfaq(){
 
-    }
+    },
+
   }
 };
 </script>

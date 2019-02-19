@@ -1,50 +1,53 @@
 <template>
   <div class="role_management">
-    <router-view></router-view>
-    <div class="top_list" :class="['hidden']">
-      <el-button
-        size="small"
-        type="primary"
-        class="el-icon-circle-plus-outline"
-        @click="$router.push({path:'/RoleManagement/AddRole'})"
-      >添加角色</el-button>
-    </div >
-    <div class="bottom_list" :class="[{hide:isHideList}]">
-      <div class="top_title">
-        <h4>角色列表</h4>
+    <!-- <router-view></router-view> -->
+    <div v-show="isHideList">
+      <div class="top_list">
+        <el-button
+          size="small"
+          type="primary"
+          class="el-icon-circle-plus-outline"
+          @click="$router.push({path:'/RoleManagement/AddRole'})"
+        >添加角色</el-button>
       </div>
-      <div class="table_list">
-        <table-list
-          :selectShow="false"
-          :handleSelectionChange="handleSelectionChange"
-          :column="items"
-          v-on:handlechange="handlechange"
-          :data="tableData"
-          :rowDblclick="getRow"
-          :handle="100"
-          :deleteShow="true"
-          :handleShow="true"
-          :editShow="true"
-        ></table-list>
+      <div class="bottom_list">
+        <div class="top_title">
+          <h4>角色列表</h4>
+        </div>
+        <div class="table_list">
+          <table-list
+            :selectShow="false"
+            :handleSelectionChange="handleSelectionChange"
+            :column="items"
+            v-on:handlechange="handlechange"
+            :data="tableData"
+            :rowDblclick="getRow"
+            :handle="100"
+            :deleteShow="true"
+            :handleShow="true"
+            :editShow="true"
+          ></table-list>
 
-      </div>
-      <div
-        class="block"
-        style="margin-top:10px;float:right"
-      >
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-sizes="[15, 30, 100]"
-          :page-size="10"
-          layout="sizes, prev, pager, next"
-          :total="total"
+        </div>
+        <div
+          class="block"
+          style="margin-top:10px;float:right"
         >
-        </el-pagination>
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="[15, 30, 100]"
+            :page-size="10"
+            layout="sizes, prev, pager, next"
+            :total="total"
+          >
+          </el-pagination>
+        </div>
       </div>
     </div>
+    <router-view></router-view>
   </div>
 </template>
 <script>
@@ -64,33 +67,30 @@ export default {
           label: "角色描述",
           prop: "description",
           width: 90
-        },
-
+        }
       ],
       tableData: [
         {
           admin: "商城管理员",
-          phone: "张小红专用",
+          phone: "张小红专用"
         }
       ],
       pageIndex: 1,
       pageSize: 10,
       currentPage: 1,
       total: 0,
-      isHideList: this.$route.params.id !== undefined
-        ? hidden
-        : false,
+      isHideList: true
     };
   },
   methods: {
-    handleSelectionChange(){},
+    handleSelectionChange() {},
     getRow(row, event) {
       console.log(row);
     },
     handlechange(params) {
       if (params.type === "edit") {
         console.log(params);
-        this.$router.push("/RoleManagement/EditRole/"+params.rowData.id);
+        this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
       }
       if (params.type === "delete") {
         console.log(params);
@@ -106,19 +106,19 @@ export default {
       console.log(`每页 ${val} 条`);
       this.pageIndex = 1;
       this.pageSize = val;
-    //   this.listOrder();
+      //   this.listOrder();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.pageIndex = val;
-    //   this.listOrder();
+      //   this.listOrder();
     },
-    getRoleList(){
+    getRoleList() {
       this.Axios(
         {
           params: {
-            page:this.pageIndex,
-            size:this.pageSize
+            page: this.pageIndex,
+            size: this.pageSize
           },
           option: {},
           type: "get",
@@ -130,30 +130,31 @@ export default {
           console.log(result.data);
           this.tableData = result.data.data;
         },
-        ({type, info}) => {
-        }
+        ({ type, info }) => {}
       );
     },
-    deleteRole(id){
+    deleteRole(id) {
       let qs = require("qs");
       let data = qs.stringify({
-        roleId:id
+        roleId: id
       });
-      this.Axios({
-        params:data,
-        url:"/api-platform/role/delete",
-        type:"post",
-        option:{
-        }
-      },this).then(result=>{
+      this.Axios(
+        {
+          params: data,
+          url: "/api-platform/role/delete",
+          type: "post",
+          option: {}
+        },
+        this
+      ).then(result => {
         console.log(result.data);
-        if(result.data.code===200){
+        if (result.data.code === 200) {
           this.reload();
         }
-      })
-    },
+      });
+    }
   },
-  created(){
+  created() {
     this.getRoleList();
   },
   components: {
@@ -161,11 +162,11 @@ export default {
   },
   watch: {
     $route() {
-      let a=this.$route.matched.find(item=>(item.name==="AddRole"))?true:false;
-      let b=this.$route.params.id !== undefined ? true : false;
-      this.isHideList = a||b ?true:false;
+      this.$route.matched.find(item=>(item.name==="AddRole"))||
+      this.$route.params.id !== undefined ? this.isHideList =false : this.isHideList =true;
+      console.log(this.isHideList);
     }
-  },
+  }
 };
 </script>
 
