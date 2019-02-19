@@ -49,6 +49,7 @@
               v-model="faqType"
               placeholder="请选择"
               size="small"
+              clearable="true"
             >
               <el-option
                 v-for="item in classify"
