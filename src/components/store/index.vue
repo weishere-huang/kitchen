@@ -47,7 +47,7 @@
           >
             <el-button
               size="small"
-              @click=""
+              plain
             >搜索</el-button>
           </el-col>
         </div>

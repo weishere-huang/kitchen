@@ -74,7 +74,7 @@
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small">搜索</el-button>
+            <el-button size="small" plain>搜索</el-button>
           </el-col>
         </div>
       </div>
