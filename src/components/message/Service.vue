@@ -39,15 +39,16 @@
             style="padding:0 5px;"
           >
             <el-select
-              v-model="value"
+              v-model="provinceCode"
               placeholder="———省———"
               size="small"
+              @change="getCity"
             >
               <el-option
                 v-for="item in province"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.id"
+                :label="item.name"
+                :value="item.code"
               >
               </el-option>
             </el-select>
@@ -57,15 +58,14 @@
             style="padding:0 5px;"
           >
             <el-select
-              v-model="value"
               placeholder="———市———"
               size="small"
             >
               <el-option
                 v-for="item in cities"
                 :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :label="item.name"
+                :value="item.code"
               >
               </el-option>
             </el-select>
@@ -138,6 +138,7 @@
 import tableList from "../public/table";
 import addServive from "./serviceAdd/Add";
 export default {
+  inject: ["reload"],
   data() {
     return {
       addMsg: {
@@ -163,7 +164,7 @@ export default {
       province: [],
       cities: [],
       currentPage: 1,
-      value: "",
+      provinceCode: "",
       items: [
         {
           label: "网点名称",
@@ -196,19 +197,11 @@ export default {
           width: 60
         }
       ],
-      tableData: [
-        {
-          name: "成都金牛区售后服务中心（授权）",
-          area: "四川省 - 成都市",
-          address: "四川省成都市武侯区华兴街道一环路南二段X号营业楼",
-          service: "028-12345678",
-          workTime: "09:00 - 18:00",
-          range: "送修、寄修"
-        }
-      ],
+      tableData: [],
       pageIndex: 1,
       pageSize: 10,
-      total: 10
+      total: 10,
+      areaName:null
     };
   },
   methods: {
@@ -248,7 +241,8 @@ export default {
         {
           params: {
             page: this.pageIndex,
-            size: this.pageSize
+            size: this.pageSize,
+            areaName:this.areaName,
           },
           option: {},
           type: "get",
@@ -263,10 +257,51 @@ export default {
         },
         ({ type, info }) => {}
       );
-    }
+    },
+    getAllProvince(){
+      this.Axios(
+        {
+          params: {},
+          option: {},
+          type: "get",
+          url: "/api-platform/network/AllProvince"
+        },
+        this
+      ).then(
+        result => {
+          this.province = result.data.data;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+    getCity(){
+      this.Axios(
+        {
+          params: {
+            code:this.provinceCode
+          },
+          option: {},
+          type: "get",
+          url: "/api-platform/network/findAllCity"
+
+        },
+        this
+      ).then(
+        result => {
+          this.cities = result.data.data;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+
   },
   created() {
+    //查询网点列表
     this.getServiceList();
+    //查询省
+    this.getAllProvince();
   },
   components: {
     tableList,
