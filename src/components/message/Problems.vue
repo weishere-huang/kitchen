@@ -70,7 +70,7 @@
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small" @click="search">搜索</el-button>
+            <el-button size="small" @click="search" plain>搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -167,7 +167,10 @@
           {
             label: "分类",
             prop: "faqType",
-            width: 80
+            width: 80,
+            formatter:function (row,column) {
+              return row.faqType==1?"订单问题":row.faqType==2?"支付问题":"其他问题"
+            }
           },
           {
             label: "发布时间",

@@ -39,6 +39,7 @@
             <el-button
               size="small"
               @click="listOrder"
+              plain
             >搜索</el-button>
           </el-col>
         </div>
