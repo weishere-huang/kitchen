@@ -97,7 +97,7 @@
 
     </div>
     <el-dialog
-      title="添加分类"
+      title="修改分类"
       :visible.sync="dialogEdit"
       width="500px"
     >
