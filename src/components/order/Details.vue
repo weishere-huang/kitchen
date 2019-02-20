@@ -57,6 +57,7 @@
           <el-button
             size="small"
             @click="dialogPay = false"
+            plain
           >取 消</el-button>
           <el-button
             size="small"
@@ -98,6 +99,7 @@
           <el-button
             size="small"
             type="primary"
+            plain
             @click="dialogClose = false"
           >确 定</el-button>
         </span>
@@ -129,6 +131,7 @@
           <el-button
             size="small"
             @click="dialogPlan = false"
+            plain
           >取 消</el-button>
           <el-button
             size="small"

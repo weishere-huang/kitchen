@@ -200,3 +200,10 @@ input[type="number"] {
 .el-loading-spinner i {
   color: #1cc09f;
 }
+.el-date-table td.current:not(.disabled) span {
+  color: #fff;
+  background-color: #1cc09f;
+}
+.el-date-table td.available:hover {
+  color: #1cc09f;
+}
