@@ -9,7 +9,7 @@
           placeholder="6~20位字符组成，以字母开头"
           size="small"
           style="width:95%"
-          v-model="addInfo.userName"
+          v-model="addInfo.account"
         ></el-input>
       </el-form-item>
       <el-form-item label="登录密码：">
@@ -17,6 +17,7 @@
           placeholder="6~20位字符组成，区分大小写"
           size="small"
           style="width:95%"
+          type="password"
           v-model="addInfo.password"
         ></el-input>
       </el-form-item>
@@ -25,6 +26,7 @@
           placeholder="请再次输入登录密码"
           size="small"
           style="width:95%"
+          type="password"
           v-model="addInfo.confirmPassword"
         ></el-input>
       </el-form-item>
@@ -41,7 +43,7 @@
         style="margin-bottom:5px;"
       >
         <el-select
-          v-model="addInfo.role"
+          v-model="addInfo.roleId"
           placeholder="请选择"
           style="width:95%"
           size="small"
@@ -49,8 +51,8 @@
           <el-option
             v-for="item in options"
             :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :label="item.name"
+            :value="item.id"
           >
           </el-option>
         </el-select>

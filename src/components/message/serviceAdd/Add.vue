@@ -34,7 +34,7 @@
       </el-form-item>
       <el-form-item label="网点名称：">
         <el-input
-          v-model="addMsg.name"
+          v-model="addMsg.title"
           size="small"
           style="width:99%"
         ></el-input>
@@ -48,7 +48,7 @@
       </el-form-item>
       <el-form-item label="服务热线：">
         <el-input
-          v-model="addMsg.tel"
+          v-model="addMsg.phone"
           size="small"
           style="width:200px"
           placeholder="如：028-12345678"
@@ -56,7 +56,7 @@
       </el-form-item>
       <el-form-item label="工作时间：">
         <el-input
-          v-model="addMsg.time"
+          v-model="addMsg.workingHours"
           size="small"
           style="width:200px"
           placeholder="如：09:00-18:00"
@@ -66,7 +66,7 @@
         label="服务范围："
         style="margin-bottom: 0px;"
       >
-        <el-checkbox-group v-model="addMsg.range">
+        <el-checkbox-group v-model="addMsg.serviceMode">
           <el-checkbox label="送修"></el-checkbox>
           <el-checkbox label="寄修"></el-checkbox>
         </el-checkbox-group>
@@ -86,11 +86,11 @@ export default {
     addMsg: {
       province: {},
       city: {},
-      name: {},
+      title: {},
       address: {},
-      tel: {},
-      time: {},
-      range: {}
+      phone: {},
+      workingHours: {},
+      serviceMode: {}
     }
   }
 };

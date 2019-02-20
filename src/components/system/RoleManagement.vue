@@ -106,12 +106,12 @@ export default {
       console.log(`每页 ${val} 条`);
       this.pageIndex = 1;
       this.pageSize = val;
-      //   this.listOrder();
+      this.getRoleList();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.pageIndex = val;
-      //   this.listOrder();
+      this.getRoleList();
     },
     getRoleList() {
       this.Axios(
@@ -164,7 +164,6 @@ export default {
     $route() {
       this.$route.matched.find(item=>(item.name==="AddRole"))||
       this.$route.params.id !== undefined ? this.isHideList =false : this.isHideList =true;
-      console.log(this.isHideList);
     }
   }
 };

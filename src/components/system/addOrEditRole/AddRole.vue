@@ -67,26 +67,7 @@
 export default {
   data() {
     return {
-      role: [
-        {
-          label: "第一级",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-              children: [
-                {
-                  id: 7,
-                  label: "三级 3-1"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: "第一级"
-        }
-      ],
+      role: [],
       defaultProps: {
         children: "children",
         label: "label"
@@ -116,8 +97,8 @@ export default {
         }
       },this).then(result=>{
         console.log(result.data);
-        if(result.data.data.code===200){
-          this.$message.success();
+        if(result.data.code===200){
+          this.$router.back(-1);
         }
       })
     },
