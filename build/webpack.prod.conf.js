@@ -114,6 +114,18 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency',
       chunks: ['manifest', 'vendor', 'forgetpassword']
     }),
+     new HtmlWebpackPlugin({
+       filename: config.build.printorder,
+       template: 'printorder.html',
+       inject: true,
+       minify: {
+         removeComments: true,
+         collapseWhitespace: true,
+         removeAttributeQuotes: true
+       },
+       chunksSortMode: 'dependency',
+       chunks: ['manifest', 'vendor', 'printorder']
+     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting

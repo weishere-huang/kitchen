@@ -29,7 +29,7 @@ export default [{
         // routeReg: /^\/Order\/Details\/\d{1,}$/i,
         defaultDock: true,
         permissionCode: 'order_details_look_up'
-      },
+      }
     ]
   },
   {
