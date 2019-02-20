@@ -6,22 +6,167 @@
         type="primary"
         class="el-icon-arrow-left"
       >返回</el-button>
+      <div style="float:right;">
+        <el-button
+          size="small"
+          type="primary"
+        >付款</el-button>
+        <el-button
+          size="small"
+          type="primary"
+        >关闭</el-button>
+        <el-button
+          size="small"
+          type="primary"
+        >进度</el-button>
+        <el-button
+          size="small"
+          type="primary"
+          @click="toPrintOrder"
+        >打印订单</el-button>
+      </div>
+      <el-dialog
+        title="付款"
+        :visible.sync="dialogPay"
+        width="500px"
+        top="30vh"
+      >
+        <el-form
+          label-width="85px"
+          style="padding-top:16px;"
+        >
+          <el-form-item
+            label="操作说明："
+            style="margin-bottom:0px;"
+          >
+            <el-input
+              type="textarea"
+              rows="5"
+              style="width:99%"
+              placeholder="请输入说明文字，不少于五个字"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            size="small"
+            @click="dialogPay = false"
+          >取 消</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="dialogPay = false"
+          >确 定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="关闭"
+        :visible.sync="dialogClose"
+        width="500px"
+        top="30vh"
+      >
+        <el-form
+          label-width="85px"
+          style="padding-top:16px;"
+        >
+          <el-form-item
+            label="操作说明："
+            style="margin-bottom:0px;"
+          >
+            <el-input
+              type="textarea"
+              rows="5"
+              style="width:99%"
+              placeholder="请输入说明文字，不少于五个字"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            size="small"
+            @click="dialogClose = false"
+          >取 消</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="dialogClose = false"
+          >确 定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="进度"
+        :visible.sync="dialogPlan"
+        width="500px"
+        top="30vh"
+      >
+        <div style="margin-top:16px;">
+          <ul class="plan_case">
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+            <li><span><i class="iconfont">&#xe758;</i>订单已完成</span><span style="float:right">1月10日 11:33</span></li>
+          </ul>
+        </div>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            size="small"
+            @click="dialogPlan = false"
+          >取 消</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="dialogPlan = false"
+          >确 定</el-button>
+        </span>
+      </el-dialog>
+
     </div>
     <div class="bottom_list">
       <div class="top_title">
-        <h4>商品信息</h4>
+        <h4>收货人信息</h4>
       </div>
       <div class="table_list">
-        <table-list
-          :selectShow="false"
-          :column="items"
-          :data="tableData"
-          :rowDblclick="getRow"
-          :handleSelectionChange="handleSelectionChange"
-        ></table-list>
-        <div class="total">
-          <span style=" font-weight: 700;font-size:16px;">合计：￥999.44<span style=" font-weight:0;font-size:14px;">（含运费5.5元）</span></span>
-        </div>
+        <el-col
+          :span="12"
+          class="form_case"
+        >
+          <el-form label-width="200px">
+            <el-form-item label="收货人：">
+              <span>22222</span>
+            </el-form-item>
+            <el-form-item label="收货地址：">
+              <span>22222</span>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col
+          :span="12"
+          class="form_case"
+        >
+          <el-form label-width="30%">
+            <el-form-item label="手机号：">
+              <span>22222</span>
+            </el-form-item>
+            <el-form-item label="配送时间：">
+              <span>22222</span>
+            </el-form-item>
+          </el-form>
+        </el-col>
       </div>
     </div>
     <div class="bottom_list">
@@ -77,73 +222,27 @@
     </div>
     <div class="bottom_list">
       <div class="top_title">
-        <h4>收货人信息</h4>
+        <h4>商品信息</h4>
       </div>
       <div class="table_list">
-        <el-col
-          :span="12"
-          class="form_case"
-        >
-          <el-form label-width="200px">
-            <el-form-item label="收货人：">
-              <span>22222</span>
-            </el-form-item>
-            <el-form-item label="收货地址：">
-              <span>22222</span>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col
-          :span="12"
-          class="form_case"
-        >
-          <el-form label-width="30%">
-            <el-form-item label="手机号：">
-              <span>22222</span>
-            </el-form-item>
-            <el-form-item label="配送时间：">
-              <span>22222</span>
-            </el-form-item>
-          </el-form>
-        </el-col>
+        <table-list
+          :selectShow="false"
+          :column="items"
+          :data="tableData"
+          :rowDblclick="getRow"
+          :handleSelectionChange="handleSelectionChange"
+        ></table-list>
+        <div class="total">
+          <span style=" font-weight: 700;font-size:16px;">合计：￥999.44<span style=" font-weight:0;font-size:14px;">（含运费5.5元）</span></span>
+        </div>
       </div>
     </div>
+
     <div class="bottom_list">
       <div class="top_title">
-        <h4>操作信息</h4>
+        <h4>操作记录</h4>
       </div>
       <div class="table_list">
-        <el-col :span="12">
-          <el-form label-width="200px">
-            <el-form-item label="当前可执行操作：">
-              <el-button
-                size="small"
-                type="primary"
-              >付款</el-button>
-              <el-button
-                size="small"
-                type="primary"
-              >发货</el-button>
-              <el-button
-                size="small"
-                type="primary"
-              >关闭</el-button>
-              <el-button
-                size="small"
-                type="primary"
-              >打印订单</el-button>
-            </el-form-item>
-            <el-form-item label="备注信息：">
-              <el-input type="textarea" rows="6"></el-input>
-            </el-form-item>
-            <el-form-item label="">
-              <el-button
-                size="small"
-                type="primary"
-              >提交</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
         <el-col :span="24">
           <div class="table_list">
             <table-list
@@ -164,6 +263,9 @@ import tableList from "../public/table";
 export default {
   data() {
     return {
+      dialogPay: false,
+      dialogClose: false,
+      dialogPlan: false,
       items: [
         {
           label: "商品名称",
@@ -223,11 +325,11 @@ export default {
       ],
       tableData1: [
         {
-          time:"2018-01-01 12:38:38",
-          person:"roulen",
-          things:"设置订单状态",
-          content:"已发货",
-          cause:"付款超时，系统自动关闭",
+          time: "2018-01-01 12:38:38",
+          person: "roulen",
+          things: "设置订单状态",
+          content: "已发货",
+          cause: "付款超时，系统自动关闭"
         }
       ]
     };
@@ -236,6 +338,9 @@ export default {
     handleSelectionChange(select) {},
     getRow(row, event) {
       console.log(row);
+    },
+    toPrintOrder(){
+      window.open('printorder.html','_blank')
     }
   },
   components: {
@@ -288,6 +393,25 @@ export default {
             line-height: 30px;
           }
         }
+      }
+    }
+  }
+  .plan_case {
+    height: 200px;
+    overflow: scroll;
+    li {
+      list-style-type: none;
+      // background-color: red;
+      height: 30px;
+      line-height: 30px;
+      i {
+        color: @font-subsidiary;
+        margin-right: 4px;
+      }
+    }
+    li:nth-child(1) {
+      i {
+        color: rgb(240, 135, 16);
       }
     }
   }

@@ -78,6 +78,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       inject: true,
       chunks: ['forgetpassword']
     }),
+    new HtmlWebpackPlugin({
+      filename: 'printorder.html',
+      template: 'printorder.html',
+      inject: true,
+      chunks: ['printorder']
+    }),
     // new HtmlWebpackPlugin({
     //   template: '/src/assets/image/favicon.ico',
     //   favicon: './favicon.ico'
