@@ -74,7 +74,7 @@ export default {
       },
       name:null,
       description:null,
-      permissionIds:null
+      permissionIds:""
     };
   },
   methods:{
@@ -84,19 +84,22 @@ export default {
     updaterole(){
       let qs = require("qs");
       let data = qs.stringify({
-        roleId:id,
+        id:this.$route.params.id,
         name:this.name,
         description:this.description,
-        permissionIds:this.permissionIds
+        // permissionIds:this.permissionIds
+        permissionIds:"1,2,3,4,5,6,7,8"
       });
       this.Axios({
         params:data,
-        url:"",
+        url:"/api-platform/role/update",
         type:"post",
         option:{
         }
       },this).then(result=>{
-        console.log(result.data);
+        if(result.data.code===200){
+          this.$router.back(-1);
+        }
       })
     },
     getrole(id){
@@ -107,11 +110,15 @@ export default {
           },
           option: {},
           type: "get",
-          url: "/api-platform/role/get/"+id
+          url: "/api-platform/role/get"
         },
         this
       ).then(result => {
-           console.log(result.data);
+          this.name=result.data.data.name;
+          this.description=result.data.data.description;
+          result.data.data.permissionRoles.forEach(item => {return this.permissionIds+=item.permissionId + " "});
+          console.log(this.permissionIds);
+          console.log(result.data);
         },
         ({type, info}) => {
         }

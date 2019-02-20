@@ -65,37 +65,28 @@
       </el-form-item>
       <el-form-item label="开始时间：">
         <el-date-picker
-          v-model="addMsg.startTime.date"
-          type="date"
+          v-model="addMsg.startTime"
+          type="datetime"
           placeholder="选择日期"
           size="small"
-          style="width:160px"
+          style="width:250px"
+          format="yyyy/MM/dd HH:mm:ss"
+          value-format="yyyy/MM/dd HH:mm:ss"
         >
         </el-date-picker>
-        <el-time-picker
-          v-model="addMsg.startTime.time"
-          placeholder="选择时间"
-          size="small"
-          style="width:160px"
-        >
-        </el-time-picker>
       </el-form-item>
       <el-form-item label="结束时间：">
         <el-date-picker
-          v-model="addMsg.endTime.date"
-          type="date"
+          v-model="addMsg.endTime"
+          type="datetime"
           placeholder="选择日期"
           size="small"
-          style="width:160px"
+          style="width:250px"
+          format="yyyy/MM/dd HH:mm:ss"
+          value-format="yyyy/MM/dd HH:mm:ss"
         >
         </el-date-picker>
-        <el-time-picker
-          v-model="addMsg.endTime.time"
-          placeholder="选择时间"
-          size="small"
-          style="width:160px"
-        >
-        </el-time-picker>
+
       </el-form-item>
     </el-form>
   </div>
@@ -115,12 +106,8 @@ export default {
       picContent: {},
       isShow: {},
       startTime: {
-        date: {},
-        time: {}
       },
       endTime: {
-        date: {},
-        time: {}
       }
     }
   },

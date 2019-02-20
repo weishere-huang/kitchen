@@ -5,7 +5,7 @@
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
-        @click="dialogAdd=true"
+        @click="toadd"
       >添加广告
       </el-button>
       <el-dialog
@@ -161,32 +161,32 @@
     data() {
       return {
         editMsg: {
-          title: "",
-          pic: "",
-          picContent: "",
-          isShow: 0,
-          startTime: {
-            date: "",
-            time: ""
-          },
-          endTime: {
-            date: "",
-            time: ""
-          }
+          // title: "",
+          // pic: "",
+          // picContent: "",
+          // isShow: 0,
+          // startTime: {
+          //   date: "",
+          //   time: ""
+          // },
+          // endTime: {
+          //   date: "",
+          //   time: ""
+          // }
         },
         addMsg: {
-          title: "",
-          pic: "",
-          picContent: "",
-          isShow: 0,
-          startTime: {
-            date: "",
-            time: ""
-          },
-          endTime: {
-            date: "",
-            time: ""
-          }
+          // title: "",
+          // pic: "",
+          // picContent: "",
+          // isShow: 0,
+          // startTime: {
+          //   date: "",
+          //   time: ""
+          // },
+          // endTime: {
+          //   date: "",
+          //   time: ""
+          // }
         },
         dialogEdit: false,
         dialogAdd: false,
@@ -209,8 +209,16 @@
       };
     },
     methods: {
+      toadd(){
+        this.addMsg={};
+        this.editMsg={};
+        this.dialogAdd = true
+      },
       handleEdit(index, rowData) {
         let params = {type: "edit", index: index, rowData: rowData};
+        this.editMsg={};
+        this.addMsg={};
+        Object.assign(this.editMsg,rowData);
         console.log(params);
         this.dialogEdit = true;
       },
@@ -266,17 +274,19 @@
       addAdvertising(){
         let qs = require("qs");
         let data = qs.stringify({
-          title:"",
-          mainPic:"",
-          content:"",
-          advertTpye:0,
+          title:this.addMsg.title,
+          // mainPic:this.addMsg.mainPic,
+          mainPic:"test",
+          // content:this.addMsg.content,
+          content:"test",
+          advertType:0,
           advertContentType:0,
-          startTime:"",
-          endTime:"",
+          startTime:this.addMsg.startTime,
+          endTime:this.addMsg.endTime,
         });
         this.Axios({
           params:data,
-          url:"/api-platform/Advertisement/delete",
+          url:"/api-platform/Advertisement/add",
           type:"post",
           option:{
           }
@@ -288,24 +298,24 @@
         })
       },
       //修改广告
-      beforeupdate(id){
-        this.updateAdvertising(id);
+      beforeupdate(){
+        this.updateAdvertising();
       },
-      updateAdvertising(id){
+      updateAdvertising(){
         let qs = require("qs");
         let data = qs.stringify({
-          id:id,
-          title:"",
-          mainPic:"",
-          content:"",
-          advertTpye:0,
+          id:this.editMsg.id,
+          title:this.editMsg.title,
+          mainPic:this.editMsg.mainPic,
+          content:this.editMsg.content,
+          advertType:0,
           advertContentType:0,
-          startTime:"",
-          endTime:"",
+          startTime:this.editMsg.startTime,
+          endTime:this.editMsg.endTime,
         });
         this.Axios({
           params:data,
-          url:"/api-platform/Advertisement/delete",
+          url:"/api-platform/Advertisement/update",
           type:"post",
           option:{
           }

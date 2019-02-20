@@ -14,6 +14,7 @@
           placeholder="请选择"
           style="width:49%"
           size="small"
+          @change="editchange"
         >
           <el-option
             v-for="item in classify"
@@ -56,13 +57,9 @@ export default {
     }
   },
   methods:{
-    beforeadd(){
+    editchange(){
 
     },
-    addfaq(){
-
-    },
-
   }
 };
 </script>
