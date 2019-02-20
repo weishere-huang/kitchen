@@ -43,8 +43,8 @@ export default {
   data() {
     return {
       classify: [
-        { label: "订单问题", value: 1 },
-        { label: "支付问题", value: 2 },
+        { label: "订单问题", value: 1},
+        { label: "支付问题", value: 2},
         { label: "其他问题", value: 3 }
       ]
     };

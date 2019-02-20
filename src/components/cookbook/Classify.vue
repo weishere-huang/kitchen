@@ -5,247 +5,59 @@
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
-        v-if="btnShow==0"
+        @click="dialogAdd=true"
       >添加分类</el-button>
-      <el-button
-        size="small"
-        type="primary"
-        class="el-icon-circle-plus-outline"
-        v-if="btnShow==1"
-      >添加工艺</el-button>
-      <el-button
-        size="small"
-        type="primary"
-        class="el-icon-circle-plus-outline"
-        v-if="btnShow==2"
-      >添加口味</el-button>
-      <el-button
-        size="small"
-        type="primary"
-        class="el-icon-circle-plus-outline"
-        v-if="btnShow==3"
-      >添加人群</el-button>
+      <el-dialog
+        title="添加分类"
+        :visible.sync="dialogAdd"
+        width="500px"
+      >
+        <el-form
+          label-width="90px"
+          style="margin-top:16px;"
+        >
+          <el-form-item label="上级分类：">
+            <el-input
+              size="small"
+              style="width:99%;"
+              suffix-icon="el-icon-caret-bottom"
+              @focus="selectShow=true"
+              v-model="classify.label"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="分类名称：">
+            <el-input
+              size="small"
+              style="width:99%;"
+            ></el-input>
+          </el-form-item>
+          <div
+            class="select_case"
+            v-show="selectShow"
+          >
+            <select-list v-on:handlechange="handlechange"></select-list>
+          </div>
+        </el-form>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            @click="dialogAdd = false"
+            plain
+            size="small"
+          >取 消</el-button>
+          <el-button
+            type="primary"
+            @click="dialogAdd = false"
+            size="small"
+          >确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
     <div class="bottom_list">
-      <!-- <el-tabs
-        tab-position="left"
-        @tab-click="handleClick"
-      >
-        <el-tab-pane
-          label="分类"
-          name="0"
-        >
-          <h2>分类</h2>
-          <div class="tree_title">
-            <span style="padding-left:8px;">分类名称</span>
-            <span style="display:inline-block;width:400px;">
-              <span style="display:inline-block;width:200px;">排序</span>
-              <span style="display:inline-block;width:190px;">操作</span>
-            </span>
-          </div>
-          <el-tree
-            :data="classifyData"
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-          >
-            <span
-              class="custom-tree-node"
-              slot-scope="{ node, data }"
-            >
-              <span>{{ node.label }}</span>
-              <span style="display:inline-block;width:400px;">
-                <span style="display:inline-block;width:200px;">
-                  <el-input
-                    type="number"
-                    size="small"
-                    style="width:100px;"
-                    @change="changeSort(data)"
-                  ></el-input>
-                </span>
-                <span style="display:inline-block;width:200px;">
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => append(data)"
-                  >
-                    修改
-                  </el-button>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => remove(node, data)"
-                  >
-                    删除
-                  </el-button>
-                </span>
-
-              </span>
-            </span>
-          </el-tree>
-        </el-tab-pane>
-        <el-tab-pane
-          label="工艺"
-          name="1"
-        >
-          <h2>工艺</h2>
-          <div class="tree_title">
-            <span style="padding-left:8px;">分类名称</span>
-            <span style="display:inline-block;width:400px;">
-              <span style="display:inline-block;width:200px;">排序</span>
-              <span style="display:inline-block;width:190px;">操作</span>
-            </span>
-          </div>
-          <el-tree
-            :data="classifyData"
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-          >
-            <span
-              class="custom-tree-node"
-              slot-scope="{ node, data }"
-            >
-              <span>{{ node.label }}</span>
-              <span style="display:inline-block;width:400px;">
-                <span style="display:inline-block;width:200px;">
-                  <el-input
-                    type="number"
-                    size="small"
-                    style="width:100px;"
-                    @change="changeSort(data)"
-                  ></el-input>
-                </span>
-                <span style="display:inline-block;width:200px;">
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => append(data)"
-                  >
-                    修改
-                  </el-button>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => remove(node, data)"
-                  >
-                    删除
-                  </el-button>
-                </span>
-
-              </span>
-            </span>
-          </el-tree>
-        </el-tab-pane>
-        <el-tab-pane
-          label="口味"
-          name="2"
-        >
-          <h2>口味</h2>
-          <div class="tree_title">
-            <span style="padding-left:8px;">分类名称</span>
-            <span style="display:inline-block;width:400px;">
-              <span style="display:inline-block;width:200px;">排序</span>
-              <span style="display:inline-block;width:190px;">操作</span>
-            </span>
-          </div>
-          <el-tree
-            :data="classifyData"
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-          >
-            <span
-              class="custom-tree-node"
-              slot-scope="{ node, data }"
-            >
-              <span>{{ node.label }}</span>
-              <span style="display:inline-block;width:400px;">
-                <span style="display:inline-block;width:200px;">
-                  <el-input
-                    type="number"
-                    size="small"
-                    style="width:100px;"
-                    @change="changeSort(data)"
-                  ></el-input>
-                </span>
-                <span style="display:inline-block;width:200px;">
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => append(data)"
-                  >
-                    修改
-                  </el-button>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => remove(node, data)"
-                  >
-                    删除
-                  </el-button>
-                </span>
-
-              </span>
-            </span>
-          </el-tree>
-        </el-tab-pane>
-        <el-tab-pane
-          label="人群"
-          name="3"
-        >
-          <h2>人群</h2>
-          <div class="tree_title">
-            <span style="padding-left:8px;">分类名称</span>
-            <span style="display:inline-block;width:400px;">
-              <span style="display:inline-block;width:200px;">排序</span>
-              <span style="display:inline-block;width:190px;">操作</span>
-            </span>
-          </div>
-          <el-tree
-            :data="classifyData"
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-          >
-            <span
-              class="custom-tree-node"
-              slot-scope="{ node, data }"
-            >
-              <span>{{ node.label }}</span>
-              <span style="display:inline-block;width:400px;">
-                <span style="display:inline-block;width:200px;">
-                  <el-input
-                    type="number"
-                    size="small"
-                    style="width:100px;"
-                    @change="changeSort(data)"
-                  ></el-input>
-                </span>
-                <span style="display:inline-block;width:200px;">
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => append(data)"
-                  >
-                    修改
-                  </el-button>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => remove(node, data)"
-                  >
-                    删除
-                  </el-button>
-                </span>
-
-              </span>
-            </span>
-          </el-tree>
-        </el-tab-pane>
-      </el-tabs> -->
       <div class="top_list">
-        <h2>分类</h2>
+        <h2>菜谱分类</h2>
       </div>
       <div style="padding:10px;overflow:hidden">
         <div class="tree_title">
@@ -284,13 +96,67 @@
       </div>
 
     </div>
+    <el-dialog
+      title="添加分类"
+      :visible.sync="dialogEdit"
+      width="500px"
+    >
+      <el-form
+        label-width="90px"
+        style="margin-top:16px;"
+      >
+        <el-form-item label="上级分类：">
+          <el-input
+            size="small"
+            style="width:99%;"
+            suffix-icon="el-icon-caret-bottom"
+            @focus="selectShow=true"
+            v-model="classify.label"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="分类名称：">
+          <el-input
+            size="small"
+            style="width:99%;"
+          ></el-input>
+        </el-form-item>
+        <div
+          class="select_case"
+          v-show="selectShow"
+        >
+          <select-list v-on:handlechange="handlechange"></select-list>
+        </div>
+      </el-form>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="dialogEdit = false"
+          plain
+          size="small"
+        >取 消</el-button>
+        <el-button
+          type="primary"
+          @click="dialogEdit = false"
+          size="small"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
+import selectList from "../public/select";
 export default {
   data() {
     return {
-      btnShow: 0,
+      classify: {
+        label: "",
+        code: ""
+      },
+      selectShow: false,
+      dialogAdd: false,
+      dialogEdit: false,
       classifyData: [
         {
           label: "第一级",
@@ -322,10 +188,19 @@ export default {
     },
     append(data) {
       console.log(data);
+      this.dialogEdit = true;
+      this.classify.label = data.label;
     },
     remove(node, data) {
       console.log(data);
+    },
+    handlechange(params) {
+      this.selectShow = false;
+      this.classify.label = params.label;
     }
+  },
+  components: {
+    selectList
   }
 };
 </script>
@@ -379,5 +254,16 @@ export default {
   h2 {
     line-height: 40px;
   }
+}
+.select_case {
+  background-color: white;
+  height: 150px;
+  width: 373px;
+  overflow: scroll;
+  border: @border;
+  border-color: #1cc09f;
+  position: absolute;
+  top: 92px;
+  left: 106px;
 }
 </style>

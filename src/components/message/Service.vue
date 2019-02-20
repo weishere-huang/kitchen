@@ -151,6 +151,7 @@ export default {
         // tel: "",
         // time: "",
         // range: []
+        serviceMode:[]
       },
       editMsg: {
         // province: "",

@@ -1,10 +1,6 @@
 <template>
   <div class="print_order">
-    <div
-      class="print_content"
-      v-for="(item, index) in 3"
-      :key="index"
-    >
+    <div class="print_content">
       <h2>订单信息</h2>
       <el-col :span="24">
         <el-col :span="7">

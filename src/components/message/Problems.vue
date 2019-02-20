@@ -49,7 +49,7 @@
               v-model="faqType"
               placeholder="请选择"
               size="small"
-              clearable=true
+              :clearable="true"
             >
               <el-option
                 v-for="item in classify"
@@ -220,11 +220,6 @@
         if (params.type === "delete") {
           console.log(params);
           this.deletefaq(params.rowData.id);
-        }
-        if (params.type === "detalis") {
-          console.log(params);
-          this.userIds = params.rowData.order;
-          this.$router.push({path: "/Order/Details/" + this.userIds});
         }
       },
       handleSelectionChange(selection) {
