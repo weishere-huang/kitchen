@@ -5,7 +5,7 @@
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
-        @click="dialogAdd=true"
+        @click="toadd"
       >添加网点</el-button>
       <el-dialog
         :close-on-click-modal="false"
@@ -19,7 +19,7 @@
           class="dialog-footer"
         >
           <el-button
-            @click="dialogAdd = false"
+            @click="beforeadd"
             size="small"
           >取 消</el-button>
           <el-button
@@ -42,7 +42,7 @@
               v-model="provinceCode"
               placeholder="———省———"
               size="small"
-              @change="getCity"
+              @change="getCity()"
             >
               <el-option
                 v-for="item in province"
@@ -58,8 +58,10 @@
             style="padding:0 5px;"
           >
             <el-select
+              v-model="citycode"
               placeholder="———市———"
               size="small"
+              @change="getcitycode"
             >
               <el-option
                 v-for="item in cities"
@@ -74,7 +76,7 @@
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small" plain>搜索</el-button>
+            <el-button size="small" plain @click="beforeSearch">搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -127,7 +129,7 @@
         >取 消</el-button>
         <el-button
           type="primary"
-          @click="dialogEdit = false"
+          @click="beforeupdate"
           size="small"
         >确 定</el-button>
       </span>
@@ -142,22 +144,22 @@ export default {
   data() {
     return {
       addMsg: {
-        province: "",
-        city: "",
-        name: "",
-        address: "",
-        tel: "",
-        time: "",
-        range: []
+        // province: "",
+        // city: "",
+        // name: "",
+        // address: "",
+        // tel: "",
+        // time: "",
+        // range: []
       },
       editMsg: {
-        province: "",
-        city: "",
-        name: "",
-        address: "",
-        tel: "",
-        time: "",
-        range: []
+        // province: "",
+        // city: "",
+        // name: "",
+        // address: "",
+        // tel: "",
+        // time: "",
+        // range: []
       },
       dialogAdd: false,
       dialogEdit: false,
@@ -165,6 +167,7 @@ export default {
       cities: [],
       currentPage: 1,
       provinceCode: "",
+      citycode:"",
       items: [
         {
           label: "网点名称",
@@ -201,10 +204,15 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       total: 10,
-      areaName:null
+      areaName:null,
     };
   },
   methods: {
+    toadd(){
+      this.editMsg={};
+      this.addMsg={};
+      this.dialogAdd=true;
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
       this.pageIndex = 1;
@@ -218,16 +226,20 @@ export default {
     },
     handlechange(params) {
       if (params.type === "edit") {
+        this.editMsg={};
+        this.addMsg={};
+        Object.assign(this.editMsg,params.rowData);
         console.log(params);
         this.dialogEdit=true
       }
       if (params.type === "delete") {
         console.log(params);
+        this.deleteService(params.rowData.id);
       }
       if (params.type === "detalis") {
         console.log(params);
         this.userIds = params.rowData.order;
-        this.$router.push({ path: "/Order/Details/" + this.userIds });
+        // this.$router.push({ path: "/Order/Details/" + this.userIds });
       }
     },
     handleSelectionChange(selection) {
@@ -236,6 +248,11 @@ export default {
     getRow(row, event) {
       console.log(row);
     },
+    beforeSearch(){
+      this.pageIndex = 1;
+      this.getServiceList();
+    },
+    //获取所有网点
     getServiceList() {
       this.Axios(
         {
@@ -244,7 +261,9 @@ export default {
             size: this.pageSize,
             areaName:this.areaName,
           },
-          option: {},
+          option: {
+
+          },
           type: "get",
           url: "/api-platform/network/list"
         },
@@ -258,11 +277,14 @@ export default {
         ({ type, info }) => {}
       );
     },
+    //获取所有省
     getAllProvince(){
       this.Axios(
         {
           params: {},
-          option: {},
+          option: {
+            enableMsg:false
+          },
           type: "get",
           url: "/api-platform/network/AllProvince"
         },
@@ -275,16 +297,40 @@ export default {
         }
       );
     },
+    //删除网点
+    deleteService(id){
+      let qs = require("qs");
+      let data = qs.stringify({
+        ids:id,
+        enableOrDisable:1
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/network/updatestate",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        if(result.data.code===200){
+          this.reload();
+        }
+      })
+    },
+    //获取市
     getCity(){
+      this.areaName=this.province.find(item =>{return this.provinceCode===item.code}).name;
+      console.log(this.areaName);
+      this.cities=[];
       this.Axios(
         {
           params: {
             code:this.provinceCode
           },
-          option: {},
+          option: {
+            enableMsg:false
+          },
           type: "get",
           url: "/api-platform/network/findAllCity"
-
         },
         this
       ).then(
@@ -295,7 +341,70 @@ export default {
         }
       );
     },
-
+    //添加
+    beforeadd(){
+      // this.addService();
+      console.log(this.addMsg)
+    },
+    addService(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        address:this.addMsg.address,
+        areaCode:this.addMsg.areaCode,
+        phone:this.addMsg.phone,
+        title:this.addMsg.title,
+        workingHours:this.addMsg.workingHours,
+        serviceMode:this.addMsg.serviceMode,
+      });
+      this.Axios({
+        params: data,
+        url: "/api-platform/network/add",
+        type: "post",
+        option: {}
+      }, this).then(result => {
+        if(result.data.code===200){
+          this.reload()
+        }else{
+          this.$message.error("出错啦,请重新添加~");
+        }
+      })
+    },
+    //修改
+    beforeupdate(){
+      // this.updateService();
+      console.log(this.editMsg);
+    },
+    updateService(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        id:this.editMsg.id,
+        address:this.editMsg.address,
+        areaCode:this.editMsg.areaCode,
+        phone:this.editMsg.phone,
+        title:this.editMsg.title,
+        workingHours:this.editMsg.workingHours,
+        serviceMode:this.editMsg.serviceMode,
+      });
+      this.Axios({
+        params: data,
+        url: "/api-platform/network/update",
+        type: "post",
+        option: {
+          enableMsg:false
+        }
+      }, this).then(result => {
+        if(result.data.code===200){
+          this.reload()
+        }else{
+          this.$message.error("出错啦,请重新修改~");
+        }
+      })
+    },
+    //选择市时改变地区名字
+    getcitycode(){
+      this.areaName += " " + this.cities.find(item =>{return this.citycode===item.code}).name;
+      console.log(this.areaName);
+    },
   },
   created() {
     //查询网点列表

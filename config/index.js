@@ -52,6 +52,7 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     login: path.resolve(__dirname, '../dist/login.html'),
     forgetpassword: path.resolve(__dirname, '../dist/forgetpassword.html'),
+    printorder: path.resolve(__dirname, '../dist/printorder.html'),
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',

@@ -4,7 +4,7 @@
       <el-button
         size="small"
         type="primary"
-        @click="dialogVisible=true"
+        @click="toadd"
         class="el-icon-circle-plus-outline"
       >添加管理员</el-button>
     </div>
@@ -60,7 +60,7 @@
         >取 消</el-button>
         <el-button
           type="primary"
-          @click="dialogVisible = false"
+          @click="beforeadd"
           size="small"
         >确 定</el-button>
       </span>
@@ -81,7 +81,7 @@
         >取 消</el-button>
         <el-button
           type="primary"
-          @click="edit = false"
+          @click="beforeupdate"
           size="small"
         >确 定</el-button>
       </span>
@@ -130,6 +130,11 @@ export default {
     };
   },
   methods: {
+    toadd(){
+      this.userMsg={},
+      this.editUserMsg={},
+      this.dialogVisible=true
+    },
     handleSelectionChange() {},
     getRow(row, event) {
       console.log(row);
@@ -137,6 +142,9 @@ export default {
     handlechange(params) {
       if (params.type === "edit") {
         console.log(params);
+        this.userMsg={},
+        this.editUserMsg={},
+        Object.assign(this.editUserMsg,params.rowData)
         this.edit=true
       }
       if (params.type === "delete") {
@@ -153,12 +161,12 @@ export default {
       console.log(`每页 ${val} 条`);
       this.pageIndex = 1;
       this.pageSize = val;
-      //   this.listOrder();
+      this.getlist();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.pageIndex = val;
-      //   this.listOrder();
+      this.getlist();
     },
     getlist(){
       this.Axios(
@@ -218,6 +226,63 @@ export default {
         ({type, info}) => {
         }
       );
+    },
+    //添加管理员
+    beforeadd(){
+      if(this.userMsg.confirmPassword!==this.userMsg.password){
+        this.$message.warning("两次密码输入不一致,请重新输入!!!")
+        return
+      }
+      this.addAdmin();
+    },
+    addAdmin(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        account:this.userMsg.account,
+        password:this.userMsg.password,
+        phone:this.userMsg.phone,
+        roleId:this.userMsg.roleId,
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/employee/add",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        if(result.data.code===200){
+          this.reload();
+        }
+      })
+
+    },
+    //修改管理员
+    beforeupdate(){
+      if(this.editUserMsg.confirmPassword!==this.editUserMsg.password){
+        this.$message.warning("两次密码输入不一致,请重新输入!!!")
+        return
+      }
+      this.updateAdmin();
+    },
+    updateAdmin(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        id:this.editUserMsg.id,
+        account:this.editUserMsg.account,
+        password:this.editUserMsg.password,
+        phone:this.editUserMsg.phone,
+        roleId:this.editUserMsg.roleId,
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/employee/update",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        console.log(result.data);
+      })
+
     },
   },
   created(){

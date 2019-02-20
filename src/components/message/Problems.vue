@@ -5,7 +5,7 @@
         size="small"
         type="primary"
         class="el-icon-circle-plus-outline"
-        @click="dialogAdd=true"
+        @click="toadd"
       >添加信息
       </el-button>
       <el-button
@@ -31,7 +31,7 @@
           >取 消</el-button>
           <el-button
             type="primary"
-            @click="addfaq"
+            @click="beforeadd"
             size="small"
           >确 定</el-button>
         </span>
@@ -39,7 +39,7 @@
     </div>
     <div class="bottom_list">
       <div class="top_title">
-        <h4>网点列表</h4>
+        <h4>常见问题</h4>
         <div class="top_search">
           <el-col
             :span="10"
@@ -49,7 +49,7 @@
               v-model="faqType"
               placeholder="请选择"
               size="small"
-              clearable="true"
+              clearable=true
             >
               <el-option
                 v-for="item in classify"
@@ -112,7 +112,7 @@
       :visible.sync="dialogEdit"
       width="800px"
     >
-      <add-problem :addMsg="addMsg"></add-problem>
+      <add-problem :addMsg="editMsg"></add-problem>
       <span
         slot="footer"
         class="dialog-footer"
@@ -123,7 +123,7 @@
         >取 消</el-button>
         <el-button
           type="primary"
-          @click="dialogEdit = false"
+          @click="beforeupdate"
           size="small"
         >确 定</el-button>
       </span>
@@ -139,14 +139,14 @@
     data() {
       return {
         addMsg: {
-          title: "",
-          classify: "",
-          content: ""
+          // title: "",
+          // classify: "",
+          // content: ""
         },
         editMsg: {
-          title: "",
-          classify: "",
-          content: ""
+          // title: "",
+          // classify: "",
+          // content: ""
         },
         dialogAdd: false,
         dialogEdit: false,
@@ -193,6 +193,11 @@
       };
     },
     methods: {
+      toadd(){
+        this.dialogAdd=true;
+        this.addMsg={};
+        this.editMsg={};
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.pageIndex = 1;
@@ -207,10 +212,14 @@
       handlechange(params) {
         if (params.type === "edit") {
           console.log(params);
+          this.addMsg={};
+          this.editMsg={};
+          Object.assign(this.editMsg,params.rowData);
           this.dialogEdit = true;
         }
         if (params.type === "delete") {
           console.log(params);
+          this.deletefaq(params.rowData.id);
         }
         if (params.type === "detalis") {
           console.log(params);
@@ -241,7 +250,6 @@
         ).then(
           result => {
             console.log(result.data)
-
             this.tableData = result.data.data.content;
             this.total = result.data.data.totalElement;
           },
@@ -254,12 +262,26 @@
         this.pageSize = 15
         this.getfaqList();
       },
-      addfaq() {//添加
+      beforeadd(){
+        let flag= true;
+        if(this.addMsg.title===""||this.addMsg.title===null||
+          this.addMsg.content===""||this.addMsg.content===null||
+          this.addMsg.faqType===""||this.addMsg.faqType===null){
+          flag=false;
+        }
+        if(flag){
+          this.addfaq();
+        }else{
+          this.$message.error("请填写完整信息")
+        }
+      },
+      //添加
+      addfaq() {
         let qs = require("qs");
         let data = qs.stringify({
-          title:"",
-          content:"",
-          faqType:0
+          title:this.addMsg.title,
+          content:this.addMsg.content,
+          faqType:this.addMsg.faqType
         });
         this.Axios({
           params: data,
@@ -267,7 +289,11 @@
           type: "post",
           option: {}
         }, this).then(result => {
-          console.log(result.data);
+          if(result.data.code===200){
+            this.reload()
+          }else{
+            this.$message.error("出错啦,请重新添加~");
+          }
         })
       },
       //获取单个
@@ -292,12 +318,26 @@
         );
       },
       //修改常见问题
+      beforeupdate(){
+        let flag= true;
+        if(this.editMsg.title===""||this.editMsg.title===null||
+          this.editMsg.content===""||this.editMsg.content===null||
+          this.editMsg.faqType===""||this.editMsg.faqType===null){
+          flag=false;
+        }
+        if(flag){
+          this.updatefaq();
+        }else{
+          this.$message.error("请填写完整信息")
+        }
+      },
       updatefaq() {
         let qs = require("qs");
         let data = qs.stringify({
-          title:"",
-          content:"",
-          faqType:0
+          id:this.editMsg.id,
+          title:this.editMsg.title,
+          content:this.editMsg.content,
+          faqType:this.editMsg.faqType
         });
         this.Axios({
           params: data,
@@ -305,10 +345,29 @@
           type: "post",
           option: {}
         }, this).then(result => {
-          console.log(result.data);
+          if(result.data.code===200){
+            this.reload()
+          }
+        })
+      },
+      deletefaq(id){
+        let qs = require("qs");
+        let data = qs.stringify({
+          id:id
+        });
+        this.Axios({
+          params:data,
+          url:"/api-platform/faq/deletefaq",
+          type:"post",
+          option:{
+          }
+        },this).then(result=>{
+          if(result.data.code===200){
+            this.reload();
+          }
         })
       }
-    },
+      },
     created() {
       this.getfaqList();
     },

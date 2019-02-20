@@ -22,6 +22,7 @@
         <el-button
           size="small"
           type="primary"
+          @click="toPrintOrder"
         >打印订单</el-button>
       </div>
       <el-dialog
@@ -337,6 +338,9 @@ export default {
     handleSelectionChange(select) {},
     getRow(row, event) {
       console.log(row);
+    },
+    toPrintOrder(){
+      window.open('printorder.html','_blank')
     }
   },
   components: {
