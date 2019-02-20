@@ -113,7 +113,7 @@
       :visible.sync="dialogEdit"
       width="800px"
     >
-      <add-problem :addMsg="editMsg"></add-problem>
+      <add-problem :addMsg="editMsg" v-on:handlechange="handlechange"></add-problem>
       <span
         slot="footer"
         class="dialog-footer"
@@ -183,7 +183,7 @@
         tableData: [
           {
             title: "在线支付的过程中，订单显示未支付成功，款项却被扣了，怎么办？",
-            classify: "常见问题",
+            faqType: 1,
             time: "2018-12-01 13:32:48"
           }
         ],
@@ -195,6 +195,9 @@
       };
     },
     methods: {
+      handlechange(data){
+        console.log(data);
+      },
       toadd(){
         this.dialogAdd=true;
         this.addMsg={};

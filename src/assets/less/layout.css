@@ -207,3 +207,7 @@ input[type="number"] {
 .el-date-table td.available:hover {
   color: #1cc09f;
 }
+.el-dialog__headerbtn:focus .el-dialog__close,
+.el-dialog__headerbtn:hover .el-dialog__close {
+  color: #1cc09f;
+}
