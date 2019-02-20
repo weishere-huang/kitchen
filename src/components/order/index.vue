@@ -4,14 +4,36 @@
       <div class="top_title">
         <h4>订单列表</h4>
         <div class="top_search">
+          <el-col :span="11">
+            <span>日期：</span>
+            <el-date-picker
+              v-model="searchDate1"
+              type="date"
+              placeholder="起始日期"
+              size="small"
+              style="width:39%;"
+            >
+            </el-date-picker>
+            至
+            <el-date-picker
+              v-model="searchDate2"
+              type="date"
+              placeholder="结束日期"
+              size="small"
+              style="width:39%;"
+            >
+            </el-date-picker>
+          </el-col>
           <el-col
-            :span="9"
+            :span="6"
             style="padding:0 5px;"
           >
+            <span>订单状态：</span>
             <el-select
               v-model="value"
               placeholder="请选择"
               size="small"
+              style="width:114px;"
             >
               <el-option
                 v-for="item in options"
@@ -23,7 +45,7 @@
             </el-select>
           </el-col>
           <el-col
-            :span="11"
+            :span="5"
             style="padding:0 5px;"
           >
             <el-input
@@ -33,7 +55,7 @@
             ></el-input>
           </el-col>
           <el-col
-            :span="4"
+            :span="2"
             style="padding:0 5px;"
           >
             <el-button
@@ -96,6 +118,10 @@ export default {
       value: "",
       options: [
         {
+          label: "全部",
+          value: "全部"
+        },
+        {
           label: "待付款",
           value: "待付款"
         },
@@ -116,6 +142,7 @@ export default {
           value: "关闭"
         }
       ],
+      tableData: [],
       items: [
         {
           label: "订单编号",
@@ -150,13 +177,26 @@ export default {
         {
           label: "订单状态",
           prop: "state",
-          width: 100
+          width: 100,
+          formatter: function(row, column) {
+            return row.state == 0
+              ? "待付款"
+              : row.state == 1
+              ? "待发货"
+              : row.state == 2
+              ? "待收货"
+              : row.state == 3
+              ? "已完成"
+              : "已取消";
+          }
         }
       ],
-      tableData: [],
+
       pageIndex: 1,
       pageSize: 10,
-      total: 0
+      total: 0,
+      searchDate1: "",
+      searchDate2: ""
     };
   },
   methods: {
@@ -244,7 +284,7 @@ export default {
         float: left;
       }
       .top_search {
-        width: 400px;
+        width: 800px;
         float: right;
       }
     }
@@ -256,6 +296,21 @@ export default {
       background-color: #1cc09f;
       color: #fff;
     }
+  }
+  .red {
+    color: #ff6600;
+  }
+  .green {
+    color: #008000;
+  }
+  .blue {
+    color: #3399ff;
+  }
+  .normal {
+    color: #333333;
+  }
+  .subsidiary {
+    color: #999999;
   }
 }
 </style>
