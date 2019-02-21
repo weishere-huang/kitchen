@@ -25,7 +25,7 @@
           >取 消</el-button>
           <el-button
             type="primary"
-            @click="dialogAdd = false"
+            @click="beforeadd"
             size="small"
           >确 定</el-button>
         </span>
