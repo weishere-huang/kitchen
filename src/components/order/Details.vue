@@ -153,10 +153,10 @@
         >
           <el-form label-width="200px">
             <el-form-item label="收货人：">
-              <span>22222</span>
+              <span>刘先生</span>
             </el-form-item>
             <el-form-item label="收货地址：">
-              <span>22222</span>
+              <span>四川省成都市金牛区  天府四街吉泰路1号XX大厦12楼1029</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -168,8 +168,8 @@
             <el-form-item label="手机号：">
               <span>22222</span>
             </el-form-item>
-            <el-form-item label="配送时间：">
-              <span>22222</span>
+            <el-form-item label="配送要求：">
+              <span style="color:#1cc09f">立即送出</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -186,19 +186,19 @@
         >
           <el-form label-width="200px">
             <el-form-item label="订单编号：">
-              <span>22222</span>
+              <span>2018051183359</span>
             </el-form-item>
             <el-form-item label="下单用户：">
-              <span>22222</span>
+              <span>153128301991</span>
             </el-form-item>
             <el-form-item label="商品总金额：">
-              <span>22222</span>
+              <span style="font-weight: 600;">¥ 64.70</span><span>（含配送费¥ 5.00元）</span>
             </el-form-item>
             <el-form-item label="- 优惠：">
-              <span>22222</span>
+              <span>¥ 0.00</span>
             </el-form-item>
             <el-form-item label="实付：">
-              <span>22222</span>
+              <span style="font-weight: 600;">¥ 64.70</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -208,19 +208,23 @@
         >
           <el-form label-width="30%">
             <el-form-item label="订单状态：">
-              <span>22222</span>
+              <span style="color:#FF6600" v-if="state===0">待付款</span>
+              <span style="color:#008000" v-if="state===1">待发货</span>
+              <span style="color:#3399FF" v-if="state===2">待收货</span>
+              <span style="color:#333333" v-if="state===3">已完成</span>
+              <span style="color:#999999" v-if="state===4">已关闭</span>
             </el-form-item>
             <el-form-item label="支付方式：">
-              <span>22222</span>
+              <span>支付宝</span>
             </el-form-item>
             <el-form-item label="下单时间：">
-              <span>22222</span>
+              <span>2018-12-21 08:31:53</span>
             </el-form-item>
             <el-form-item label="付款时间：">
-              <span>22222</span>
+              <span>2018-12-21 08:31:53</span>
             </el-form-item>
             <el-form-item label="发货时间：">
-              <span>22222</span>
+              <span>-</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -269,6 +273,7 @@ import tableList from "../public/table";
 export default {
   data() {
     return {
+      state:1,
       dialogPay: false,
       dialogClose: false,
       dialogPlan: false,
@@ -390,6 +395,7 @@ export default {
       .total {
         float: right;
         margin-top: 20px;
+        
       }
       .form_case {
         .el-form-item {

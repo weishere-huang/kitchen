@@ -78,12 +78,12 @@ export default {
   padding: 10px 0;
   .province_case {
     // float: left;
-    width: 140px;
+    width: 30%;
     height: 200px;
     overflow: scroll;
     li {
       list-style-type: none;
-      line-height: 20px;
+      line-height: 28px;
       margin-bottom: 5px;
       padding: 0 10px;
       cursor: pointer;
@@ -97,7 +97,7 @@ export default {
     padding: 5px;
   }
   .city_case {
-    width: 140px;
+    width: 30%;
     // float: left;
     border: @border;
     border-radius: 5px;
@@ -110,7 +110,7 @@ export default {
     }
     .el-checkbox {
       display: block;
-      line-height: 20px;
+      line-height: 28px;
       margin-bottom: 5px;
       padding: 0 10px;
     }
@@ -129,7 +129,7 @@ export default {
   }
   .district_case {
     // margin-left: 20px;
-    width: 140px;
+    width: 30%;
     // float: left;
     border: @border;
     border-radius: 5px;
@@ -141,7 +141,7 @@ export default {
     }
     .el-checkbox {
       display: block;
-      line-height: 20px;
+      line-height: 28px;
       margin-bottom: 5px;
       padding: 0 10px;
     }

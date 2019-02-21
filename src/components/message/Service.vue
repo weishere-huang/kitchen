@@ -150,13 +150,12 @@ export default {
   data() {
     return {
       addMsg: {
-        // province: "",
-        // city: "",
-        // name: "",
-        // address: "",
-        // tel: "",
-        // time: "",
-        // range: []
+        province: "",
+        city: "",
+        title:"",
+        address: "",
+        phone: "",
+        workingHours: "",
         serviceMode: []
       },
       editMsg: {
