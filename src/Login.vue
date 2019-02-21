@@ -5,6 +5,7 @@
       <el-form>
         <el-form-item>
           <el-input
+            v-model="userMsg.name"
             type="text"
             placeholder="手机号/用户名"
           ><i
@@ -15,6 +16,7 @@
         </el-form-item>
         <el-form-item>
           <el-input
+            v-model="userMsg.password"
             type="password"
             placeholder="密码"
           ><i
@@ -25,7 +27,7 @@
         </el-form-item>
         <el-form-item>
           <el-input
-            type="password"
+            type="number"
             placeholder="验证码"
             style="width:60%;"
           ><i
@@ -53,11 +55,55 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      userMsg: {
+        name: "",
+        password: "",
+        verifyCode: ""
+      }
+    };
   },
   methods: {
+    encryptByDES(message, key) {
+      const keyHex = CryptoJS.enc.Utf8.parse(key);
+      const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+      });
+      return encrypted.toString();
+    },
     login() {
-      window.location.href = "/Home";
+      let pass = this.userMsg.password;
+      pass = md5(pass);
+      let key = "*chang_hong_device_cloud";
+      let a = pass;
+      pass = this.encryptByDES(a, key);
+      let qs = require("qs");
+      let data = qs.stringify({
+        phoneOrName: this.userMsg.name,
+        passWord: pass,
+        verifyCode: 1015
+      });
+      this.Axios(
+        {
+          params: data,
+          option: {},
+          type: "post",
+          url: "/api-platform/employee/login",
+          loadingConfig: {
+            target: document.querySelector(".login")
+          }
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          // if (result.data.code === 200) {
+          //   window.location.href = "/Home";
+          // }
+        },
+        ({ type, info }) => {}
+      );
     }
   }
 };
