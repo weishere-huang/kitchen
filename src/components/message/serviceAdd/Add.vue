@@ -3,30 +3,32 @@
     <el-form label-width="90px">
       <el-form-item label="地区：">
         <el-select
-          v-model="addMsg.province"
+          v-model="provinceCode"
           placeholder="请选择"
           style="width:49%"
           size="small"
+          @change="beforeCity"
         >
           <el-option
             v-for="item in provinces"
             :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :label="item.name"
+            :value="item.code"
           >
           </el-option>
         </el-select>
         <el-select
-          v-model="addMsg.city"
+          v-model="citycode"
           placeholder="请选择"
           style="width:49%"
           size="small"
+          @change="getcitycode"
         >
           <el-option
             v-for="item in citys"
             :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :label="item.name"
+            :value="item.code"
           >
           </el-option>
         </el-select>
@@ -78,47 +80,152 @@
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      provinces: [],
-      citys: [],
-      serviceMode: []
-    };
-  },
-  props: {
-    addMsg: {
-      province: {},
-      city: {},
-      title: {},
-      address: {},
-      phone: {},
-      workingHours: {},
-      serviceMode: {}
+  export default {
+    data() {
+      return {
+        provinces: [],
+        citys: [],
+        serviceMode: [],
+        areaName: null,
+        provinceCode: null,
+        citycode: null
+      };
+    },
+    props: {
+      addMsg: {
+        title: {},
+        address: {},
+        phone: {},
+        workingHours: {},
+        serviceMode: {},
+        areaCode: {},
+      }
+    },
+    methods: {
+      changeMode() {
+        this.addMsg.serviceMode = this.serviceMode;
+      },
+      //获取所有省
+      getAllProvince() {
+        this.Axios(
+          {
+            params: {},
+            option: {
+              enableMsg: false
+            },
+            type: "get",
+            url: "/api-platform/network/AllProvince"
+          },
+          this
+        ).then(
+          result => {
+            console.log(result.data.data);
+            this.provinces = result.data.data;
+            console.log("子页面的省加载");
+            //判断是否为编辑
+
+          },
+          ({type, info}) => {
+          }
+        );
+      },
+      //获取市
+      beforeCity(){
+        this.areaName = this.provinces.find(item => {
+          return this.provinceCode === item.code;
+        }).name;
+        this.addMsg.areaCode = this.areaName
+        console.log(this.areaName);
+        this.citys = [];
+        this.getCity();
+      },
+      getCity() {
+        debugger
+        console.log(this.provinceCode);
+        this.Axios(
+          {
+            params: {
+              code: this.provinceCode
+            },
+            option: {
+              enableMsg: false
+            },
+            type: "get",
+            url: "/api-platform/network/findAllCity"
+          },
+          this
+        ).then(
+          result => {
+            console.log("市区方法查询结果"+result.data);
+            this.citys = result.data.data;
+            console.log("市区信息"+result.data.data);
+          },
+          ({type, info}) => {
+          }
+        );
+      },
+      getcitycode() {
+        this.areaName += " " + this.citys.find(item => {
+          return this.citycode === item.code;
+        }).name;
+        this.addMsg.areaCode = this.areaName
+        console.log(this.areaName);
+        this.citys=[];
+      },
+      startedit() {
+        //截取地区长度
+        debugger
+        let arr = this.addMsg.areaCode.split(" ");
+        this.provinceCode = this.provinces.find(item => {
+          return arr[0] === item.name;
+        }).code;
+        //获取市信息
+        console.log("1");
+        this.getCity();
+        console.log("2");
+        console.log(this.citys);
+        if (arr.length > 1) {
+          this.citycode = this.citys.find(item => {
+            return arr[1] === item.name;
+          }).code;
+          // console.log(this.citys.find(item => {
+          //      return arr[1] === item.name;
+          //    }))
+        }
+
+        //服务范围
+        // this.addMsg.serviceMode = this.addMsg.serviceMode.split(",");
+        // this.serviceMode = this.addMsg.serviceMode;
+      }
+    },
+    created() {
+      this.getAllProvince();
+      //编辑用
+    },
+    watch:{
+      addMsg(){
+        if(this.addMsg.id!=null){
+          this.startedit();
+        }
+      },
     }
-  },
-  methods: {
-    changeMode() {
-      this.addMsg.serviceMode = this.serviceMode;
-    }
-  }
-};
+  };
 </script>
 <style lang="less">
-@main-color: #1cc09f;
-@bgColor: #f0f2f5;
-@font-normal: #333333;
-@font-subsidiary: #999999;
-@font-special: #1cc09f;
-@border: 1px solid #dde2eb;
-.add_service {
-  font-size: 14px;
-  color: @font-normal;
-  .el-form {
-    padding-top: 16px;
+  @main-color: #1cc09f;
+  @bgColor: #f0f2f5;
+  @font-normal: #333333;
+  @font-subsidiary: #999999;
+  @font-special: #1cc09f;
+  @border: 1px solid #dde2eb;
+  .add_service {
+    font-size: 14px;
+    color: @font-normal;
+    .el-form {
+      padding-top: 16px;
+    }
+    .el-form-item {
+      margin-bottom: 12px;
+    }
   }
-  .el-form-item {
-    margin-bottom: 12px;
-  }
-}
 </style>
