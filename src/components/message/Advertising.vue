@@ -312,8 +312,8 @@
           content:this.editMsg.content,
           advertType:0,
           advertContentType:0,
-          startTime:this.editMsg.startTime,
-          endTime:this.editMsg.endTime,
+          startTime:this.editMsg.startTime.replace(/-/g,"/"),
+          endTime:this.editMsg.endTime.replace(/-/g,"/"),
         });
         this.Axios({
           params:data,
