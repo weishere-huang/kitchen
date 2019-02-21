@@ -43,7 +43,7 @@
         style="margin-bottom:5px;"
       >
         <el-select
-          v-model="addInfo.roleId"
+          v-model="roleId"
           placeholder="请选择"
           style="width:95%"
           size="small"
@@ -64,7 +64,8 @@
 export default {
   data() {
     return {
-      options: {}
+      options: {},
+      roleId:this.addInfo.roleId
     };
   },
   props: {
@@ -73,7 +74,7 @@ export default {
       password: {},
       confirmPassword: {},
       phone: {},
-      role: {}
+      roleId: {}
     }
   },
   methods:{

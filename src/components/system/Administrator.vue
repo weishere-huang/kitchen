@@ -104,7 +104,7 @@ export default {
       items: [
         {
           label: "管理员",
-          prop: "name",
+          prop: "account",
           width: 100
         },
         {
@@ -287,7 +287,9 @@ export default {
         option:{
         }
       },this).then(result=>{
-        console.log(result.data);
+        if(result.data.code===200){
+          this.reload();
+        }
       })
 
     },
