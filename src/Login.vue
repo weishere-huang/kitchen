@@ -53,6 +53,8 @@
   </div>
 </template>
 <script>
+import md5 from "js-md5/src/md5.js";
+import CryptoJS from "crypto-js/crypto-js.js";
 export default {
   data() {
     return {
@@ -98,14 +100,16 @@ export default {
       ).then(
         result => {
           console.log(result);
-          // if (result.data.code === 200) {
-          //   window.location.href = "/Home";
-          // }
+          // sessionStorage.token=result.data.data.tokenStr
+          if (result.data.code === 200) {
+            window.location.href = "/Home";
+          }
         },
         ({ type, info }) => {}
       );
     }
-  }
+  },
+  created() {}
 };
 </script>
 

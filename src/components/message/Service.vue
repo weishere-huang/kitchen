@@ -237,6 +237,7 @@ export default {
         Object.assign(this.editMsg, params.rowData);
         console.log(params);
         this.dialogEdit = true;
+
       }
       if (params.type === "delete") {
         console.log(params);
@@ -349,18 +350,17 @@ export default {
     },
     //添加
     beforeadd() {
-      // this.addService();
-      console.log(this.addMsg);
+       this.addService();
     },
     addService() {
       let qs = require("qs");
       let data = qs.stringify({
         address: this.addMsg.address,
-        areaCode: this.addMsg.areaCode,
+        areaCode: this.addMsg.areaName,
         phone: this.addMsg.phone,
         title: this.addMsg.title,
         workingHours: this.addMsg.workingHours,
-        serviceMode: this.addMsg.serviceMode
+        serviceMode: this.addMsg.serviceMode.toString(),
       });
       this.Axios(
         {

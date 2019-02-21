@@ -84,7 +84,7 @@ Vue.directive('clickoutside', {
 // 登录拦截
 router.beforeEach((to, from, next) => {
   if (permissionUrl.length === 0) permissionUrl = JSON.parse(localStorage.getItem("permissionUrl") || '[]');
-  let isLogin = localStorage.getItem('token')
+  let isLogin = sessionStorage.getItem('token')
   instance.defaults.headers.common["token"] = isLogin;
   if (to.meta.requireAuth) { // 判断是否需要登录权限
     if (isLogin) { // 判断是否登录
@@ -109,12 +109,13 @@ router.beforeEach((to, from, next) => {
           path: '/Home'
         })
     } else { // 没登录则跳转到登录界面
-      next({
-        path: '/Login',
-        query: {
-          redirect: to.fullPath
-        }
-      })
+      window.location.href="login.html"
+      // next({
+      //   path: 'login.html',
+      //   query: {
+      //     redirect: to.fullPath
+      //   }
+      // })
     }
   } else {
     next()

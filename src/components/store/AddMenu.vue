@@ -106,6 +106,11 @@
             :on-remove="handleRemove"
           >
             <i class="el-icon-plus"></i>
+            <div
+              slot="tip"
+              class="el-upload__tip"
+            >600 × 600像素，≤80 KB的jpg图片</div>
+
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
             <img
@@ -304,37 +309,46 @@ export default {
         }
       }
       .el-radio-button__inner:hover {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
+        background-color: #ff9200;
+        border-color: #ff9200;
       }
       .el-radio-button__inner:focus {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
+        background-color: #ff9200;
+        border-color: #ff9200;
       }
       .el-radio-button__inner:active {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
+        background-color: #ff9200;
+        border-color: #ff9200;
       }
       .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
+        background-color: #ff9200;
+        border-color: #ff9200;
       }
       .el-checkbox__input.is-checked .el-checkbox__inner,
       .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-        background-color: #1cc09f;
-        border-color: #1cc09f;
+        background-color: #ff9200;
+        border-color: #ff9200;
       }
       .el-checkbox__input.is-checked + .el-checkbox__label {
-        color: #1cc09f;
+        color: #ff9200;
       }
     }
   }
   .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-    -webkit-box-shadow: -1px 0 0 0 #1cc09f;
-    box-shadow: -1px 0 0 0 #1cc09f;
+    -webkit-box-shadow: -1px 0 0 0 #ff9200;
+    box-shadow: -1px 0 0 0 #ff9200;
   }
   .el-form-item {
     margin-bottom: 12px;
+  }
+  .el-upload__tip {
+    font-size: 12px;
+    color: #606266;
+    margin-top: 7px;
+    display: inline-block;
+    vertical-align: bottom;
+    padding-left: 8px;
+    line-height: 40px;
   }
 }
 </style>
