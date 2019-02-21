@@ -165,10 +165,10 @@ export default {
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消重置"
-          });
+          // this.$message({
+          //   type: "info",
+          //   message: "已取消重置"
+          // });
         });
     },
     handleDelete(index, rowData) {

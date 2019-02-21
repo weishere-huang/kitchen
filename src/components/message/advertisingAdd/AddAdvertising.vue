@@ -138,5 +138,14 @@ export default {
   .el-form-item {
     margin-bottom: 12px;
   }
+  .el-upload__tip {
+    font-size: 12px;
+    color: #606266;
+    margin-top: 7px;
+    display: inline-block;
+    vertical-align: bottom;
+    padding-left: 8px;
+    line-height: 40px;
+  }
 }
 </style>
