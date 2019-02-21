@@ -44,6 +44,7 @@
               placeholder="———省———"
               size="small"
               @change="getCity()"
+              :clearable="true"
             >
               <el-option
                 v-for="item in province"
@@ -63,6 +64,7 @@
               placeholder="———市———"
               size="small"
               @change="getcitycode"
+              :clearable="true"
             >
               <el-option
                 v-for="item in cities"
@@ -327,6 +329,7 @@ export default {
       this.areaName = this.province.find(item => {
         return this.provinceCode === item.code;
       }).name;
+      this.citycode = null;
       console.log(this.areaName);
       this.cities = [];
       this.Axios(
@@ -356,7 +359,7 @@ export default {
       let qs = require("qs");
       let data = qs.stringify({
         address: this.addMsg.address,
-        areaCode: this.addMsg.areaName,
+        areaCode: this.addMsg.areaCode,
         phone: this.addMsg.phone,
         title: this.addMsg.title,
         workingHours: this.addMsg.workingHours,
@@ -380,7 +383,7 @@ export default {
     },
     //修改
     beforeupdate() {
-      // this.updateService();
+       this.updateService();
       console.log(this.editMsg);
     },
     updateService() {
@@ -392,7 +395,7 @@ export default {
         phone: this.editMsg.phone,
         title: this.editMsg.title,
         workingHours: this.editMsg.workingHours,
-        serviceMode: this.editMsg.serviceMode
+        serviceMode: this.editMsg.serviceMode.toString()
       });
       this.Axios(
         {

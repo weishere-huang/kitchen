@@ -65,19 +65,20 @@
       </el-form-item>
       <el-form-item label="开始时间：">
         <el-date-picker
-          v-model="addMsg.startTime"
+          v-model="startTime"
           type="datetime"
           placeholder="选择日期"
           size="small"
           style="width:250px"
           format="yyyy/MM/dd HH:mm:ss"
           value-format="yyyy/MM/dd HH:mm:ss"
+          @change="edittime"
         >
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间：">
         <el-date-picker
-          v-model="addMsg.endTime"
+          v-model="endTime"
           type="datetime"
           placeholder="选择日期"
           size="small"
@@ -96,7 +97,9 @@ export default {
   data() {
     return {
       dialogImageUrl: "",
-      dialogVisible: false
+      dialogVisible: false,
+      startTime: this.addMsg.startTime,
+      endTime: this.addMsg.endTime
     };
   },
   props: {
@@ -105,13 +108,14 @@ export default {
       pic: {},
       picContent: {},
       isShow: {},
-      startTime: {
-      },
-      endTime: {
-      }
+      startTime: {},
+      endTime: {}
     }
   },
   methods: {
+    edittime(){
+
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },

@@ -104,11 +104,16 @@ export default {
       items: [
         {
           label: "管理员",
-          prop: "name",
+          prop: "account",
           width: 100
         },
         {
           label: "绑定手机",
+          prop: "phone",
+          width: 90
+        },
+        {
+          label: "角色权限",
           prop: "phone",
           width: 90
         },
@@ -282,7 +287,9 @@ export default {
         option:{
         }
       },this).then(result=>{
-        console.log(result.data);
+        if(result.data.code===200){
+          this.reload();
+        }
       })
 
     },

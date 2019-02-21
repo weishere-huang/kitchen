@@ -73,7 +73,7 @@
           @change="changeMode"
         >
           <el-checkbox label="送修"></el-checkbox>
-          <el-checkbox label="寄修"></el-checkbox>
+          <el-checkbox label="检修"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
     </el-form>
@@ -119,11 +119,7 @@
           this
         ).then(
           result => {
-            console.log(result.data.data);
             this.provinces = result.data.data;
-            console.log("子页面的省加载");
-            //判断是否为编辑
-
           },
           ({type, info}) => {
           }
@@ -140,8 +136,6 @@
         this.getCity();
       },
       getCity() {
-        debugger
-        console.log(this.provinceCode);
         this.Axios(
           {
             params: {
@@ -156,9 +150,7 @@
           this
         ).then(
           result => {
-            console.log("市区方法查询结果"+result.data);
             this.citys = result.data.data;
-            console.log("市区信息"+result.data.data);
           },
           ({type, info}) => {
           }
@@ -172,35 +164,34 @@
         console.log(this.areaName);
         this.citys=[];
       },
+      //编辑赋值方法 , 服务范围可以
       startedit() {
         //截取地区长度
-        debugger
         let arr = this.addMsg.areaCode.split(" ");
         this.provinceCode = this.provinces.find(item => {
           return arr[0] === item.name;
         }).code;
         //获取市信息
-        console.log("1");
         this.getCity();
-        console.log("2");
-        console.log(this.citys);
         if (arr.length > 1) {
-          this.citycode = this.citys.find(item => {
-            return arr[1] === item.name;
-          }).code;
+          // this.citycode = this.citys.find(item => {
+          //   return arr[1] === item.name;
+          // }).code;
           // console.log(this.citys.find(item => {
           //      return arr[1] === item.name;
           //    }))
         }
 
-        //服务范围
-        // this.addMsg.serviceMode = this.addMsg.serviceMode.split(",");
-        // this.serviceMode = this.addMsg.serviceMode;
+        // 服务范围
+        console.log("执行");
+        this.addMsg.serviceMode = this.addMsg.serviceMode.split(",");
+        this.serviceMode = this.addMsg.serviceMode;
       }
     },
     created() {
       this.getAllProvince();
       //编辑用
+
     },
     watch:{
       addMsg(){

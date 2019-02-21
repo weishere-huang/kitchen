@@ -84,7 +84,16 @@
             min-width="100"
           >
             <template slot-scope="scope">
+              <el-popover
+              popper-class="color_text"
+                ref="popover1"
+                placement="right"
+                trigger="focus"
+                content="只保留小数点后两位"
+              >
+              </el-popover>
               ￥<el-input
+                v-popover:popover1
                 size="small"
                 type="number"
                 step="0.01"
@@ -114,7 +123,16 @@
                 type="number"
                 v-model="scope.row.time"
                 style="width:60px;padding:0;"
+                v-popover:popover
               ></el-input>
+              <el-popover
+              popper-class="color_text"
+                ref="popover"
+                placement="right"
+                trigger="focus"
+                content="只能是整数"
+              >
+              </el-popover>
             </template>
           </el-table-column>
           <el-table-column
@@ -195,20 +213,22 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <el-tooltip
-                class="item"
-                effect="light"
+              <el-popover
+              popper-class="color_text"
+                ref="popover2"
+                placement="right"
+                trigger="focus"
                 content="数值越大排序越靠前"
-                placement="top"
               >
-                <el-input
-                  size="small"
-                  type="number"
-                  step="0.01"
-                  v-model="scope.row.sort"
-                  style="width:60px;padding:0;"
-                ></el-input>
-              </el-tooltip>
+              </el-popover>
+              <el-input
+                v-popover:popover2
+                size="small"
+                type="number"
+                step="0.01"
+                v-model="scope.row.sort"
+                style="width:60px;padding:0;"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column
@@ -302,10 +322,7 @@ export default {
   },
   methods: {
     handleInput(e, index) {
-      console.log(e);
-      console.log(index);
       this.tableData[index].price = e.match(/^\d*(\.?\d{0,2})/g)[0] || null;
-      console.log(e.match(/^\d*(\.?\d{0,2})/g)[0]);
     },
     handleEdit(index, rowData) {
       let params = { type: "edit", index: index, rowData: rowData };
@@ -430,6 +447,13 @@ export default {
   input[type="number"] {
     -moz-appearance: textfield;
   }
+  .el-popover--plain{
+    padding:4px 8px;
+  }
+}
+.color_text{
+  color: #1cc09f;
+  padding: 4px 8px;
 }
 </style>
 
