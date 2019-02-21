@@ -113,6 +113,11 @@ export default {
           width: 90
         },
         {
+          label: "角色权限",
+          prop: "phone",
+          width: 90
+        },
+        {
           label: "创建时间",
           prop: "gmtCreate",
           width: 140

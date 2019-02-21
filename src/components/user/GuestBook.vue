@@ -35,7 +35,10 @@
           :span="4"
           style="padding:0 5px;"
         >
-          <el-button size="small" plain>搜索</el-button>
+          <el-button
+            size="small"
+            plain
+          >搜索</el-button>
         </el-col>
       </div>
     </div>
@@ -49,7 +52,7 @@
         :header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
       >
         <el-table-column
-          label="用户名"
+          label="昵称"
           min-width="100"
           show-overflow-tooltip
         >
@@ -59,11 +62,20 @@
         </el-table-column>
         <el-table-column
           label="内容"
-          min-width="300"
+          min-width="260"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
             <span>{{ scope.row.content }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="联系电话"
+          min-width="100"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -76,7 +88,7 @@
         </el-table-column>
         <el-table-column
           label="状态"
-          min-width="100"
+          min-width="80"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -144,7 +156,10 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <span style="color:#999999" v-if="replayContent.state==1">提示: 此条留言已有回复, 如果继续回复将更新原来回复的内容!</span>
+          <span
+            style="color:#999999"
+            v-if="replayContent.state==1"
+          >提示: 此条留言已有回复, 如果继续回复将更新原来回复的内容!</span>
         </el-form-item>
       </el-form>
       <span
@@ -182,12 +197,14 @@ export default {
         {
           name: "13112388333",
           content: "我想吃咸菜回锅肉，什么时候有买的啊？",
+          phone: "13100001026",
           time: "2018-05-12 13:46:37",
           state: 0
         },
         {
           name: "13112388333",
           content: "我想吃咸菜回锅肉，什么时候有买的啊？",
+          phone: "13100001026",
           time: "2018-05-12 13:46:37",
           state: 1
         }
@@ -198,7 +215,7 @@ export default {
     reply(index, rowData) {
       let params = { type: "edit", index: index, rowData: rowData };
       console.log(params);
-      this.replayContent=params.rowData
+      this.replayContent = params.rowData;
       this.dialogReplay = true;
     },
     handleDelete(index, rowData) {
