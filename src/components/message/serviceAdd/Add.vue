@@ -3,30 +3,32 @@
     <el-form label-width="90px">
       <el-form-item label="地区：">
         <el-select
-          v-model="addMsg.province"
+          v-model="provinceCode"
           placeholder="请选择"
           style="width:49%"
           size="small"
+          @change="getCity"
         >
           <el-option
             v-for="item in provinces"
             :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :label="item.name"
+            :value="item.code"
           >
           </el-option>
         </el-select>
         <el-select
-          v-model="addMsg.city"
+          v-model="citycode"
           placeholder="请选择"
           style="width:49%"
           size="small"
+          @change="getcitycode"
         >
           <el-option
             v-for="item in citys"
             :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :label="item.name"
+            :value="item.code"
           >
           </el-option>
         </el-select>
@@ -66,7 +68,7 @@
         label="服务范围："
         style="margin-bottom: 0px;"
       >
-        <el-checkbox-group v-model="addMsg.serviceMode">
+        <el-checkbox-group v-model="addMsg.serviceMode1">
           <el-checkbox label="送修"></el-checkbox>
           <el-checkbox label="寄修"></el-checkbox>
         </el-checkbox-group>
@@ -79,18 +81,76 @@ export default {
   data() {
     return {
       provinces: [],
-      citys: []
+      citys: [],
+      areaName:null,
+      citycode:"",
+      provinceCode:"",
     };
+  },
+  methods:{
+    //获取市
+    getCity(){
+      this.areaName=this.provinces.find(item =>{return this.provinceCode===item.code}).name;
+      console.log(this.areaName);
+      this.citys=[];
+      this.Axios(
+        {
+          params: {
+            code:this.provinceCode
+          },
+          option: {
+            enableMsg:false
+          },
+          type: "get",
+          url: "/api-platform/network/findAllCity"
+        },
+        this
+      ).then(
+        result => {
+          this.citys = result.data.data;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+    //获取所有省
+    getAllProvince(){
+      this.Axios(
+        {
+          params: {},
+          option: {
+            enableMsg:false
+          },
+          type: "get",
+          url: "/api-platform/network/AllProvince"
+        },
+        this
+      ).then(
+        result => {
+          this.provinces = result.data.data;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+    //选择市时改变地区名字
+    getcitycode(){
+      this.areaName += " " + this.citys.find(item =>{return this.citycode===item.code}).name;
+      console.log(this.areaName);
+    },
+  },
+  created(){
+    this.getAllProvince();
   },
   props: {
     addMsg: {
-      province: {},
-      city: {},
+      areaName: this.areaName,
       title: {},
       address: {},
       phone: {},
       workingHours: {},
-      serviceMode: {}
+      serviceMode1: {},
+      serviceMode:{}
     }
   }
 };
