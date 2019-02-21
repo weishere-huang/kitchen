@@ -75,7 +75,8 @@
     <el-dialog
       title="添加区域"
       :visible.sync="areaShow"
-      width="500px"
+      width="600px"
+      :close-on-click-modal="false"
     >
       <area-list :districtShow="true"></area-list>
       <span
@@ -97,7 +98,8 @@
     <el-dialog
       title="编辑区域"
       :visible.sync="editAreaShow"
-      width="500px"
+      width="600px"
+      :close-on-click-modal="false"
     >
       <area-list :districtShow="true"></area-list>
       <span

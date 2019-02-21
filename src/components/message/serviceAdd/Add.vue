@@ -66,9 +66,12 @@
         label="服务范围："
         style="margin-bottom: 0px;"
       >
-        <el-checkbox-group v-model="addMsg.serviceMode">
-          <el-checkbox label="0">送修</el-checkbox>
-          <el-checkbox label="1">寄修</el-checkbox>
+        <el-checkbox-group
+          v-model="serviceMode"
+          @change="changeMode"
+        >
+          <el-checkbox label="送修"></el-checkbox>
+          <el-checkbox label="寄修"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
     </el-form>
@@ -79,7 +82,8 @@ export default {
   data() {
     return {
       provinces: [],
-      citys: []
+      citys: [],
+      serviceMode: []
     };
   },
   props: {
@@ -90,9 +94,12 @@ export default {
       address: {},
       phone: {},
       workingHours: {},
-      serviceMode: {
-        type:Array
-      }
+      serviceMode: {}
+    }
+  },
+  methods: {
+    changeMode() {
+      this.addMsg.serviceMode = this.serviceMode;
     }
   }
 };
