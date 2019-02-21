@@ -57,6 +57,7 @@
         <el-button
           @click="dialogVisible = false"
           size="small"
+          plain
         >取 消</el-button>
         <el-button
           type="primary"
@@ -78,6 +79,7 @@
         <el-button
           @click="edit = false"
           size="small"
+          plain
         >取 消</el-button>
         <el-button
           type="primary"

@@ -68,7 +68,7 @@ const router = new Router({
       name: 'Store',
       component: Store,
       props: {
-        pageName: '订单列表'
+        pageName: '商城列表'
       },
       meta: {
         requireAuth: false,

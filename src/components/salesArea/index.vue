@@ -85,6 +85,7 @@
         <el-button
           @click="areaShow = false"
           size="small"
+          plain
         >取 消</el-button>
         <el-button
           type="primary"
@@ -106,6 +107,7 @@
         <el-button
           @click="editAreaShow = false"
           size="small"
+          plain
         >取 消</el-button>
         <el-button
           type="primary"

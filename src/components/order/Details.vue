@@ -10,14 +10,17 @@
         <el-button
           size="small"
           type="primary"
+          @click="dialogPay=true"
         >付款</el-button>
         <el-button
           size="small"
           type="primary"
+          @click="dialogClose=true"
         >关闭</el-button>
         <el-button
           size="small"
           type="primary"
+          @click="dialogPlan=true"
         >进度</el-button>
         <el-button
           size="small"
@@ -29,7 +32,7 @@
         title="付款"
         :visible.sync="dialogPay"
         width="500px"
-        top="30vh"
+        :close-on-click-modal="false"
       >
         <el-form
           label-width="85px"
@@ -54,6 +57,7 @@
           <el-button
             size="small"
             @click="dialogPay = false"
+            plain
           >取 消</el-button>
           <el-button
             size="small"
@@ -66,7 +70,7 @@
         title="关闭"
         :visible.sync="dialogClose"
         width="500px"
-        top="30vh"
+        :close-on-click-modal="false"
       >
         <el-form
           label-width="85px"
@@ -95,6 +99,7 @@
           <el-button
             size="small"
             type="primary"
+            plain
             @click="dialogClose = false"
           >确 定</el-button>
         </span>
@@ -103,7 +108,7 @@
         title="进度"
         :visible.sync="dialogPlan"
         width="500px"
-        top="30vh"
+        :close-on-click-modal="false"
       >
         <div style="margin-top:16px;">
           <ul class="plan_case">
@@ -126,6 +131,7 @@
           <el-button
             size="small"
             @click="dialogPlan = false"
+            plain
           >取 消</el-button>
           <el-button
             size="small"
@@ -339,8 +345,8 @@ export default {
     getRow(row, event) {
       console.log(row);
     },
-    toPrintOrder(){
-      window.open('printorder.html','_blank')
+    toPrintOrder() {
+      window.open("printorder.html", "_blank");
     }
   },
   components: {

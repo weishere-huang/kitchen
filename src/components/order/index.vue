@@ -84,6 +84,7 @@
           <el-button
             size="small"
             type="primary"
+            @click="toPrintOrder"
           >打印订单</el-button>
         </div>
         <div
@@ -200,6 +201,9 @@ export default {
     };
   },
   methods: {
+    toPrintOrder() {
+      window.open("printorder.html", "_blank");
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
       this.pageIndex = 1;

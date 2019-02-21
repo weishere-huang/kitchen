@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item label="分类：">
         <el-select
-          v-model="addMsg.faqType"
+          v-model="sstype"
           placeholder="请选择"
           style="width:49%"
           size="small"
@@ -43,10 +43,11 @@ export default {
   data() {
     return {
       classify: [
-        { label: "订单问题", value: 1 },
-        { label: "支付问题", value: 2 },
+        { label: "订单问题", value: 1},
+        { label: "支付问题", value: 2},
         { label: "其他问题", value: 3 }
-      ]
+      ],
+      sstype:this.addMsg.faqType,
     };
   },
   props: {
@@ -57,8 +58,8 @@ export default {
     }
   },
   methods:{
-    editchange(){
-
+    editchange(data){
+      this.addMsg.faqType=this.sstype
     },
   }
 };

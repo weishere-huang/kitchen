@@ -28,6 +28,7 @@
           <el-button
             @click="dialogAdd = false"
             size="small"
+            plain
           >取 消</el-button>
           <el-button
             type="primary"
@@ -49,7 +50,7 @@
               v-model="faqType"
               placeholder="请选择"
               size="small"
-              clearable=true
+              :clearable="true"
             >
               <el-option
                 v-for="item in classify"
@@ -112,7 +113,7 @@
       :visible.sync="dialogEdit"
       width="800px"
     >
-      <add-problem :addMsg="editMsg"></add-problem>
+      <add-problem :addMsg="editMsg" v-on:handlechange="handlechange"></add-problem>
       <span
         slot="footer"
         class="dialog-footer"
@@ -120,6 +121,7 @@
         <el-button
           @click="dialogEdit = false"
           size="small"
+          plain
         >取 消</el-button>
         <el-button
           type="primary"
@@ -181,7 +183,7 @@
         tableData: [
           {
             title: "在线支付的过程中，订单显示未支付成功，款项却被扣了，怎么办？",
-            classify: "常见问题",
+            faqType: 1,
             time: "2018-12-01 13:32:48"
           }
         ],
@@ -193,6 +195,9 @@
       };
     },
     methods: {
+      handlechange(data){
+        console.log(data);
+      },
       toadd(){
         this.dialogAdd=true;
         this.addMsg={};
@@ -220,11 +225,6 @@
         if (params.type === "delete") {
           console.log(params);
           this.deletefaq(params.rowData.id);
-        }
-        if (params.type === "detalis") {
-          console.log(params);
-          this.userIds = params.rowData.order;
-          this.$router.push({path: "/Order/Details/" + this.userIds});
         }
       },
       handleSelectionChange(selection) {
