@@ -154,6 +154,7 @@
         <el-button
           @click="dialogReplay = false"
           size="small"
+          plain
         >取 消</el-button>
         <el-button
           type="primary"

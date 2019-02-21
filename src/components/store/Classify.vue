@@ -151,6 +151,7 @@
         <el-button
           size="small"
           @click="dialogVisible = false"
+          plain
         >取 消</el-button>
         <el-button
           size="small"
@@ -205,6 +206,7 @@
         <el-button
           size="small"
           @click="editClassify = false"
+          plain
         >取 消</el-button>
         <el-button
           size="small"

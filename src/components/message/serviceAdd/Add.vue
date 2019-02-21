@@ -69,8 +69,8 @@
         style="margin-bottom: 0px;"
       >
         <el-checkbox-group v-model="addMsg.serviceMode1">
-          <el-checkbox label="送修"></el-checkbox>
-          <el-checkbox label="寄修"></el-checkbox>
+          <el-checkbox label="0">送修</el-checkbox>
+          <el-checkbox label="1">寄修</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
     </el-form>
@@ -149,8 +149,10 @@ export default {
       address: {},
       phone: {},
       workingHours: {},
+      serviceMode: {
       serviceMode1: {},
-      serviceMode:{}
+        type:Array
+      }
     }
   }
 };

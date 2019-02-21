@@ -21,6 +21,7 @@
           <el-button
             @click="dialogAdd = false"
             size="small"
+            plain
           >取 消</el-button>
           <el-button
             type="primary"
@@ -76,7 +77,11 @@
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small" plain @click="beforeSearch">搜索</el-button>
+            <el-button
+              size="small"
+              plain
+              @click="beforeSearch"
+            >搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -126,6 +131,7 @@
         <el-button
           @click="dialogEdit = false"
           size="small"
+          plain
         >取 消</el-button>
         <el-button
           type="primary"
@@ -151,6 +157,7 @@ export default {
         // tel: "",
         // time: "",
         // range: []
+        serviceMode: []
       },
       editMsg: {
         // province: "",
@@ -167,7 +174,7 @@ export default {
       cities: [],
       currentPage: 1,
       provinceCode: "",
-      citycode:"",
+      citycode: "",
       items: [
         {
           label: "网点名称",
@@ -204,14 +211,14 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       total: 10,
-      areaName:null,
+      areaName: null
     };
   },
   methods: {
-    toadd(){
-      this.editMsg={};
-      this.addMsg={};
-      this.dialogAdd=true;
+    toadd() {
+      this.editMsg = {};
+      this.addMsg = {};
+      this.dialogAdd = true;
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -226,11 +233,11 @@ export default {
     },
     handlechange(params) {
       if (params.type === "edit") {
-        this.editMsg={};
-        this.addMsg={};
-        Object.assign(this.editMsg,params.rowData);
+        this.editMsg = {};
+        this.addMsg = {};
+        Object.assign(this.editMsg, params.rowData);
         console.log(params);
-        this.dialogEdit=true
+        this.dialogEdit = true;
       }
       if (params.type === "delete") {
         console.log(params);
@@ -248,7 +255,7 @@ export default {
     getRow(row, event) {
       console.log(row);
     },
-    beforeSearch(){
+    beforeSearch() {
       this.pageIndex = 1;
       this.getServiceList();
     },
@@ -259,11 +266,9 @@ export default {
           params: {
             page: this.pageIndex,
             size: this.pageSize,
-            areaName:this.areaName,
+            areaName: this.areaName
           },
-          option: {
-
-          },
+          option: {},
           type: "get",
           url: "/api-platform/network/list"
         },
@@ -278,12 +283,12 @@ export default {
       );
     },
     //获取所有省
-    getAllProvince(){
+    getAllProvince() {
       this.Axios(
         {
           params: {},
           option: {
-            enableMsg:false
+            enableMsg: false
           },
           type: "get",
           url: "/api-platform/network/AllProvince"
@@ -293,41 +298,44 @@ export default {
         result => {
           this.province = result.data.data;
         },
-        ({type, info}) => {
-        }
+        ({ type, info }) => {}
       );
     },
     //删除网点
-    deleteService(id){
+    deleteService(id) {
       let qs = require("qs");
       let data = qs.stringify({
-        ids:id,
-        enableOrDisable:1
+        ids: id,
+        enableOrDisable: 1
       });
-      this.Axios({
-        params:data,
-        url:"/api-platform/network/updatestate",
-        type:"post",
-        option:{
-        }
-      },this).then(result=>{
-        if(result.data.code===200){
+      this.Axios(
+        {
+          params: data,
+          url: "/api-platform/network/updatestate",
+          type: "post",
+          option: {}
+        },
+        this
+      ).then(result => {
+        if (result.data.code === 200) {
           this.reload();
         }
-      })
+      });
     },
     //获取市
-    getCity(){
-      this.areaName=this.province.find(item =>{return this.provinceCode===item.code}).name;
+    getCity() {
+      this.areaName = this.province.find(item => {
+        return this.provinceCode === item.code;
+      }).name;
       console.log(this.areaName);
-      this.cities=[];
+      this.cities = [];
       this.Axios(
         {
           params: {
-            code:this.provinceCode
+            code: this.provinceCode
           },
           option: {
-            enableMsg:false
+            enableMsg: false
           },
           type: "get",
           url: "/api-platform/network/findAllCity"
@@ -337,74 +345,83 @@ export default {
         result => {
           this.cities = result.data.data;
         },
-        ({type, info}) => {
-        }
+        ({ type, info }) => {}
       );
     },
     //添加
-    beforeadd(){
+    beforeadd() {
       // this.addService();
-      console.log(this.addMsg)
+      console.log(this.addMsg);
     },
-    addService(){
+    addService() {
       let qs = require("qs");
       let data = qs.stringify({
-        address:this.addMsg.address,
-        areaCode:this.addMsg.areaCode,
-        phone:this.addMsg.phone,
-        title:this.addMsg.title,
-        workingHours:this.addMsg.workingHours,
-        serviceMode:this.addMsg.serviceMode,
+        address: this.addMsg.address,
+        areaCode: this.addMsg.areaCode,
+        phone: this.addMsg.phone,
+        title: this.addMsg.title,
+        workingHours: this.addMsg.workingHours,
+        serviceMode: this.addMsg.serviceMode
       });
-      this.Axios({
-        params: data,
-        url: "/api-platform/network/add",
-        type: "post",
-        option: {}
-      }, this).then(result => {
-        if(result.data.code===200){
-          this.reload()
-        }else{
+      this.Axios(
+        {
+          params: data,
+          url: "/api-platform/network/add",
+          type: "post",
+          option: {}
+        },
+        this
+      ).then(result => {
+        if (result.data.code === 200) {
+          this.reload();
+        } else {
           this.$message.error("出错啦,请重新添加~");
         }
-      })
+      });
     },
     //修改
-    beforeupdate(){
+    beforeupdate() {
       // this.updateService();
       console.log(this.editMsg);
     },
-    updateService(){
+    updateService() {
       let qs = require("qs");
       let data = qs.stringify({
-        id:this.editMsg.id,
-        address:this.editMsg.address,
-        areaCode:this.editMsg.areaCode,
-        phone:this.editMsg.phone,
-        title:this.editMsg.title,
-        workingHours:this.editMsg.workingHours,
-        serviceMode:this.editMsg.serviceMode,
+        id: this.editMsg.id,
+        address: this.editMsg.address,
+        areaCode: this.editMsg.areaCode,
+        phone: this.editMsg.phone,
+        title: this.editMsg.title,
+        workingHours: this.editMsg.workingHours,
+        serviceMode: this.editMsg.serviceMode
       });
-      this.Axios({
-        params: data,
-        url: "/api-platform/network/update",
-        type: "post",
-        option: {
-          enableMsg:false
-        }
-      }, this).then(result => {
-        if(result.data.code===200){
-          this.reload()
-        }else{
+      this.Axios(
+        {
+          params: data,
+          url: "/api-platform/network/update",
+          type: "post",
+          option: {
+            enableMsg: false
+          }
+        },
+        this
+      ).then(result => {
+        if (result.data.code === 200) {
+          this.reload();
+        } else {
           this.$message.error("出错啦,请重新修改~");
         }
-      })
+      });
     },
     //选择市时改变地区名字
-    getcitycode(){
-      this.areaName += " " + this.cities.find(item =>{return this.citycode===item.code}).name;
+    getcitycode() {
+      this.areaName +=
+        " " +
+        this.cities.find(item => {
+          return this.citycode === item.code;
+        }).name;
       console.log(this.areaName);
-    },
+    }
   },
   created() {
     //查询网点列表
