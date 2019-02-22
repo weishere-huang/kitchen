@@ -2,45 +2,45 @@
   <div class="guest_book">
     <div class="top_title">
       <h4>用户留言</h4>
-      <div class="top_search">
-        <el-col
-          :span="9"
-          style="padding:0 5px;"
-        >
-          <el-select
-            v-model="value"
-            placeholder="请选择"
-            size="small"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col
-          :span="11"
-          style="padding:0 5px;"
-        >
-          <el-input
-            size="small"
-            style="width:100%;"
-            placeholder=""
-          ></el-input>
-        </el-col>
-        <el-col
-          :span="4"
-          style="padding:0 5px;"
-        >
-          <el-button
-            size="small"
-            plain
-          >搜索</el-button>
-        </el-col>
-      </div>
+      <!--<div class="top_search">-->
+        <!--<el-col-->
+          <!--:span="9"-->
+          <!--style="padding:0 5px;"-->
+        <!--&gt;-->
+          <!--<el-select-->
+            <!--v-model="value"-->
+            <!--placeholder="请选择"-->
+            <!--size="small"-->
+          <!--&gt;-->
+            <!--<el-option-->
+              <!--v-for="item in options"-->
+              <!--:key="item.value"-->
+              <!--:label="item.label"-->
+              <!--:value="item.value"-->
+            <!--&gt;-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-col>-->
+        <!--<el-col-->
+          <!--:span="11"-->
+          <!--style="padding:0 5px;"-->
+        <!--&gt;-->
+          <!--<el-input-->
+            <!--size="small"-->
+            <!--style="width:100%;"-->
+            <!--placeholder=""-->
+          <!--&gt;</el-input>-->
+        <!--</el-col>-->
+        <!--<el-col-->
+          <!--:span="4"-->
+          <!--style="padding:0 5px;"-->
+        <!--&gt;-->
+          <!--<el-button-->
+            <!--size="small"-->
+            <!--plain-->
+          <!--&gt;搜索</el-button>-->
+        <!--</el-col>-->
+      <!--</div>-->
     </div>
     <div class="table_list">
       <el-table
@@ -57,7 +57,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <span>{{ scope.row.userName }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -66,7 +66,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.content }}</span>
+            <span>{{ scope.row.opinion }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -83,7 +83,7 @@
           min-width="120"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.time }}</span>
+            <span>{{ scope.row.gmtCreate }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -126,7 +126,7 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        :current-page.sync="pageIndex"
         :page-sizes="[15, 30, 100]"
         :page-size="10"
         layout="sizes, prev, pager, next"
@@ -145,14 +145,14 @@
         class="dialog_form"
       >
         <el-form-item label="反馈内容：">
-          <span>{{replayContent.content}}</span>
+          <span>{{replayContent.opinion}}</span>
         </el-form-item>
         <el-form-item label="回复内容：">
           <el-input
             type="textarea"
             rows="4"
             style="width:90%;"
-            v-model="replayContent.replayContent"
+            v-model="replayContent.replyContent"
           ></el-input>
         </el-form-item>
         <el-form-item>
@@ -173,7 +173,7 @@
         >取 消</el-button>
         <el-button
           type="primary"
-          @click="dialogReplay = false"
+          @click="beforeupdate"
           size="small"
         >确 定</el-button>
       </span>
@@ -182,6 +182,7 @@
 </template>
 <script>
 export default {
+  inject: ["reload"],
   data() {
     return {
       replayContent: {
@@ -189,26 +190,12 @@ export default {
         replyContent: ""
       },
       dialogReplay: false,
-      total: 100,
-      currentPage: 1,
+      total: 0,
+      pageIndex: 1,
+      pageSize:10,
       value: "",
       options: [],
-      tableData: [
-        {
-          name: "13112388333",
-          content: "我想吃咸菜回锅肉，什么时候有买的啊？",
-          phone: "13100001026",
-          time: "2018-05-12 13:46:37",
-          state: 0
-        },
-        {
-          name: "13112388333",
-          content: "我想吃咸菜回锅肉，什么时候有买的啊？",
-          phone: "13100001026",
-          time: "2018-05-12 13:46:37",
-          state: 1
-        }
-      ]
+      tableData: [],
     };
   },
   methods: {
@@ -221,16 +208,86 @@ export default {
     handleDelete(index, rowData) {
       let params = { type: "delete", index: index, rowData: rowData };
       console.log(params);
+      this.beforedelete(params.rowData.id);
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
       this.pageIndex = 1;
       this.pageSize = val;
+      this.getlist();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.pageIndex = val;
+      this.getlist();
+    },
+    getlist(){
+      this.Axios(
+        {
+          params: {
+            page:this.pageIndex,
+            size:this.pageSize,
+          },
+          option: {},
+          type: "get",
+          url: "/api-platform/advise/list"
+
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.tableData = result.data.data.content;
+          this.total = result.data.data.totalElement;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
+    beforedelete(id){
+      this.deleteAdvise(id);
+    },
+    deleteAdvise(id){
+      let qs = require("qs");
+      let data = qs.stringify({
+        ids:id
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/advise/updateState",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        if(result.data.code===200){
+          this.reload();
+        }
+      })
+    },
+    beforeupdate(){
+      this.updateAdvise();
+    },
+    updateAdvise(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        id:this.replayContent.id,
+        reply:this.replayContent.replyContent
+      });
+      this.Axios({
+        params:data,
+        url:"/api-platform/advise/reply",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        if(result.data.code===200){
+          this.reload();
+        }
+      })
     }
+  },
+  created(){
+    this.getlist();
   }
 };
 </script>
