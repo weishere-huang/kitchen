@@ -152,7 +152,7 @@
             type="textarea"
             rows="4"
             style="width:90%;"
-            v-model="replayContent.replyContent"
+            v-model="replayContent.reply"
           ></el-input>
         </el-form-item>
         <el-form-item>
@@ -271,7 +271,7 @@ export default {
       let qs = require("qs");
       let data = qs.stringify({
         id:this.replayContent.id,
-        reply:this.replayContent.replyContent
+        reply:this.replayContent.reply
       });
       this.Axios({
         params:data,

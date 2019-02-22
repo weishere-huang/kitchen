@@ -41,20 +41,8 @@
               style="width:400px;"
               v-model="cookbook.menuScript"
               @focus="dialogScript=true"
+              placeholder="请选择"
             ></el-input>
-            <!-- <el-select
-              size="small"
-              style="width:400px;"
-              v-model="cookbook.menuScript"
-            >
-              <el-option
-                v-for="item in menuScript"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select> -->
           </el-form-item>
           <el-form-item label="烹饪时长：">
             <el-input

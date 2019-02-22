@@ -65,6 +65,7 @@
 </template>
 <script>
 export default {
+  inject: ["reload"],
   data() {
     return {
       role: [],
@@ -99,6 +100,7 @@ export default {
         console.log(result.data);
         if(result.data.code===200){
           this.$router.back(-1);
+          this.reload();
         }
       })
     },

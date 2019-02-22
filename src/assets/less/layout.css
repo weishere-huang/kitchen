@@ -211,3 +211,8 @@ input[type="number"] {
 .el-dialog__headerbtn:hover .el-dialog__close {
   color: #1cc09f;
 }
+.el-upload--picture-card:hover,
+.el-upload:focus {
+  border-color: #1cc09f;
+  color: #1cc09f;
+}

@@ -151,7 +151,8 @@ export default {
         console.log(params);
         this.userMsg={},
         this.editUserMsg={},
-        Object.assign(this.editUserMsg,params.rowData)
+        Object.assign(this.editUserMsg,params.rowData);
+        this.editUserMsg.confirmPassword=this.editUserMsg.password;
         this.edit=true
       }
       if (params.type === "delete") {

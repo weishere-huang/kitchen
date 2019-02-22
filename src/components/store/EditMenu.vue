@@ -42,6 +42,7 @@
             style="width:192px;"
             v-model="cookbook"
             @focus="dialogCoobook=true"
+            placeholder="请选择"
           ></el-input>
         </el-form-item>
         <el-form-item label="商品价格：">
