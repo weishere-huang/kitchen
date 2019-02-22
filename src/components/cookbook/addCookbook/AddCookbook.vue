@@ -118,21 +118,33 @@
         </el-form>
       </div>
     </div>
+    <el-dialog
+      title="添加菜谱脚本"
+      :visible.sync="dialogScript"
+      width="600px"
+    >
+      <div style="overflow:hidden;margin-top:16px;">
+        <dialog-script></dialog-script>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 <script>
+import DialogScript from "./DialogScript";
 export default {
   data() {
     return {
+      dialogScript: true,
       cookbook: {
-          name:"",
-          classify:"",
-          menuScript:"",
-          time:"",
-          pic:"",
-          mainIngredient:"",
-          ingredients :"",
-          introduce:""
+        name: "",
+        classify: "",
+        menuScript: "",
+        time: "",
+        pic: "",
+        mainIngredient: "",
+        ingredients: "",
+        introduce: ""
       },
       classify: [
         {
@@ -160,7 +172,9 @@ export default {
     }
   },
   created() {},
-  components: {}
+  components: {
+    DialogScript
+  }
 };
 </script>
 

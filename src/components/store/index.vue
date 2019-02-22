@@ -454,6 +454,7 @@ export default {
 .color_text{
   color: #1cc09f;
   padding: 4px 8px;
+  width: auto;
 }
 </style>
 
