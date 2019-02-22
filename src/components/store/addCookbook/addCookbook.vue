@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog_script">
+  <div class="add_cookbook">
     <el-col
       :span="24"
       class="serach_case"
@@ -50,7 +50,7 @@ export default {
   methods: {
     getValue(val) {
       let params = { value: val, isHide: false };
-      this.$emit("dialogScriptHide", params);
+      this.$emit("dialogCoobookHide", params);
     }
   },created () {
     this.scriptData=this.recentSearch
@@ -65,7 +65,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.dialog_script {
+.add_cookbook {
   font-size: 14px;
   color: @font-normal;
   .results {

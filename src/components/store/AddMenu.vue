@@ -35,6 +35,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="绑定菜谱：">
+          <el-input
+            type="text"
+            size="small"
+            style="width:192px;"
+            v-model="cookbook"
+            @focus="dialogCoobook=true"
+            placeholder="请选择"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="商品价格：">
           <el-input
             type="text"
@@ -58,7 +68,10 @@
             placeholder="单位：分钟"
           ></el-input>
         </el-form-item>
-        <el-form-item label="参考辣度：">
+        <el-form-item
+          label="参考辣度："
+          class="hot_case"
+        >
           <el-radio-group
             v-model="radio5"
             size="small"
@@ -154,14 +167,27 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog
+      title="绑定菜谱"
+      :visible.sync="dialogCoobook"
+      width="600px"
+      :close-on-click-modal="false"
+    >
+      <div style="overflow:hidden;margin-top:16px;">
+        <dialog-coobook v-on:dialogCoobookHide="dialogCoobookHide"></dialog-coobook>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import ueditor from "../public/Ue";
 import areaList from "../public/Area";
+import dialogCoobook from "./addCookbook/addCookbook";
 export default {
   data() {
     return {
+      cookbook: "",
+      dialogCoobook: false,
       areaShow: false,
       radio5: "",
       defaultMsg: "",
@@ -184,6 +210,10 @@ export default {
     };
   },
   methods: {
+    dialogCoobookHide(params) {
+      this.dialogCoobook = params.ishide;
+      this.cookbook = params.value;
+    },
     getUEContent() {
       // let content = this.$refs.ue.getUEContent();
       // this.$notify({
@@ -235,7 +265,8 @@ export default {
   mounted() {},
   components: {
     ueditor,
-    areaList
+    areaList,
+    dialogCoobook
   }
 };
 </script>
@@ -308,36 +339,39 @@ export default {
           line-height: 20px;
         }
       }
-      .el-radio-button__inner:hover {
-        background-color: #ff9200;
-        border-color: #ff9200;
-      }
-      .el-radio-button__inner:focus {
-        background-color: #ff9200;
-        border-color: #ff9200;
-      }
-      .el-radio-button__inner:active {
-        background-color: #ff9200;
-        border-color: #ff9200;
-      }
-      .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-        background-color: #ff9200;
-        border-color: #ff9200;
-      }
-      .el-checkbox__input.is-checked .el-checkbox__inner,
-      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-        background-color: #ff9200;
-        border-color: #ff9200;
-      }
-      .el-checkbox__input.is-checked + .el-checkbox__label {
-        color: #ff9200;
+      .hot_case {
+        .el-radio-button__inner:hover {
+          background-color: #ff9200;
+          border-color: #ff9200;
+        }
+        .el-radio-button__inner:focus {
+          background-color: #ff9200;
+          border-color: #ff9200;
+        }
+        .el-radio-button__inner:active {
+          background-color: #ff9200;
+          border-color: #ff9200;
+        }
+        .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+          background-color: #ff9200;
+          border-color: #ff9200;
+        }
+        .el-checkbox__input.is-checked .el-checkbox__inner,
+        .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+          background-color: #ff9200;
+          border-color: #ff9200;
+        }
+        .el-checkbox__input.is-checked + .el-checkbox__label {
+          color: #ff9200;
+        }
+        .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+          -webkit-box-shadow: -1px 0 0 0 #ff9200;
+          box-shadow: -1px 0 0 0 #ff9200;
+        }
       }
     }
   }
-  .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-    -webkit-box-shadow: -1px 0 0 0 #ff9200;
-    box-shadow: -1px 0 0 0 #ff9200;
-  }
+
   .el-form-item {
     margin-bottom: 12px;
   }
