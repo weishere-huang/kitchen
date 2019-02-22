@@ -27,7 +27,7 @@
               v-model="cookbook.classify"
             >
               <el-option
-                v-for="item in classigy"
+                v-for="item in classify"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -36,7 +36,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="菜谱脚本：">
-            <el-select
+            <el-input
+              size="small"
+              style="width:400px;"
+              v-model="cookbook.menuScript"
+              @focus="dialogScript=true"
+            ></el-input>
+            <!-- <el-select
               size="small"
               style="width:400px;"
               v-model="cookbook.menuScript"
@@ -48,7 +54,7 @@
                 :value="item.value"
               >
               </el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <el-form-item label="烹饪时长：">
             <el-input
@@ -118,29 +124,36 @@
         </el-form>
       </div>
     </div>
+    <el-dialog
+      title="绑定菜谱脚本"
+      :visible.sync="dialogScript"
+      width="600px"
+      :close-on-click-modal="false"
+    >
+      <div style="overflow:hidden;margin-top:16px;">
+        <dialog-script v-on:dialogScriptHide="dialogScriptHide"></dialog-script>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 <script>
+import DialogScript from "./DialogScript";
 export default {
   data() {
     return {
+      dialogScript: false,
       cookbook: {
-          name:"",
-          classify:"",
-          menuScript:"",
-          time:"",
-          pic:"",
-          mainIngredient:"",
-          ingredients :"",
-          introduce:""
+        name: "",
+        classify: "",
+        menuScript: "",
+        time: "",
+        pic: "",
+        mainIngredient: "",
+        ingredients: "",
+        introduce: ""
       },
       classify: [
-        {
-          label: "猪肉",
-          value: "2213"
-        }
-      ],
-      menuScript: [
         {
           label: "猪肉",
           value: "2213"
@@ -151,6 +164,10 @@ export default {
     };
   },
   methods: {
+    dialogScriptHide(params) {
+      this.dialogScript = params.isHide;
+      this.cookbook.menuScript = params.value;
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -160,7 +177,9 @@ export default {
     }
   },
   created() {},
-  components: {}
+  components: {
+    DialogScript
+  }
 };
 </script>
 
