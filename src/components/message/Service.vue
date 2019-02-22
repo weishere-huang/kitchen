@@ -326,9 +326,12 @@ export default {
     },
     //获取市
     getCity() {
-      this.areaName = this.province.find(item => {
+      let p = this.province.find(item => {
         return this.provinceCode === item.code;
-      }).name;
+      });
+      if(p!=null){
+        this.areaName = p.name;
+      }
       this.citycode = null;
       console.log(this.areaName);
       this.cities = [];
