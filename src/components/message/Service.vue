@@ -331,6 +331,8 @@ export default {
       });
       if(p!=null){
         this.areaName = p.name;
+      }else{
+        this.areaName = null;
       }
       this.citycode = null;
       console.log(this.areaName);
