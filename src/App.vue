@@ -183,7 +183,11 @@ export default {
       msgcount: 0,
       version: versionInfo,
       menuSource: [],
-      permissionUrl: ""
+      permissionUrl: "",
+
+      province: [],
+      city: [],
+      block: []
     };
   },
   computed: {},
@@ -191,12 +195,57 @@ export default {
     //获取地区JSON文件
     getArea() {
       axios.get("../static/area.json").then(res => {
-        // console.log(res.data.area);
-        this.$store.commit("getArea", res.data.area);
+        let that = this;
+        let data = res.data.area;
+        for (var item in data) {
+          if (data[item].adcode.match(/0000$/)) {
+            //省
+            that.province.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName,
+              children: []
+            });
+          } else if (data[item].adcode.match(/00$/)) {
+            //市
+            that.city.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName,
+              children: []
+            });
+          } else {
+            //区
+            that.block.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName
+            });
+          }
+        }
+        // 分类市级
+        for (var index in that.province) {
+          for (var index1 in that.city) {
+            if (
+              that.province[index].adcode.slice(0, 2) ===
+              that.city[index1].adcode.slice(0, 2)
+            ) {
+              that.province[index].children.push(that.city[index1]);
+            }
+          }
+        }
+        //  分类区级
+        for (var item1 in that.city) {
+          for (var item2 in that.block) {
+            if (
+              that.block[item2].adcode.slice(0, 4) ===
+              that.city[item1].adcode.slice(0, 4)
+            ) {
+              that.city[item1].children.push(that.block[item2]);
+            }
+          }
+        }
+        this.$store.commit("getArea", this.province);
         console.log(this.$store.state.getArea.area);
       });
     },
-
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
