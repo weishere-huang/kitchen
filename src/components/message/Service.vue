@@ -358,6 +358,7 @@ export default {
     },
     //添加
     beforeadd() {
+      
        this.addService();
     },
     addService() {

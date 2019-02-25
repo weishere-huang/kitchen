@@ -35,7 +35,10 @@
           :span="4"
           style="padding:0 5px;"
         >
-          <el-button size="small" plain>搜索</el-button>
+          <el-button
+            size="small"
+            plain
+          >搜索</el-button>
         </el-col>
       </div>
     </div>
@@ -98,16 +101,59 @@
           width="140"
         >
           <template slot-scope="scope">
-            <el-button
-              type="text"
-              size="mini"
-              @click.stop.prevent="resetPasswords(scope.$index, scope.row)"
-            >重置密码</el-button>
-            <el-button
-              type="text"
-              size="mini"
-              @click.stop.prevent="handleDelete(scope.$index, scope.row)"
-            >删除</el-button>
+            <el-popover
+              placement="top"
+              width="180"
+              v-model="scope.row.resetvisible"
+            >
+              <p style="line-height:32px;text-align:center;"> <i
+                  class="el-icon-warning"
+                  style="color:#e6a23c;font-size:18px;margin-right:8px;"
+                ></i>确定重置吗？</p>
+              <div style="text-align: center; margin: 0">
+                <el-button
+                  size="mini"
+                  plain
+                  @click="scope.row.resetvisible = false"
+                >取消</el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="resetPasswords(scope.$index, scope.row)"
+                >确定</el-button>
+              </div>
+              <el-button
+                slot="reference"
+                type="text"
+                size="mini"
+              >重置密码</el-button>
+            </el-popover>
+            <el-popover
+              placement="top"
+              width="180"
+              v-model="scope.row.visible"
+            >
+              <p style="line-height:32px;text-align:center;"> <i
+                  class="el-icon-warning"
+                  style="color:#e6a23c;font-size:18px;margin-right:8px;"
+                ></i>确定删除吗？</p>
+              <div style="text-align: center; margin: 0">
+                <el-button
+                  size="mini"
+                  plain
+                  @click="scope.row.visible = false"
+                >取消</el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="handleDelete(scope.$index, scope.row)"
+                >确定</el-button>
+              </div>
+              <el-button
+                slot="reference"
+                type="text"
+              >删除</el-button>
+            </el-popover>
           </template>
         </el-table-column>
       </el-table>
@@ -151,27 +197,12 @@ export default {
   },
   methods: {
     resetPasswords(index, rowData) {
+      rowData.resetvisible = false;
       let params = { type: "edit", index: index, rowData: rowData };
       console.log(params);
-      this.$confirm("您确定为该用户重置密码并发送通知短信？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "重置成功!"
-          });
-        })
-        .catch(() => {
-          // this.$message({
-          //   type: "info",
-          //   message: "已取消重置"
-          // });
-        });
     },
     handleDelete(index, rowData) {
+      rowData.visible = false;
       let params = { type: "delete", index: index, rowData: rowData };
       console.log(params);
     },

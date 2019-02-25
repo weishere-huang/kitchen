@@ -24,7 +24,10 @@
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small" plain>搜索</el-button>
+            <el-button
+              size="small"
+              plain
+            >搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -89,7 +92,26 @@ export default {
         {
           name: "土豆肉丝",
           classify: "猪肉",
-          menuScript: "土豆肉丝（2019版）"
+          menuScript: "土豆肉丝（2019版）",
+          visible:false
+        },
+        {
+          name: "土豆肉丝",
+          classify: "猪肉",
+          menuScript: "土豆肉丝（2019版）",
+          visible:false
+        },
+        {
+          name: "土豆肉丝",
+          classify: "猪肉",
+          menuScript: "土豆肉丝（2019版）",
+          visible:false
+        },
+        {
+          name: "土豆肉丝",
+          classify: "猪肉",
+          menuScript: "土豆肉丝（2019版）",
+          visible:false
         }
       ],
       pageIndex: 1,
