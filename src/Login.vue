@@ -2,8 +2,12 @@
   <div class="login">
     <div class="login_case">
       <h2>登录</h2>
-      <el-form>
-        <el-form-item>
+      <el-form
+        :model="userMsg"
+        :rules="userMsgRules"
+        :status-icon="true"
+      >
+        <el-form-item prop="name">
           <el-input
             v-model="userMsg.name"
             type="text"
@@ -14,7 +18,7 @@
               style="color:#999999"
             >&#xe646;</i></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
             v-model="userMsg.password"
             type="password"
@@ -25,7 +29,7 @@
               style="color:#999999"
             >&#xe652;</i></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="verifyCode">
           <el-input
             type="number"
             placeholder="验证码"
@@ -62,6 +66,19 @@ export default {
         name: "",
         password: "",
         verifyCode: ""
+      },
+      userMsgRules: {
+        name: [
+          { required: true, message: "请输入用户名或手机号", trigger: "blur" },
+          { min: 1, max: 20, message: "请输入正确的用户名或手机号" }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { max: 20, message: "密码错误" }
+        ],
+        verifyCode: [
+          { required: false, message: "验证码不能为空", trigger: "blur" }
+        ]
       }
     };
   },
