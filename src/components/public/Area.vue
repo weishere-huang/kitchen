@@ -11,7 +11,7 @@
       </ul>
     </div>
     <div class="city_case">
-      <el-checkbox-group v-model="checkedCities">
+      <el-checkbox-group v-model="checkedCities" :max="1">
         <el-checkbox
           v-for="city in cities"
           :label="city"
@@ -116,7 +116,7 @@ export default {
     }
     .el-checkbox__input {
       float: right;
-      line-height: 23px;
+      line-height: 30px;
     }
     .el-checkbox__input.is-checked .el-checkbox__inner,
     .el-checkbox__input.is-indeterminate .el-checkbox__inner {

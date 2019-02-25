@@ -6,6 +6,7 @@
         :model="userMsg"
         :rules="userMsgRules"
         :status-icon="true"
+        ref="userMsg"
       >
         <el-form-item prop="name">
           <el-input
