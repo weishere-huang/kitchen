@@ -174,12 +174,12 @@
         //获取市信息
         this.getCity();
         if (arr.length > 1) {
-          // this.citycode = this.citys.find(item => {
-          //   return arr[1] === item.name;
-          // }).code;
-          // console.log(this.citys.find(item => {
-          //      return arr[1] === item.name;
-          //    }))
+          let p = this.citys.find(item => {
+            return arr[1] === item.name;
+          });
+          if(p!=null){
+            this.citycode = p.code;
+          }
         }
 
         // 服务范围
@@ -191,7 +191,9 @@
     created() {
       this.getAllProvince();
       //编辑用
-
+      if(this.addMsg.id!=null){
+        this.startedit();
+      }
     },
     watch:{
       addMsg(){
