@@ -3,43 +3,43 @@
     <div class="top_title">
       <h4>用户留言</h4>
       <!--<div class="top_search">-->
-        <!--<el-col-->
-          <!--:span="9"-->
-          <!--style="padding:0 5px;"-->
-        <!--&gt;-->
-          <!--<el-select-->
-            <!--v-model="value"-->
-            <!--placeholder="请选择"-->
-            <!--size="small"-->
-          <!--&gt;-->
-            <!--<el-option-->
-              <!--v-for="item in options"-->
-              <!--:key="item.value"-->
-              <!--:label="item.label"-->
-              <!--:value="item.value"-->
-            <!--&gt;-->
-            <!--</el-option>-->
-          <!--</el-select>-->
-        <!--</el-col>-->
-        <!--<el-col-->
-          <!--:span="11"-->
-          <!--style="padding:0 5px;"-->
-        <!--&gt;-->
-          <!--<el-input-->
-            <!--size="small"-->
-            <!--style="width:100%;"-->
-            <!--placeholder=""-->
-          <!--&gt;</el-input>-->
-        <!--</el-col>-->
-        <!--<el-col-->
-          <!--:span="4"-->
-          <!--style="padding:0 5px;"-->
-        <!--&gt;-->
-          <!--<el-button-->
-            <!--size="small"-->
-            <!--plain-->
-          <!--&gt;搜索</el-button>-->
-        <!--</el-col>-->
+      <!--<el-col-->
+      <!--:span="9"-->
+      <!--style="padding:0 5px;"-->
+      <!--&gt;-->
+      <!--<el-select-->
+      <!--v-model="value"-->
+      <!--placeholder="请选择"-->
+      <!--size="small"-->
+      <!--&gt;-->
+      <!--<el-option-->
+      <!--v-for="item in options"-->
+      <!--:key="item.value"-->
+      <!--:label="item.label"-->
+      <!--:value="item.value"-->
+      <!--&gt;-->
+      <!--</el-option>-->
+      <!--</el-select>-->
+      <!--</el-col>-->
+      <!--<el-col-->
+      <!--:span="11"-->
+      <!--style="padding:0 5px;"-->
+      <!--&gt;-->
+      <!--<el-input-->
+      <!--size="small"-->
+      <!--style="width:100%;"-->
+      <!--placeholder=""-->
+      <!--&gt;</el-input>-->
+      <!--</el-col>-->
+      <!--<el-col-->
+      <!--:span="4"-->
+      <!--style="padding:0 5px;"-->
+      <!--&gt;-->
+      <!--<el-button-->
+      <!--size="small"-->
+      <!--plain-->
+      <!--&gt;搜索</el-button>-->
+      <!--</el-col>-->
       <!--</div>-->
     </div>
     <div class="table_list">
@@ -109,11 +109,32 @@
               size="mini"
               @click.stop.prevent="reply(scope.$index, scope.row)"
             >回复</el-button>
-            <el-button
-              type="text"
-              size="mini"
-              @click.stop.prevent="handleDelete(scope.$index, scope.row)"
-            >删除</el-button>
+            <el-popover
+              placement="top"
+              width="180"
+              v-model="scope.row.visible"
+            >
+              <p style="line-height:32px;text-align:center;"> <i
+                  class="el-icon-warning"
+                  style="color:#e6a23c;font-size:18px;margin-right:8px;"
+                ></i>确定删除吗？</p>
+              <div style="text-align: center; margin: 0">
+                <el-button
+                  size="mini"
+                  plain
+                  @click="scope.row.visible = false"
+                >取消</el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="handleDelete(scope.$index, scope.row)"
+                >确定</el-button>
+              </div>
+              <el-button
+                slot="reference"
+                type="text"
+              >删除</el-button>
+            </el-popover>
           </template>
         </el-table-column>
       </el-table>
@@ -192,10 +213,10 @@ export default {
       dialogReplay: false,
       total: 0,
       pageIndex: 1,
-      pageSize:10,
+      pageSize: 10,
       value: "",
       options: [],
-      tableData: [],
+      tableData: []
     };
   },
   methods: {
@@ -221,17 +242,16 @@ export default {
       this.pageIndex = val;
       this.getlist();
     },
-    getlist(){
+    getlist() {
       this.Axios(
         {
           params: {
-            page:this.pageIndex,
-            size:this.pageSize,
+            page: this.pageIndex,
+            size: this.pageSize
           },
           option: {},
           type: "get",
           url: "/api-platform/advise/list"
-
         },
         this
       ).then(
@@ -240,53 +260,56 @@ export default {
           this.tableData = result.data.data.content;
           this.total = result.data.data.totalElement;
         },
-        ({type, info}) => {
-        }
+        ({ type, info }) => {}
       );
     },
-    beforedelete(id){
+    beforedelete(id) {
       this.deleteAdvise(id);
     },
-    deleteAdvise(id){
+    deleteAdvise(id) {
       let qs = require("qs");
       let data = qs.stringify({
-        ids:id
+        ids: id
       });
-      this.Axios({
-        params:data,
-        url:"/api-platform/advise/updateState",
-        type:"post",
-        option:{
-        }
-      },this).then(result=>{
-        if(result.data.code===200){
+      this.Axios(
+        {
+          params: data,
+          url: "/api-platform/advise/updateState",
+          type: "post",
+          option: {}
+        },
+        this
+      ).then(result => {
+        if (result.data.code === 200) {
           this.reload();
         }
-      })
+      });
     },
-    beforeupdate(){
+    beforeupdate() {
       this.updateAdvise();
     },
-    updateAdvise(){
+    updateAdvise() {
       let qs = require("qs");
       let data = qs.stringify({
-        id:this.replayContent.id,
-        reply:this.replayContent.reply
+        id: this.replayContent.id,
+        reply: this.replayContent.reply
       });
-      this.Axios({
-        params:data,
-        url:"/api-platform/advise/reply",
-        type:"post",
-        option:{
-        }
-      },this).then(result=>{
-        if(result.data.code===200){
+      this.Axios(
+        {
+          params: data,
+          url: "/api-platform/advise/reply",
+          type: "post",
+          option: {}
+        },
+        this
+      ).then(result => {
+        if (result.data.code === 200) {
           this.reload();
         }
-      })
+      });
     }
   },
-  created(){
+  created() {
     this.getlist();
   }
 };

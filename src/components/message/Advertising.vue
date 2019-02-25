@@ -118,12 +118,32 @@
                 @click.stop.prevent="handleEdit(scope.$index, scope.row)"
               >修改
               </el-button>
-              <el-button
-                type="text"
-                size="mini"
-                @click.stop.prevent="handleDelete(scope.$index, scope.row)"
-              >删除
-              </el-button>
+              <el-popover
+                placement="top"
+                width="180"
+                v-model="scope.row.visible"
+              >
+                <p style="line-height:32px;text-align:center;"> <i
+                    class="el-icon-warning"
+                    style="color:#e6a23c;font-size:18px;margin-right:8px;"
+                  ></i>确定删除吗？</p>
+                <div style="text-align: center; margin: 0">
+                  <el-button
+                    size="small"
+                    plain
+                    @click="scope.row.visible = false"
+                  >取消</el-button>
+                  <el-button
+                    type="primary"
+                    size="small"
+                    @click="handleDelete(scope.$index, scope.row)"
+                  >确定</el-button>
+                </div>
+                <el-button
+                  slot="reference"
+                  type="text"
+                >删除</el-button>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
@@ -225,6 +245,7 @@
         this.dialogEdit = true;
       },
       handleDelete(index, rowData) {
+        rowData.visible=false
         let params = {type: "delete", index: index, rowData: rowData};
         this.beforeDelete(rowData.id);
         console.log(params);
