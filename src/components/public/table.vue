@@ -53,19 +53,19 @@
             width="180"
             v-model="scope.row.visible"
           >
-            <p style="line-height:32px;text-align:center;"> <i
+            <p style="line-height:40px;text-align:center;"> <i
                 class="el-icon-warning"
                 style="color:#e6a23c;font-size:18px;margin-right:8px;"
               ></i>确定删除吗？</p>
             <div style="text-align: center; margin: 0">
               <el-button
-                size="small"
+                size="mini"
                 plain
                 @click="scope.row.visible = false"
               >取消</el-button>
               <el-button
                 type="primary"
-                size="small"
+                size="mini"
                 @click="handleDelete(scope.$index, scope.row)"
               >确定</el-button>
             </div>

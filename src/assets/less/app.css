@@ -81,5 +81,7 @@
 }
 .siderWrapper .el-menu-item {
   color: #eee;
-  width: 190px;
+}
+.el-submenu .el-menu-item {
+  min-width: 190px;
 }
