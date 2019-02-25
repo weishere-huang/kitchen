@@ -11,6 +11,7 @@
         title="添加分类"
         :visible.sync="dialogAdd"
         width="500px"
+        :close-on-click-modal="false"
       >
         <el-form
           label-width="90px"
@@ -100,6 +101,7 @@
       title="修改分类"
       :visible.sync="dialogEdit"
       width="500px"
+      :close-on-click-modal="false"
     >
       <el-form
         label-width="90px"

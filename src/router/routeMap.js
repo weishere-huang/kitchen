@@ -135,8 +135,7 @@ export default [{
     permissionCode: 'user',
     defaultDock: true,
     icon: '&#xe646;',
-    subMenu: [
-      {
+    subMenu: [{
         menu: '用户列表',
         route: '/User',
         permissionCode: ''
@@ -173,7 +172,7 @@ export default [{
       },
       {
         menu: '修改角色',
-        routeReg:/^\/RoleManagement\/EditRole\/\d{1,}$/i,
+        routeReg: /^\/RoleManagement\/EditRole\/\d{1,}$/i,
         visible: true,
         permissionCode: 'order_look_up'
       },
