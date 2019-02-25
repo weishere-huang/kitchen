@@ -32,7 +32,10 @@
         :width="handle"
         v-if="handleShow"
       >
-        <template slot-scope="scope" @click.stop>
+        <template
+          slot-scope="scope"
+          @click.stop
+        >
           <el-button
             v-if="detalisShow"
             size="small"
@@ -45,12 +48,39 @@
             type="text"
             @click.stop.prevent="handleEdit(scope.$index, scope.row)"
           >修改</el-button>
-          <el-button
+          <el-popover
+            placement="top"
+            width="180"
+            v-model="scope.row.visible"
+          >
+            <p style="line-height:32px;text-align:center;"> <i
+                class="el-icon-warning"
+                style="color:#e6a23c;font-size:18px;margin-right:8px;"
+              ></i>确定删除吗？</p>
+            <div style="text-align: center; margin: 0">
+              <el-button
+                size="small"
+                plain
+                @click="scope.row.visible = false"
+              >取消</el-button>
+              <el-button
+                type="primary"
+                size="small"
+                @click="handleDelete(scope.$index, scope.row)"
+              >确定</el-button>
+            </div>
+            <el-button
+              slot="reference"
+              type="text"
+              v-if="deleteShow"
+            >删除</el-button>
+          </el-popover>
+          <!-- <el-button
             v-if="deleteShow"
             size="small"
             type="text"
             @click.stop.prevent="handleDelete(scope.$index, scope.row)"
-          >删除</el-button>
+          >删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -61,13 +91,15 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      visible2: false
+    };
   },
   props: {
-    handleShow:{},
-    detalisShow:{},
-    editShow:{},
-    deleteShow:{},
+    handleShow: {},
+    detalisShow: {},
+    editShow: {},
+    deleteShow: {},
     handleSelectionChange: {
       type: Function
     },
@@ -97,6 +129,7 @@ export default {
       this.$emit("handlechange", params);
     },
     handleDelete(index, rowData) {
+      rowData.visible = false;
       let params = { type: "delete", index: index, rowData: rowData };
       this.$emit("handlechange", params);
     }

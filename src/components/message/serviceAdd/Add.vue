@@ -167,20 +167,20 @@
       //编辑赋值方法 , 服务范围可以
       startedit() {
         //截取地区长度
-        let arr = this.addMsg.areaCode.split(" ");
-        this.provinceCode = this.provinces.find(item => {
-          return arr[0] === item.name;
-        }).code;
+        // let arr = this.addMsg.areaCode.split(" ");
+        // this.provinceCode = this.provinces.find(item => {
+        //   return arr[0] === item.name;
+        // }).code;
         //获取市信息
-        this.getCity();
-        if (arr.length > 1) {
-          let p = this.citys.find(item => {
-            return arr[1] === item.name;
-          });
-          if(p!=null){
-            this.citycode = p.code;
-          }
-        }
+        // this.getCity();
+        // if (arr.length > 1) {
+        //   let p = this.citys.find(item => {
+        //     return arr[1] === item.name;
+        //   });
+        //   if(p!=null){
+        //     this.citycode = p.code;
+        //   }
+        // }
 
         // 服务范围
         console.log("执行");
