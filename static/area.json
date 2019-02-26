@@ -1,6 +1,11 @@
 {
   "status": "0",
   "area": [{
+      "areaName": "中华人民共和国",
+      "adcode": "100000",
+      "citycode": ""
+    }, 
+    {
       "areaName": "北京市",
       "adcode": "110000",
       "citycode": "010"
