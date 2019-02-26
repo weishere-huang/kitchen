@@ -218,4 +218,5 @@ input[type="number"] {
 }
 .showPic .el-dialog__body {
   padding: 0;
+  font-size: 0;
 }
