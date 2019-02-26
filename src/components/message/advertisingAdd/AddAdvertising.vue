@@ -1,6 +1,6 @@
 <template>
   <div class="add_advertising">
-    <el-form label-width="100px">
+    <el-form label-width="110px">
       <el-form-item label="广告名称：">
         <el-input
           v-model="addMsg.title"
@@ -56,6 +56,13 @@
             alt=""
           >
         </el-dialog>
+      </el-form-item>
+      <el-form-item label="广告链接地址：">
+        <el-input
+          size="small"
+          placeholder="http或https开头"
+          style="width:99%"
+        ></el-input>
       </el-form-item>
       <el-form-item label="是否显示：">
         <el-radio-group v-model="addMsg.isShow">
@@ -113,9 +120,7 @@ export default {
     }
   },
   methods: {
-    edittime(){
-
-    },
+    edittime() {},
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
