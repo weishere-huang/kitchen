@@ -10,19 +10,30 @@
     </div>
     <div class="bottom_list">
       <div class="top_title">
-        <h4>添加商品</h4>
+        <h4>修改商品</h4>
       </div>
-      <el-form label-width="200px" size="small">
-        <el-form-item label="商品名称：">
+      <el-form
+        label-width="200px"
+        size="small"
+        :model="editmenu"
+      >
+        <el-form-item
+          label="商品名称："
+          prop="itemName"
+        >
           <el-input
             type="text"
             size="small"
             style="width:300px;"
+            v-model="editmenu.itemName"
           ></el-input>
         </el-form-item>
-        <el-form-item label="商品分类：">
+        <el-form-item
+          label="商品分类："
+          prop="itemCate"
+        >
           <el-select
-            v-model="classifyValue"
+            v-model="editmenu.itemCate"
             placeholder="请选择"
             size="small"
           >
@@ -41,12 +52,16 @@
             size="small"
             style="width:192px;"
             v-model="cookbook"
-            @focus="dialogCoobook=true"
+            @focus="dialogCookbook=true"
             placeholder="请选择"
           ></el-input>
         </el-form-item>
-        <el-form-item label="商品价格：">
+        <el-form-item
+          label="商品价格："
+          prop="itemPrice"
+        >
           <el-input
+            v-model="editmenu.itemPrice"
             type="text"
             size="small"
             style="width:192px;"
@@ -60,8 +75,12 @@
             style="width:192px;"
           ></el-input>
         </el-form-item>
-        <el-form-item label="烹饪时长：">
+        <el-form-item
+          label="烹饪时长："
+          prop="cookingTime"
+        >
           <el-input
+            v-model="editmenu.cookingTime"
             type="text"
             size="small"
             style="width:192px;"
@@ -71,9 +90,11 @@
         <el-form-item
           label="参考辣度："
           class="hot_case"
+          prop="spicy"
         >
           <el-radio-group
-            v-model="radio5"
+            v-model="editmenu.spicy"
+            style="width:192px;"
             size="small"
           >
             <el-radio-button label="0"><i
@@ -94,23 +115,34 @@
               >&#xe614;</i></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="净含量：">
+        <el-form-item
+          label="净含量："
+          prop="itemWeight"
+        >
           <el-input
+            v-model="editmenu.itemWeight"
             type="text"
             size="small"
             style="width:192px;"
             placeholder="单位：克"
           ></el-input>
         </el-form-item>
-        <el-form-item label="食材搭配：">
+        <el-form-item
+          label="食材搭配："
+          prop="itemSpec"
+        >
           <el-input
+            v-model="editmenu.itemSpec"
             type="text"
             size="small"
             style="width:300px;"
             placeholder=" 如：精选五花肉，青椒，蒜片，姜片"
           ></el-input>
         </el-form-item>
-        <el-form-item label="商品图片：">
+        <el-form-item
+          label="商品图片："
+          prop="itemSpec"
+        >
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
@@ -131,22 +163,32 @@
             >
           </el-dialog>
         </el-form-item>
-        <el-form-item label="是否上架：">
+        <el-form-item
+          label="是否上架："
+          prop="state"
+        >
           <el-radio
-            v-model="up"
+            v-model="editmenu.state"
             label="1"
           >是</el-radio>
           <el-radio
-            v-model="up"
+            v-model="editmenu.state"
             label="2"
           >否</el-radio>
         </el-form-item>
-        <el-form-item label="加入推荐：">
-          <el-checkbox v-model="hotMenu">热销</el-checkbox>
-          <el-checkbox v-model="newMeny">新品</el-checkbox>
+        <el-form-item
+          label="加入推荐："
+          prop="recommendType"
+        >
+          <el-checkbox v-model="editmenu.recommendType.hotMenu">热销</el-checkbox>
+          <el-checkbox v-model="editmenu.recommendType.newMenu">新品</el-checkbox>
         </el-form-item>
-        <el-form-item label="详细内容：">
+        <el-form-item
+          label="详细内容："
+          prop="des"
+        >
           <el-input
+            v-model="editmenu.des"
             type="textarea"
             rows="5"
             style="width:600px;"
@@ -160,43 +202,53 @@
           <el-button
             size="small"
             type="primary"
-            @click="getUEContent"
+            @click="editfood"
           >保存</el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-dialog
       title="绑定菜谱"
-      :visible.sync="dialogCoobook"
+      :visible.sync="dialogCookbook"
       width="600px"
       :close-on-click-modal="false"
     >
       <div style="overflow:hidden;margin-top:16px;">
-        <dialog-coobook v-on:dialogCoobookHide="dialogCoobookHide"></dialog-coobook>
+        <addCookbook v-on:dialogCoobookHide="dialogCoobookHide"></addCookbook>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import ueditor from "../public/Ue";
-import areaList from "../public/Area";
-import dialogCoobook from "./addCookbook/addCookbook";
+import addCookbook from "./addCookbook/addCookbook";
 export default {
   data() {
     return {
+      editmenu: {
+        itemName: "",
+        itemCate: "",
+        itemImg: "123",
+        itemPrice: "",
+        itemWeight: "",
+        itemSpec: "",
+        cookingTime: "",
+        spicy: "",
+        des: "",
+        state: "1",
+        recommendType: {
+          newMenu: false,
+          hotMenu: false
+        }
+      },
       cookbook: "",
-      dialogCoobook: false,
+      dialogCookbook: false,
       areaShow: false,
-      radio5: "",
       defaultMsg: "",
       config: {
         initialFrameWidth: null,
         initialFrameHeight: 350
       },
-      newMeny: "",
-      hotMenu: "",
       up: "",
-      classifyValue: "",
       classify: [
         {
           value: "1",
@@ -209,7 +261,7 @@ export default {
   },
   methods: {
     dialogCoobookHide(params) {
-      this.dialogCoobook = params.ishide;
+      this.dialogCookbook = params.ishide;
       this.cookbook = params.value;
     },
     getUEContent() {
@@ -224,11 +276,24 @@ export default {
     },
     editfood() {
       let qs = require("qs");
-      let data = qs.stringify({});
+      let data = qs.stringify({
+        id:this.$route.params.id,
+        itemName: this.editmenu.itemName,
+        itemCate: this.editmenu.itemCate,
+        itemImg: "123",
+        itemPrice: this.editmenu.itemPrice,
+        itemWeight: this.editmenu.itemWeight,
+        itemSpec: this.editmenu.itemSpec,
+        cookingTime: this.editmenu.cookingTime,
+        spicy: this.editmenu.spicy,
+        des: this.editmenu.des,
+        state: this.editmenu.state,
+        recommendType: JSON.stringify(this.editmenu.recommendType)
+      });
       this.Axios(
         {
           params: data,
-          url: "",
+          url: "/api-mall/mallManage/updateItem",
           type: "post",
           option: {
             successMsg: "编辑成功"
@@ -243,14 +308,38 @@ export default {
           this.$message.error("编辑失败,请重新尝试");
         }
       });
+    },
+    getMenu(id) {
+      this.Axios(
+        {
+          params: {
+            id: id
+          },
+          option: {},
+          type: "get",
+          url: "/api-mall/mallManage/findById"
+        },
+        this
+      ).then(
+        result => {
+          result.data.data.recommendType = JSON.parse(
+            result.data.data.recommendType
+          );
+          result.data.data.state = result.data.data.state.toString();
+          this.editmenu = result.data.data;
+          // console.log(result.data.data);
+          console.log(this.editmenu);
+        },
+        ({ type, info }) => {}
+      );
     }
   },
-
+  created() {
+    this.getMenu(this.$route.params.id);
+  },
   mounted() {},
   components: {
-    ueditor,
-    areaList,
-    dialogCoobook
+    addCookbook
   }
 };
 </script>
