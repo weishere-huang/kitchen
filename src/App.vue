@@ -251,7 +251,7 @@ export default {
         }
         that.country[0].children.push(that.province)
         this.$store.commit("getArea", that.country);
-        console.log(that.country);
+        // console.log(that.country);
       });
     },
     handleOpen(key, keyPath) {

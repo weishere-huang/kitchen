@@ -67,7 +67,7 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.itemName }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -76,7 +76,7 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.classify }}</span>
+              <span>{{ scope.row.itemCate }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -97,7 +97,7 @@
                 size="small"
                 type="number"
                 step="0.01"
-                v-model="scope.row.price"
+                v-model="scope.row.itemPrice"
                 style="width:60px;padding:0;"
                 @change="handleInput(scope.row.price,scope.$index)"
               ></el-input>
@@ -121,7 +121,7 @@
               <el-input
                 size="small"
                 type="number"
-                v-model="scope.row.time"
+                v-model="scope.row.cookingTime"
                 style="width:60px;padding:0;"
                 v-popover:popover
               ></el-input>
@@ -141,7 +141,7 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.content}}</span>
+              <span>{{ scope.row.itemWeight}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -225,7 +225,7 @@
                 v-popover:popover2
                 size="small"
                 type="number"
-                step="0.01"
+                step="0"
                 v-model="scope.row.sort"
                 style="width:60px;padding:0;"
               ></el-input>
@@ -355,7 +355,7 @@ export default {
       console.log(params);
     },
     handleDelete(index, rowData) {
-      rowData.visible=false
+      rowData.visible = false;
       let params = { type: "delete", index: index, rowData: rowData };
       console.log(params);
     },
@@ -403,12 +403,15 @@ export default {
           },
           option: {},
           type: "get",
-          url: "/api-mall/showItem"
+          url: "/api-mall/mallManage/itemList",
+          loadingConfig: {
+            target: document.querySelector(".store_list")
+          }
         },
         this
       ).then(
         result => {
-          console.log(result.data);
+          console.log(result.data.data);
           this.tableData = result.data.data.content;
           this.total = result.data.data.totalElement;
         },

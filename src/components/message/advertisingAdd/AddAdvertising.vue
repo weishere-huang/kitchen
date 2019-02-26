@@ -1,7 +1,7 @@
 <template>
   <div class="add_advertising">
-    <el-form label-width="110px" size="small">
-      <el-form-item label="广告名称：">
+    <el-form label-width="110px" size="small" :model="addMsg">
+      <el-form-item label="广告名称：" props="title">
         <el-input
           v-model="addMsg.title"
           size="small"

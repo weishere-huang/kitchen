@@ -12,7 +12,10 @@
         <h4>修改菜谱</h4>
       </div>
       <div class="table_list">
-        <el-form label-width="200px" size="small">
+        <el-form
+          label-width="200px"
+          size="small"
+        >
           <el-form-item label="菜谱名称：">
             <el-input
               size="small"
@@ -50,6 +53,14 @@
               style="width:400px;"
               placeholder="单位：分钟"
               v-model="cookbook.time"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="价格：">
+            <el-input
+              size="small"
+              style="width:400px;"
+              placeholder="单位：元"
+              v-model="cookbook.price"
             ></el-input>
           </el-form-item>
           <el-form-item label="菜谱配图：">
@@ -141,7 +152,8 @@ export default {
         pic: "",
         mainIngredient: "",
         ingredients: "",
-        introduce: ""
+        introduce: "",
+        price:"",
       },
       classify: [
         {
@@ -209,7 +221,6 @@ export default {
       overflow: hidden;
       padding: 10px;
     }
-   
   }
   .el-upload__tip {
     font-size: 12px;

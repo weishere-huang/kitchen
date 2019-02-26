@@ -52,6 +52,14 @@
               v-model="cookbook.time"
             ></el-input>
           </el-form-item>
+          <el-form-item label="价格：">
+            <el-input
+              size="small"
+              style="width:400px;"
+              placeholder="单位：元"
+              v-model="cookbook.price"
+            ></el-input>
+          </el-form-item>
           <el-form-item label="菜谱配图：">
             <el-upload
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -142,7 +150,8 @@ export default {
         pic: "",
         mainIngredient: "",
         ingredients: "",
-        introduce: ""
+        introduce: "",
+        price:""
       },
       classify: [
         {

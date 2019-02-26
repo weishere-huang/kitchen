@@ -12,7 +12,7 @@
       <div class="top_title">
         <h4>添加商品</h4>
       </div>
-      <el-form label-width="200px">
+      <el-form label-width="200px" size="small">
         <el-form-item label="商品名称：">
           <el-input
             type="text"
@@ -352,9 +352,6 @@ export default {
     }
   }
 
-  .el-form-item {
-    margin-bottom: 12px;
-  }
   .el-upload__tip {
     font-size: 12px;
     color: #606266;
