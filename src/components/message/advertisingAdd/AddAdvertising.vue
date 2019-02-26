@@ -1,6 +1,6 @@
 <template>
   <div class="add_advertising">
-    <el-form label-width="110px">
+    <el-form label-width="110px" size="small">
       <el-form-item label="广告名称：">
         <el-input
           v-model="addMsg.title"
@@ -29,6 +29,7 @@
             width="100%"
             :src="dialogImageUrl"
             alt=""
+            class="showPic"
           >
         </el-dialog>
       </el-form-item>
@@ -49,6 +50,7 @@
         <el-dialog
           :visible.sync="dialogVisible"
           append-to-body
+          class="showPic"
         >
           <img
             width="100%"
@@ -144,9 +146,7 @@ export default {
   .el-form {
     padding-top: 16px;
   }
-  .el-form-item {
-    margin-bottom: 12px;
-  }
+  
   .el-upload__tip {
     font-size: 12px;
     color: #606266;
@@ -157,4 +157,5 @@ export default {
     line-height: 40px;
   }
 }
+
 </style>

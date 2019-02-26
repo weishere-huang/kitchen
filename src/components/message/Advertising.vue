@@ -61,7 +61,7 @@
           >
             <template slot-scope="scope">
 
-              <span><img
+              <span @click="mainPicShow=true"><img
                 :src="scope.row.mainPic"
                 alt=""
                 style="width:180px;height:60px;"
@@ -73,7 +73,7 @@
             min-width="200"
           >
             <template slot-scope="scope">
-              <span><img
+              <span @click="contentShow"><img
                 :src="scope.row.content"
                 alt=""
                 style="width:180px;height:60px;"
@@ -182,6 +182,8 @@
     inject: ["reload"],
     data() {
       return {
+        contentShow:false,
+        mainPicShow:false,
         editMsg: {
           // title: "",
           // pic: "",
