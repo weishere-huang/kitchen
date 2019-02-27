@@ -1,7 +1,7 @@
 <template>
   <div class="add_advertising">
-    <el-form label-width="100px">
-      <el-form-item label="广告名称：">
+    <el-form label-width="110px" size="small" :model="addMsg">
+      <el-form-item label="广告名称：" props="title">
         <el-input
           v-model="addMsg.title"
           size="small"
@@ -29,6 +29,7 @@
             width="100%"
             :src="dialogImageUrl"
             alt=""
+            class="showPic"
           >
         </el-dialog>
       </el-form-item>
@@ -49,6 +50,7 @@
         <el-dialog
           :visible.sync="dialogVisible"
           append-to-body
+          class="showPic"
         >
           <img
             width="100%"
@@ -56,6 +58,13 @@
             alt=""
           >
         </el-dialog>
+      </el-form-item>
+      <el-form-item label="广告链接地址：">
+        <el-input
+          size="small"
+          placeholder="http或https开头"
+          style="width:99%"
+        ></el-input>
       </el-form-item>
       <el-form-item label="是否显示：">
         <el-radio-group v-model="addMsg.isShow">
@@ -113,9 +122,7 @@ export default {
     }
   },
   methods: {
-    edittime(){
-
-    },
+    edittime() {},
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -139,9 +146,7 @@ export default {
   .el-form {
     padding-top: 16px;
   }
-  .el-form-item {
-    margin-bottom: 12px;
-  }
+  
   .el-upload__tip {
     font-size: 12px;
     color: #606266;
@@ -152,4 +157,5 @@ export default {
     line-height: 40px;
   }
 }
+
 </style>

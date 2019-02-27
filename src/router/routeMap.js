@@ -49,12 +49,14 @@ export default [{
       },
       {
         menu: '添加商品',
-        route: '/AddMenu',
+        route: '/Store/AddMenu',
+        visible: true,
         permissionCode: ''
       },
       {
         menu: '修改商品',
-        route: '/EditMenu',
+        routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
+       visible: true,
         permissionCode: ''
       }
     ]

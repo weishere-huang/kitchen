@@ -187,7 +187,8 @@ export default {
 
       province: [],
       city: [],
-      block: []
+      block: [],
+      country: []
     };
   },
   computed: {},
@@ -198,7 +199,13 @@ export default {
         let that = this;
         let data = res.data.area;
         for (var item in data) {
-          if (data[item].adcode.match(/0000$/)) {
+          if (data[item].adcode.match(/100000$/)) {
+            that.country.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName,
+              children: []
+            });
+          } else if (data[item].adcode.match(/0000$/)) {
             //省
             that.province.push({
               adcode: data[item].adcode,
@@ -242,8 +249,9 @@ export default {
             }
           }
         }
-        this.$store.commit("getArea", this.province);
-        console.log(this.$store.state.getArea.area);
+        that.country[0].children.push(that.province)
+        this.$store.commit("getArea", that.country);
+        // console.log(that.country);
       });
     },
     handleOpen(key, keyPath) {

@@ -73,6 +73,30 @@ const router = new Router({
       meta: {
         requireAuth: false,
       },
+      children: [
+        {
+          path: 'AddMenu',
+          name: 'AddMenu',
+          component: AddMenu,
+          props: {
+            pageName: '添加商品'
+          },
+          meta: {
+            requireAuth: false,
+          },
+        },
+        {
+          path: 'EditMenu/:id/',
+          name: 'EditMenu',
+          component: EditMenu,
+          props: {
+            pageName: '修改商品'
+          },
+          meta: {
+            requireAuth: false,
+          },
+        },
+      ]
     },
     {
       path: '/Classify',
@@ -85,28 +109,28 @@ const router = new Router({
         requireAuth: false,
       },
     },
-    {
-      path: '/AddMenu',
-      name: 'AddMenu',
-      component: AddMenu,
-      props: {
-        pageName: '添加商品'
-      },
-      meta: {
-        requireAuth: false,
-      },
-    },
-    {
-      path: '/EditMenu',
-      name: 'EditMenu',
-      component: EditMenu,
-      props: {
-        pageName: '修改商品'
-      },
-      meta: {
-        requireAuth: false,
-      },
-    },
+    // {
+    //   path: '/AddMenu',
+    //   name: 'AddMenu',
+    //   component: AddMenu,
+    //   props: {
+    //     pageName: '添加商品'
+    //   },
+    //   meta: {
+    //     requireAuth: false,
+    //   },
+    // },
+    // {
+    //   path: '/EditMenu',
+    //   name: 'EditMenu',
+    //   component: EditMenu,
+    //   props: {
+    //     pageName: '修改商品'
+    //   },
+    //   meta: {
+    //     requireAuth: false,
+    //   },
+    // },
     {
       path: '/Service',
       name: 'Service',
