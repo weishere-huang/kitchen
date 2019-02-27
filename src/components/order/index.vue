@@ -1,110 +1,114 @@
 <template>
   <div class="order_list">
-    <div class="top_case">
-      <div class="top_title">
-        <h4>订单列表</h4>
-        <div class="top_search">
-          <el-col :span="11">
-            <span>日期：</span>
-            <el-date-picker
-              v-model="searchDate1"
-              type="date"
-              placeholder="起始日期"
-              size="small"
-              style="width:39%;"
-            >
-            </el-date-picker>
-            至
-            <el-date-picker
-              v-model="searchDate2"
-              type="date"
-              placeholder="结束日期"
-              size="small"
-              style="width:39%;"
-            >
-            </el-date-picker>
-          </el-col>
-          <el-col
-            :span="6"
-            style="padding:0 5px;"
-          >
-            <span>订单状态：</span>
-            <el-select
-              v-model="value"
-              placeholder="请选择"
-              size="small"
-              style="width:114px;"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+    <div v-show="isHideList">
+      <div class="top_case">
+        <div class="top_title">
+          <h4>订单列表</h4>
+          <div class="top_search">
+            <el-col :span="11">
+              <span>日期：</span>
+              <el-date-picker
+                v-model="searchDate1"
+                type="date"
+                placeholder="起始日期"
+                size="small"
+                style="width:39%;"
               >
-              </el-option>
-            </el-select>
-          </el-col>
-          <el-col
-            :span="5"
-            style="padding:0 5px;"
-          >
-            <el-input
-              size="small"
-              style="width:100%;"
-              placeholder="收货人、订单号"
-            ></el-input>
-          </el-col>
-          <el-col
-            :span="2"
-            style="padding:0 5px;"
-          >
+              </el-date-picker>
+              至
+              <el-date-picker
+                v-model="searchDate2"
+                type="date"
+                placeholder="结束日期"
+                size="small"
+                style="width:39%;"
+              >
+              </el-date-picker>
+            </el-col>
+            <el-col
+              :span="6"
+              style="padding:0 5px;"
+            >
+              <span>订单状态：</span>
+              <el-select
+                v-model="value"
+                placeholder="请选择"
+                size="small"
+                style="width:114px;"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col
+              :span="5"
+              style="padding:0 5px;"
+            >
+              <el-input
+                size="small"
+                style="width:100%;"
+                placeholder="收货人、订单号"
+              ></el-input>
+            </el-col>
+            <el-col
+              :span="2"
+              style="padding:0 5px;"
+            >
+              <el-button
+                size="small"
+                @click="listOrder"
+                plain
+              >搜索</el-button>
+            </el-col>
+          </div>
+        </div>
+      </div>
+      <div class="bottom_list">
+        <div style="padding:10px;">
+          <table-list
+            :selectShow="true"
+            :handleSelectionChange="handleSelectionChange"
+            :column="items"
+            v-on:handlechange="handlechange"
+            :data="tableData"
+            :rowDblclick="getRow"
+            :handle="100"
+            :detalisShow="true"
+            :handleShow="true"
+          ></table-list>
+          <div style="margin-top:20px;float:left;padding-left:10px;">
             <el-button
               size="small"
-              @click="listOrder"
-              plain
-            >搜索</el-button>
-          </el-col>
-        </div>
-      </div>
-    </div>
-    <div class="bottom_list">
-      <div style="padding:10px;">
-        <table-list
-          :selectShow="true"
-          :handleSelectionChange="handleSelectionChange"
-          :column="items"
-          v-on:handlechange="handlechange"
-          :data="tableData"
-          :rowDblclick="getRow"
-          :handle="100"
-          :detalisShow="true"
-          :handleShow="true"
-        ></table-list>
-        <div style="margin-top:20px;float:left;padding-left:10px;">
-          <el-button
-            size="small"
-            type="primary"
-            @click="toPrintOrder"
-          >打印订单</el-button>
-        </div>
-        <div
-          class="block"
-          style="margin-top:20px;float:right"
-        >
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-sizes="[15, 30, 100]"
-            :page-size="10"
-            layout="sizes, prev, pager, next"
-            :total="total"
+              type="primary"
+              @click="toPrintOrder"
+            >打印订单</el-button>
+          </div>
+          <div
+            class="block"
+            style="margin-top:20px;float:right"
           >
-          </el-pagination>
+            <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-sizes="[15, 30, 100]"
+              :page-size="10"
+              layout="sizes, prev, pager, next"
+              :total="total"
+            >
+            </el-pagination>
+          </div>
         </div>
       </div>
     </div>
+
+    <router-view></router-view>
   </div>
 </template>
 <script>
@@ -114,6 +118,7 @@ export default {
   inject: ["reload"],
   data() {
     return {
+      isHideList: true,
       currentPage: 3,
       selectShow: true,
       value: "",
@@ -161,7 +166,7 @@ export default {
         },
         {
           label: "下单时间",
-          prop: "time",
+          prop: "gmtCreate",
           width: 140
         },
         {
@@ -176,7 +181,7 @@ export default {
         },
         {
           label: "支付方式",
-          prop: "paly",
+          prop: "payType",
           width: 80
         },
         {
@@ -230,7 +235,7 @@ export default {
       }
       if (params.type === "detalis") {
         console.log(params);
-        this.userIds = params.rowData.order;
+        this.$router.push("/Order/Details/" + params.rowData.id);
         // this.$router.push({ path: "/Order/Details/" + this.userIds });
       }
     },
@@ -245,13 +250,12 @@ export default {
       this.Axios(
         {
           params: {
-            userId: 1,
             page: this.pageIndex,
             size: this.pageSize
           },
           option: {},
           type: "get",
-          url: "/api-order/order/list"
+          url: "/api-order/order/allOrder"
         },
         this
       ).then(
@@ -265,10 +269,21 @@ export default {
     }
   },
   created() {
-    // this.listOrder();
+    this.listOrder();
+    this.$route.params.id !== undefined
+      ? (this.isHideList = false)
+      : (this.isHideList = true);
   },
   components: {
     tableList
+  },
+  watch: {
+    $route() {
+      this.$route.matched.find(item => item.name === "Details") ||
+      this.$route.params.id !== undefined
+        ? (this.isHideList = false)
+        : (this.isHideList = true);
+    }
   }
 };
 </script>
