@@ -81,6 +81,7 @@ Vue.directive('clickoutside', {
     delete el.__vueClickOutside__;
   },
 });
+
 // 登录拦截
 router.beforeEach((to, from, next) => {
   if (permissionUrl.length === 0) permissionUrl = JSON.parse(localStorage.getItem("permissionUrl") || '[]');
@@ -109,7 +110,7 @@ router.beforeEach((to, from, next) => {
           path: '/Home'
         })
     } else { // 没登录则跳转到登录界面
-      window.location.href="login.html"
+      window.location.href = "login.html"
       // next({
       //   path: 'login.html',
       //   query: {

@@ -6,10 +6,18 @@
           <!-- <img src="./assets/image/logo.png"> -->
           <h3>长虹智慧厨房</h3>
           <div style="width:50px;float:left;padding-left:10px">
-            <i class="iconfont" v-show="isCollapse === true" v-on:click="TroggleHandle">&#xe62b;</i>
-            <i class="iconfont" v-show="isCollapse === false" v-on:click="TroggleHandle">&#xe62c;</i>
+            <i
+              class="iconfont"
+              v-show="isCollapse === true"
+              v-on:click="TroggleHandle"
+            >&#xe62b;</i>
+            <i
+              class="iconfont"
+              v-show="isCollapse === false"
+              v-on:click="TroggleHandle"
+            >&#xe62c;</i>
           </div>
-          
+
         </div>
         <el-menu
           :router="true"
@@ -19,9 +27,17 @@
           active-text-color="#ffd04b"
           :collapse="isCollapse"
         >
-          <el-submenu :index="item.permissionCode" v-if="item.subMenu.length!==1" :key="item.route" v-for="item in menuSource">
-            <template slot="title" >
-              <i class="iconfont" v-html="item.icon"></i>
+          <el-submenu
+            :index="item.permissionCode"
+            v-if="item.subMenu.length!==1"
+            :key="item.route"
+            v-for="item in menuSource"
+          >
+            <template slot="title">
+              <i
+                class="iconfont"
+                v-html="item.icon"
+              ></i>
               <span slot="title">{{item.menu}}</span>
             </template>
             <el-menu-item
@@ -30,7 +46,14 @@
               v-for="subItem in item.subMenu"
             >{{subItem.menu}}</el-menu-item>
           </el-submenu>
-          <el-menu-item class='singleMenuItem' v-else :index="item.subMenu[0].route"><i class="iconfont" v-html="item.icon"></i><span slot="title">{{item.menu}}</span></el-menu-item>
+          <el-menu-item
+            class='singleMenuItem'
+            v-else
+            :index="item.subMenu[0].route"
+          ><i
+              class="iconfont"
+              v-html="item.icon"
+            ></i><span slot="title">{{item.menu}}</span></el-menu-item>
         </el-menu>
         <!-- <div
           v-on:click="TroggleHandle"
@@ -47,77 +70,77 @@
         </div> -->
       </el-aside>
       <el-container>
-        
-          <el-header style="background-color:#1CC09F;">
-            <div class="breadcrumbWrap">
-              <breadCrumb></breadCrumb>
-              <a href="login.html"></a>
-            </div>
-            <div class="stateList">
-              <ul>
-                <li>&nbsp;欢迎您：{{user}}</li>
-                <li>
-                  <el-tooltip
+
+        <el-header style="background-color:#1CC09F;">
+          <div class="breadcrumbWrap">
+            <breadCrumb></breadCrumb>
+            <a href="login.html"></a>
+          </div>
+          <div class="stateList">
+            <ul>
+              <li>&nbsp;欢迎您：{{user}}</li>
+              <li>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="设备状态"
+                  placement="bottom-end"
+                >
+                  <i
+                    class="iconfont"
+                    @click="pathto(0)"
+                  >&#xe609;</i>
+                </el-tooltip>
+              </li>
+              <li>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="我的消息"
+                  placement="bottom-end"
+                >
+                  <el-badge
+                    :value="msgcount===0?'':msgcount"
+                    :max="99"
                     class="item"
-                    effect="dark"
-                    content="设备状态"
-                    placement="bottom-end"
                   >
                     <i
                       class="iconfont"
-                      @click="pathto(0)"
-                    >&#xe609;</i>
-                  </el-tooltip>
-                </li>
-                <li>
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="我的消息"
-                    placement="bottom-end"
-                  >
-                    <el-badge
-                      :value="msgcount===0?'':msgcount"
-                      :max="99"
-                      class="item"
-                    >
-                      <i
-                        class="iconfont"
-                        @click="pathto(1)"
-                      >&#xe601;</i>
-                    </el-badge>
-                  </el-tooltip>
-                </li>
-                <li>
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="我的工单"
-                    placement="bottom-end"
-                  >
-                    <i
-                      class="iconfont"
-                      @click="pathto(2)"
-                    >&#xe61d;</i>
-                  </el-tooltip>
-                </li>
-                <li>
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="退出"
-                    placement="bottom-end"
-                  >
-                    <i
-                      class="iconfont"
-                      @click="out"
-                    >&#xe6af;</i>
-                  </el-tooltip>
-                </li>
-              </ul>
-            </div>
-          </el-header>
-       
+                      @click="pathto(1)"
+                    >&#xe601;</i>
+                  </el-badge>
+                </el-tooltip>
+              </li>
+              <li>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="我的工单"
+                  placement="bottom-end"
+                >
+                  <i
+                    class="iconfont"
+                    @click="pathto(2)"
+                  >&#xe61d;</i>
+                </el-tooltip>
+              </li>
+              <li>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="退出"
+                  placement="bottom-end"
+                >
+                  <i
+                    class="iconfont"
+                    @click="out"
+                  >&#xe6af;</i>
+                </el-tooltip>
+              </li>
+            </ul>
+          </div>
+        </el-header>
+
         <el-main
           class="mainContentWrapper"
           style="padding:8px;font-size:14px;"
@@ -160,19 +183,83 @@ export default {
       msgcount: 0,
       version: versionInfo,
       menuSource: [],
-      permissionUrl: ""
+      permissionUrl: "",
+
+      province: [],
+      city: [],
+      block: [],
+      country: []
     };
   },
-  computed:{
-      
-    },
+  computed: {},
   methods: {
-     handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      },
+    //获取地区JSON文件
+    getArea() {
+      axios.get("../static/area.json").then(res => {
+        let that = this;
+        let data = res.data.area;
+        for (var item in data) {
+          if (data[item].adcode.match(/100000$/)) {
+            that.country.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName,
+              children: []
+            });
+          } else if (data[item].adcode.match(/0000$/)) {
+            //省
+            that.province.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName,
+              children: []
+            });
+          } else if (data[item].adcode.match(/00$/)) {
+            //市
+            that.city.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName,
+              children: []
+            });
+          } else {
+            //区
+            that.block.push({
+              adcode: data[item].adcode,
+              areaName: data[item].areaName
+            });
+          }
+        }
+        // 分类市级
+        for (var index in that.province) {
+          for (var index1 in that.city) {
+            if (
+              that.province[index].adcode.slice(0, 2) ===
+              that.city[index1].adcode.slice(0, 2)
+            ) {
+              that.province[index].children.push(that.city[index1]);
+            }
+          }
+        }
+        //  分类区级
+        for (var item1 in that.city) {
+          for (var item2 in that.block) {
+            if (
+              that.block[item2].adcode.slice(0, 4) ===
+              that.city[item1].adcode.slice(0, 4)
+            ) {
+              that.city[item1].children.push(that.block[item2]);
+            }
+          }
+        }
+        that.country[0].children.push(that.province)
+        this.$store.commit("getArea", that.country);
+        // console.log(that.country);
+      });
+    },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
     reload() {
       this.isRouterAlive = false;
       this.$nextTick(function() {
@@ -308,7 +395,8 @@ export default {
   computed: {},
   created() {
     // if(localStorage.getItem("token")){
-      this.initPermission();
+    this.initPermission();
+    this.getArea();
     // }
     //setInterval(this.MsgCount,1000)
   },
@@ -326,7 +414,7 @@ export default {
 </script>
 
  <style lang="less" >
- @import url("./assets/less/layout.less");
+@import url("./assets/less/layout.less");
 .el-menu-vertical-demo {
   margin-top: 60px !important;
   &:not(.el-menu--collapse) {
@@ -337,11 +425,11 @@ export default {
   }
 }
 
-@main-color: #1CC09F;
-@bgColor:#f0f2f5;
-@font-normal:#333333;
-@font-subsidiary:#999999;
-@font-special:#1CC09F;
+@main-color: #1cc09f;
+@bgColor: #f0f2f5;
+@font-normal: #333333;
+@font-subsidiary: #999999;
+@font-special: #1cc09f;
 * {
   margin: 0;
   padding: 0;
@@ -401,16 +489,16 @@ export default {
     }
   }
 }
-.logoWrap{
-line-height: 60px;
-h3{
-  color: @main-color;
-  width:  130px;
-  float: left;
-}
-i{
-  cursor: pointer;
-}
+.logoWrap {
+  line-height: 60px;
+  h3 {
+    color: @main-color;
+    width: 130px;
+    float: left;
+  }
+  i {
+    cursor: pointer;
+  }
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -436,9 +524,10 @@ i{
 .el-menu--popup {
   background: #333 !important;
 }
- .el-menu-item li:hover,.el-menu-item:hover{
-   background: #666 !important;
- }
+.el-menu-item li:hover,
+.el-menu-item:hover {
+  background: #666 !important;
+}
 /*chrome滚动条颜色设置*/
 ::-webkit-scrollbar {
   width: 10px;

@@ -24,7 +24,10 @@
             :span="4"
             style="padding:0 5px;"
           >
-            <el-button size="small" plain>搜索</el-button>
+            <el-button
+              size="small"
+              plain
+            >搜索</el-button>
           </el-col>
         </div>
       </div>
@@ -53,7 +56,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="[15, 30, 100]"
-          :page-size="10"
+          :page-size="15"
           layout="sizes, prev, pager, next"
           :total="total"
         >
@@ -89,11 +92,30 @@ export default {
         {
           name: "土豆肉丝",
           classify: "猪肉",
-          menuScript: "土豆肉丝（2019版）"
+          menuScript: "土豆肉丝（2019版）",
+          visible: false
+        },
+        {
+          name: "土豆肉丝",
+          classify: "猪肉",
+          menuScript: "土豆肉丝（2019版）",
+          visible: false
+        },
+        {
+          name: "土豆肉丝",
+          classify: "猪肉",
+          menuScript: "土豆肉丝（2019版）",
+          visible: false
+        },
+        {
+          name: "土豆肉丝",
+          classify: "猪肉",
+          menuScript: "土豆肉丝（2019版）",
+          visible: false
         }
       ],
       pageIndex: 1,
-      pageSize: 10,
+      pageSize: 15,
       total: 10
     };
   },
@@ -128,9 +150,34 @@ export default {
     },
     getRow(row, event) {
       console.log(row);
+    },
+    getCookbookList() {
+      let data = {
+        size: this.pageIndex,
+        page: this.pageSize
+      };
+      this.Axios(
+        {
+          params: data,
+          option: {},
+          type: "get",
+          url: "/recipe/listRecipeCate",
+          loadingConfig: {
+            target: document.querySelector(".cookbook_list")
+          }
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+        },
+        ({ type, info }) => {}
+      );
     }
   },
-  created() {},
+  created() {
+    this.getCookbookList();
+  },
   components: {
     tableList
   }

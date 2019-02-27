@@ -12,7 +12,7 @@
         <h4>添加菜谱</h4>
       </div>
       <div class="table_list">
-        <el-form label-width="200px">
+        <el-form label-width="200px" size="small">
           <el-form-item label="菜谱名称：">
             <el-input
               size="small"
@@ -52,6 +52,14 @@
               v-model="cookbook.time"
             ></el-input>
           </el-form-item>
+          <el-form-item label="价格：">
+            <el-input
+              size="small"
+              style="width:400px;"
+              placeholder="单位：元"
+              v-model="cookbook.price"
+            ></el-input>
+          </el-form-item>
           <el-form-item label="菜谱配图：">
             <el-upload
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -65,7 +73,10 @@
                 class="el-upload__tip"
               >600 × 600像素，≤80 KB的jpg图片</div>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
+            <el-dialog
+              :visible.sync="dialogVisible"
+              class="showPic"
+            >
               <img
                 width="100%"
                 :src="dialogImageUrl"
@@ -139,7 +150,8 @@ export default {
         pic: "",
         mainIngredient: "",
         ingredients: "",
-        introduce: ""
+        introduce: "",
+        price:""
       },
       classify: [
         {
@@ -206,9 +218,6 @@ export default {
     .table_list {
       overflow: hidden;
       padding: 10px;
-    }
-    .el-form-item {
-      margin-bottom: 12px;
     }
   }
   .el-upload__tip {

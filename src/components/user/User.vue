@@ -8,7 +8,7 @@
           style="padding:0 5px;"
         >
           <el-select
-            v-model="value"
+            v-model="states"
             placeholder="请选择"
             size="small"
           >
@@ -29,13 +29,19 @@
             size="small"
             style="width:100%;"
             placeholder=""
+            v-model="keyWord"
           ></el-input>
         </el-col>
         <el-col
           :span="4"
           style="padding:0 5px;"
         >
-          <el-button size="small" plain>搜索</el-button>
+          <el-button
+            size="small"
+            plain
+            @click="searchlist"
+          >搜索
+          </el-button>
         </el-col>
       </div>
     </div>
@@ -54,7 +60,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <span>{{ scope.row.nickName }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -80,7 +86,8 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.state }}</span>
+            <span v-if="scope.row.state==0">正常</span>
+            <span v-if="scope.row.state==-1" style="color:red">禁用</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -89,7 +96,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{scope.row.createdTime}}</span>
+            <span>{{scope.row.gmtCreate}}</span>
           </template>
         </el-table-column>
 
@@ -98,16 +105,65 @@
           width="140"
         >
           <template slot-scope="scope">
-            <el-button
-              type="text"
-              size="mini"
-              @click.stop.prevent="resetPasswords(scope.$index, scope.row)"
-            >重置密码</el-button>
-            <el-button
-              type="text"
-              size="mini"
-              @click.stop.prevent="handleDelete(scope.$index, scope.row)"
-            >删除</el-button>
+            <el-popover
+              placement="top"
+              width="180"
+              v-model="scope.row.resetvisible"
+            >
+              <p style="line-height:32px;text-align:center;"><i
+                class="el-icon-warning"
+                style="color:#e6a23c;font-size:18px;margin-right:8px;"
+              ></i>确定重置吗？</p>
+              <div style="text-align: center; margin: 0">
+                <el-button
+                  size="mini"
+                  plain
+                  @click="scope.row.resetvisible = false"
+                >取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="resetPasswords(scope.$index, scope.row)"
+                >确定
+                </el-button>
+              </div>
+              <el-button
+                slot="reference"
+                type="text"
+                size="mini"
+              >重置密码
+              </el-button>
+            </el-popover>
+            <el-popover
+              placement="top"
+              width="180"
+              v-model="scope.row.visible"
+            >
+              <p style="line-height:32px;text-align:center;"><i
+                class="el-icon-warning"
+                style="color:#e6a23c;font-size:18px;margin-right:8px;"
+              ></i>确定删除吗？</p>
+              <div style="text-align: center; margin: 0">
+                <el-button
+                  size="mini"
+                  plain
+                  @click="scope.row.visible = false"
+                >取消
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="handleDelete(scope.$index, scope.row)"
+                >确定
+                </el-button>
+              </div>
+              <el-button
+                slot="reference"
+                type="text"
+              >删除
+              </el-button>
+            </el-popover>
           </template>
         </el-table-column>
       </el-table>
@@ -120,9 +176,9 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        :current-page.sync="pageIndex"
         :page-sizes="[15, 30, 100]"
-        :page-size="10"
+        :page-size="pageSize"
         layout="sizes, prev, pager, next"
         :total="total"
       >
@@ -131,93 +187,153 @@
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      total: 100,
-      currentPage: 1,
-      value: "",
-      options: [],
-      tableData: [
-        {
-          name: "可爱的蓝朋友",
-          phone: "13580001234",
-          order: "21",
-          state: "正常",
-          createdTime: "2019-01-01 18:38:12"
-        }
-      ]
-    };
-  },
-  methods: {
-    resetPasswords(index, rowData) {
-      let params = { type: "edit", index: index, rowData: rowData };
-      console.log(params);
-      this.$confirm("您确定为该用户重置密码并发送通知短信？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "重置成功!"
-          });
-        })
-        .catch(() => {
-          // this.$message({
-          //   type: "info",
-          //   message: "已取消重置"
-          // });
+  export default {
+    inject: ["reload"],
+    data() {
+      return {
+        total: 0,
+        pageIndex: 1,
+        pageSize: 10,
+        options: [
+          {
+            label:"正常",
+            value:0
+          },
+          {
+            label:"禁用",
+            value:-1
+          }
+        ],
+        tableData: [],
+        states: null,
+        keyWord: null
+      };
+    },
+    methods: {
+      resetPasswords(index, rowData) {
+        rowData.resetvisible = false;
+        let params = {type: "edit", index: index, rowData: rowData};
+        console.log(params);
+        this.resetpsw(rowData.userId);
+      },
+      handleDelete(index, rowData) {
+        rowData.visible = false;
+        let params = {type: "delete", index: index, rowData: rowData};
+        console.log(params);
+        this.deleteuser(rowData.userId);
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pageIndex = 1;
+        this.pageSize = val;
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.pageIndex = val;
+      },
+      searchlist() {
+        this.pageIndex = 1;
+        this.getlist();
+      },
+      getlist() {
+        this.Axios(
+          {
+            params: {
+              page: this.pageIndex,
+              size: this.pageSize,
+              states: this.states,
+              keyWord: this.keyWord,
+            },
+            option: {},
+            type: "get",
+            url: "/api-user/userInfo/listUserInfo"
+
+          },
+          this
+        ).then(
+          result => {
+            console.log(result.data)
+            this.tableData = result.data.data.content;
+            this.total = result.data.data.totalElement;
+          },
+          ({type, info}) => {
+          }
+        );
+      },
+      deleteuser(userId){
+        let qs = require("qs");
+        let data = qs.stringify({
+          id:userId
         });
+        this.Axios({
+          params:data,
+          url:"/api-user/userInfo/deleteInfo",
+          // url:"/api-sso/user/resetpassword",
+          type:"post",
+          option:{
+          }
+        },this).then(result=>{
+          if(result.data.code===200){
+            this.reload();
+          }
+          console.log(result.data);
+        })
+      },
+      resetpsw(userId){
+        let qs = require("qs");
+        let data = qs.stringify({
+          id:userId
+        });
+        this.Axios({
+          params:data,
+          url:"/api-sso/user/resetpassword",
+          type:"post",
+          option:{
+          }
+        },this).then(result=>{
+          if(result.data.code===200){
+            this.reload();
+          }
+          console.log(result.data);
+        })
+      }
     },
-    handleDelete(index, rowData) {
-      let params = { type: "delete", index: index, rowData: rowData };
-      console.log(params);
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.pageIndex = 1;
-      this.pageSize = val;
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.pageIndex = val;
+    created() {
+      this.getlist();
     }
-  }
-};
+  };
 </script>
 
 <style lang="less">
-@main-color: #1cc09f;
-@bgColor: #f0f2f5;
-@font-normal: #333333;
-@font-subsidiary: #999999;
-@font-special: #1cc09f;
-@border: 1px solid #dde2eb;
-.user_list {
-  font-size: 14px;
-  color: @font-normal;
-  background-color: white;
-  padding-bottom: 10px;
-  overflow: hidden;
-  .top_title {
-    padding: 0 10px;
-    line-height: 60px;
+  @main-color: #1cc09f;
+  @bgColor: #f0f2f5;
+  @font-normal: #333333;
+  @font-subsidiary: #999999;
+  @font-special: #1cc09f;
+  @border: 1px solid #dde2eb;
+  .user_list {
+    font-size: 14px;
+    color: @font-normal;
+    background-color: white;
+    padding-bottom: 10px;
     overflow: hidden;
-    border-bottom: @border;
+    .top_title {
+      padding: 0 10px;
+      line-height: 60px;
+      overflow: hidden;
+      border-bottom: @border;
 
-    h4 {
-      float: left;
+      h4 {
+        float: left;
+      }
+      .top_search {
+        width: 400px;
+        float: right;
+      }
     }
-    .top_search {
-      width: 400px;
-      float: right;
+    .table_list {
+      overflow: hidden;
+      padding: 10px;
     }
   }
-  .table_list {
-    overflow: hidden;
-    padding: 10px;
-  }
-}
 </style>

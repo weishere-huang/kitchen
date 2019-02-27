@@ -143,7 +143,11 @@ export default {
           value: "关闭"
         }
       ],
-      tableData: [],
+      tableData: [
+        {
+          orderNo: "111"
+        }
+      ],
       items: [
         {
           label: "订单编号",
@@ -188,7 +192,9 @@ export default {
               ? "待收货"
               : row.state == 3
               ? "已完成"
-              : "已取消";
+              : row.state == 3
+              ? "已取消"
+              : "";
           }
         }
       ],
@@ -259,7 +265,7 @@ export default {
     }
   },
   created() {
-    this.listOrder();
+    // this.listOrder();
   },
   components: {
     tableList

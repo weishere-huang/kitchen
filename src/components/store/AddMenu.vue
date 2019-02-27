@@ -12,17 +12,28 @@
       <div class="top_title">
         <h4>添加商品</h4>
       </div>
-      <el-form label-width="200px">
-        <el-form-item label="商品名称：">
+      <el-form
+        label-width="200px"
+        size="small"
+        :model="addMenu"
+      >
+        <el-form-item
+          label="商品名称："
+          prop="itemName"
+        >
           <el-input
             type="text"
             size="small"
             style="width:300px;"
+            v-model="addMenu.itemName"
           ></el-input>
         </el-form-item>
-        <el-form-item label="商品分类：">
+        <el-form-item
+          label="商品分类："
+          prop="itemCate"
+        >
           <el-select
-            v-model="classifyValue"
+            v-model="addMenu.itemCate"
             placeholder="请选择"
             size="small"
           >
@@ -45,8 +56,12 @@
             placeholder="请选择"
           ></el-input>
         </el-form-item>
-        <el-form-item label="商品价格：">
+        <el-form-item
+          label="商品价格："
+          prop="itemPrice"
+        >
           <el-input
+            v-model="addMenu.itemPrice"
             type="text"
             size="small"
             style="width:192px;"
@@ -60,8 +75,12 @@
             style="width:192px;"
           ></el-input>
         </el-form-item>
-        <el-form-item label="烹饪时长：">
+        <el-form-item
+          label="烹饪时长："
+          prop="cookingTime"
+        >
           <el-input
+            v-model="addMenu.cookingTime"
             type="text"
             size="small"
             style="width:192px;"
@@ -71,9 +90,10 @@
         <el-form-item
           label="参考辣度："
           class="hot_case"
+          prop="spicy"
         >
           <el-radio-group
-            v-model="radio5"
+            v-model="addMenu.spicy"
             size="small"
             style="width:192px;"
           >
@@ -95,23 +115,34 @@
               >&#xe614;</i></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="净含量：">
+        <el-form-item
+          label="净含量："
+          prop="itemWeight"
+        >
           <el-input
+            v-model="addMenu.itemWeight"
             type="text"
             size="small"
             style="width:192px;"
             placeholder="单位：克"
           ></el-input>
         </el-form-item>
-        <el-form-item label="食材搭配：">
+        <el-form-item
+          label="食材搭配："
+          prop="itemSpec"
+        >
           <el-input
+            v-model="addMenu.itemSpec"
             type="text"
             size="small"
             style="width:300px;"
             placeholder=" 如：精选五花肉，青椒，蒜片，姜片"
           ></el-input>
         </el-form-item>
-        <el-form-item label="商品图片：">
+        <el-form-item
+          label="商品图片："
+          prop="itemSpec"
+        >
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
@@ -133,22 +164,32 @@
             >
           </el-dialog>
         </el-form-item>
-        <el-form-item label="是否上架：">
+        <el-form-item
+          label="是否上架："
+          prop="state"
+        >
           <el-radio
-            v-model="up"
+            v-model="addMenu.state"
             label="1"
           >是</el-radio>
           <el-radio
-            v-model="up"
+            v-model="addMenu.state"
             label="2"
           >否</el-radio>
         </el-form-item>
-        <el-form-item label="加入推荐：">
-          <el-checkbox v-model="hotMenu">热销</el-checkbox>
-          <el-checkbox v-model="newMeny">新品</el-checkbox>
+        <el-form-item
+          label="加入推荐："
+          prop="recommendType"
+        >
+          <el-checkbox v-model="addMenu.recommendType.hotMenu">热销</el-checkbox>
+          <el-checkbox v-model="addMenu.recommendType.newMenu">新品</el-checkbox>
         </el-form-item>
-        <el-form-item label="详细内容：">
+        <el-form-item
+          label="详细内容："
+          prop="des"
+        >
           <el-input
+            v-model="addMenu.des"
             type="textarea"
             rows="5"
             style="width:600px;"
@@ -186,22 +227,33 @@ import dialogCoobook from "./addCookbook/addCookbook";
 export default {
   data() {
     return {
+      addMenu: {
+        itemName: "",
+        itemCate: "",
+        itemImg: "123",
+        itemPrice: "",
+        itemWeight: "",
+        itemSpec: "",
+        cookingTime: "",
+        spicy: "",
+        des: "",
+        state: "1",
+        recommendType: {
+          newMenu: false,
+          hotMenu: false
+        }
+      },
       cookbook: "",
       dialogCoobook: false,
       areaShow: false,
-      radio5: "",
       defaultMsg: "",
       config: {
         initialFrameWidth: null,
         initialFrameHeight: 350
       },
-      newMeny: "",
-      hotMenu: "",
-      up: "",
-      classifyValue: "",
       classify: [
         {
-          value: "1",
+          value: "炒菜",
           label: "炒菜"
         }
       ],
@@ -215,13 +267,7 @@ export default {
       this.cookbook = params.value;
     },
     getUEContent() {
-      // let content = this.$refs.ue.getUEContent();
-      // this.$notify({
-      //   title: "获取成功，可在控制台查看！",
-      //   message: content,
-      //   type: "success"
-      // });
-      // console.log(content);
+    
       this.savespu();
     },
     handleRemove(file, fileList) {
@@ -240,14 +286,29 @@ export default {
     },
     savespu() {
       let qs = require("qs");
-      let data = qs.stringify({});
+      let data = qs.stringify({
+        itemName: this.addMenu.itemName,
+        itemCate: this.addMenu.itemCate,
+        itemImg: "123",
+        itemPrice: this.addMenu.itemPrice,
+        itemWeight: this.addMenu.itemWeight,
+        itemSpec: this.addMenu.itemSpec,
+        cookingTime: this.addMenu.cookingTime,
+        spicy: this.addMenu.spicy,
+        des: this.addMenu.des,
+        state: this.addMenu.state,
+        recommendType:JSON.stringify(this.addMenu.recommendType)
+      });
       this.Axios(
         {
           params: data,
-          url: "",
+          url: "/api-mall/mallManage/addItem",
           type: "post",
           option: {
             successMsg: "保存成功"
+          },
+          loadingConfig: {
+            target: document.querySelector(".add_menu")
           }
         },
         this
@@ -372,9 +433,6 @@ export default {
     }
   }
 
-  .el-form-item {
-    margin-bottom: 12px;
-  }
   .el-upload__tip {
     font-size: 12px;
     color: #606266;
