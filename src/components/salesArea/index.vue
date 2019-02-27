@@ -123,8 +123,8 @@
 <script>
   import areaList from "../public/Area";
   import tableList from "../public/table";
-
   export default {
+    inject: ["reload"],
     data() {
       return {
         editAreaShow: false,
@@ -196,19 +196,40 @@
             params: {},
             option: {},
             type: "get",
-            url: ""
-
+            url: "/api-mall/area/list"
           },
           this
         ).then(
           result => {
-            this.tableData = result.data.data.content;
-            this.total = result.data.data.totalElement;
+            this.tableData = result.data.data;
           },
           ({type, info}) => {
           }
         );
       },
+      savearea(){
+        let qs = require("qs");
+        let data = qs.stringify({
+          codes:""
+        });
+        this.Axios(
+          {
+            params: {},
+            option: {},
+            type: "post",
+            url: "/api-mall/area/save"
+          },
+          this
+        ).then(
+          result => {
+            if(result.data.code===200){
+              this.reload();
+            }
+          },
+          ({type, info}) => {
+          }
+        );
+      }
     },
     created() {
       this.getarea();

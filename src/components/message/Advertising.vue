@@ -206,52 +206,14 @@ export default {
     return {
       contentShow: false,
       mainPicShow: false,
-      editMsg: {
-        // title: "",
-        // pic: "",
-        // picContent: "",
-        // isShow: 0,
-        // startTime: {
-        //   date: "",
-        //   time: ""
-        // },
-        // endTime: {
-        //   date: "",
-        //   time: ""
-        // }
-      },
-      addMsg: {
-        // title: "",
-        // pic: "",
-        // picContent: "",
-        // isShow: 0,
-        // startTime: {
-        //   date: "",
-        //   time: ""
-        // },
-        // endTime: {
-        //   date: "",
-        //   time: ""
-        // }
-      },
+      editMsg: {},
+      addMsg: {},
       dialogEdit: false,
       dialogAdd: false,
       currentPage: 1,
-      tableData: [
-        {
-          title: "满99减50",
-          mainPic:
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550220559773&di=d5539846e2a20bf9bff4187b1f2e4ea5&imgtype=0&src=http%3A%2F%2Fpic34.nipic.com%2F20131031%2F9612701_091323702350_2.jpg",
-          picContent:
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550220559773&di=d5539846e2a20bf9bff4187b1f2e4ea5&imgtype=0&src=http%3A%2F%2Fpic34.nipic.com%2F20131031%2F9612701_091323702350_2.jpg",
-          startTime: "2018-09-01 00:00:00",
-          endTime: "2018-10-09 00:00:00",
-          linkCount: "88"
-        }
-      ],
+      tableData: [],
       pageIndex: 1,
       pageSize: 10,
-      total: 100
     };
   },
   methods: {
@@ -316,20 +278,21 @@ export default {
     },
     //添加广告
     beforeadd() {
+      console.log(this.addMsg);
       this.addAdvertising();
     },
     addAdvertising() {
       let qs = require("qs");
       let data = qs.stringify({
         title: this.addMsg.title,
-        // mainPic:this.addMsg.mainPic,
-        mainPic: "test",
-        // content:this.addMsg.content,
-        content: "test",
+        mainPic:this.addMsg.mainPic,
+        content:this.addMsg.content,
+        linkUrl:this.addMsg.linkUrl,
         advertType: 0,
         advertContentType: 0,
         startTime: this.addMsg.startTime,
-        endTime: this.addMsg.endTime
+        endTime: this.addMsg.endTime,
+        state:this.addMsg.state
       });
       this.Axios(
         {
