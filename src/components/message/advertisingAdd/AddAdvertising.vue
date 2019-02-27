@@ -62,7 +62,7 @@
       <el-form-item label="广告链接地址：">
         <el-input
           size="small"
-          placeholder="http或https开头"
+          placeholder="http或https开头(内容图与链接2选1)"
           style="width:99%"
         ></el-input>
       </el-form-item>

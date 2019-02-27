@@ -281,9 +281,6 @@ export default {
       this.uedata.push(UE.getEditor("editor").getContent());
       console.log(this.uedata);
     },
-    xieru() {
-      UE.getEditor("editor").setContent("欢迎使用ueditor");
-    },
     savespu() {
       let qs = require("qs");
       let data = qs.stringify({
