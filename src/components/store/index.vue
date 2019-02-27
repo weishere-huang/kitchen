@@ -14,16 +14,16 @@
           <h4>商品列表</h4>
           <div class="top_search">
             <el-col
-              :span="9"
+              :span="6"
               style="padding:0 5px;"
             >
               <el-select
-                v-model="value"
+                v-model="classifyValue"
                 placeholder="请选择"
                 size="small"
               >
                 <el-option
-                  v-for="item in options"
+                  v-for="item in classifyOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -32,18 +32,36 @@
               </el-select>
             </el-col>
             <el-col
-              :span="11"
+              :span="6"
+              style="padding:0 5px;"
+            >
+              <el-select
+                v-model="stateValue"
+                placeholder="请选择"
+                size="small"
+              >
+                <el-option
+                  v-for="item in stateOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col
+              :span="9"
               style="padding:0 5px;"
             >
               <el-input
                 size="small"
                 style="width:100%;"
-                placeholder=""
+                placeholder="商品名称"
                 v-model="keyword"
               ></el-input>
             </el-col>
             <el-col
-              :span="4"
+              :span="3"
               style="padding:0 5px;"
             >
               <el-button
@@ -125,7 +143,7 @@
                   v-model="scope.row.cookingTime"
                   style="width:60px;padding:0;"
                   v-popover:popover
-                  
+                  @change="handleCookkingTime(scope.row,scope.$index)"
                 ></el-input>
                 <el-popover
                   popper-class="color_text"
@@ -224,6 +242,7 @@
                 >
                 </el-popover>
                 <el-input
+                  @change="handleCookkingTime(scope.row,scope.$index)"
                   v-popover:popover2
                   size="small"
                   type="number"
@@ -307,8 +326,39 @@ export default {
   data() {
     return {
       currentPage: 1,
-      value: "",
-      options: [
+      classifyValue: "全部分类",
+      stateValue: "-1",
+      classifyOptions: [
+        {
+          label: "全部分类",
+          value: "全部分类"
+        },
+        {
+          label: "炒菜",
+          value: "炒菜"
+        },
+        {
+          label: "炖菜",
+          value: "炖菜"
+        },
+        {
+          label: "盐焗",
+          value: "盐焗"
+        },
+        {
+          label: "清蒸",
+          value: "清蒸"
+        },
+        {
+          label: "红烧",
+          value: "红烧"
+        }
+      ],
+      stateOptions: [
+        {
+          label: "全部状态",
+          value: "-1"
+        },
         {
           label: "炒菜",
           value: "炒菜"
@@ -366,6 +416,7 @@ export default {
         spicy: data.spicy,
         des: data.des,
         state: data.state,
+        sortLevel: data.sortLevel,
         recommendType: JSON.stringify(data.recommendType)
       });
       console.log(data);
@@ -393,6 +444,9 @@ export default {
         row.itemPrice.match(/^\d*(\.?\d{0,2})/g)[0] || null;
       this.editfood(row);
     },
+    handleCookkingTime(row, index) {
+      this.editfood(row);
+    },
     handleEdit(index, rowData) {
       let params = { type: "edit", index: index, rowData: rowData };
       this.$router.push("/Store/EditMenu/" + params.rowData.id);
@@ -401,7 +455,35 @@ export default {
     handleDelete(index, rowData) {
       rowData.visible = false;
       let params = { type: "delete", index: index, rowData: rowData };
+
       console.log(params);
+      let qs = require("qs");
+      let datas = qs.stringify({
+        itemId: params.rowData.id
+      });
+      console.log(params.rowData.id);
+      this.Axios(
+        {
+          params: datas,
+          option: {
+            enableMsg: false
+          },
+          type: "post",
+          url: "/api-mall/mallManage/delItem",
+          loadingConfig: {
+            target: document.querySelector(".store_list")
+          }
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          if (result.data.data.code===200) {
+            this.reload()
+          }
+        },
+        ({ type, info }) => {}
+      );
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -448,7 +530,10 @@ export default {
         {
           params: {
             page: this.pageIndex,
-            size: this.pageSize
+            size: this.pageSize,
+            states: "",
+            cate: "",
+            name: this.keyword
           },
           option: {
             enableMsg: false
@@ -481,6 +566,9 @@ export default {
   },
   created() {
     this.foodlist();
+    this.$route.params.id !== undefined
+      ? (this.isHideList = false)
+      : (this.isHideList = true);
   },
   watch: {
     $route() {
@@ -522,7 +610,7 @@ export default {
         float: left;
       }
       .top_search {
-        width: 400px;
+        width: 500px;
         float: right;
       }
     }
