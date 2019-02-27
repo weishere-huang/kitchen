@@ -251,7 +251,8 @@ export default {
         {
           params: {
             page: this.pageIndex,
-            size: this.pageSize
+            size: this.pageSize,
+            platformState:-2
           },
           option: {},
           type: "get",
