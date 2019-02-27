@@ -204,7 +204,7 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       total: 10,
-      areaName: this.pname+this.cname,
+      areaName: null,
       pname:null,
       cname:null
     };
@@ -262,7 +262,7 @@ export default {
           params: {
             page: this.pageIndex,
             size: this.pageSize,
-            areaName: this.areaName
+            areaName: this.areaName,
           },
           option: {},
           type: "get",
@@ -328,6 +328,7 @@ export default {
       }else{
         this.pname = null;
       }
+      this.areaName=this.pname;
       this.cname = null;
       this.citycode = null;
       this.cities = [];
@@ -418,7 +419,14 @@ export default {
     },
     //选择市时改变地区名字
     getcitycode() {
-      this.cname =this.cities.find(item => {return this.citycode === item.code;}).name;
+      let c = this.cities.find(item => {return this.citycode === item.code;});
+      if(c!=null){
+        this.cname=c.name
+      }else{
+        this.cname=null;
+      }
+      this.areaName = this.pname + this.cname;
+      console.log(this.areaName);
     }
   },
   created() {
