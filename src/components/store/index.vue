@@ -100,7 +100,7 @@
                   step="0.01"
                   v-model="scope.row.itemPrice"
                   style="width:60px;padding:0;"
-                  @change="handleInput(scope.row.price,scope.$index)"
+                  @change="handleInput(scope.row,scope.$index)"
                 ></el-input>
               </template>
             </el-table-column>
@@ -125,6 +125,7 @@
                   v-model="scope.row.cookingTime"
                   style="width:60px;padding:0;"
                   v-popover:popover
+                  
                 ></el-input>
                 <el-popover
                   popper-class="color_text"
@@ -154,12 +155,12 @@
                 <div @click.stop.prevent="changeUp(scope.$index, scope.row)">
                   <i
                     class="iconfont"
-                    v-if="scope.row.up==='0'"
+                    v-if="scope.row.state=='1'"
                     style="color:green;cursor: pointer;"
                   >&#xe659;</i>
                   <i
                     class="iconfont"
-                    v-if="scope.row.up==='1'"
+                    v-if="scope.row.state=='2'"
                     style="color:red;cursor: pointer;"
                   >&#xe658;</i>
                 </div>
@@ -175,12 +176,12 @@
                 <div @click.stop.prevent="changeNew(scope.$index, scope.row)">
                   <i
                     class="iconfont"
-                    v-if="scope.row.new==='0'"
+                    v-if="scope.row.recommendType.newMenu===true"
                     style="color:green;cursor: pointer;"
                   >&#xe659;</i>
                   <i
                     class="iconfont"
-                    v-if="scope.row.new==='1'"
+                    v-if="scope.row.recommendType.newMenu===false"
                     style="color:red;cursor: pointer;"
                   >&#xe658;</i>
                 </div>
@@ -196,12 +197,12 @@
                 <div @click.stop.prevent="changeHot(scope.$index, scope.row)">
                   <i
                     class="iconfont"
-                    v-if="scope.row.hot==='0'"
+                    v-if="scope.row.recommendType.hotMenu===true"
                     style="color:green;cursor: pointer;"
                   >&#xe659;</i>
                   <i
                     class="iconfont"
-                    v-if="scope.row.hot==='1'"
+                    v-if="scope.row.recommendType.hotMenu===false"
                     style="color:red;cursor: pointer;"
                   >&#xe658;</i>
                 </div>
@@ -227,7 +228,7 @@
                   size="small"
                   type="number"
                   step="0"
-                  v-model="scope.row.sort"
+                  v-model="scope.row.sortLevel"
                   style="width:60px;padding:0;"
                 ></el-input>
               </template>
@@ -351,8 +352,46 @@ export default {
     };
   },
   methods: {
-    handleInput(e, index) {
-      this.tableData[index].price = e.match(/^\d*(\.?\d{0,2})/g)[0] || null;
+    editfood(data) {
+      let qs = require("qs");
+      let datas = qs.stringify({
+        id: data.id,
+        itemName: data.itemName,
+        itemCate: data.itemCate,
+        itemImg: "123",
+        itemPrice: data.itemPrice,
+        itemWeight: data.itemWeight,
+        itemSpec: data.itemSpec,
+        cookingTime: data.cookingTime,
+        spicy: data.spicy,
+        des: data.des,
+        state: data.state,
+        recommendType: JSON.stringify(data.recommendType)
+      });
+      console.log(data);
+      this.Axios(
+        {
+          params: datas,
+          url: "/api-mall/mallManage/updateItem",
+          type: "post",
+          option: {
+            successMsg: "编辑成功"
+          }
+        },
+        this
+      ).then(result => {
+        console.log(result.data);
+        if (result.data.code === 200) {
+          this.reload();
+        } else {
+          this.$message.error("编辑失败,请重新尝试");
+        }
+      });
+    },
+    handleInput(row, index) {
+      this.tableData[index].itemPrice =
+        row.itemPrice.match(/^\d*(\.?\d{0,2})/g)[0] || null;
+      this.editfood(row);
     },
     handleEdit(index, rowData) {
       let params = { type: "edit", index: index, rowData: rowData };
@@ -376,27 +415,32 @@ export default {
       this.foodlist();
     },
     changeNew(index, val) {
-      console.log(val.new);
-      if (val.new === "1") {
-        this.tableData[index].new = "0";
+      if (val.recommendType.newMenu === false) {
+        this.tableData[index].recommendType.newMenu = true;
+        this.editfood(val);
       } else {
-        this.tableData[index].new = "1";
+        this.tableData[index].recommendType.newMenu = false;
+        this.editfood(val);
       }
     },
     changeUp(index, val) {
-      console.log(val.new);
-      if (val.up === "1") {
-        this.tableData[index].up = "0";
+      console.log(val.state);
+      if (val.state == "1") {
+        this.tableData[index].state = "2";
+        this.editfood(val);
       } else {
-        this.tableData[index].up = "1";
+        this.tableData[index].state = "1";
+        this.editfood(val);
       }
     },
     changeHot(index, val) {
-      console.log(val.new);
-      if (val.hot === "1") {
-        this.tableData[index].hot = "0";
+      console.log(val.recommendType.hotMenu);
+      if (val.recommendType.hotMenu === false) {
+        this.tableData[index].recommendType.hotMenu = true;
+        this.editfood(val);
       } else {
-        this.tableData[index].hot = "1";
+        this.tableData[index].recommendType.hotMenu = false;
+        this.editfood(val);
       }
     },
     foodlist() {
@@ -406,7 +450,9 @@ export default {
             page: this.pageIndex,
             size: this.pageSize
           },
-          option: {},
+          option: {
+            enableMsg: false
+          },
           type: "get",
           url: "/api-mall/mallManage/itemList",
           loadingConfig: {
@@ -416,9 +462,18 @@ export default {
         this
       ).then(
         result => {
-          console.log(result.data.data);
+          for (let i = 0; i < result.data.data.content.length; i++) {
+            result.data.data.content[i].itemPrice =
+              result.data.data.content[i].itemPrice / 100;
+            result.data.data.content[i].itemWeight =
+              result.data.data.content[i].itemWeight / 100;
+            result.data.data.content[i].recommendType = JSON.parse(
+              result.data.data.content[i].recommendType
+            );
+          }
           this.tableData = result.data.data.content;
           this.total = result.data.data.totalElement;
+          console.log(this.tableData);
         },
         ({ type, info }) => {}
       );

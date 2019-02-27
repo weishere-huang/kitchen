@@ -222,6 +222,7 @@
 <script>
 import addCookbook from "./addCookbook/addCookbook";
 export default {
+  inject: ["reload"],
   data() {
     return {
       editmenu: {
@@ -277,7 +278,7 @@ export default {
     editfood() {
       let qs = require("qs");
       let data = qs.stringify({
-        id:this.$route.params.id,
+        id: this.$route.params.id,
         itemName: this.editmenu.itemName,
         itemCate: this.editmenu.itemCate,
         itemImg: "123",
@@ -304,6 +305,7 @@ export default {
         console.log(result.data);
         if (result.data.code === 200) {
           this.$router.push("/store");
+          this.reload();
         } else {
           this.$message.error("编辑失败,请重新尝试");
         }
@@ -322,10 +324,13 @@ export default {
         this
       ).then(
         result => {
+          result.data.data.itemPrice = result.data.data.itemPrice / 100;
+          result.data.data.itemWeight = result.data.data.itemWeight / 100;
           result.data.data.recommendType = JSON.parse(
             result.data.data.recommendType
           );
           result.data.data.state = result.data.data.state.toString();
+          console.log(result.data.data);
           this.editmenu = result.data.data;
           // console.log(result.data.data);
           console.log(this.editmenu);

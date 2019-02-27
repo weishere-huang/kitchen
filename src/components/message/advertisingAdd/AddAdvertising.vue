@@ -10,16 +10,19 @@
       </el-form-item>
       <el-form-item label="广告缩略图：">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://192.168.1.104:8861/api-upload/upload"
           list-type="picture-card"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
+          :on-success="handleAvatarSuccess"
+          v-model="addMsg.mainPic"
         >
           <i class="el-icon-plus"></i>
           <div
             slot="tip"
             class="el-upload__tip"
-          >宽高750 × 290像素，＜500KB的jpg图片</div>
+          >宽高750 × 290像素，＜500KB的jpg图片
+          </div>
         </el-upload>
         <el-dialog
           :visible.sync="dialogVisible"
@@ -36,16 +39,19 @@
 
       <el-form-item label="广告内容图：">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://192.168.1.104:8861/api-upload/upload"
           list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
+          :on-preview="handlePictureCardPreview1"
+          :on-remove="handleRemove1"
+          :on-success="handleAvatarSuccess1"
+          v-model="addMsg.content"
         >
           <i class="el-icon-plus"></i>
           <div
             slot="tip"
             class="el-upload__tip"
-          >宽高1000 × 不限，＜2MB的jpg图片</div>
+          >宽高1000 × 不限，＜2MB的jpg图片
+          </div>
         </el-upload>
         <el-dialog
           :visible.sync="dialogVisible"
@@ -54,7 +60,7 @@
         >
           <img
             width="100%"
-            :src="dialogImageUrl"
+            :src="dialogImageUrl1"
             alt=""
           >
         </el-dialog>
@@ -62,12 +68,13 @@
       <el-form-item label="广告链接地址：">
         <el-input
           size="small"
-          placeholder="http或https开头"
+          placeholder="http或https开头(内容图与链接2选1)"
           style="width:99%"
+          v-model="addMsg.linkUrl"
         ></el-input>
       </el-form-item>
       <el-form-item label="是否显示：">
-        <el-radio-group v-model="addMsg.isShow">
+        <el-radio-group v-model="addMsg.state">
           <el-radio :label="0">是</el-radio>
           <el-radio :label="1">否</el-radio>
         </el-radio-group>
@@ -94,6 +101,7 @@
           style="width:250px"
           format="yyyy/MM/dd HH:mm:ss"
           value-format="yyyy/MM/dd HH:mm:ss"
+          @change="edittime1"
         >
         </el-date-picker>
 
@@ -102,60 +110,90 @@
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      dialogImageUrl: "",
-      dialogVisible: false,
-      startTime: this.addMsg.startTime,
-      endTime: this.addMsg.endTime
-    };
-  },
-  props: {
-    addMsg: {
-      title: {},
-      pic: {},
-      picContent: {},
-      isShow: {},
-      startTime: {},
-      endTime: {}
-    }
-  },
-  methods: {
-    edittime() {},
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+  export default {
+    data() {
+      return {
+        dialogImageUrl: this.addMsg.mainPic,
+        dialogImageUrl1:this.addMsg.content,
+        dialogVisible: false,
+        startTime: this.addMsg.startTime,
+        endTime: this.addMsg.endTime
+      };
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    }
-  }
-};
+    props: {
+      addMsg: {
+        title: {},
+        mainPic: {},
+        content: {},
+        state: {},
+        startTime: {},
+        endTime: {},
+        linkUrl: {}
+      }
+    },
+    methods: {
+      edittime() {
+        this.addMsg.startTime = this.startTime;
+      },
+      edittime1() {
+        this.addMsg.endTime = this.endTime;
+      },
+      handleRemove(file, fileList) {
+        this.addMsg.mainPic = null;
+        console.log(file, fileList);
+      },
+      handleRemove1(file, fileList) {
+        this.addMsg.content = null;
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        console.log(file);
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handlePictureCardPreview1(file) {
+        console.log(file);
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handleAvatarSuccess(res, file){
+
+        this.addMsg.mainPic = this.global.imgPath+res.data.replace("img:","/");
+        console.log(res)
+        console.log(file)
+      },
+      handleAvatarSuccess1(res, file){
+        this.addMsg.content = this.global.imgPath+res.data.replace("img:","/");
+        console.log(res)
+        console.log(file)
+      }
+    },
+
+  };
 </script>
 <style lang="less">
-@main-color: #1cc09f;
-@bgColor: #f0f2f5;
-@font-normal: #333333;
-@font-subsidiary: #999999;
-@font-special: #1cc09f;
-@border: 1px solid #dde2eb;
-.add_advertising {
-  font-size: 14px;
-  color: @font-normal;
-  .el-form {
-    padding-top: 16px;
+  @main-color: #1cc09f;
+  @bgColor: #f0f2f5;
+  @font-normal: #333333;
+  @font-subsidiary: #999999;
+  @font-special: #1cc09f;
+  @border: 1px solid #dde2eb;
+  .add_advertising {
+    font-size: 14px;
+    color: @font-normal;
+    .el-form {
+      padding-top: 16px;
+    }
+
+    .el-upload__tip {
+      font-size: 12px;
+      color: #606266;
+      margin-top: 7px;
+      display: inline-block;
+      vertical-align: bottom;
+      padding-left: 8px;
+      line-height: 40px;
+    }
   }
-  
-  .el-upload__tip {
-    font-size: 12px;
-    color: #606266;
-    margin-top: 7px;
-    display: inline-block;
-    vertical-align: bottom;
-    padding-left: 8px;
-    line-height: 40px;
-  }
-}
 
 </style>
