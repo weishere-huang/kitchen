@@ -160,15 +160,7 @@ export default {
         workingHours: "",
         serviceMode: []
       },
-      editMsg: {
-        // province: "",
-        // city: "",
-        // name: "",
-        // address: "",
-        // tel: "",
-        // time: "",
-        // range: []
-      },
+      editMsg: {},
       dialogAdd: false,
       dialogEdit: false,
       province: [],
@@ -212,7 +204,9 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       total: 10,
-      areaName: null
+      areaName: this.pname+this.cname,
+      pname:null,
+      cname:null
     };
   },
   methods: {
@@ -330,13 +324,14 @@ export default {
         return this.provinceCode === item.code;
       });
       if(p!=null){
-        this.areaName = p.name;
+        this.pname = p.name+" ";
       }else{
-        this.areaName = null;
+        this.pname = null;
       }
+      this.cname = null;
       this.citycode = null;
-      console.log(this.areaName);
       this.cities = [];
+      console.log(this.areaName);
       this.Axios(
         {
           params: {
@@ -358,7 +353,7 @@ export default {
     },
     //添加
     beforeadd() {
-      
+
        this.addService();
     },
     addService() {
@@ -423,12 +418,7 @@ export default {
     },
     //选择市时改变地区名字
     getcitycode() {
-      this.areaName +=
-        " " +
-        this.cities.find(item => {
-          return this.citycode === item.code;
-        }).name;
-      console.log(this.areaName);
+      this.cname =this.cities.find(item => {return this.citycode === item.code;}).name;
     }
   },
   created() {
