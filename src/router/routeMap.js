@@ -25,8 +25,7 @@ export default [{
       },
       {
         menu: '订单详情',
-        route: '/Details',
-        // routeReg: /^\/Order\/Details\/\d{1,}$/i,
+        routeReg: /^\/Order\/Details\/\d{1,}$/i,
         defaultDock: true,
         permissionCode: 'order_details_look_up'
       }
@@ -56,7 +55,7 @@ export default [{
       {
         menu: '修改商品',
         routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
-       visible: true,
+        visible: true,
         permissionCode: ''
       }
     ]

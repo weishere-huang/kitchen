@@ -5,7 +5,7 @@
       style="width: 100%"
       @row-dblclick="rowDblclick"
       stripe
-      size="small"
+      size="mini"
       tooltip-effect="light"
       @selection-change="handleSelectionChange"
       :header-cell-style="{'background-color':'#f1f1f1','color':'#333333', 'font-weight': 'normal'}"

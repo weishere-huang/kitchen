@@ -17,7 +17,7 @@
         <el-table
           :data="tableData"
           style="width: 100%"
-          size="small"
+          size="mini"
           stripe
           tooltip-effect="light"
           :header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
@@ -28,7 +28,7 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.cateName }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -37,10 +37,10 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.number }}</span>
+              <span>{{ scope.row.goodsCount }}</span>
             </template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             label="是否显示"
             min-width="60"
             show-overflow-tooltip
@@ -60,7 +60,7 @@
               </div>
 
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="排序"
             min-width="100"
@@ -80,7 +80,7 @@
                 size="small"
                 type="number"
                 step="0"
-                v-model="scope.row.sort"
+                v-model="scope.row.sortLevel"
                 style="width:80px;padding:0;"
               ></el-input>
               <!-- <el-tooltip
@@ -95,7 +95,7 @@
                   v-model="scope.row.sort"
                   style="width:80px;padding:0;"
                 ></el-input> -->
-              </el-tooltip>
+              <!-- </el-tooltip> -->
             </template>
           </el-table-column>
           <el-table-column
@@ -109,7 +109,7 @@
                 @click.stop.prevent="handleEdit(scope.$index, scope.row)"
               >修改
               </el-button>
-               <el-popover
+              <el-popover
                 placement="top"
                 width="180"
                 v-model="scope.row.visible"
@@ -155,29 +155,8 @@
             type="text"
             size="small"
             style="width:90%;"
+            v-model="classifyName"
           ></el-input>
-        </el-form-item>
-        <el-form-item label="排序：">
-          <el-input
-            type="text"
-            size="small"
-            style="width:50%;"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="是否显示："
-          style="margin-bottom: 0px;"
-        >
-          <el-radio
-            v-model="isShow"
-            label="1"
-          >是
-          </el-radio>
-          <el-radio
-            v-model="isShow"
-            label="2"
-          >否
-          </el-radio>
         </el-form-item>
       </el-form>
       <span
@@ -192,7 +171,7 @@
         <el-button
           size="small"
           type="primary"
-          @click="dialogVisible = false"
+          @click="addClassify"
         >确 定</el-button>
       </span>
     </el-dialog>
@@ -210,6 +189,7 @@
             type="text"
             size="small"
             style="width:90%;"
+            v-model="editMsg.cateName"
           ></el-input>
         </el-form-item>
         <el-form-item label="排序：">
@@ -217,22 +197,8 @@
             type="text"
             size="small"
             style="width:50%;"
+            v-model="editMsg.sortLevel"
           ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="是否显示："
-          style="margin-bottom: 0px;"
-        >
-          <el-radio
-            v-model="isShow"
-            label="1"
-          >是
-          </el-radio>
-          <el-radio
-            v-model="isShow"
-            label="2"
-          >否
-          </el-radio>
         </el-form-item>
       </el-form>
       <span
@@ -247,7 +213,7 @@
         <el-button
           size="small"
           type="primary"
-          @click="editClassify = false"
+          @click="saveEdit"
         >确 定</el-button>
       </span>
     </el-dialog>
@@ -255,8 +221,14 @@
 </template>
 <script>
 export default {
+  inject: ["reload"],
   data() {
     return {
+      editMsg: {
+        sortLevel: "",
+        cateName: ""
+      },
+      classifyName: "",
       editClassify: false,
       isShow: "1",
       dialogVisible: false,
@@ -278,15 +250,100 @@ export default {
     };
   },
   methods: {
+    addClassify() {
+      console.log(this.classifyName);
+      let qs = require("qs");
+      let datas = qs.stringify({ cateName: this.classifyName });
+      this.Axios(
+        {
+          params: datas,
+          option: {
+            successMsg: "保存成功"
+          },
+          type: "post",
+          url: "/api-mall/itemCat/addItemCate",
+          loadingConfig: {
+            target: document.querySelector(".classify_list")
+          }
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          if (result.data.code === 200) {
+            this.dialogVisible = false;
+            this.reload();
+          }
+        },
+        ({ type, info }) => {}
+      );
+    },
+    saveEdit() {
+      let qs = require("qs");
+      let datas = qs.stringify({
+        cateName: this.editMsg.cateName,
+        cateId: this.editMsg.id,
+        sortLevel: this.editMsg.sortLevel
+      });
+      this.Axios(
+        {
+          params: datas,
+          option: {
+            successMsg: "保存成功"
+          },
+          type: "post",
+          url: "/api-mall/itemCat/updateCate",
+          loadingConfig: {
+            target: document.querySelector(".classify_list")
+          }
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          if (result.data.code === 200) {
+            this.editClassify = false;
+            this.reload();
+          }
+        },
+        ({ type, info }) => {}
+      );
+    },
     handleEdit(index, rowData) {
       let params = { type: "edit", index: index, rowData: rowData };
       console.log(params);
       this.editClassify = true;
+      this.editMsg = rowData;
     },
     handleDelete(index, rowData) {
-      rowData.visible = false
+      rowData.visible = false;
       let params = { type: "delete", index: index, rowData: rowData };
-      console.log(params);
+      let qs = require("qs");
+      let datas = qs.stringify({
+        cateId: rowData.id
+      });
+      this.Axios(
+        {
+          params: datas,
+          option: {
+            successMsg: "删除成功"
+          },
+          type: "post",
+          url: "/api-mall/itemCat/delCate",
+          loadingConfig: {
+            target: document.querySelector(".classify_list")
+          }
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          if (result.data.code === 200) {
+            this.reload();
+          }
+        },
+        ({ type, info }) => {}
+      );
     },
     changeUp(index, val) {
       console.log(val);
@@ -300,14 +357,17 @@ export default {
       this.Axios(
         {
           params: {},
-          option: {},
+          option: {
+            enableMsg: false
+          },
           type: "get",
-          url: ""
+          url: "/api-mall/itemCat/listCate"
         },
         this
       ).then(
         result => {
-          this.tableData = result.data.data.content;
+          console.log(result.data.data);
+          this.tableData = result.data.data;
         },
         ({ type, info }) => {}
       );
