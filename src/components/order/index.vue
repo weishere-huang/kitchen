@@ -13,6 +13,7 @@
                 placeholder="起始日期"
                 size="small"
                 style="width:39%;"
+                value-format="yyyy/MM/dd"
               >
               </el-date-picker>
               至
@@ -22,6 +23,7 @@
                 placeholder="结束日期"
                 size="small"
                 style="width:39%;"
+                value-format="yyyy/MM/dd"
               >
               </el-date-picker>
             </el-col>
@@ -31,13 +33,13 @@
             >
               <span>订单状态：</span>
               <el-select
-                v-model="value"
+                v-model="platformState"
                 placeholder="请选择"
                 size="small"
                 style="width:114px;"
               >
                 <el-option
-                  v-for="item in options"
+                  v-for="item in stateOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -53,6 +55,7 @@
                 size="small"
                 style="width:100%;"
                 placeholder="收货人、订单号"
+                v-model="keyWord"
               ></el-input>
             </el-col>
             <el-col
@@ -121,31 +124,31 @@ export default {
       isHideList: true,
       currentPage: 3,
       selectShow: true,
-      value: "",
-      options: [
+      platformState: -2,
+      stateOptions: [
         {
-          label: "全部",
-          value: "全部"
+          label: "全部订单",
+          value: -2
         },
         {
           label: "待付款",
-          value: "待付款"
+          value: 0
         },
         {
-          label: "已付款",
-          value: "已付款"
-        },
-        {
-          label: "待发货",
-          value: "待发货"
+          label: "待收货",
+          value: 1
         },
         {
           label: "已发货",
-          value: "已发货"
+          value: 2
         },
         {
-          label: "关闭",
-          value: "关闭"
+          label: "已完成",
+          value: 3
+        },
+        {
+          label: "已取消",
+          value: 9
         }
       ],
       tableData: [
@@ -207,12 +210,16 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       total: 0,
-      searchDate1: "",
-      searchDate2: ""
+      searchDate1: null,
+      searchDate2: null,
+      keyWord: "",
+      orderIds: []
     };
   },
   methods: {
     toPrintOrder() {
+     
+      sessionStorage.setItem("orderIds",this.orderIds.join(','))
       window.open("printorder.html", "_blank");
     },
     handleSizeChange(val) {
@@ -241,6 +248,10 @@ export default {
     },
     handleSelectionChange(selection) {
       console.log(selection);
+      this.orderIds = selection.map(item => {
+        return item.id;
+      });
+      console.log(this.orderIds.join(','));
     },
     getRow(row, event) {
       console.log(row);
@@ -252,9 +263,14 @@ export default {
           params: {
             page: this.pageIndex,
             size: this.pageSize,
-            platformState:-2
+            platformState: this.platformState,
+            keyWord: this.keyWord,
+            startTime: this.searchDate1,
+            endTime: this.searchDate2
           },
-          option: {},
+          option: {
+            enableMsg: false
+          },
           type: "get",
           url: "/api-order/order/allOrder"
         },
@@ -298,9 +314,10 @@ export default {
 @border: 1px solid #dde2eb;
 .order_list {
   width: 100%;
-  background-color: white;
+  // background-color: white;
   padding-bottom: 10px;
   .top_case {
+    background-color: white;
     border-bottom: @border;
     .top_title {
       padding: 0 10px;
@@ -316,6 +333,7 @@ export default {
     }
   }
   .bottom_list {
+    background-color: white;
     margin-top: 10px;
     overflow: hidden;
     .el-pagination.is-background .el-pager li:not(.disabled).active {
