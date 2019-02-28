@@ -154,10 +154,10 @@
         >
           <el-form label-width="200px">
             <el-form-item label="收货人：">
-              <span>刘先生</span>
+              <span>{{orderDetails.address.consignee}}</span>
             </el-form-item>
             <el-form-item label="收货地址：">
-              <span>四川省成都市金牛区  天府四街吉泰路1号XX大厦12楼1029</span>
+              <span>{{orderDetails.address.address}}</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -167,9 +167,9 @@
         >
           <el-form label-width="30%">
             <el-form-item label="手机号：">
-              <span>22222</span>
+              <span>{{orderDetails.address.phone}}</span>
             </el-form-item>
-            <el-form-item label="配送要求：">
+            <el-form-item label="送达时间：">
               <span style="color:#1cc09f">立即送出</span>
             </el-form-item>
           </el-form>
@@ -187,10 +187,10 @@
         >
           <el-form label-width="200px">
             <el-form-item label="订单编号：">
-              <span>2018051183359</span>
+              <span>{{orderDetails.orderNo}}</span>
             </el-form-item>
             <el-form-item label="下单用户：">
-              <span>153128301991</span>
+              <span>{{orderDetails.userId}}</span>
             </el-form-item>
             <el-form-item label="商品总金额：">
               <span style="font-weight: 600;">¥ 64.70</span><span>（含配送费¥ 5.00元）</span>
@@ -209,17 +209,32 @@
         >
           <el-form label-width="30%">
             <el-form-item label="订单状态：">
-              <span style="color:#FF6600" v-if="state===0">待付款</span>
-              <span style="color:#008000" v-if="state===1">待发货</span>
-              <span style="color:#3399FF" v-if="state===2">待收货</span>
-              <span style="color:#333333" v-if="state===3">已完成</span>
-              <span style="color:#999999" v-if="state===4">已关闭</span>
+              <span
+                style="color:#FF6600"
+                v-if="orderDetails.platformState===0"
+              >待付款</span>
+              <span
+                style="color:#008000"
+                v-if="orderDetails.platformState===2"
+              >已发货</span>
+              <span
+                style="color:#3399FF"
+                v-if="orderDetails.platformState===1"
+              >待收货</span>
+              <span
+                style="color:#333333"
+                v-if="orderDetails.platformState===3"
+              >已完成</span>
+              <span
+                style="color:#999999"
+                v-if="orderDetails.platformState===9"
+              >已关闭</span>
             </el-form-item>
             <el-form-item label="支付方式：">
-              <span>支付宝</span>
+              <span>{{orderDetails.payType}}</span>
             </el-form-item>
             <el-form-item label="下单时间：">
-              <span>2018-12-21 08:31:53</span>
+              <span>{{orderDetails.gmtCreate}}</span>
             </el-form-item>
             <el-form-item label="付款时间：">
               <span>2018-12-21 08:31:53</span>
@@ -239,16 +254,15 @@
         <table-list
           :selectShow="false"
           :column="items"
-          :data="tableData"
+          :data="orderDetails.items"
           :rowDblclick="getRow"
           :handleSelectionChange="handleSelectionChange"
         ></table-list>
         <div class="total">
-          <span style=" font-weight: 700;font-size:16px;">合计：￥999.44<span style=" font-weight:0;font-size:14px;">（含运费5.5元）</span></span>
+          <span style=" font-weight: 700;font-size:16px;">合计：￥{{orderDetails.orderMoney+5.5}}<span style=" font-weight:0;font-size:14px;">（含运费5.5元）</span></span>
         </div>
       </div>
     </div>
-
     <div class="bottom_list">
       <div class="top_title">
         <h4>操作记录</h4>
@@ -274,19 +288,20 @@ import tableList from "../public/table";
 export default {
   data() {
     return {
-      state:1,
+      orderDetails: "",
+      state: 1,
       dialogPay: false,
       dialogClose: false,
       dialogPlan: false,
       items: [
         {
           label: "商品名称",
-          prop: "name",
+          prop: "itemName",
           width: 100
         },
         {
           label: "价格",
-          prop: "price",
+          prop: "itemPrice",
           width: 90
         },
         {
@@ -297,7 +312,10 @@ export default {
         {
           label: "小计",
           prop: "subtotal",
-          width: 120
+          width: 120,
+          formatter:function (row, column) {
+            return row.subtotal=row.itemPrice*row.number
+          }
         }
       ],
       tableData: [
@@ -352,8 +370,35 @@ export default {
       console.log(row);
     },
     toPrintOrder() {
-      window.open("printorder.html", "_blank");
+      sessionStorage.setItem("orderIds",this.$route.params.id)
+      window.open("http://127.0.0.1:8081/printorder.html", "_blank");
+    },
+    getDetails(id) {
+      this.Axios(
+        {
+          params: {
+            orderId: id
+          },
+          option: {
+            enableMsg: false
+          },
+          type: "get",
+          url: "/api-order/order/getOneOrder"
+        },
+        this
+      ).then(
+        result => {
+          // console.log(result.data);
+          result.data.data.address = JSON.parse(result.data.data.address);
+          this.orderDetails = result.data.data;
+          console.log(this.orderDetails);
+        },
+        ({ type, info }) => {}
+      );
     }
+  },
+  created() {
+    this.getDetails(this.$route.params.id);
   },
   components: {
     tableList
@@ -396,7 +441,6 @@ export default {
       .total {
         float: right;
         margin-top: 20px;
-        
       }
       .form_case {
         .el-form-item {
