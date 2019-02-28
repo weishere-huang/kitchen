@@ -249,9 +249,11 @@ export default {
             }
           }
         }
-        that.country[0].children.push(that.province)
-        this.$store.commit("getArea", that.country);
-        // console.log(that.country);
+        that.country[0].children.push(that.province);
+     
+      sessionStorage.setItem("area",JSON.stringify(that.country))
+        // this.$store.commit("getArea", Object.assign({},that.country));
+        // console.log(this.$store.state.getArea.area);
       });
     },
     handleOpen(key, keyPath) {

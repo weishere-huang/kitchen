@@ -46,7 +46,7 @@
       <el-table
         :data="tableData"
         style="width: 100%"
-        size="small"
+        size="mini"
         stripe
         tooltip-effect="light"
         :header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"

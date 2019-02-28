@@ -17546,12 +17546,12 @@
       "citycode": "1903"
     },
     {
-      "areaName": "台湾省",
+      "areaName": "台湾",
       "adcode": "710000",
       "citycode": "1886"
     },
     {
-      "areaName": "香港特别行政区",
+      "areaName": "香港",
       "adcode": "810000",
       "citycode": "1852"
     },
@@ -17646,7 +17646,7 @@
       "citycode": "1852"
     },
     {
-      "areaName": "澳门特别行政区",
+      "areaName": "澳门",
       "adcode": "820000",
       "citycode": "1853"
     },
@@ -17689,11 +17689,6 @@
       "areaName": "圣方济各堂区",
       "adcode": "820008",
       "citycode": "1853"
-    },
-    {
-      "areaName": "外国",
-      "adcode": "900000",
-      "citycode": "1900"
     }
   ]
 }

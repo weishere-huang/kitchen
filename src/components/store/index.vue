@@ -75,8 +75,7 @@
           <el-table
             :data="tableData"
             style="width: 100%"
-            size="small"
-            stripe
+            size="mini"
             tooltip-effect="light"
             :header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
           >
@@ -167,7 +166,6 @@
             <el-table-column
               label="*上架"
               min-width="60"
-              show-overflow-tooltip
             >
               <template slot-scope="scope">
                 <div @click.stop.prevent="changeUp(scope.$index, scope.row)">
@@ -188,7 +186,6 @@
             <el-table-column
               label="*新品"
               min-width="60"
-              show-overflow-tooltip
             >
               <template slot-scope="scope">
                 <div @click.stop.prevent="changeNew(scope.$index, scope.row)">
@@ -209,7 +206,6 @@
             <el-table-column
               label="*热销"
               min-width="60"
-              show-overflow-tooltip
             >
               <template slot-scope="scope">
                 <div @click.stop.prevent="changeHot(scope.$index, scope.row)">
@@ -478,8 +474,8 @@ export default {
       ).then(
         result => {
           console.log(result);
-          if (result.data.data.code===200) {
-            this.reload()
+          if (result.data.data.code === 200) {
+            this.reload();
           }
         },
         ({ type, info }) => {}
@@ -636,11 +632,6 @@ export default {
   .el-popover--plain {
     padding: 4px 8px;
   }
-}
-.color_text {
-  color: #1cc09f;
-  padding: 4px 8px;
-  width: auto;
 }
 </style>
 
