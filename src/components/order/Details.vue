@@ -5,6 +5,7 @@
         size="small"
         type="primary"
         class="el-icon-arrow-left"
+        @click="$router.back(-1)"
       >返回</el-button>
       <div style="float:right;">
         <el-button

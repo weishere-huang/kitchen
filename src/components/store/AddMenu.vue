@@ -225,6 +225,7 @@ import ueditor from "../public/Ue";
 import areaList from "../public/Area";
 import dialogCoobook from "./addCookbook/addCookbook";
 export default {
+  inject: ["reload"],
   data() {
     return {
       addMenu: {
@@ -267,7 +268,6 @@ export default {
       this.cookbook = params.value;
     },
     getUEContent() {
-    
       this.savespu();
     },
     handleRemove(file, fileList) {
@@ -294,7 +294,7 @@ export default {
         spicy: this.addMenu.spicy,
         des: this.addMenu.des,
         state: this.addMenu.state,
-        recommendType:JSON.stringify(this.addMenu.recommendType)
+        recommendType: JSON.stringify(this.addMenu.recommendType)
       });
       this.Axios(
         {
@@ -313,6 +313,7 @@ export default {
         console.log(result.data);
         if (result.data.code === 200) {
           this.$router.push("/store");
+          this.reload();
         } else {
           this.$message.error("出库失败,请重新尝试");
         }

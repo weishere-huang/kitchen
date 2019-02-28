@@ -50,19 +50,19 @@ const router = new Router({
       meta: {
         requireAuth: false,
       },
-      children: []
+      children: [{
+        path: 'Details/:id/',
+        name: 'Details',
+        component: Details,
+        props: {
+          pageName: '订单详情'
+        },
+        meta: {
+          requireAuth: false,
+        },
+      }, ]
     },
-    {
-      path: '/Details',
-      name: 'Details',
-      component: Details,
-      props: {
-        pageName: '订单详情'
-      },
-      meta: {
-        requireAuth: false,
-      },
-    },
+
     {
       path: '/Store',
       name: 'Store',
@@ -73,8 +73,7 @@ const router = new Router({
       meta: {
         requireAuth: false,
       },
-      children: [
-        {
+      children: [{
           path: 'AddMenu',
           name: 'AddMenu',
           component: AddMenu,
@@ -174,8 +173,7 @@ const router = new Router({
       meta: {
         requireAuth: false,
       },
-      children:[
-        {
+      children: [{
           path: 'AddRole',
           name: 'AddRole',
           component: AddRole,

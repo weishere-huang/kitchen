@@ -46,7 +46,7 @@
       <el-table
         :data="tableData"
         style="width: 100%"
-        size="small"
+        size="mini"
         stripe
         tooltip-effect="light"
         :header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
@@ -286,7 +286,11 @@ export default {
       });
     },
     beforeupdate() {
-      this.updateAdvise();
+      if(this.replayContent.reply==null || this.replayContent.reply===""){
+        this.$message.warning("请填写回复!")
+      }else{
+        this.updateAdvise();
+      }
     },
     updateAdvise() {
       let qs = require("qs");
