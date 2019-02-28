@@ -40,8 +40,8 @@
             <el-option
               v-for="item in classify"
               :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :label="item.cateName"
+              :value="item.no"
             >
             </el-option>
           </el-select>
@@ -263,6 +263,26 @@ export default {
     };
   },
   methods: {
+    getClassfy() {
+      this.Axios(
+        {
+          params: {},
+          option: {
+            enableMsg: false
+          },
+          type: "get",
+          url: "/api-mall/itemCat/allCate"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data.data);
+          // result.data.data.splice(0,0,{cateName:"全部类别",id:-2})
+          this.classify=result.data.data
+        },
+        ({ type, info }) => {}
+      );
+    },
     dialogCoobookHide(params) {
       this.dialogCoobook = params.ishide;
       this.cookbook = params.value;
@@ -322,6 +342,9 @@ export default {
   },
 
   mounted() {},
+  created() {
+    this.getClassfy()
+  },
   components: {
     ueditor,
     areaList,
