@@ -1,31 +1,35 @@
 <template>
   <div class="print_order">
-    <div class="print_content">
+    <div
+      class="print_content"
+      v-for="(item, index) in printData"
+      :key="index"
+    >
       <h2>订单信息</h2>
       <el-col :span="24">
         <el-col :span="7">
-          <el-col :span="24"><span>订单用户：roulen</span></el-col>
+          <el-col :span="24"><span>订单用户：{{item.userId}}</span></el-col>
           <el-col :span="24"><span>付款时间：2019-01-23 15:47:29</span></el-col>
         </el-col>
         <el-col :span="7">
-          <el-col :span="24"><span>下单时间：2019-01-23 15:47:29</span></el-col>
-          <el-col :span="24"><span>发货时间：2019-01-23 15:47:29</span></el-col>
+          <el-col :span="24"><span>下单时间：{{item.gmtCreate}}</span></el-col>
+          <el-col :span="24"><span>发货时间：{{item.startTime}}</span></el-col>
         </el-col>
         <el-col :span="4">
-          <el-col :span="24"><span>支付方式：在线支付</span></el-col>
+          <el-col :span="24"><span>支付方式：{{item.payType}}</span></el-col>
           <el-col :span="24"><span>配送要求：</span></el-col>
         </el-col>
         <el-col :span="6">
-          <el-col :span="24"><span>订单编号：20190328429374</span></el-col>
+          <el-col :span="24"><span>订单编号：{{item.orderNo}}</span></el-col>
           <el-col :span="24"><span>发货单号：</span></el-col>
         </el-col>
         <el-col
           :span="24"
           class="consignee_case"
         >
-          <span>收货地址：[成都市 武侯区 ] 天府四街吉泰路长虹科技大厦 33楼</span>
-          <span>收货人：卢先生</span>
-          <span>电话：13590990811</span>
+          <span>收货地址：{{item.address.address}}</span>
+          <span>收货人：{{item.address.consignee}}</span>
+          <span>电话：{{item.address.phone}}</span>
         </el-col>
       </el-col>
       <el-col
@@ -39,22 +43,22 @@
             <td>数量</td>
             <td>小计</td>
           </tr>
-          <tr>
-            <td>炒花菜</td>
-            <td>￥8.8元</td>
-            <td>1</td>
-            <td>￥8.8元</td>
+          <tr v-for="(item1, index) in item.items" :key="index">
+            <td>{{item1.itemName}}</td>
+            <td>￥{{item1.itemPrice}}元</td>
+            <td>{{item1.number}}</td>
+            <td>￥{{item1.itemPrice*item1.number}}元</td>
           </tr>
         </table>
       </el-col>
       <el-col :span="24">
         <span style="float:right;">
-          <h5 style="display:inline-block;font-size:14px;">合计：¥ 64.70</h5>（含运费¥ 5.00元）
+          <h5 style="display:inline-block;font-size:14px;">合计：¥ {{item.orderMoney+5}}</h5>（含运费¥ 5.00元）
         </span>
       </el-col>
       <el-col :span="24">
         <span style="float:right;">
-          <span style="margin-right:20px">打印时间：2019-01-23 12:32:41</span>
+          <span style="margin-right:20px">打印时间：{{knowDate}}</span>
           <span>打印人：roulen</span>
         </span>
       </el-col>
@@ -62,9 +66,38 @@
   </div>
 </template>
 <script>
+function getCurrentDate(format) {
+  var now = new Date();
+  var year = now.getFullYear(); //得到年份
+  var month = now.getMonth(); //得到月份
+  var date = now.getDate(); //得到日期
+  var day = now.getDay(); //得到周几
+  var hour = now.getHours(); //得到小时
+  var minu = now.getMinutes(); //得到分钟
+  var sec = now.getSeconds(); //得到秒
+  month = month + 1;
+  if (month < 10) month = "0" + month;
+  if (date < 10) date = "0" + date;
+  if (hour < 10) hour = "0" + hour;
+  if (minu < 10) minu = "0" + minu;
+  if (sec < 10) sec = "0" + sec;
+  var time = "";
+  //精确到天
+  if (format == 1) {
+    time = year + "-" + month + "-" + date;
+  }
+  //精确到分
+  else if (format == 2) {
+    time =
+      year + "-" + month + "-" + date + " " + hour + ":" + minu + ":" + sec;
+  }
+  return time;
+}
 export default {
   data() {
     return {
+      printData: [],
+      knowDate: getCurrentDate(2),
       tableData: [
         {
           name: "素炒花菜",
@@ -74,6 +107,30 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    this.Axios(
+      {
+        params: {
+          orderIds: sessionStorage.getItem("orderIds")
+        },
+        option: {
+          enableMsg: false
+        },
+        type: "get",
+        url: "/api-order/order/printOrder"
+      },
+      this
+    ).then(
+      result => {
+        for (let i = 0; i < result.data.data.length; i++) {
+          result.data.data[i].address = JSON.parse(result.data.data[i].address);
+        }
+        console.log(result.data.data);
+        this.printData = Object.assign([], result.data.data);
+      },
+      ({ type, info }) => {}
+    );
   }
 };
 </script>
