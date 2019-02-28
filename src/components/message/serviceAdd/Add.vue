@@ -1,6 +1,6 @@
 <template>
   <div class="add_service">
-    <el-form label-width="90px">
+    <el-form label-width="90px" :model="addMsg" ref="addMsg" :rules="serviceRules">
       <el-form-item label="地区：">
         <el-select
           v-model="provinceCode"
@@ -83,6 +83,10 @@
   export default {
     data() {
       return {
+
+        serviceRules:{
+
+        },
         provinces: [],
         citys: [],
         serviceMode: [],

@@ -47,6 +47,7 @@
           placeholder="请选择"
           style="width:95%"
           size="small"
+          @change="getroleId"
         >
           <el-option
             v-for="item in options"
@@ -78,8 +79,8 @@ export default {
     }
   },
   methods:{
-    clickContro(){
-
+    getroleId(){
+      this.addInfo.roleId = this.roleId;
     },
     getRoleList(){
       this.Axios({
@@ -87,7 +88,9 @@ export default {
           page:this.pageIndex,
           size:this.pageSize
         },
-        option: {},
+        option: {
+          enableMsg:false
+        },
         type: "get",
         url: "/api-platform/role/listAllRole"
       }, this).then(result => {
