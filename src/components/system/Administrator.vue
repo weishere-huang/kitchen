@@ -151,8 +151,9 @@ export default {
         console.log(params);
         this.userMsg={},
         this.editUserMsg={},
-        Object.assign(this.editUserMsg,params.rowData);
-        this.editUserMsg.confirmPassword=this.editUserMsg.password;
+        // Object.assign(this.editUserMsg,params.rowData);
+        // this.editUserMsg.confirmPassword=this.editUserMsg.password;
+        this.findOne(params.id)
         this.edit=true
       }
       if (params.type === "delete") {
@@ -241,6 +242,7 @@ export default {
         this.$message.warning("两次密码输入不一致,请重新输入!!!")
         return
       }
+      console.log(this.userMsg);
       this.addAdmin();
     },
     addAdmin(){
@@ -294,6 +296,27 @@ export default {
       })
 
     },
+    findOne(id){
+      this.Axios(
+        {
+          params: {
+            employeeId:id
+          },
+          option:{
+            enableMsg:false
+          },
+          type: "get",
+          url: "/api-platform/employee/findOne"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.editUserMsg = result.data.data;
+        },
+        ({type, info}) => {});
+    }
+
   },
   created(){
     this.getlist();

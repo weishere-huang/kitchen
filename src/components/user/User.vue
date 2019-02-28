@@ -196,6 +196,10 @@
         pageSize: 10,
         options: [
           {
+            label:"全部",
+            value:-2
+          },
+          {
             label:"正常",
             value:0
           },
@@ -205,7 +209,7 @@
           }
         ],
         tableData: [],
-        states: null,
+        states: -2,
         keyWord: null
       };
     },
@@ -236,6 +240,7 @@
         this.getlist();
       },
       getlist() {
+        console.log("Zhixing")
         this.Axios(
           {
             params: {
@@ -247,12 +252,11 @@
             option: {},
             type: "get",
             url: "/api-user/userInfo/listUserInfo"
-
           },
           this
         ).then(
           result => {
-            console.log(result.data)
+            console.log(result)
             this.tableData = result.data.data.content;
             this.total = result.data.data.totalElement;
           },
@@ -271,6 +275,7 @@
           // url:"/api-sso/user/resetpassword",
           type:"post",
           option:{
+            enableMsg:false
           }
         },this).then(result=>{
           if(result.data.code===200){
@@ -289,6 +294,7 @@
           url:"/api-sso/user/resetpassword",
           type:"post",
           option:{
+            enableMsg:false
           }
         },this).then(result=>{
           if(result.data.code===200){

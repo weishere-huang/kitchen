@@ -180,13 +180,7 @@
             width: 140
           }
         ],
-        tableData: [
-          {
-            title: "在线支付的过程中，订单显示未支付成功，款项却被扣了，怎么办？",
-            faqType: 1,
-            time: "2018-12-01 13:32:48"
-          }
-        ],
+        tableData: [],
         pageIndex: 1,
         pageSize: 10,
         total: 0,

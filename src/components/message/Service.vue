@@ -48,9 +48,9 @@
             >
               <el-option
                 v-for="item in province"
-                :key="item.id"
-                :label="item.name"
-                :value="item.code"
+                :key="item.adcode"
+                :label="item.areaName"
+                :value="item.adcode"
               >
               </el-option>
             </el-select>
@@ -68,9 +68,9 @@
             >
               <el-option
                 v-for="item in cities"
-                :key="item.value"
-                :label="item.name"
-                :value="item.code"
+                :key="item.adcode"
+                :label="item.areaName"
+                :value="item.adcode"
               >
               </el-option>
             </el-select>
@@ -160,10 +160,18 @@ export default {
         workingHours: "",
         serviceMode: []
       },
-      editMsg: {},
+      editMsg: {
+        province: "",
+        city: "",
+        title:"",
+        address: "",
+        phone: "",
+        workingHours: "",
+        serviceMode: []
+      },
       dialogAdd: false,
       dialogEdit: false,
-      province: [],
+      province:[],
       cities: [],
       currentPage: 1,
       provinceCode: "",
@@ -278,26 +286,6 @@ export default {
         ({ type, info }) => {}
       );
     },
-    //获取所有省
-    getAllProvince() {
-      this.Axios(
-        {
-          params: {},
-          option: {
-            enableMsg: false
-          },
-          type: "get",
-          url: "/api-platform/network/AllProvince"
-        },
-        this
-      ).then(
-        result => {
-          this.province = result.data.data;
-        },
-        ({ type, info }) => {}
-      );
-    },
-    //删除网点
     deleteService(id) {
       let qs = require("qs");
       let data = qs.stringify({
@@ -320,37 +308,24 @@ export default {
     },
     //获取市
     getCity() {
-      let p = this.province.find(item => {
-        return this.provinceCode === item.code;
-      });
-      if(p!=null){
-        this.pname = p.name+" ";
-      }else{
-        this.pname = null;
-      }
-      this.areaName=this.pname;
-      this.cname = null;
-      this.citycode = null;
-      this.cities = [];
-      console.log(this.areaName);
-      this.Axios(
-        {
-          params: {
-            code: this.provinceCode
-          },
-          option: {
-            enableMsg: false
-          },
-          type: "get",
-          url: "/api-platform/network/findAllCity"
-        },
-        this
-      ).then(
-        result => {
-          this.cities = result.data.data;
-        },
-        ({ type, info }) => {}
-      );
+    //   let p = this.province.find(item => {
+    //     return this.provinceCode === item.code;
+    //   });
+    //   if(p!=null){
+    //     this.pname = p.name+" ";
+    //   }else{
+    //     this.pname = null;
+    //   }
+    //   this.areaName=this.pname;
+    //   this.cname = null;
+    //   this.citycode = null;
+       this.cities = [];
+    //   console.log(this.areaName);
+       let p = this.province.find(item =>{return this.provinceCode = item.adcode})
+       if(p!=null){
+          this.cities=p.children[0];
+       };
+
     },
     //添加
     beforeadd() {
@@ -433,7 +408,8 @@ export default {
     //查询网点列表
     this.getServiceList();
     //查询省
-    this.getAllProvince();
+    console.log(this.$store.state.getArea.area[0].children[0]);
+    this.province=this.$store.state.getArea.area[0].children[0];
   },
   components: {
     tableList,
