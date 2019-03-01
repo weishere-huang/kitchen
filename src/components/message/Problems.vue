@@ -236,7 +236,9 @@
               faqType: this.faqType,
               keyword: this.keyword
             },
-            option: {},
+            option: {
+              successMsg:"常见问题加载完成~"
+            },
             type: "get",
             url: "/api-platform/faq/faqlist"
           },
@@ -281,7 +283,9 @@
           params: data,
           url: "/api-platform/faq/addfaq",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         }, this).then(result => {
           if(result.data.code===200){
             this.reload()
@@ -337,7 +341,9 @@
           params: data,
           url: "/api-platform/faq/updatefaq",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         }, this).then(result => {
           if(result.data.code===200){
             this.reload()
@@ -354,6 +360,7 @@
           url:"/api-platform/faq/deletefaq",
           type:"post",
           option:{
+            enableMsg:false
           }
         },this).then(result=>{
           if(result.data.code===200){

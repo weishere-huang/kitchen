@@ -249,7 +249,9 @@
               states: this.states,
               keyWord: this.keyWord,
             },
-            option: {},
+            option: {
+              successMsg:"用户列表加载完成~"
+            },
             type: "get",
             url: "/api-user/userInfo/listUserInfo"
           },
@@ -298,7 +300,7 @@
           }
         },this).then(result=>{
           if(result.data.code===200){
-            this.reload();
+            this.$message.success("修改成功~")
           }
           console.log(result.data);
         })

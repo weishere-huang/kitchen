@@ -278,7 +278,9 @@ export default {
             size: this.pageSize,
             areaName: this.areaName,
           },
-          option: {},
+          option: {
+            successMsg:"服务网点加载完成~"
+          },
           type: "get",
           url: "/api-platform/network/list"
         },
@@ -303,7 +305,9 @@ export default {
           params: data,
           url: "/api-platform/network/updatestate",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -348,7 +352,9 @@ export default {
           params: data,
           url: "/api-platform/network/add",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {

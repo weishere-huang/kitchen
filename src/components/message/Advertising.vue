@@ -240,7 +240,9 @@ export default {
       this.Axios(
         {
           params: {},
-          option: {},
+          option: {
+            successMsg:"广告加载完成~"
+          },
           type: "get",
           url: "/api-platform/Advertisement/list"
         },
@@ -266,7 +268,9 @@ export default {
           params: data,
           url: "/api-platform/Advertisement/delete",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -300,7 +304,9 @@ export default {
           params: data,
           url: "/api-platform/Advertisement/add",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -331,7 +337,9 @@ export default {
           params: data,
           url: "/api-platform/Advertisement/update",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
