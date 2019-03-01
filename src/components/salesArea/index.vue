@@ -95,7 +95,9 @@ export default {
       this.Axios(
         {
           params: {},
-          option: {},
+          option: {
+            successMsg:"销售区域加载完成~"
+          },
           type: "get",
           url: "/api-mall/area/list"
         },
