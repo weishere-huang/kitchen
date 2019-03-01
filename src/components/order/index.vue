@@ -84,16 +84,21 @@
             :detalisShow="true"
             :handleShow="true"
           ></table-list>
-          <div style="margin-top:20px;float:left;padding-left:10px;">
+          <div style="margin-top:20px;float:left;padding-left:10px;padding-bottom:10px;">
             <el-button
               size="small"
               type="primary"
               @click="toPrintOrder"
             >打印订单</el-button>
+            <el-button
+              size="small"
+              type="primary"
+              @click="shipments"
+            >发货</el-button>
           </div>
           <div
             class="block"
-            style="margin-top:20px;float:right"
+            style="margin-top:20px;float:right;padding-bottom:10px;"
           >
             <el-pagination
               background
@@ -139,7 +144,7 @@ export default {
           value: 1
         },
         {
-          label: "已发货",
+          label: "待发货",
           value: 2
         },
         {
@@ -147,7 +152,7 @@ export default {
           value: 3
         },
         {
-          label: "已取消",
+          label: "已关闭",
           value: 9
         }
       ],
@@ -164,7 +169,7 @@ export default {
         },
         {
           label: "用户",
-          prop: "userId",
+          prop: "phone",
           width: 90
         },
         {
@@ -195,13 +200,13 @@ export default {
             return row.state == 0
               ? "待付款"
               : row.state == 1
-              ? "待发货"
-              : row.state == 2
               ? "待收货"
+              : row.state == 2
+              ? "待发货"
               : row.state == 3
               ? "已完成"
-              : row.state == 3
-              ? "已取消"
+              : row.state == 9
+              ? "已关闭"
               : "";
           }
         }
@@ -217,8 +222,12 @@ export default {
     };
   },
   methods: {
+    shipments(){
+      this.Axios({
+
+      })
+    },
     toPrintOrder() {
-     
       sessionStorage.setItem("orderIds",this.orderIds.join(','))
       window.open("printorder.html", "_blank");
     },

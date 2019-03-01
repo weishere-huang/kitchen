@@ -11,6 +11,11 @@
         <el-button
           size="small"
           type="primary"
+          @click="dialogSend=true"
+        >发货</el-button>
+        <el-button
+          size="small"
+          type="primary"
           @click="dialogPay=true"
         >付款</el-button>
         <el-button
@@ -29,6 +34,33 @@
           @click="toPrintOrder"
         >打印订单</el-button>
       </div>
+       <el-dialog
+        title="发货提示"
+        :visible.sync="dialogSend"
+        width="300px"
+        :close-on-click-modal="false"
+        top="30vh"
+      >
+        <span style="line-height:40px;">
+          <i class="el-icon-warning" style="color:#FF6600;font-size:18px;"></i>
+          发货后不能撤销，您要继续吗？
+        </span>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            size="small"
+            @click="dialogSend = false"
+            plain
+          >取 消</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="shipments"
+          >确 定</el-button>
+        </span>
+      </el-dialog>
       <el-dialog
         title="付款"
         :visible.sync="dialogPay"
@@ -63,7 +95,7 @@
           <el-button
             size="small"
             type="primary"
-            @click="dialogPay = false"
+            @click="payOrder"
           >确 定</el-button>
         </span>
       </el-dialog>
@@ -101,7 +133,7 @@
             size="small"
             type="primary"
             plain
-            @click="dialogClose = false"
+            @click="closeOrder"
           >确 定</el-button>
         </span>
       </el-dialog>
@@ -169,7 +201,7 @@
             <el-form-item label="手机号：">
               <span>{{orderDetails.address.phone}}</span>
             </el-form-item>
-            <el-form-item label="送达时间：">
+            <el-form-item label="配送时间：">
               <span style="color:#1cc09f">立即送出</span>
             </el-form-item>
           </el-form>
@@ -190,16 +222,16 @@
               <span>{{orderDetails.orderNo}}</span>
             </el-form-item>
             <el-form-item label="下单用户：">
-              <span>{{orderDetails.userId}}</span>
+              <span>{{orderDetails.phone}}</span>
             </el-form-item>
             <el-form-item label="商品总金额：">
-              <span style="font-weight: 600;">¥ 64.70</span><span>（含配送费¥ 5.00元）</span>
+              <span style="font-weight: 600;">¥ {{orderDetails.orderMoney+orderDetails.postFee}}</span><span>（含配送费 {{orderDetails.postFee}}元）</span>
             </el-form-item>
             <el-form-item label="- 优惠：">
               <span>¥ 0.00</span>
             </el-form-item>
             <el-form-item label="实付：">
-              <span style="font-weight: 600;">¥ 64.70</span>
+              <span style="font-weight: 600;">¥ {{orderDetails.orderMoney+orderDetails.postFee}}</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -216,7 +248,7 @@
               <span
                 style="color:#008000"
                 v-if="orderDetails.platformState===2"
-              >已发货</span>
+              >待发货</span>
               <span
                 style="color:#3399FF"
                 v-if="orderDetails.platformState===1"
@@ -237,10 +269,10 @@
               <span>{{orderDetails.gmtCreate}}</span>
             </el-form-item>
             <el-form-item label="付款时间：">
-              <span>2018-12-21 08:31:53</span>
+              <span>{{orderDetails.payTime}}</span>
             </el-form-item>
             <el-form-item label="发货时间：">
-              <span>-</span>
+              <span>{{orderDetails.sendGoodTime}}</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -259,7 +291,7 @@
           :handleSelectionChange="handleSelectionChange"
         ></table-list>
         <div class="total">
-          <span style=" font-weight: 700;font-size:16px;">合计：￥{{orderDetails.orderMoney+5.5}}<span style=" font-weight:0;font-size:14px;">（含运费5.5元）</span></span>
+          <span style=" font-weight: 700;font-size:16px;">合计：￥{{orderDetails.orderMoney+orderDetails.postFee}}<span style=" font-weight:0;font-size:14px;">（含运费{{orderDetails.postFee}}元）</span></span>
         </div>
       </div>
     </div>
@@ -286,10 +318,12 @@
 <script>
 import tableList from "../public/table";
 export default {
+  inject:['reload'],
   data() {
     return {
       orderDetails: "",
       state: 1,
+      dialogSend:false,
       dialogPay: false,
       dialogClose: false,
       dialogPlan: false,
@@ -313,8 +347,8 @@ export default {
           label: "小计",
           prop: "subtotal",
           width: 120,
-          formatter:function (row, column) {
-            return row.subtotal=row.itemPrice*row.number
+          formatter: function(row, column) {
+            return (row.subtotal = row.itemPrice * row.number);
           }
         }
       ],
@@ -365,12 +399,90 @@ export default {
     };
   },
   methods: {
+    shipments(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        orderId: this.$route.params.id
+      });
+      this.Axios(
+        {
+          params: data,
+          option: {
+            successMsg: "发货成功"
+          },
+          type: "post",
+          url: "/api-order/order/sendGood"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          if (result.data.code === 200) {
+            this.reload()
+            this.dialogSend = false;
+          }
+        },
+        ({ type, info }) => {}
+      );
+    },
+    payOrder(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        orderId: this.$route.params.id
+      });
+      this.Axios(
+        {
+          params: data,
+          option: {
+            successMsg: "付款成功"
+          },
+          type: "post",
+          url: "/api-order/order/payOrder"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          if (result.data.code === 200) {
+            this.reload()
+            this.dialogPay = false;
+          }
+        },
+        ({ type, info }) => {}
+      );
+    },
+    closeOrder() {
+      let qs = require("qs");
+      let data = qs.stringify({
+        orderId: this.$route.params.id
+      });
+      this.Axios(
+        {
+          params: data,
+          option: {
+            successMsg: "订单已关闭"
+          },
+          type: "post",
+          url: "/api-order/order/closeOrder"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result);
+          if (result.data.code === 200) {
+            this.reload()
+            this.dialogClose = false;
+          }
+        },
+        ({ type, info }) => {}
+      );
+    },
     handleSelectionChange(select) {},
     getRow(row, event) {
       console.log(row);
     },
     toPrintOrder() {
-      sessionStorage.setItem("orderIds",this.$route.params.id)
+      sessionStorage.setItem("orderIds", this.$route.params.id);
       window.open("http://127.0.0.1:8081/printorder.html", "_blank");
     },
     getDetails(id) {

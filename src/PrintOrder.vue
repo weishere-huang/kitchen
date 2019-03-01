@@ -8,16 +8,16 @@
       <h2>订单信息</h2>
       <el-col :span="24">
         <el-col :span="7">
-          <el-col :span="24"><span>订单用户：{{item.userId}}</span></el-col>
-          <el-col :span="24"><span>付款时间：2019-01-23 15:47:29</span></el-col>
+          <el-col :span="24"><span>购买用户：{{item.phone}}</span></el-col>
+          <el-col :span="24"><span>付款时间：{{item.payTime}}</span></el-col>
         </el-col>
         <el-col :span="7">
           <el-col :span="24"><span>下单时间：{{item.gmtCreate}}</span></el-col>
-          <el-col :span="24"><span>发货时间：{{item.startTime}}</span></el-col>
+          <el-col :span="24"><span>发货时间：{{item.sendGoodTime}}</span></el-col>
         </el-col>
         <el-col :span="4">
           <el-col :span="24"><span>支付方式：{{item.payType}}</span></el-col>
-          <el-col :span="24"><span>配送要求：</span></el-col>
+          <el-col :span="24"><span>配送时间：</span></el-col>
         </el-col>
         <el-col :span="6">
           <el-col :span="24"><span>订单编号：{{item.orderNo}}</span></el-col>
@@ -53,7 +53,7 @@
       </el-col>
       <el-col :span="24">
         <span style="float:right;">
-          <h5 style="display:inline-block;font-size:14px;">合计：¥ {{item.orderMoney+5}}</h5>（含运费¥ 5.00元）
+          <h5 style="display:inline-block;font-size:14px;">合计：¥ {{item.orderMoney+item.postFee}}</h5>（含运费{{item.postFee}}元）
         </span>
       </el-col>
       <el-col :span="24">
