@@ -195,7 +195,7 @@ export default {
   methods: {
     //获取地区JSON文件
     getArea() {
-      axios.get("../static/area.json").then(res => {
+      this.axios.get("./static/area.json").then(res => {
         let that = this;
         let data = res.data.area;
         for (var item in data) {

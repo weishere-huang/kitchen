@@ -25,8 +25,8 @@
                 <el-option
                   v-for="item in classifyOptions"
                   :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :label="item.cateName"
+                  :value="item.no"
                 >
                 </el-option>
               </el-select>
@@ -67,6 +67,7 @@
               <el-button
                 size="small"
                 plain
+                @click="foodlist"
               >搜索</el-button>
             </el-col>
           </div>
@@ -90,11 +91,11 @@
             </el-table-column>
             <el-table-column
               label="分类"
-              min-width="60"
+              min-width="80"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                <span>{{ scope.row.itemCate }}</span>
+                <span>{{ scope.row.cateName }}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -322,59 +323,27 @@ export default {
   data() {
     return {
       currentPage: 1,
-      classifyValue: "全部分类",
-      stateValue: "-1",
+      classifyValue: -2,
+      stateValue: -2,
       classifyOptions: [
         {
-          label: "全部分类",
-          value: "全部分类"
+          cateName: "全部分类",
+          no: -2
         },
-        {
-          label: "炒菜",
-          value: "炒菜"
-        },
-        {
-          label: "炖菜",
-          value: "炖菜"
-        },
-        {
-          label: "盐焗",
-          value: "盐焗"
-        },
-        {
-          label: "清蒸",
-          value: "清蒸"
-        },
-        {
-          label: "红烧",
-          value: "红烧"
-        }
       ],
       stateOptions: [
         {
           label: "全部状态",
-          value: "-1"
+          value: -2
         },
         {
-          label: "炒菜",
-          value: "炒菜"
+          label: "下架",
+          value: 2
         },
         {
-          label: "炖菜",
-          value: "炖菜"
+          label: "上架",
+          value: 1
         },
-        {
-          label: "盐焗",
-          value: "盐焗"
-        },
-        {
-          label: "清蒸",
-          value: "清蒸"
-        },
-        {
-          label: "红烧",
-          value: "红烧"
-        }
       ],
       tableData: [
         {
@@ -527,8 +496,8 @@ export default {
           params: {
             page: this.pageIndex,
             size: this.pageSize,
-            states: "",
-            cate: "",
+            state: this.stateValue,
+            cate: this.classifyValue,
             name: this.keyword
           },
           option: {
@@ -558,9 +527,30 @@ export default {
         },
         ({ type, info }) => {}
       );
+    },
+    getClassfy() {
+      this.Axios(
+        {
+          params: {},
+          option: {
+            enableMsg: false
+          },
+          type: "get",
+          url: "/api-mall/itemCat/allCate"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data.data);
+          result.data.data.splice(0,0,{cateName:"全部类别",no:-2})
+          this.classifyOptions=result.data.data
+        },
+        ({ type, info }) => {}
+      );
     }
   },
   created() {
+    this.getClassfy()
     this.foodlist();
     this.$route.params.id !== undefined
       ? (this.isHideList = false)
