@@ -260,7 +260,13 @@ export default {
       console.log(row);
     },
     beforeSearch() {
+      if(this.cname!=null){
+        this.areaName= this.pname + " " +this.cname;
+      }else{
+        this.areaName= this.pname
+      }
       this.pageIndex = 1;
+      console.log(this.areaName);
       this.getServiceList();
     },
     //获取所有网点
@@ -272,7 +278,9 @@ export default {
             size: this.pageSize,
             areaName: this.areaName,
           },
-          option: {},
+          option: {
+            successMsg:"服务网点加载完成~"
+          },
           type: "get",
           url: "/api-platform/network/list"
         },
@@ -297,7 +305,9 @@ export default {
           params: data,
           url: "/api-platform/network/updatestate",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -308,24 +318,19 @@ export default {
     },
     //获取市
     getCity() {
-    //   let p = this.province.find(item => {
-    //     return this.provinceCode === item.code;
-    //   });
-    //   if(p!=null){
-    //     this.pname = p.name+" ";
-    //   }else{
-    //     this.pname = null;
-    //   }
-    //   this.areaName=this.pname;
-    //   this.cname = null;
-    //   this.citycode = null;
-       this.cities = [];
-    //   console.log(this.areaName);
-       let p = this.province.find(item =>{return this.provinceCode = item.adcode})
-       if(p!=null){
-          this.cities=p.children[0];
-       };
+      //省改变时 重置市区所有字段
+      this.cname = null;
+      this.citycode = null;
+      this.cities = [];
 
+       let p = this.province.find(item =>{return this.provinceCode === item.adcode});
+       console.log(p);
+       if(p!=null){
+          this.pname=p.areaName
+          this.cities=p.children;
+       }else{
+         this.pname = null
+       }
     },
     //添加
     beforeadd() {
@@ -347,7 +352,9 @@ export default {
           params: data,
           url: "/api-platform/network/add",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -394,22 +401,19 @@ export default {
     },
     //选择市时改变地区名字
     getcitycode() {
-      let c = this.cities.find(item => {return this.citycode === item.code;});
+      let c = this.cities.find(item => {return this.citycode === item.adcode;});
       if(c!=null){
-        this.cname=c.name
+        this.cname=c.areaName
       }else{
         this.cname=null;
       }
-      this.areaName = this.pname + this.cname;
-      console.log(this.areaName);
     }
   },
   created() {
     //查询网点列表
     this.getServiceList();
     //查询省
-    console.log(this.$store.state.getArea.area[0].children[0]);
-    this.province=this.$store.state.getArea.area[0].children[0];
+    this.province=JSON.parse(sessionStorage.getItem("area"))[0].children[0];
   },
   components: {
     tableList,

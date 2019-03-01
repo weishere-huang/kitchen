@@ -240,7 +240,9 @@ export default {
       this.Axios(
         {
           params: {},
-          option: {},
+          option: {
+            successMsg:"广告加载完成~"
+          },
           type: "get",
           url: "/api-platform/Advertisement/list"
         },
@@ -266,7 +268,9 @@ export default {
           params: data,
           url: "/api-platform/Advertisement/delete",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -285,7 +289,8 @@ export default {
       let qs = require("qs");
       let data = qs.stringify({
         title: this.addMsg.title,
-        mainPic:this.addMsg.mainPic,
+        // mainPic:this.addMsg.mainPic,
+        mainPic: this.addMsg.mainPic,
         content:this.addMsg.content,
         linkUrl:this.addMsg.linkUrl,
         advertType: 0,
@@ -299,7 +304,9 @@ export default {
           params: data,
           url: "/api-platform/Advertisement/add",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -330,7 +337,9 @@ export default {
           params: data,
           url: "/api-platform/Advertisement/update",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {

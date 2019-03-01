@@ -10,10 +10,10 @@
           @change="beforeCity"
         >
           <el-option
-            v-for="item in provinces"
-            :key="item.value"
-            :label="item.name"
-            :value="item.code"
+            v-for="item in province"
+            :key="item.adcode"
+            :label="item.areaName"
+            :value="item.adcode"
           >
           </el-option>
         </el-select>
@@ -25,10 +25,10 @@
           @change="getcitycode"
         >
           <el-option
-            v-for="item in citys"
-            :key="item.value"
-            :label="item.name"
-            :value="item.code"
+            v-for="item in cities"
+            :key="item.adcode"
+            :label="item.areaName"
+            :value="item.adcode"
           >
           </el-option>
         </el-select>
@@ -87,12 +87,14 @@
         serviceRules:{
 
         },
-        provinces: [],
-        citys: [],
+        province: [],
+        cities: [],
         serviceMode: [],
         areaName: null,
         provinceCode: null,
-        citycode: null
+        citycode: null,
+        cname:null,
+        pname:null
       };
     },
     props: {
@@ -109,83 +111,56 @@
       changeMode() {
         this.addMsg.serviceMode = this.serviceMode;
       },
-      //获取所有省
-      getAllProvince() {
-        this.Axios(
-          {
-            params: {},
-            option: {
-              enableMsg: false
-            },
-            type: "get",
-            url: "/api-platform/network/AllProvince"
-          },
-          this
-        ).then(
-          result => {
-            this.provinces = result.data.data;
-          },
-          ({type, info}) => {
-          }
-        );
-      },
+
       //获取市
       beforeCity(){
-        this.areaName = this.provinces.find(item => {
-          return this.provinceCode === item.code;
-        }).name;
-        this.addMsg.areaCode = this.areaName
-        console.log(this.areaName);
-        this.citys = [];
-        this.getCity();
+        //省改变时 重置市区所有字段
+        this.cname = null;
+        this.citycode = null;
+        this.cities = [];
+
+        let p = this.province.find(item =>{return this.provinceCode === item.adcode});
+        console.log(p);
+        if(p!=null){
+          this.pname=p.areaName
+          this.cities=p.children;
+        }else{
+          this.pname = null
+        };
+        this.addMsg.areaCode=this.pname;
       },
-      getCity() {
-        this.Axios(
-          {
-            params: {
-              code: this.provinceCode
-            },
-            option: {
-              enableMsg: false
-            },
-            type: "get",
-            url: "/api-platform/network/findAllCity"
-          },
-          this
-        ).then(
-          result => {
-            this.citys = result.data.data;
-          },
-          ({type, info}) => {
-          }
-        );
-      },
+
       getcitycode() {
-        this.areaName += " " + this.citys.find(item => {
-          return this.citycode === item.code;
-        }).name;
-        this.addMsg.areaCode = this.areaName
-        console.log(this.areaName);
-        this.citys=[];
+        if(this.pname==null){
+          let p1 = this.province.find(item =>{return this.provinceCode === item.adcode});
+          if( p1 !=null)this.pname = p1.areaName
+        }
+        let c = this.cities.find(item => {return this.citycode === item.adcode;});
+        if(c!=null){
+          this.cname=c.areaName
+          this.addMsg.areaCode = this.pname+" "+this.cname;
+        }else{
+          this.cname=null;
+          this.addMsg.areaCode = this.pname
+        };
+
       },
       //编辑赋值方法 , 服务范围可以
       startedit() {
-        //截取地区长度
-        // let arr = this.addMsg.areaCode.split(" ");
-        // this.provinceCode = this.provinces.find(item => {
-        //   return arr[0] === item.name;
-        // }).code;
-        //获取市信息
-        // this.getCity();
-        // if (arr.length > 1) {
-        //   let p = this.citys.find(item => {
-        //     return arr[1] === item.name;
-        //   });
-        //   if(p!=null){
-        //     this.citycode = p.code;
-        //   }
-        // }
-
+        //截取地区
+        let arr = this.addMsg.areaCode.split(" ");
+        //赋值省
+        let p = this.province.find(item=>{return arr[0]===item.areaName});
+        if(p!=null){
+          this.provinceCode = p.adcode
+        };
+        //获取市
+        this.cities = p.children;
+        //赋值市区
+        if(arr.length>1){
+          let c = this.cities.find(item=>{return arr[1]===item.areaName});
+          if(c!=null){this.citycode=c.adcode}
+        }
         // 服务范围
         console.log("执行");
         this.addMsg.serviceMode = this.addMsg.serviceMode.split(",");
@@ -193,7 +168,7 @@
       }
     },
     created() {
-      this.getAllProvince();
+      this.province=JSON.parse(sessionStorage.getItem("area"))[0].children[0];
       //编辑用
       if(this.addMsg.id!=null){
         this.startedit();
