@@ -16,6 +16,7 @@
           :on-remove="handleRemove"
           :on-success="handleAvatarSuccess"
           v-model="addMsg.mainPic"
+          :file-list="mainPic"
         >
           <i class="el-icon-plus"></i>
           <div
@@ -45,6 +46,7 @@
           :on-remove="handleRemove1"
           :on-success="handleAvatarSuccess1"
           v-model="addMsg.content"
+          :file-list="content"
         >
           <i class="el-icon-plus"></i>
           <div
@@ -117,7 +119,9 @@
         dialogImageUrl1:this.addMsg.content,
         dialogVisible: false,
         startTime: this.addMsg.startTime,
-        endTime: this.addMsg.endTime
+        endTime: this.addMsg.endTime,
+        mainPic:[],
+        content:[],
       };
     },
     props: {
@@ -158,17 +162,50 @@
       },
       handleAvatarSuccess(res, file){
 
-        this.addMsg.mainPic = this.global.imgPath+res.data.replace("img:","/");
-        console.log(res)
-        console.log(file)
+        this.addMsg.mainPic = this.global.imgPath+res.data.replace("img:","");
+        console.log(res);
+        console.log(file);
       },
       handleAvatarSuccess1(res, file){
-        this.addMsg.content = this.global.imgPath+res.data.replace("img:","/");
+        this.addMsg.content = this.global.imgPath+res.data.replace("img:","");
         console.log(res)
         console.log(file)
       }
     },
-
+    created(){
+      if(this.addMsg.id!=null){
+        console.log("111");
+        this.mainPic=[{
+          name:"mainpic.jpg",
+          url:this.addMsg.mainPic
+        }];
+        this.content=[{
+          name:"content.jpg",
+          url:this.addMsg.content
+        }];
+      }else{
+        this.mainPic = [];
+        this.content = [];
+      }
+    },
+    watch:{
+      addMsg(){
+        if(this.addMsg.id!=null){
+          console.log("111");
+          this.mainPic=[{
+            name:"mainpic.jpg",
+            url:this.addMsg.mainPic
+          }];
+          this.content=[{
+            name:"content.jpg",
+            url:this.addMsg.content
+          }];
+        }else{
+          this.mainPic = []
+          this.content = []
+        }
+      },
+    }
   };
 </script>
 <style lang="less">

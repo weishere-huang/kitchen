@@ -15,6 +15,9 @@
             :highlight-current="true"
             show-checkbox
             :check-strictly="false"
+            :default-checked-keys="selectarea"
+            node-key="adcode"
+            ref="tree1"
           >
           </el-tree>
         </el-col>
@@ -27,6 +30,9 @@
             :highlight-current="true"
             show-checkbox
             :check-strictly="false"
+            :default-checked-keys="selectarea"
+            node-key="adcode"
+            ref="tree2"
           >
           </el-tree>
         </el-col>
@@ -39,6 +45,9 @@
             :highlight-current="true"
             show-checkbox
             :check-strictly="false"
+            :default-checked-keys="selectarea"
+            node-key="adcode"
+            ref="tree3"
           >
           </el-tree>
         </el-col>
@@ -47,11 +56,13 @@
         <el-button
           size="small"
           type="primary"
+          @click="reload()"
         ><i class="el-icon-refresh"></i> 刷新
         </el-button>
         <el-button
           size="small"
           type="primary"
+          @click="beforesave"
         ><i class="iconfont">&#xe62d;</i> 保存修改
         </el-button>
       </div>
@@ -69,8 +80,11 @@ export default {
       data3: [],
       defaultProps: {
         children: "children",
-        label: "areaName"
-      }
+        label: "areaName",
+        value: "adcode"
+      },
+      // selectarea:["110000","120000","350000","530000","820000"],
+      selectarea:[]
     };
   },
   methods: {
@@ -88,20 +102,37 @@ export default {
         this
       ).then(
         result => {
-          this.tableData = result.data.data;
+          result.data.data.map(item =>{this.selectarea.push(item.adCode)});
+          this.selectarea=JSON.parse(JSON.stringify(this.selectarea));
         },
         ({ type, info }) => {}
       );
     },
+    beforesave(){
+      this.$confirm('确认保存销售区域吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        this.savearea();
+      }).catch(() => {
+      });
+
+    },
     savearea() {
+      let arr = [];
+      arr=arr.concat(this.$refs.tree1.getCheckedKeys()).concat(this.$refs.tree2.getCheckedKeys()).concat(this.$refs.tree3.getCheckedKeys());
       let qs = require("qs");
       let data = qs.stringify({
-        codes: ""
+        codes: arr.toString()
       });
       this.Axios(
         {
-          params: {},
-          option: {},
+          params: data,
+          option: {
+            enableMsg:false,
+          },
           type: "post",
           url: "/api-mall/area/save"
         },
@@ -109,7 +140,7 @@ export default {
       ).then(
         result => {
           if (result.data.code === 200) {
-            this.reload();
+            this.$message.success("保存成功");
           }
         },
         ({ type, info }) => {}
@@ -122,7 +153,7 @@ export default {
     this.data1 = this.data.slice(0, 12);
     this.data2 = this.data.slice(12, 24);
     this.data3 = this.data.slice(24, 34);
-    console.log(this.data);
+    this.getarea();
   },
   components: {}
 };
