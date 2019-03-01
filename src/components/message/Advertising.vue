@@ -285,7 +285,8 @@ export default {
       let qs = require("qs");
       let data = qs.stringify({
         title: this.addMsg.title,
-        mainPic:this.addMsg.mainPic,
+        // mainPic:this.addMsg.mainPic,
+        mainPic: this.addMsg.mainPic,
         content:this.addMsg.content,
         linkUrl:this.addMsg.linkUrl,
         advertType: 0,
