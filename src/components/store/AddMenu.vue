@@ -16,6 +16,9 @@
         label-width="200px"
         size="small"
         :model="addMenu"
+        :rules="addMenuRules"
+        ref="addMenu"
+        :inline-message="true"
       >
         <el-form-item
           label="商品名称："
@@ -62,15 +65,16 @@
         >
           <el-input
             v-model="addMenu.itemPrice"
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
             placeholder="单位：元"
+            step="0.01"
           ></el-input>
         </el-form-item>
         <el-form-item label="商品库存：">
           <el-input
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
           ></el-input>
@@ -81,10 +85,11 @@
         >
           <el-input
             v-model="addMenu.cookingTime"
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
             placeholder="单位：分钟"
+            step="0"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -121,10 +126,11 @@
         >
           <el-input
             v-model="addMenu.itemWeight"
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
             placeholder="单位：克"
+            step="0.01"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -152,7 +158,7 @@
             v-model="addMenu.itemImg"
             :before-upload="beforeAvatarUpload"
             accept=".jpg,.jpeg,.png"
-            limit="1"
+            :limit="1"
           >
             <i class="el-icon-plus"></i>
             <div
@@ -208,7 +214,7 @@
           <el-button
             size="small"
             type="primary"
-            @click="getUEContent"
+            @click="submitForm('addMenu')"
           >保存</el-button>
         </el-form-item>
       </el-form>
@@ -236,7 +242,7 @@ export default {
       addMenu: {
         itemName: "",
         itemCate: "",
-        itemImg: "123",
+        itemImg: "",
         itemPrice: "",
         itemWeight: "",
         itemSpec: "",
@@ -248,6 +254,57 @@ export default {
           newMenu: false,
           hotMenu: false
         }
+      },
+      addMenuRules: {
+        itemName: [
+          { required: true, message: "请输入商品名称", trigger: "blur" }
+        ],
+        itemCate: [{ required: true, message: "请选择分类", trigger: "blur" }],
+        itemImg: [{ required: true, message: "请上传图片" }],
+        itemPrice: [
+          { required: true, message: "请输入商品价格", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+                callback(new Error("支持小数点后两位，且不能为负数"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        itemWeight: [
+          { required: true, message: "请输入商品净含量", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+                callback(new Error("只能为正整数"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        itemSpec: [
+          { required: true, message: "请输入商品食材搭配", trigger: "blur" }
+        ],
+        cookingTime: [
+          { required: true, message: "请输入烹饪时长", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+                callback(new Error("请输入正整数"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        spicy: [{ required: true, message: "请选择辣度", trigger: "blur" }],
+        des: [{ required: false, message: "请输入详细内容", trigger: "blur" }]
       },
       cookbook: "",
       dialogCoobook: false,
@@ -268,6 +325,21 @@ export default {
     };
   },
   methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.savespu();
+        } else {
+          return false;
+        }
+      });
+    },
+    // handleInput(row) {
+    //   row.target.value = row.target.value.match(/^\d*(\.?\d{0,2})/g)[0] || null;
+    // },
+    // handleInput1(row) {
+    //   row.target.value = row.target.value.match(/^\d*(\.?\d{0,0})/g)[0] || null;
+    // },
     imgApi() {
       let url = this.global.apiImg + "/api-upload/upload";
       return url;

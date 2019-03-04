@@ -448,7 +448,7 @@ export default {
               message: "删除成功！",
               type: "success"
             });
-            this.reload();
+            this.foodlist();
           } else {
             this.$message({
               message: result.data.msg,

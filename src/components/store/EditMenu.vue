@@ -16,6 +16,9 @@
         label-width="200px"
         size="small"
         :model="editmenu"
+        :rules="editmenuRules"
+        ref="editmenu"
+        :inline-message="true"
       >
         <el-form-item
           label="商品名称："
@@ -62,7 +65,7 @@
         >
           <el-input
             v-model="editmenu.itemPrice"
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
             placeholder="单位：元"
@@ -70,7 +73,7 @@
         </el-form-item>
         <el-form-item label="商品库存：">
           <el-input
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
           ></el-input>
@@ -81,7 +84,7 @@
         >
           <el-input
             v-model="editmenu.cookingTime"
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
             placeholder="单位：分钟"
@@ -121,7 +124,7 @@
         >
           <el-input
             v-model="editmenu.itemWeight"
-            type="text"
+            type="number"
             size="small"
             style="width:192px;"
             placeholder="单位：克"
@@ -235,7 +238,7 @@ export default {
       editmenu: {
         itemName: "",
         itemCate: "",
-        itemImg: "123",
+        itemImg: "",
         itemPrice: "",
         itemWeight: "",
         itemSpec: "",
@@ -247,6 +250,57 @@ export default {
           newMenu: false,
           hotMenu: false
         }
+      },
+      editmenuRules: {
+        itemName: [
+          { required: true, message: "请输入商品名称", trigger: "blur" }
+        ],
+        itemCate: [{ required: true, message: "请选择分类", trigger: "blur" }],
+        itemImg: [{ required: true, message: "请上传图片" }],
+        itemPrice: [
+          { required: true, message: "请输入商品价格", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+                callback(new Error("支持小数点后两位，且不能为负数"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        itemWeight: [
+          { required: true, message: "请输入商品净含量", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+                callback(new Error("只能为正整数"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        itemSpec: [
+          { required: true, message: "请输入商品食材搭配", trigger: "blur" }
+        ],
+        cookingTime: [
+          { required: true, message: "请输入烹饪时长", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+                callback(new Error("请输入正整数"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        spicy: [{ required: true, message: "请选择辣度", trigger: "blur" }],
+        des: [{ required: false, message: "请输入详细内容", trigger: "blur" }]
       },
       cookbook: "",
       dialogCookbook: false,
