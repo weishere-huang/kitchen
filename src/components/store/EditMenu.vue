@@ -96,7 +96,7 @@
 						:on-remove="handleRemove"
 						:on-success="handleAvatarSuccess"
 						:file-list="filelist"
-						limit="1"
+						:limit="1"
 						v-model="editmenu.itemImg"
 						:before-upload="beforeAvatarUpload"
 						accept=".jpg, .jpeg, .png"
@@ -135,14 +135,19 @@
 				<addCookbook v-on:dialogCoobookHide="dialogCoobookHide"></addCookbook>
 			</div>
 		</el-dialog>
+		<el-dialog :visible.sync="dialogPreview" width="414px" class="showPic">
+			<Preview :MenuMsg="editmenu"></Preview>
+		</el-dialog>
 	</div>
 </template>
 <script>
+import Preview from './preview/Preview'
 import addCookbook from "./addCookbook/addCookbook";
 export default {
 	inject: ["reload"],
 	data() {
 		return {
+      dialogPreview:true,
 			filelist: [],
 			editmenu: {
 				itemName: "",
@@ -406,7 +411,8 @@ export default {
 	},
 	mounted() {},
 	components: {
-		addCookbook
+    addCookbook,
+    Preview
 	}
 };
 </script>
