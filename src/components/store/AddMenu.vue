@@ -141,19 +141,24 @@
         </el-form-item>
         <el-form-item
           label="商品图片："
-          prop="itemSpec"
+          prop="itemImg"
         >
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="imgApi()"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :on-success="handleAvatarSuccess"
+            v-model="addMenu.itemImg"
+            :before-upload="beforeAvatarUpload"
+            accept=".jpg,.jpeg,.png"
+            limit="1"
           >
             <i class="el-icon-plus"></i>
             <div
               slot="tip"
               class="el-upload__tip"
-            >600 × 600像素，≤80 KB的jpg图片</div>
+            >600 × 600像素，≤80 KB的jpg/png图片</div>
 
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -263,6 +268,10 @@ export default {
     };
   },
   methods: {
+    imgApi() {
+      let url = this.global.apiImg + "/api-upload/upload";
+      return url;
+    },
     getClassfy() {
       this.Axios(
         {
@@ -278,7 +287,7 @@ export default {
         result => {
           console.log(result.data.data);
           // result.data.data.splice(0,0,{cateName:"全部类别",id:-2})
-          this.classify=result.data.data
+          this.classify = result.data.data;
         },
         ({ type, info }) => {}
       );
@@ -292,21 +301,61 @@ export default {
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.addMenu.itemImg = null;
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    submits() {
-      this.uedata.push(UE.getEditor("editor").getContent());
-      console.log(this.uedata);
+    handleAvatarSuccess(res, file) {
+      if (res.code === 200) {
+        this.addMenu.itemImg =
+          this.global.imgPath + res.data.replace("img:", "");
+        this.$message({
+          message: "图片上传成功！",
+          type: "success"
+        });
+      } else {
+        this.$message({
+          message: "图片上传不成功！",
+          type: "error"
+        });
+      }
+      console.log(res);
+      console.log(file);
+    },
+    beforeAvatarUpload(file) {
+      const isSize = new Promise(function(resolve, reject) {
+        let width = 600;
+        let height = 600;
+        let _URL = window.URL || window.webkitURL;
+        let img = new Image();
+        img.onload = function() {
+          let valid = img.width <= width && img.height <= height;
+          valid ? resolve() : reject();
+        };
+        img.src = _URL.createObjectURL(file);
+      }).then(
+        () => {
+          return file;
+        },
+        () => {
+          this.$message.error("上传的图片必须是等于或小于600*600!");
+          return Promise.reject();
+        }
+      );
+      const isPicSize = file.size / 1024 <= 80;
+      if (!isPicSize) {
+        this.$message.error("上传图片不能大于80KB");
+      }
+      return isSize && isPicSize;
     },
     savespu() {
       let qs = require("qs");
       let data = qs.stringify({
         itemName: this.addMenu.itemName,
         itemCate: this.addMenu.itemCate,
-        itemImg: "123",
+        itemImg: this.addMenu.itemImg,
         itemPrice: this.addMenu.itemPrice,
         itemWeight: this.addMenu.itemWeight,
         itemSpec: this.addMenu.itemSpec,
@@ -343,7 +392,7 @@ export default {
 
   mounted() {},
   created() {
-    this.getClassfy()
+    this.getClassfy();
   },
   components: {
     ueditor,
