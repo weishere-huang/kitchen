@@ -1,12 +1,7 @@
 <template>
   <div class="add_menu">
     <div class="top_list">
-      <el-button
-        size="small"
-        type="primary"
-        class="el-icon-arrow-left"
-        @click="$router.back(-1)"
-      >返回</el-button>
+      <el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
     </div>
     <div class="bottom_list">
       <div class="top_title">
@@ -20,33 +15,17 @@
         ref="addMenu"
         :inline-message="true"
       >
-        <el-form-item
-          label="商品名称："
-          prop="itemName"
-        >
-          <el-input
-            type="text"
-            size="small"
-            style="width:300px;"
-            v-model="addMenu.itemName"
-          ></el-input>
+        <el-form-item label="商品名称：" prop="itemName">
+          <el-input type="text" size="small" style="width:300px;" v-model="addMenu.itemName"></el-input>
         </el-form-item>
-        <el-form-item
-          label="商品分类："
-          prop="itemCate"
-        >
-          <el-select
-            v-model="addMenu.itemCate"
-            placeholder="请选择"
-            size="small"
-          >
+        <el-form-item label="商品分类：" prop="itemCate">
+          <el-select v-model="addMenu.itemCate" placeholder="请选择" size="small">
             <el-option
               v-for="item in classify"
               :key="item.value"
               :label="item.cateName"
               :value="item.no"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="绑定菜谱：">
@@ -55,14 +34,11 @@
             size="small"
             style="width:192px;"
             v-model="cookbook"
-            @focus="dialogCoobook=true"
+            @focus="dialogCoobook = true"
             placeholder="请选择"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="商品价格："
-          prop="itemPrice"
-        >
+        <el-form-item label="商品价格：" prop="itemPrice">
           <el-input
             v-model="addMenu.itemPrice"
             type="number"
@@ -73,16 +49,9 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="商品库存：">
-          <el-input
-            type="number"
-            size="small"
-            style="width:192px;"
-          ></el-input>
+          <el-input type="number" size="small" style="width:192px;"></el-input>
         </el-form-item>
-        <el-form-item
-          label="烹饪时长："
-          prop="cookingTime"
-        >
+        <el-form-item label="烹饪时长：" prop="cookingTime">
           <el-input
             v-model="addMenu.cookingTime"
             type="number"
@@ -92,38 +61,23 @@
             step="0"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="参考辣度："
-          class="hot_case"
-          prop="spicy"
-        >
-          <el-radio-group
-            v-model="addMenu.spicy"
-            size="small"
-            style="width:192px;"
-          >
-            <el-radio-button label="0"><i
-                class="iconfont"
-                style="color:#999999;"
-              >&#xe612;</i></el-radio-button>
-            <el-radio-button label="1"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe612;</i></el-radio-button>
-            <el-radio-button label="2"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe613;</i></el-radio-button>
-            <el-radio-button label="3"><i
-                class="iconfont"
-                style="color:red;"
-              >&#xe614;</i></el-radio-button>
+        <el-form-item label="参考辣度：" class="hot_case" prop="spicy">
+          <el-radio-group v-model="addMenu.spicy" size="small" style="width:192px;">
+            <el-radio-button label="0">
+              <i class="iconfont" style="color:#999999;">&#xe612;</i>
+            </el-radio-button>
+            <el-radio-button label="1">
+              <i class="iconfont" style="color:red;">&#xe612;</i>
+            </el-radio-button>
+            <el-radio-button label="2">
+              <i class="iconfont" style="color:red;">&#xe613;</i>
+            </el-radio-button>
+            <el-radio-button label="3">
+              <i class="iconfont" style="color:red;">&#xe614;</i>
+            </el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item
-          label="净含量："
-          prop="itemWeight"
-        >
+        <el-form-item label="净含量：" prop="itemWeight">
           <el-input
             v-model="addMenu.itemWeight"
             type="number"
@@ -133,10 +87,7 @@
             step="0.01"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="食材搭配："
-          prop="itemSpec"
-        >
+        <el-form-item label="食材搭配：" prop="itemSpec">
           <el-input
             v-model="addMenu.itemSpec"
             type="text"
@@ -145,10 +96,7 @@
             placeholder=" 如：精选五花肉，青椒，蒜片，姜片"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="商品图片："
-          prop="itemImg"
-        >
+        <el-form-item label="商品图片：" prop="itemImg">
           <el-upload
             :action="imgApi()"
             list-type="picture-card"
@@ -157,65 +105,30 @@
             :on-success="handleAvatarSuccess"
             v-model="addMenu.itemImg"
             :before-upload="beforeAvatarUpload"
-            accept=".jpg,.jpeg,.png"
+            accept=".jpg, .jpeg, .png"
             :limit="1"
           >
             <i class="el-icon-plus"></i>
-            <div
-              slot="tip"
-              class="el-upload__tip"
-            >600 × 600像素，≤80 KB的jpg/png图片</div>
-
+            <div slot="tip" class="el-upload__tip">600 × 600像素，≤80 KB的jpg/png图片</div>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
-            <img
-              width="100%"
-              :src="dialogImageUrl"
-              alt=""
-            >
+            <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
         </el-form-item>
-        <el-form-item
-          label="是否上架："
-          prop="state"
-        >
-          <el-radio
-            v-model="addMenu.state"
-            label="1"
-          >是</el-radio>
-          <el-radio
-            v-model="addMenu.state"
-            label="2"
-          >否</el-radio>
+        <el-form-item label="是否上架：" prop="state">
+          <el-radio v-model="addMenu.state" label="1">是</el-radio>
+          <el-radio v-model="addMenu.state" label="2">否</el-radio>
         </el-form-item>
-        <el-form-item
-          label="加入推荐："
-          prop="recommendType"
-        >
+        <el-form-item label="加入推荐：" prop="recommendType">
           <el-checkbox v-model="addMenu.recommendType.hotMenu">热销</el-checkbox>
           <el-checkbox v-model="addMenu.recommendType.newMenu">新品</el-checkbox>
         </el-form-item>
-        <el-form-item
-          label="详细内容："
-          prop="des"
-        >
-          <el-input
-            v-model="addMenu.des"
-            type="textarea"
-            rows="5"
-            style="width:600px;"
-          ></el-input>
+        <el-form-item label="详细内容：" prop="des">
+          <el-input v-model="addMenu.des" type="textarea" rows="5" style="width:600px;"></el-input>
         </el-form-item>
-        <el-form-item label="">
-          <el-button
-            size="small"
-            type="primary"
-          >预览</el-button>
-          <el-button
-            size="small"
-            type="primary"
-            @click="submitForm('addMenu')"
-          >保存</el-button>
+        <el-form-item label>
+          <el-button size="small" type="primary">预览</el-button>
+          <el-button size="small" type="primary" @click="submitForm('addMenu')">保存</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -257,12 +170,20 @@ export default {
       },
       addMenuRules: {
         itemName: [
-          { required: true, message: "请输入商品名称", trigger: "blur" }
+          {
+            required: true,
+            message: "请输入商品名称",
+            trigger: "blur"
+          }
         ],
         itemCate: [{ required: true, message: "请选择分类", trigger: "blur" }],
         itemImg: [{ required: true, message: "请上传图片" }],
         itemPrice: [
-          { required: true, message: "请输入商品价格", trigger: "blur" },
+          {
+            required: true,
+            message: "请输入商品价格",
+            trigger: "blur"
+          },
           {
             validator: (rule, value, callback) => {
               if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
@@ -275,7 +196,11 @@ export default {
           }
         ],
         itemWeight: [
-          { required: true, message: "请输入商品净含量", trigger: "blur" },
+          {
+            required: true,
+            message: "请输入商品净含量",
+            trigger: "blur"
+          },
           {
             validator: (rule, value, callback) => {
               if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
@@ -288,10 +213,18 @@ export default {
           }
         ],
         itemSpec: [
-          { required: true, message: "请输入商品食材搭配", trigger: "blur" }
+          {
+            required: true,
+            message: "请输入商品食材搭配",
+            trigger: "blur"
+          }
         ],
         cookingTime: [
-          { required: true, message: "请输入烹饪时长", trigger: "blur" },
+          {
+            required: true,
+            message: "请输入烹饪时长",
+            trigger: "blur"
+          },
           {
             validator: (rule, value, callback) => {
               if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
@@ -304,7 +237,13 @@ export default {
           }
         ],
         spicy: [{ required: true, message: "请选择辣度", trigger: "blur" }],
-        des: [{ required: false, message: "请输入详细内容", trigger: "blur" }]
+        des: [
+          {
+            required: false,
+            message: "请输入详细内容",
+            trigger: "blur"
+          }
+        ]
       },
       cookbook: "",
       dialogCoobook: false,
