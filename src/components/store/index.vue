@@ -329,7 +329,7 @@ export default {
         {
           cateName: "全部分类",
           no: -2
-        },
+        }
       ],
       stateOptions: [
         {
@@ -343,7 +343,7 @@ export default {
         {
           label: "上架",
           value: 1
-        },
+        }
       ],
       tableData: [
         {
@@ -398,7 +398,7 @@ export default {
       ).then(result => {
         console.log(result.data);
         if (result.data.code === 200) {
-          this.reload();
+          this.foodlist();
         } else {
           this.$message.error("编辑失败,请重新尝试");
         }
@@ -443,8 +443,17 @@ export default {
       ).then(
         result => {
           console.log(result);
-          if (result.data.data.code === 200) {
+          if (result.data.code === 200) {
+            this.$message({
+              message: "删除成功！",
+              type: "success"
+            });
             this.reload();
+          } else {
+            this.$message({
+              message: result.data.msg,
+              type: "error"
+            });
           }
         },
         ({ type, info }) => {}
@@ -542,15 +551,15 @@ export default {
       ).then(
         result => {
           console.log(result.data.data);
-          result.data.data.splice(0,0,{cateName:"全部类别",no:-2})
-          this.classifyOptions=result.data.data
+          result.data.data.splice(0, 0, { cateName: "全部类别", no: -2 });
+          this.classifyOptions = result.data.data;
         },
         ({ type, info }) => {}
       );
     }
   },
   created() {
-    this.getClassfy()
+    this.getClassfy();
     this.foodlist();
     this.$route.params.id !== undefined
       ? (this.isHideList = false)
