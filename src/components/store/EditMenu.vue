@@ -23,14 +23,15 @@
 						<el-option v-for="item in classify" :key="item.value" :label="item.cateName" :value="item.no"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="绑定菜谱：">
+				<el-form-item label="绑定菜谱：" prop="script">
 					<el-input
 						type="text"
 						size="small"
 						style="width:192px;"
-						v-model="cookbook"
 						@focus="dialogCookbook=true"
 						placeholder="请选择"
+						clearable
+						v-model="editmenu.script"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品价格：" prop="itemPrice">
@@ -42,8 +43,8 @@
 						placeholder="单位：元"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="商品库存：">
-					<el-input type="number" size="small" style="width:192px;"></el-input>
+				<el-form-item label="商品库存：" prop="number">
+					<el-input type="number" size="small" style="width:192px;" v-model="editmenu.number"></el-input>
 				</el-form-item>
 				<el-form-item label="烹饪时长：" prop="cookingTime">
 					<el-input
@@ -120,7 +121,7 @@
 					<el-input v-model="editmenu.des" type="textarea" rows="5" style="width:600px;"></el-input>
 				</el-form-item>
 				<el-form-item label>
-					<el-button size="small" type="primary">预览</el-button>
+					<el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button>
 					<el-button size="small" type="primary" @click="submitForm('editmenu')">保存</el-button>
 				</el-form-item>
 			</el-form>
@@ -135,19 +136,19 @@
 				<addCookbook v-on:dialogCoobookHide="dialogCoobookHide"></addCookbook>
 			</div>
 		</el-dialog>
-		<el-dialog :visible.sync="dialogPreview" width="414px" class="showPic">
+		<el-dialog :visible.sync="dialogPreview" width="414px" class="showPic el_show">
 			<Preview :MenuMsg="editmenu"></Preview>
 		</el-dialog>
 	</div>
 </template>
 <script>
-import Preview from './preview/Preview'
+import Preview from "./preview/Preview";
 import addCookbook from "./addCookbook/addCookbook";
 export default {
 	inject: ["reload"],
 	data() {
 		return {
-      dialogPreview:true,
+			dialogPreview: false,
 			filelist: [],
 			editmenu: {
 				itemName: "",
@@ -159,6 +160,8 @@ export default {
 				cookingTime: "",
 				spicy: "",
 				des: "",
+				script:"",
+				number:"",
 				state: "1",
 				recommendType: {
 					newMenu: false,
@@ -167,12 +170,23 @@ export default {
 			},
 			editmenuRules: {
 				itemName: [
-					{ required: true, message: "请输入商品名称", trigger: "blur" }
+					{
+						required: true,
+						message: "请输入商品名称",
+						trigger: "blur"
+					}
 				],
 				itemCate: [{ required: true, message: "请选择分类", trigger: "blur" }],
 				itemImg: [{ required: true, message: "请上传图片" }],
+				script: [
+					{ required: true, message: "请选择菜谱脚本", trigger: "focus" }
+				],
 				itemPrice: [
-					{ required: true, message: "请输入商品价格", trigger: "blur" },
+					{
+						required: true,
+						message: "请输入商品价格",
+						trigger: "blur"
+					},
 					{
 						validator: (rule, value, callback) => {
 							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
@@ -185,7 +199,28 @@ export default {
 					}
 				],
 				itemWeight: [
-					{ required: true, message: "请输入商品净含量", trigger: "blur" },
+					{
+						required: true,
+						message: "请输入商品净含量",
+						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+								callback(new Error("只能为正整数"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				number: [
+					{
+						required: true,
+						message: "请输入商品库存",
+						trigger: "blur"
+					},
 					{
 						validator: (rule, value, callback) => {
 							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
@@ -198,10 +233,18 @@ export default {
 					}
 				],
 				itemSpec: [
-					{ required: true, message: "请输入商品食材搭配", trigger: "blur" }
+					{
+						required: true,
+						message: "请输入商品食材搭配",
+						trigger: "blur"
+					}
 				],
 				cookingTime: [
-					{ required: true, message: "请输入烹饪时长", trigger: "blur" },
+					{
+						required: true,
+						message: "请输入烹饪时长",
+						trigger: "blur"
+					},
 					{
 						validator: (rule, value, callback) => {
 							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
@@ -214,7 +257,13 @@ export default {
 					}
 				],
 				spicy: [{ required: true, message: "请选择辣度", trigger: "blur" }],
-				des: [{ required: false, message: "请输入详细内容", trigger: "blur" }]
+				des: [
+					{
+						required: false,
+						message: "请输入详细内容",
+						trigger: "blur"
+					}
+				]
 			},
 			cookbook: "",
 			dialogCookbook: false,
@@ -271,7 +320,7 @@ export default {
 		},
 		dialogCoobookHide(params) {
 			this.dialogCookbook = params.ishide;
-			this.cookbook = params.value;
+			this.editmenu.script = params.value;
 		},
 		getUEContent() {
 			this.editfood();
@@ -411,8 +460,8 @@ export default {
 	},
 	mounted() {},
 	components: {
-    addCookbook,
-    Preview
+		addCookbook,
+		Preview
 	}
 };
 </script>
@@ -522,6 +571,11 @@ export default {
 		vertical-align: bottom;
 		padding-left: 8px;
 		line-height: 40px;
+	}
+}
+.el_show {
+	.el-dialog {
+		background: #fff0;
 	}
 }
 </style>
