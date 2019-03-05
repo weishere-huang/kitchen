@@ -36,7 +36,7 @@
 				</el-form-item>
 				<el-form-item label="商品价格：" prop="itemPrice">
 					<el-input
-						v-model="editmenu.itemPrice"
+						v-model.number="editmenu.itemPrice"
 						type="number"
 						size="small"
 						style="width:192px;"
@@ -44,11 +44,11 @@
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品库存：" prop="number">
-					<el-input type="number" size="small" style="width:192px;" v-model="editmenu.number"></el-input>
+					<el-input type="number" size="small" style="width:192px;" v-model.number="editmenu.number"></el-input>
 				</el-form-item>
 				<el-form-item label="烹饪时长：" prop="cookingTime">
 					<el-input
-						v-model="editmenu.cookingTime"
+						v-model.number="editmenu.cookingTime"
 						type="number"
 						size="small"
 						style="width:192px;"
@@ -73,7 +73,7 @@
 				</el-form-item>
 				<el-form-item label="净含量：" prop="itemWeight">
 					<el-input
-						v-model="editmenu.itemWeight"
+						v-model.number="editmenu.itemWeight"
 						type="number"
 						size="small"
 						style="width:192px;"

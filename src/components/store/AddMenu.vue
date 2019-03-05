@@ -35,7 +35,7 @@
 				</el-form-item>
 				<el-form-item label="商品价格：" prop="itemPrice">
 					<el-input
-						v-model="addMenu.itemPrice"
+						v-model.number="addMenu.itemPrice"
 						type="number"
 						size="small"
 						style="width:192px;"
@@ -44,11 +44,11 @@
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品库存：" prop="number">
-					<el-input type="number" size="small" style="width:192px;" v-model="addMenu.number"></el-input>
+					<el-input type="number" size="small" style="width:192px;" v-model.number="addMenu.number"></el-input>
 				</el-form-item>
 				<el-form-item label="烹饪时长：" prop="cookingTime">
 					<el-input
-						v-model="addMenu.cookingTime"
+						v-model.number="addMenu.cookingTime"
 						type="number"
 						size="small"
 						style="width:192px;"
@@ -74,7 +74,7 @@
 				</el-form-item>
 				<el-form-item label="净含量：" prop="itemWeight">
 					<el-input
-						v-model="addMenu.itemWeight"
+						v-model.number="addMenu.itemWeight"
 						type="number"
 						size="small"
 						style="width:192px;"
@@ -477,8 +477,7 @@ export default {
 							&:hover {
 								color: #1cc09f;
 							}
-            }
-            
+						}
 					}
 				}
 				.content_case {
