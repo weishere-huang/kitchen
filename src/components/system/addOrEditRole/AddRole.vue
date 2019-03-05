@@ -43,7 +43,6 @@
         <el-tree
           :data="role"
           show-checkbox
-          default-expand-all
           node-key="id"
           ref="tree"
           highlight-current
@@ -80,6 +79,17 @@ export default {
   },
   methods:{
     addContro(){
+      if(this.name==null || this.name===""){
+        this.$message.warning("请输入角色名")
+        return
+      }
+      let arr = [];
+      arr=arr.concat(this.$refs.tree.getCheckedKeys());
+      if(arr.length===0){
+        this.$message.warning("请设置权限 !")
+        return
+      }
+      this.permissionIds=arr.toString();
       this.addRole();
     },
     addRole(){
@@ -88,7 +98,7 @@ export default {
         name:this.name,
         description:this.description,
         // permissionIds:this.permissionIds
-        permissionIds:"1,2,3,4,5,6,7,8"
+        permissionIds:this.permissionIds
       });
       this.Axios({
         params:data,

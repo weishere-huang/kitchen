@@ -161,14 +161,21 @@
         this.dialogVisible = true;
       },
       handleAvatarSuccess(res, file){
-
-        this.addMsg.mainPic = this.global.imgPath+res.data.replace("img:","");
+        if(res.code===200){
+          this.addMsg.mainPic = this.global.imgPath+res.data.replace("img:","");
+        }else{
+          this.$message.error("上传图片失败,请再次尝试")
+        }
         console.log(res);
         console.log(file);
       },
       handleAvatarSuccess1(res, file){
-        this.addMsg.content = this.global.imgPath+res.data.replace("img:","");
-        console.log(res)
+        if(res.code===200){
+          this.addMsg.content = this.global.imgPath+res.data.replace("img:","");
+        }else{
+          this.$message.error("上传图片失败,请再次尝试")
+        }
+        console.log(res);
         console.log(file)
       }
     },

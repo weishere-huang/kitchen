@@ -43,11 +43,11 @@
         <el-tree
           :data="role"
           show-checkbox
-          default-expand-all
           node-key="id"
           ref="tree"
           highlight-current
           :props="defaultProps"
+          :default-checked-keys="editpermission"
         >
           <span
             class="custom-tree-node"
@@ -75,11 +75,23 @@ export default {
       },
       name:null,
       description:null,
-      permissionIds:""
+      permissionIds:null,
+      editpermission:[],
     };
   },
   methods:{
     updateContro(){
+      if(this.name==null || this.name===""){
+        this.$message.warning("请输入角色名")
+        return
+      }
+      let arr = [];
+      arr=arr.concat(this.$refs.tree.getCheckedKeys());
+      if(arr.length===0){
+        this.$message.warning("请设置权限 !")
+        return
+      }
+      this.permissionIds=arr.toString();
       this.updaterole();
     },
     updaterole(){
@@ -89,7 +101,7 @@ export default {
         name:this.name,
         description:this.description,
         // permissionIds:this.permissionIds
-        permissionIds:"1,2,3,4,5,6,7,8"
+        permissionIds:this.permissionIds
       });
       this.Axios({
         params:data,
@@ -118,8 +130,9 @@ export default {
       ).then(result => {
           this.name=result.data.data.name;
           this.description=result.data.data.description;
-          result.data.data.permissionRoles.forEach(item => {return this.permissionIds+=item.permissionId + " "});
-          console.log(this.permissionIds);
+          result.data.data.permissionRoles.map(item=>{this.editpermission.push(item.permissionId)});
+          this.editpermission=JSON.parse(JSON.stringify(this.editpermission));
+          console.log(this.editpermission);
           console.log(result.data);
         },
         ({type, info}) => {

@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       options: {},
-      roleId:this.addInfo.roleId
+      roleId:this.addInfo.roleId,
     };
   },
   props: {
@@ -102,6 +102,15 @@ export default {
   },
   created(){
     this.getRoleList();
+    console.log("this.addInfo");
+    console.log(this.addInfo);
+  },
+  watch:{
+    addInfo(){
+      if(this.addInfo.roleId != null){
+        this.roleId = this.addInfo.roleId;
+      }
+    }
   }
 };
 </script>

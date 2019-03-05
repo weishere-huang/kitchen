@@ -334,8 +334,20 @@ export default {
     },
     //添加
     beforeadd() {
-
-       this.addService();
+        let flag=true;
+        if(this.addMsg.address==null||this.addMsg.address===""||
+          this.addMsg.areaCode==null||this.addMsg.areaCode===""||
+          this.addMsg.phone==null||this.addMsg.phone===""||
+          this.addMsg.title==null||this.addMsg.title===""||
+          this.addMsg.workingHours==null||this.addMsg.workingHours===""||
+          this.addMsg.serviceMode==null){
+          flag=false;
+        }
+        if(flag){
+          this.addService();
+        }else{
+          this.$message.warning("请完善信息!");
+        }
     },
     addService() {
       let qs = require("qs");
@@ -367,8 +379,20 @@ export default {
     },
     //修改
     beforeupdate() {
-       this.updateService();
-      console.log(this.editMsg);
+      let flag=true;
+      if(this.editMsg.address==null||this.editMsg.address===""||
+        this.editMsg.areaCode==null||this.editMsg.areaCode===""||
+        this.editMsg.phone==null||this.editMsg.phone===""||
+        this.editMsg.title==null||this.editMsg.title===""||
+        this.editMsg.workingHours==null||this.editMsg.workingHours===""||
+        this.editMsg.serviceMode==null){
+        flag=false;
+      }
+      if(flag){
+        this.updateService();
+      }else{
+        this.$message.warning("请完善信息!");
+      }
     },
     updateService() {
       let qs = require("qs");
