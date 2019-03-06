@@ -120,7 +120,8 @@ export default {
           console.log(result);
           // sessionStorage.token=result.data.data.tokenStr
           if (result.data.code === 200) {
-            window.location.href = "/Home";
+            // window.location.href = "/Home";
+            console.log(result);
           }
         },
         ({ type, info }) => {}

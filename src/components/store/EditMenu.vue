@@ -160,8 +160,8 @@ export default {
 				cookingTime: "",
 				spicy: "",
 				des: "",
-				script:"",
-				number:"",
+				script: "",
+				number: "",
 				state: "1",
 				recommendType: {
 					newMenu: false,
