@@ -141,9 +141,9 @@
     data() {
       return {
         addMsg: {
-          // title: "",
-          // classify: "",
-          // content: ""
+          title: "",
+          faqType: "",
+          content: ""
         },
         editMsg: {
           // title: "",
@@ -260,9 +260,9 @@
       },
       beforeadd(){
         let flag= true;
-        if(this.addMsg.title===""||this.addMsg.title===null||
-          this.addMsg.content===""||this.addMsg.content===null||
-          this.addMsg.faqType===""||this.addMsg.faqType===null){
+        if(this.addMsg.title===""||this.addMsg.title==null||
+          this.addMsg.content===""||this.addMsg.content==null||
+          this.addMsg.faqType===""||this.addMsg.faqType==null){
           flag=false;
         }
         if(flag){
@@ -290,7 +290,7 @@
           if(result.data.code===200){
             this.reload()
           }else{
-            this.$message.error("出错啦,请重新添加~");
+            this.$message.warning("出错啦,请重新添加~");
           }
         })
       },

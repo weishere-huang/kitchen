@@ -283,7 +283,15 @@ export default {
     //添加广告
     beforeadd() {
       console.log(this.addMsg);
-      this.addAdvertising();
+      let flag = true;
+      if(this.addMsg.mainPic==null && this.addMsg.content==null)flag=false;
+      if(this.addMsg.title==null||this.addMsg.mainPic==null||this.addMsg.startTime==null
+      ||this.addMsg.startTime==null||this.addMsg.endTime==null||this.addMsg.state==null){flag=false}
+      if(flag){
+        this.addAdvertising();
+      }else{
+        this.$message.warning("请完善信息")
+      }
     },
     addAdvertising() {
       let qs = require("qs");
@@ -318,7 +326,16 @@ export default {
     },
     //修改广告
     beforeupdate() {
-      this.updateAdvertising();
+      let flag = true;
+      if(this.editMsg.mainPic==null && this.editMsg.content==null)flag=false;
+      if(this.editMsg.title==null||this.editMsg.mainPic==null||this.editMsg.startTime==null
+        ||this.editMsg.startTime==null||this.editMsg.endTime==null||this.editMsg.state==null){flag=false}
+      debugger
+        if(flag){
+        this.updateAdvertising();
+      }else{
+        this.$message.warning("请完善信息")
+      }
     },
     updateAdvertising() {
       let qs = require("qs");
@@ -327,6 +344,7 @@ export default {
         title: this.editMsg.title,
         mainPic: this.editMsg.mainPic,
         content: this.editMsg.content,
+        linkUrl:this.editMsg.linkUrl,
         advertType: 0,
         advertContentType: 0,
         startTime: this.editMsg.startTime.replace(/-/g, "/"),

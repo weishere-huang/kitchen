@@ -93,6 +93,8 @@
 <script>
 import tableList from "../public/table";
 import Add from "./adminAdd&edit/Add&Edit";
+import md5 from "js-md5/src/md5.js";
+import CryptoJS from "crypto-js/crypto-js.js";
 export default {
   inject: ["reload"],
   data() {
@@ -114,7 +116,7 @@ export default {
         },
         {
           label: "角色权限",
-          prop: "phone",
+          prop: "name",
           width: 90
         },
         {
@@ -137,6 +139,20 @@ export default {
     };
   },
   methods: {
+    encryptByDES(message, key) {
+      const keyHex = CryptoJS.enc.Utf8.parse(key);
+      const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+      });
+      return encrypted.toString();
+    },
+
+      // let pass = this.userMsg.password;
+      // pass = md5(pass);
+      // let key = "*chang_hong_device_cloud";
+      // let a = pass;
+      // pass = this.encryptByDES(a, key);
     toadd(){
       this.userMsg={},
       this.editUserMsg={},
@@ -153,7 +169,8 @@ export default {
         this.editUserMsg={},
         // Object.assign(this.editUserMsg,params.rowData);
         // this.editUserMsg.confirmPassword=this.editUserMsg.password;
-        this.findOne(params.id)
+        this.findOne(params.rowData.id);
+
         this.edit=true
       }
       if (params.type === "delete") {
@@ -215,34 +232,21 @@ export default {
         }
       })
     },
-    getRoleList(){
-      this.Axios(
-        {
-          params: {
-
-          },
-          option: {},
-          type: "get",
-          url: "/api-platform/role/listAllRole"
-        },
-        this
-      ).then(
-        result => {
-          console.log(result.data);
-          this.userMsg = result.data.data;
-          this.editUserMsg = result.data.data;
-        },
-        ({type, info}) => {
-        }
-      );
-    },
     //添加管理员
     beforeadd(){
       if(this.userMsg.confirmPassword!==this.userMsg.password){
         this.$message.warning("两次密码输入不一致,请重新输入!!!")
         return
       }
+      if(this.userMsg.account==null||this.userMsg.password==null||this.userMsg.phone==null||this.userMsg.roleId==null){
+        this.$message.warning("请完善信息!");
+        return
+      }
       console.log(this.userMsg);
+       let pass = this.userMsg.password;
+       pass = md5(pass);
+       let key = "*chang_hong_device_cloud";
+      this.userMsg.password = this.encryptByDES(pass, key);
       this.addAdmin();
     },
     addAdmin(){
@@ -271,6 +275,16 @@ export default {
       if(this.editUserMsg.confirmPassword!==this.editUserMsg.password){
         this.$message.warning("两次密码输入不一致,请重新输入!!!")
         return
+      }
+      if(this.editUserMsg.account==null||this.editUserMsg.phone==null||this.editUserMsg.roleId==null){
+        this.$message.warning("请完善信息!");
+        return
+      }
+      if(this.editUserMsg.password!=null||this.editUserMsg.password!==""){
+        let pass = this.editUserMsg.password;
+        pass = md5(pass);
+        let key = "*chang_hong_device_cloud";
+        this.editUserMsg.password = this.encryptByDES(pass, key);
       }
       this.updateAdmin();
     },
@@ -320,7 +334,6 @@ export default {
   },
   created(){
     this.getlist();
-    this.getRoleList();
   },
   components: {
     tableList,
