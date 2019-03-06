@@ -13,6 +13,7 @@ import Advertising from '@/components/message/Advertising'
 import SalesArea from '@/components/salesArea/index'
 import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
+import System from '@/components/system/System'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
 import EditRole from '@/components/system/addOrEditRole/EditRole'
 import CookbookClassify from '@/components/cookbook/Classify'
@@ -164,6 +165,17 @@ const router = new Router({
       },
     },
     {
+      path: '/System',
+      name: 'System',
+      component: System,
+      props: {
+        pageName: '系统设置'
+      },
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
       path: '/RoleManagement',
       name: 'RoleManagement',
       component: RoleManagement,
@@ -285,29 +297,6 @@ const router = new Router({
         requireAuth: false,
       },
     },
-    // {
-    //   path: '/',
-    //   redirect: '/Login',
-    // },
-    // {
-    //   path: '/Login',
-    //   name: 'Login',
-    //   component: Login,
-    //   meta: {
-    //     requireAuth: false,
-    //   },
-    // },
-    // {
-    //   path: '/Home',
-    //   name: 'Home',
-    //   component: Home,
-    //   props: {
-    //     pageName: '默认工作台'
-    //   },
-    //   meta: {
-    //     requireAuth: true
-    //   },
-    // },
   ]
 })
 

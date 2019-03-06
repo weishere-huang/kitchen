@@ -154,6 +154,12 @@ export default [{
     defaultDock: true,
     icon: '&#xe633;',
     subMenu: [{
+        menu: '系统设置',
+        route: '/System',
+        defaultDock: true,
+        permissionCode: 'order_look_up'
+      },
+      {
         menu: '管理员列表',
         route: '/Administrator',
         defaultDock: true,
