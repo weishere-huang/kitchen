@@ -1,6 +1,6 @@
 <template>
 	<div class="order_list">
-		<div v-show="isHideList">
+		<div :class="[{hide:isHideList}]">
 			<div class="top_case">
 				<div class="top_title">
 					<h4>订单列表</h4>
@@ -104,7 +104,7 @@ export default {
 	data() {
 		return {
 			dialogSend: false,
-			isHideList: true,
+			isHideList: this.$route.params.id !== undefined ? true : false,
 			currentPage: 3,
 			selectShow: true,
 			platformState: -2,
@@ -322,19 +322,22 @@ export default {
 	},
 	created() {
 		this.listOrder();
-		this.$route.params.id !== undefined
-			? (this.isHideList = false)
-			: (this.isHideList = true);
+		let a = this.$route.matched.find(item => item.name === "Details")
+			? true
+			: false;
+		let b = this.$route.params.id !== undefined ? true : false;
+		this.isHideList = a || b ? true : false;
 	},
 	components: {
 		tableList
 	},
 	watch: {
 		$route() {
-			this.$route.matched.find(item => item.name === "Details") ||
-			this.$route.params.id !== undefined
-				? (this.isHideList = false)
-				: (this.isHideList = true);
+			let a = this.$route.matched.find(item => item.name === "Details")
+				? true
+				: false;
+			let b = this.$route.params.id !== undefined ? true : false;
+			this.isHideList = a || b ? true : false;
 		}
 	}
 };

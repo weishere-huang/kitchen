@@ -92,10 +92,15 @@ export default {
 			).then(
 				result => {
 					console.log(result);
-					// sessionStorage.token=result.data.data.tokenStr
+
 					if (result.data.code === 200) {
-						// window.location.href = "/Home";
 						console.log(result);
+						sessionStorage.permissionUrl = JSON.stringify(
+							result.data.data.permissionUrl
+						);
+						sessionStorage.token = result.data.data.tokenStr;
+						sessionStorage.user = JSON.stringify(result.data.data);
+						window.location.href = "/Home";
 					}
 				},
 				({ type, info }) => {}

@@ -225,3 +225,13 @@ input[type="number"] {
   padding: 4px 8px;
   width: auto;
 }
+.el-range-editor.is-active,
+.el-range-editor.is-active:hover {
+  border-color: #1cc09f;
+}
+.el-time-panel__btn.confirm {
+  color: #1cc09f;
+}
+.hide {
+  display: none !important;
+}
