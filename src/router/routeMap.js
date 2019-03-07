@@ -15,113 +15,110 @@ export default [{
   {
     menu: '订单管理',
     permissionCode: 'order',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe60d;',
     subMenu: [{
         menu: '订单列表',
         route: '/Order',
-        defaultDock: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'order_list_lookup'
       },
       {
         menu: '订单详情',
         routeReg: /^\/Order\/Details\/\d{1,}$/i,
-        defaultDock: true,
-        permissionCode: 'order_details_look_up'
+        visible: true,
+        permissionCode: 'order_detail_lookup'
       }
     ]
   },
   {
     menu: '商城管理',
     permissionCode: 'store',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe634;',
     subMenu: [{
         menu: '商品列表',
         route: '/Store',
-        permissionCode: ''
+        permissionCode: 'mall_list_lookup'
       },
       {
         menu: '商品分类',
         route: '/Classify',
-        permissionCode: ''
+        permissionCode: 'mall_cate_lookup'
       },
       {
         menu: '添加商品',
         route: '/Store/AddMenu',
         visible: true,
-        permissionCode: ''
+        permissionCode: 'mall_add_lookup'
       },
       {
         menu: '修改商品',
         routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
         visible: true,
-        permissionCode: ''
+        permissionCode: 'mall_update_lookup'
       }
     ]
   },
   {
     menu: '菜谱管理',
     permissionCode: 'cookbook',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe640;',
     subMenu: [{
         menu: '菜谱列表',
         route: '/Cookbook',
-        defaultDock: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'manu_list_lookup'
       },
       {
         menu: '添加菜谱',
         route: '/AddCookbook',
-        defaultDock: true,
-        permissionCode: 'order_look_up'
+        visible: true,
+        permissionCode: 'menu_add_lookup'
       },
       {
         menu: '修改菜谱',
         route: '/EditCookbook',
-        defaultDock: true,
-        permissionCode: 'order_look_up'
+        visible: true,
+        permissionCode: 'menu_update_lookup'
       },
       {
         menu: '菜谱分类',
         route: '/CookbookClassify',
-        defaultDock: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'menu_cate_lookup'
       },
     ]
   },
   {
     menu: '信息管理',
     permissionCode: 'msg',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe629;',
     subMenu: [{
         menu: '服务网点',
         route: '/Service',
-        permissionCode: ''
+        permissionCode: 'message_service_lookup'
       },
       {
         menu: '常见问题',
         route: '/Problems',
-        permissionCode: ''
+        permissionCode: 'message_faq_lookup'
       },
       {
         menu: '广告列表',
         route: '/Advertising',
-        permissionCode: ''
+        permissionCode: 'message_advertisement_lookup'
       }
     ]
   },
   {
     menu: '销售区域',
     permissionCode: 'area',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe605;',
     subMenu: [{
       menu: '销售区域',
       route: '/SalesArea',
-      permissionCode: ''
+      permissionCode: 'area_list_lookup'
     }]
   },
   // {
@@ -134,80 +131,53 @@ export default [{
   {
     menu: '用户管理',
     permissionCode: 'user',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe646;',
     subMenu: [{
         menu: '用户列表',
         route: '/User',
-        permissionCode: ''
+        permissionCode: 'user_manager_list_lookup'
       },
       {
         menu: '留言与反馈',
         route: '/GuestBook',
-        permissionCode: ''
+        permissionCode: 'user_faq_list_lookup'
       }
     ]
   },
   {
     menu: '系统管理',
     permissionCode: 'system',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe633;',
     subMenu: [{
         menu: '系统设置',
         route: '/System',
         defaultDock: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'system_employee_lookup'
       },
       {
         menu: '管理员列表',
         route: '/Administrator',
-        defaultDock: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'system_employee_lookup'
       },
       {
         menu: '角色管理',
         route: '/RoleManagement',
-        defaultDock: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'system_role_list_lookup'
       },
       {
         menu: '添加角色',
         route: '/RoleManagement/AddRole',
         visible: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'system_role_add_lookup'
       },
       {
         menu: '修改角色',
         routeReg: /^\/RoleManagement\/EditRole\/\d{1,}$/i,
         visible: true,
-        permissionCode: 'order_look_up'
+        permissionCode: 'system_role_update_lookup'
       },
     ]
   },
-
-  //预留样式模板
-  // {
-  //   menu: '员工管理',
-  //   permissionCode: 'personnel"',
-  //   icon: '&#xe68d;',
-  //   subMenu: [{
-  //       menu: '员工管理',
-  //       route: '/Personnel',
-  //       permissionCode: 'employee_lookup'
-  //     },
-  //     {
-  //       menu: '员工详情',
-  //       routeReg: /^\/Personnel\/Modification\/\d{1,}$/i,
-  //       visible: true,
-  //       permissionCode: 'employee_modification_lookup'
-  //     },
-  //     {
-  //       menu: '添加员工',
-  //       route: "/Personnel/PersnnelAdd",
-  //       visible: true,
-  //       permissionCode: 'employee_add_lookup'
-  //     }
-  //   ]
-  // },
 ]

@@ -12,6 +12,7 @@
 					:model="systemMsg"
 					ref="systemMsg"
 					:rules="systemRules"
+					:inline-message="true"
 				>
 					<el-form-item label="客服热线：" prop="phone">
 						<el-tooltip class="item" effect="light" content="作用于App端-意见反馈拨号" placement="top">
@@ -216,16 +217,16 @@ export default {
 				carLimit: "",
 				itemLimit: "",
 				phone: "",
-				moneyOff: true,
+				moneyOff: false,
 				payType: {
 					wechat: true,
 					alipay: true
 				},
-				sendTime: "2",
-				timeFrame1: ["9-00", "11-00"],
-				timeFrame2: ["12-00", "14-00"],
-				timeFrame3: ["15-00", "17-00"],
-				timeFrame4: ["18-00", "21-00"],
+				sendTime: "1",
+				timeFrame1: ["9-00", "18-00"],
+				timeFrame2: null,
+				timeFrame3: null,
+				timeFrame4:null,
 				retentionTime: "",
 				allMoney: ""
 			},
@@ -334,7 +335,10 @@ export default {
 				]
 			}
 		};
-	}
+	},
+	methods: {
+		
+	},
 };
 </script>
 
