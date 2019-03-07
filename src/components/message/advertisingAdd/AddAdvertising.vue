@@ -190,9 +190,6 @@
           name:"content.jpg",
           url:this.addMsg.content
         }];
-      }else{
-        this.mainPic = [];
-        this.content = [];
       }
     },
     watch:{
@@ -207,9 +204,6 @@
             name:"content.jpg",
             url:this.addMsg.content
           }];
-        }else{
-          this.mainPic = []
-          this.content = []
         }
       },
     }

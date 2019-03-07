@@ -330,7 +330,6 @@ export default {
       if(this.editMsg.mainPic==null && this.editMsg.content==null)flag=false;
       if(this.editMsg.title==null||this.editMsg.mainPic==null||this.editMsg.startTime==null
         ||this.editMsg.startTime==null||this.editMsg.endTime==null||this.editMsg.state==null){flag=false}
-      debugger
         if(flag){
         this.updateAdvertising();
       }else{
