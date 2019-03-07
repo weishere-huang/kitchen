@@ -283,7 +283,7 @@ export default {
 				sortLevel: data.sortLevel,
 				recommendType: JSON.stringify(data.recommendType)
 			});
-			console.log(data);
+
 			this.Axios(
 				{
 					params: datas,
@@ -295,7 +295,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.foodlist();
 				} else {
@@ -314,18 +313,16 @@ export default {
 		handleEdit(index, rowData) {
 			let params = { type: "edit", index: index, rowData: rowData };
 			this.$router.push("/Store/EditMenu/" + params.rowData.id);
-			console.log(params);
 		},
 		handleDelete(index, rowData) {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
 
-			console.log(params);
 			let qs = require("qs");
 			let datas = qs.stringify({
 				itemId: params.rowData.id
 			});
-			console.log(params.rowData.id);
+
 			this.Axios(
 				{
 					params: datas,
@@ -341,7 +338,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.$message({
 							message: "删除成功！",
@@ -359,13 +355,11 @@ export default {
 			);
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.foodlist();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.foodlist();
 		},
@@ -379,7 +373,6 @@ export default {
 			}
 		},
 		changeUp(index, val) {
-			console.log(val.state);
 			if (val.state == "1") {
 				this.tableData[index].state = "2";
 				this.editfood(val);
@@ -389,7 +382,6 @@ export default {
 			}
 		},
 		changeHot(index, val) {
-			console.log(val.recommendType.hotMenu);
 			if (val.recommendType.hotMenu === false) {
 				this.tableData[index].recommendType.hotMenu = true;
 				this.editfood(val);
@@ -431,7 +423,6 @@ export default {
 					}
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
-					console.log(this.tableData);
 				},
 				({ type, info }) => {}
 			);
@@ -449,7 +440,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					result.data.data.splice(0, 0, { cateName: "全部类别", no: -2 });
 					this.classifyOptions = result.data.data;
 				},

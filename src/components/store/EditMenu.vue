@@ -179,7 +179,7 @@ export default {
 				itemCate: [{ required: true, message: "请选择分类", trigger: "blur" }],
 				itemImg: [{ required: true, message: "请上传图片" }],
 				script: [
-					{ required: true, message: "请选择菜谱脚本", trigger: "focus" }
+					{ required: false, message: "请选择菜谱脚本", trigger: "focus" }
 				],
 				itemPrice: [
 					{
@@ -405,7 +405,7 @@ export default {
 			).then(result => {
 				console.log(result.data);
 				if (result.data.code === 200) {
-					this.$router.push("/store");
+					this.$router.back(-1);
 					this.reload();
 				} else {
 					this.$message.error("编辑失败,请重新尝试");
@@ -418,7 +418,9 @@ export default {
 					params: {
 						id: id
 					},
-					option: {},
+					option: {
+						enableMsg: false
+					},
 					type: "get",
 					url: "/api-mall/mallManage/findById"
 				},

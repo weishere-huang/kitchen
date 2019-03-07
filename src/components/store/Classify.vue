@@ -73,13 +73,13 @@
 			</div>
 		</div>
 		<el-dialog title="添加分类" :visible.sync="dialogVisible" width="500px">
-			<el-form label-width="120px" style="padding-top:10px;" size="small">
+			<el-form label-width="120px" style="padding-top:10px;" size="small" :model="addClassifyName">
 				<el-form-item
 					label="分类名称："
 					prop="classifyName"
-					:rules="{ required: true, message: '名称不能为空', trigger: ['blur' ,'change']}"
+					:rules="{ required: true, message: '名称不能为空', trigger: 'blur'}"
 				>
-					<el-input type="text" size="small" style="width:90%;" v-model="classifyName"></el-input>
+					<el-input type="text" size="small" style="width:90%;" v-model="addClassifyName.classifyName"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -120,7 +120,9 @@ export default {
 				sortLevel: "",
 				cateName: ""
 			},
-			classifyName: "",
+			addClassifyName: {
+				classifyName: ""
+			},
 			editClassify: false,
 			isShow: "1",
 			dialogVisible: false,
@@ -150,12 +152,13 @@ export default {
 			}
 		},
 		addClassify() {
-			console.log(this.classifyName);
-			if (this.classifyName == "") {
+			if (this.addClassifyName.classifyName == "") {
 				this.$message.error("名称不能为空！");
 			} else {
 				let qs = require("qs");
-				let datas = qs.stringify({ cateName: this.classifyName });
+				let datas = qs.stringify({
+					cateName: this.addClassifyName.classifyName
+				});
 				this.Axios(
 					{
 						params: datas,
