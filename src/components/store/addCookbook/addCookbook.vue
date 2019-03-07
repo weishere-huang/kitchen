@@ -6,7 +6,7 @@
     >
       <el-input
         size="small"
-        style="width:500px;"
+        style="width:617px;"
       ></el-input>
       <el-button
         type="primary"
@@ -43,8 +43,8 @@
 export default {
   data() {
     return {
-      scriptData: ["红烧肉", "鱼香肉丝", "酸菜鱼", "鸡公煲", "酸辣土豆丝"],
-      recentSearch: ["糖醋里脊", "锅包肉", "老鸭汤", "鱼香茄子"]
+      scriptData: ["红烧肉", "鱼香肉丝", "酸菜鱼", "鸡公煲", "酸辣土豆丝","糖醋里脊", "锅包肉", "老鸭汤", "鱼香茄子"],
+      recentSearch: ["糖醋里脊", "锅包肉", "老鸭汤", "鱼香茄子","红烧肉", "鱼香肉丝", "酸菜鱼", "鸡公煲", "酸辣土豆丝"]
     };
   },
   methods: {
@@ -90,7 +90,7 @@ export default {
       color: white;
     }
   }
-  .content_item:not(:nth-child(5n)) {
+  .content_item:not(:nth-child(6n)) {
     margin-right: 12px;
   }
 }

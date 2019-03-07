@@ -129,7 +129,7 @@
 		<el-dialog
 			title="绑定菜谱"
 			:visible.sync="dialogCookbook"
-			width="600px"
+			width="714px"
 			:close-on-click-modal="false"
 		>
 			<div style="overflow:hidden;margin-top:16px;">

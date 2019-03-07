@@ -127,7 +127,7 @@
 				</el-form-item>
 			</el-form>
 		</div>
-		<el-dialog title="绑定菜谱" :visible.sync="dialogCoobook" width="600px" :close-on-click-modal="false">
+		<el-dialog title="绑定菜谱" :visible.sync="dialogCoobook" width="714px" :close-on-click-modal="false">
 			<div style="overflow:hidden;margin-top:16px;">
 				<dialog-coobook v-on:dialogCoobookHide="dialogCoobookHide"></dialog-coobook>
 			</div>
