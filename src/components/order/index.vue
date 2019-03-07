@@ -255,8 +255,13 @@ export default {
 			}
 		},
 		toPrintOrder() {
-			sessionStorage.setItem("orderIds", this.orderIds.join(","));
-			window.open("printorder.html", "_blank");
+			console.log(this.orderIds);
+			if (this.orderIds == "") {
+				this.$message.error("请勾选要打印的订单！");
+			} else {
+				sessionStorage.setItem("orderIds", this.orderIds.join(","));
+				window.open("printorder.html", "_blank");
+			}
 		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);

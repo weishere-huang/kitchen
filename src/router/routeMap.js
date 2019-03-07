@@ -71,13 +71,13 @@ export default [{
       },
       {
         menu: '添加菜谱',
-        route: '/AddCookbook',
+        route: '/Cookbook/AddCookbook',
         visible: true,
         permissionCode: 'menu_add_lookup'
       },
       {
         menu: '修改菜谱',
-        route: '/EditCookbook',
+        routeReg: /^\/Cookbook\/EditCookbook\/\d{1,}$/i,
         visible: true,
         permissionCode: 'menu_update_lookup'
       },
