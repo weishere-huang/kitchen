@@ -84,7 +84,7 @@ Vue.directive('clickoutside', {
 
 // 登录拦截
 router.beforeEach((to, from, next) => {
-  if (permissionUrl.length === 0) permissionUrl = JSON.parse(localStorage.getItem("permissionUrl") || '[]');
+  if (permissionUrl.length === 0) permissionUrl = JSON.parse(sessionStorage.getItem("permissionUrl") || '[]');
   let isLogin = sessionStorage.getItem('token')
   instance.defaults.headers.common["token"] = isLogin;
   if (to.meta.requireAuth) { // 判断是否需要登录权限

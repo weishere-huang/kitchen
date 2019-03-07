@@ -13,6 +13,7 @@ import Advertising from '@/components/message/Advertising'
 import SalesArea from '@/components/salesArea/index'
 import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
+import System from '@/components/system/System'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
 import EditRole from '@/components/system/addOrEditRole/EditRole'
 import CookbookClassify from '@/components/cookbook/Classify'
@@ -37,7 +38,7 @@ const router = new Router({
         pageName: '主页'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -48,7 +49,7 @@ const router = new Router({
         pageName: '订单列表'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
       children: [{
         path: 'Details/:id/',
@@ -58,7 +59,7 @@ const router = new Router({
           pageName: '订单详情'
         },
         meta: {
-          requireAuth: false,
+          requireAuth: true,
         },
       }, ]
     },
@@ -71,7 +72,7 @@ const router = new Router({
         pageName: '商城列表'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
       children: [{
           path: 'AddMenu',
@@ -81,7 +82,7 @@ const router = new Router({
             pageName: '添加商品'
           },
           meta: {
-            requireAuth: false,
+            requireAuth: true,
           },
         },
         {
@@ -92,7 +93,7 @@ const router = new Router({
             pageName: '修改商品'
           },
           meta: {
-            requireAuth: false,
+            requireAuth: true,
           },
         },
       ]
@@ -105,7 +106,7 @@ const router = new Router({
         pageName: '商品分类'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     // {
@@ -116,7 +117,7 @@ const router = new Router({
     //     pageName: '添加商品'
     //   },
     //   meta: {
-    //     requireAuth: false,
+    //     requireAuth: true,
     //   },
     // },
     // {
@@ -127,7 +128,7 @@ const router = new Router({
     //     pageName: '修改商品'
     //   },
     //   meta: {
-    //     requireAuth: false,
+    //     requireAuth: true,
     //   },
     // },
     {
@@ -138,7 +139,7 @@ const router = new Router({
         pageName: '服务网点'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -149,7 +150,7 @@ const router = new Router({
         pageName: '销售区域'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -160,7 +161,18 @@ const router = new Router({
         pageName: '管理员列表'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/System',
+      name: 'System',
+      component: System,
+      props: {
+        pageName: '系统设置'
+      },
+      meta: {
+        requireAuth: true,
       },
     },
     {
@@ -171,7 +183,7 @@ const router = new Router({
         pageName: '角色管理'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
       children: [{
           path: 'AddRole',
@@ -181,7 +193,7 @@ const router = new Router({
             pageName: '添加角色'
           },
           meta: {
-            requireAuth: false,
+            requireAuth: true,
           },
         },
         {
@@ -192,7 +204,7 @@ const router = new Router({
             pageName: '修改角色'
           },
           meta: {
-            requireAuth: false,
+            requireAuth: true,
           },
         }
       ]
@@ -205,7 +217,7 @@ const router = new Router({
         pageName: '菜谱分类'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -216,30 +228,31 @@ const router = new Router({
         pageName: '菜谱列表'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
-    },
-    {
-      path: '/AddCookbook',
-      name: 'AddCookbook',
-      component: AddCookbook,
-      props: {
-        pageName: '添加菜谱'
-      },
-      meta: {
-        requireAuth: false,
-      },
-    },
-    {
-      path: '/EditCookbook',
-      name: 'EditCookbook',
-      component: EditCookbook,
-      props: {
-        pageName: '修改菜谱'
-      },
-      meta: {
-        requireAuth: false,
-      },
+      children: [{
+          path: 'AddCookbook',
+          name: 'AddCookbook',
+          component: AddCookbook,
+          props: {
+            pageName: '添加菜谱'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'EditCookbook/:id',
+          name: 'EditCookbook',
+          component: EditCookbook,
+          props: {
+            pageName: '修改菜谱'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+      ]
     },
     {
       path: '/Problems',
@@ -249,7 +262,7 @@ const router = new Router({
         pageName: '常见问题'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -260,7 +273,7 @@ const router = new Router({
         pageName: '广告列表'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -271,7 +284,7 @@ const router = new Router({
         pageName: '用户列表'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -282,32 +295,9 @@ const router = new Router({
         pageName: '留言与反馈'
       },
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
-    // {
-    //   path: '/',
-    //   redirect: '/Login',
-    // },
-    // {
-    //   path: '/Login',
-    //   name: 'Login',
-    //   component: Login,
-    //   meta: {
-    //     requireAuth: false,
-    //   },
-    // },
-    // {
-    //   path: '/Home',
-    //   name: 'Home',
-    //   component: Home,
-    //   props: {
-    //     pageName: '默认工作台'
-    //   },
-    //   meta: {
-    //     requireAuth: true
-    //   },
-    // },
   ]
 })
 

@@ -219,8 +219,8 @@ export default {
 		handleEdit(index, rowData) {
 			let params = { type: "edit", index: index, rowData: rowData };
 			console.log(params);
-      this.editClassify = true;
-      Object.assign(this.editMsg,rowData)
+			this.editClassify = true;
+			Object.assign(this.editMsg, rowData);
 			// this.editMsg = rowData;
 		},
 		handleDelete(index, rowData) {
