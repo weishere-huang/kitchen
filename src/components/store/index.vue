@@ -34,7 +34,7 @@
 							</el-select>
 						</el-col>
 						<el-col :span="9" style="padding:0 5px;">
-							<el-input size="small" style="width:100%;" placeholder="商品名称" v-model="keyword"></el-input>
+							<el-input clearable size="small" style="width:100%;" placeholder="商品名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="3" style="padding:0 5px;">
 							<el-button size="small" plain @click="foodlist">搜索</el-button>
