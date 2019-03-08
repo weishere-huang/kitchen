@@ -276,7 +276,9 @@ export default {
           params: data,
           url: "/api-platform/advise/updateState",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -303,7 +305,9 @@ export default {
           params: data,
           url: "/api-platform/advise/reply",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {

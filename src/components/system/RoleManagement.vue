@@ -1,7 +1,7 @@
 <template>
   <div class="role_management">
     <!-- <router-view></router-view> -->
-    <div v-show="isHideList">
+    <div :class="[{hide:isHideList}]">
       <div class="top_list">
         <el-button
           size="small"
@@ -79,7 +79,7 @@ export default {
       pageSize: 10,
       currentPage: 1,
       total: 0,
-      isHideList: true
+      isHideList: false
     };
   },
   methods: {
@@ -143,7 +143,9 @@ export default {
           params: data,
           url: "/api-platform/role/delete",
           type: "post",
-          option: {}
+          option: {
+            enableMsg:false
+          }
         },
         this
       ).then(result => {
@@ -156,14 +158,22 @@ export default {
   },
   created() {
     this.getRoleList();
+    let a = this.$route.matched.find(item => item.name === "AddRole")
+      ? true
+      : false;
+    let b = this.$route.params.id !== undefined ? true : false;
+    this.isHideList = a || b ? true : false;
   },
   components: {
     tableList
   },
   watch: {
     $route() {
-      this.$route.matched.find(item=>(item.name==="AddRole"))||
-      this.$route.params.id !== undefined ? this.isHideList =false : this.isHideList =true;
+      let a = this.$route.matched.find(item => item.name === "AddRole")
+        ? true
+        : false;
+      let b = this.$route.params.id !== undefined ? true : false;
+      this.isHideList = a || b ? true : false;
     }
   }
 };

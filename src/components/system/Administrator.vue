@@ -224,6 +224,7 @@ export default {
         url:"/api-platform/employee/updateState",
         type:"post",
         option:{
+          enableMsg:false
         }
       },this).then(result=>{
         console.log(result.data);
@@ -262,6 +263,7 @@ export default {
         url:"/api-platform/employee/add",
         type:"post",
         option:{
+          enableMsg:false
         }
       },this).then(result=>{
         if(result.data.code===200){
@@ -280,7 +282,7 @@ export default {
         this.$message.warning("请完善信息!");
         return
       }
-      if(this.editUserMsg.password!=null||this.editUserMsg.password!==""){
+      if(this.editUserMsg.password!=null && this.editUserMsg.password!=="" && this.editUserMsg.password!==undefined){
         let pass = this.editUserMsg.password;
         pass = md5(pass);
         let key = "*chang_hong_device_cloud";
@@ -302,6 +304,7 @@ export default {
         url:"/api-platform/employee/update",
         type:"post",
         option:{
+          enableMsg:false
         }
       },this).then(result=>{
         if(result.data.code===200){

@@ -36,6 +36,7 @@
           size="small"
           style="width:95%"
           v-model="addInfo.phone"
+          type="number"
         ></el-input>
       </el-form-item>
       <el-form-item

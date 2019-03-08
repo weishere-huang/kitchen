@@ -47,6 +47,7 @@
           ref="tree"
           highlight-current
           :props="defaultProps"
+          :default-expanded-keys="[0,1]"
         >
           <span
             class="custom-tree-node"
