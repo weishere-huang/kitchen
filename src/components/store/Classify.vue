@@ -47,6 +47,7 @@
 								step="0"
 								v-model="scope.row.sortLevel"
 								style="width:80px;padding:0;"
+								@change="handleSortLevel(scope.row,scope.$index)"
 							></el-input>
 						</template>
 					</el-table-column>
@@ -144,6 +145,15 @@ export default {
 		};
 	},
 	methods: {
+		handleSortLevel(row, index) {
+			if (/^[0-9]*[1-9][0-9]*$/.test(row.sortLevel)) {
+				this.editMsg = row;
+				this.saveEdit();
+			} else {
+				this.$message.error("排序只能为正整数，请重新输入");
+				this.getClassfy();
+			}
+		},
 		validator(rule, value, callback) {
 			if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
 				callback(new Error("只能为正整数"));
@@ -212,7 +222,7 @@ export default {
 						console.log(result);
 						if (result.data.code === 200) {
 							this.editClassify = false;
-							this.reload();
+							this.getClassfy();
 						}
 					},
 					({ type, info }) => {}

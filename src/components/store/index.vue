@@ -162,7 +162,7 @@
 									content="数值越大排序越靠前"
 								></el-popover>
 								<el-input
-									@change="handleCookkingTime(scope.row,scope.$index)"
+									@change="handleSortLevel(scope.row,scope.$index)"
 									v-popover:popover2
 									size="small"
 									type="number"
@@ -303,12 +303,37 @@ export default {
 			});
 		},
 		handleInput(row, index) {
-			this.tableData[index].itemPrice =
-				row.itemPrice.match(/^\d*(\.?\d{0,2})/g)[0] || null;
-			this.editfood(row);
+			if (/^\+?(\d*\.\d{2})$/.test(row.itemPrice)) {
+				this.editfood(row);
+			} else {
+				this.$message.error("价格只能保留两位小数，且不能为负数，请重新输入");
+				this.foodlist();
+			}
+			// this.tableData[index].itemPrice =
+			// 	row.itemPrice.match(/^\d*(\.?\d{0,2})/g)[0] || null;
+			// this.editfood(row);
 		},
 		handleCookkingTime(row, index) {
-			this.editfood(row);
+			// this.tableData[index].cookingTime =
+			// 	row.cookingTime.match(/^\d*(\d{0,0})/g)[0] || null;
+			// this.editfood(row);
+			if (/^[0-9]*[1-9][0-9]*$/.test(row.cookingTime)) {
+				this.editfood(row);
+			} else {
+				this.$message.error("烹饪时长只能为正整数，请重新输入");
+				this.foodlist();
+			}
+		},
+		handleSortLevel(row, index) {
+			if (/^[0-9]*[1-9][0-9]*$/.test(row.sortLevel)) {
+				this.editfood(row);
+			} else {
+				this.$message.error("排序只能为正整数，请重新输入");
+				this.foodlist();
+			}
+			// this.tableData[index].sortLevel =
+			// 	row.sortLevel.match(/^\d*(\d{0,0})/g)[0] || null;
+			// this.editfood(row);
 		},
 		handleEdit(index, rowData) {
 			let params = { type: "edit", index: index, rowData: rowData };
