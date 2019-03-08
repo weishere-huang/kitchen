@@ -34,7 +34,7 @@
 							</el-select>
 						</el-col>
 						<el-col :span="9" style="padding:0 5px;">
-							<el-input size="small" style="width:100%;" placeholder="商品名称" v-model="keyword"></el-input>
+							<el-input clearable size="small" style="width:100%;" placeholder="商品名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="3" style="padding:0 5px;">
 							<el-button size="small" plain @click="foodlist">搜索</el-button>
@@ -162,7 +162,7 @@
 									content="数值越大排序越靠前"
 								></el-popover>
 								<el-input
-									@change="handleCookkingTime(scope.row,scope.$index)"
+									@change="handleSortLevel(scope.row,scope.$index)"
 									v-popover:popover2
 									size="small"
 									type="number"
@@ -259,7 +259,7 @@ export default {
 				}
 			],
 			pageIndex: 1,
-			pageSize: 10,
+			pageSize: 15,
 			keyword: "",
 			total: 0,
 			isHideList: this.$route.params.id !== undefined ? true : false
@@ -283,7 +283,7 @@ export default {
 				sortLevel: data.sortLevel,
 				recommendType: JSON.stringify(data.recommendType)
 			});
-			console.log(data);
+
 			this.Axios(
 				{
 					params: datas,
@@ -295,7 +295,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.foodlist();
 				} else {
@@ -304,28 +303,51 @@ export default {
 			});
 		},
 		handleInput(row, index) {
-			this.tableData[index].itemPrice =
-				row.itemPrice.match(/^\d*(\.?\d{0,2})/g)[0] || null;
-			this.editfood(row);
+			if (/^\+?(\d*\.\d{2})$/.test(row.itemPrice)) {
+				this.editfood(row);
+			} else {
+				this.$message.error("价格只能保留两位小数，且不能为负数，请重新输入");
+				// this.foodlist();
+			}
+			// this.tableData[index].itemPrice =
+			// 	row.itemPrice.match(/^\d*(\.?\d{0,2})/g)[0] || null;
+			// this.editfood(row);
 		},
 		handleCookkingTime(row, index) {
-			this.editfood(row);
+			// this.tableData[index].cookingTime =
+			// 	row.cookingTime.match(/^\d*(\d{0,0})/g)[0] || null;
+			// this.editfood(row);
+			if (/^[0-9]*[1-9][0-9]*$/.test(row.cookingTime)) {
+				this.editfood(row);
+			} else {
+				this.$message.error("烹饪时长只能为正整数，请重新输入");
+				// this.foodlist();
+			}
+		},
+		handleSortLevel(row, index) {
+			if (/^[0-9]*[1-9][0-9]*$/.test(row.sortLevel)) {
+				this.editfood(row);
+			} else {
+				this.$message.error("排序只能为正整数，请重新输入");
+				// this.foodlist();
+			}
+			// this.tableData[index].sortLevel =
+			// 	row.sortLevel.match(/^\d*(\d{0,0})/g)[0] || null;
+			// this.editfood(row);
 		},
 		handleEdit(index, rowData) {
 			let params = { type: "edit", index: index, rowData: rowData };
 			this.$router.push("/Store/EditMenu/" + params.rowData.id);
-			console.log(params);
 		},
 		handleDelete(index, rowData) {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
 
-			console.log(params);
 			let qs = require("qs");
 			let datas = qs.stringify({
 				itemId: params.rowData.id
 			});
-			console.log(params.rowData.id);
+
 			this.Axios(
 				{
 					params: datas,
@@ -341,7 +363,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.$message({
 							message: "删除成功！",
@@ -359,13 +380,11 @@ export default {
 			);
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.foodlist();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.foodlist();
 		},
@@ -379,7 +398,6 @@ export default {
 			}
 		},
 		changeUp(index, val) {
-			console.log(val.state);
 			if (val.state == "1") {
 				this.tableData[index].state = "2";
 				this.editfood(val);
@@ -389,7 +407,6 @@ export default {
 			}
 		},
 		changeHot(index, val) {
-			console.log(val.recommendType.hotMenu);
 			if (val.recommendType.hotMenu === false) {
 				this.tableData[index].recommendType.hotMenu = true;
 				this.editfood(val);
@@ -420,6 +437,7 @@ export default {
 				this
 			).then(
 				result => {
+					console.log(result);
 					for (let i = 0; i < result.data.data.content.length; i++) {
 						result.data.data.content[i].itemPrice =
 							result.data.data.content[i].itemPrice / 100;
@@ -431,7 +449,6 @@ export default {
 					}
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
-					console.log(this.tableData);
 				},
 				({ type, info }) => {}
 			);
@@ -449,7 +466,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					result.data.data.splice(0, 0, { cateName: "全部类别", no: -2 });
 					this.classifyOptions = result.data.data;
 				},

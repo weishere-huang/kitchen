@@ -63,67 +63,67 @@
 				</span>
 			</el-dialog>
 			<el-dialog title="进度" :visible.sync="dialogPlan" width="500px" :close-on-click-modal="false">
-				<div style="margin-top:16px;">
+				<div style="margin-top:16px;height: 200px;overflow: scroll;">
 					<ul class="plan_case">
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 						<li>
 							<span>
 								<i class="iconfont">&#xe758;</i>订单已完成
 							</span>
-							<span style="float:right">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
 						</li>
 					</ul>
 				</div>
@@ -503,8 +503,8 @@ export default {
 		}
 	}
 	.plan_case {
-		height: 200px;
-		overflow: scroll;
+		// height: 200px;
+		// overflow: scroll;
 		li {
 			list-style-type: none;
 			// background-color: red;

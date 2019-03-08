@@ -14,7 +14,7 @@
 					<h4>菜谱列表</h4>
 					<div class="top_search">
 						<el-col :span="20" style="padding:0 5px;">
-							<el-input size="small" placeholder="菜谱名称"></el-input>
+							<el-input size="small" clearable placeholder="菜谱名称"></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
 							<el-button size="small" plain>搜索</el-button>

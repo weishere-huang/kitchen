@@ -103,12 +103,13 @@ router.beforeEach((to, from, next) => {
           }
         }
       }
-      if (isHasPermission)
+      if (isHasPermission) {
         next()
-      else
+      } else {
         next({
           path: '/Home'
         })
+      }
     } else { // 没登录则跳转到登录界面
       window.location.href = "login.html"
       // next({

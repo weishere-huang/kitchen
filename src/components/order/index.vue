@@ -37,7 +37,7 @@
 							</el-select>
 						</el-col>
 						<el-col :span="5" style="padding:0 5px;">
-							<el-input size="small" style="width:100%;" placeholder="收货人、订单号" v-model="keyWord"></el-input>
+							<el-input size="small" style="width:100%;" clearable placeholder="收货人、订单号" v-model="keyWord"></el-input>
 						</el-col>
 						<el-col :span="2" style="padding:0 5px;">
 							<el-button size="small" @click="compareDate" plain>搜索</el-button>
@@ -57,6 +57,7 @@
 						:handle="100"
 						:detalisShow="true"
 						:handleShow="true"
+						:cellStyle="cellStyle"
 					></table-list>
 					<div style="margin-top:20px;float:left;padding-left:10px;padding-bottom:10px;">
 						<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
@@ -200,6 +201,19 @@ export default {
 		};
 	},
 	methods: {
+		cellStyle(row, column) {
+			if (row.row.platformState == 0 && row.column.label == "订单状态") {
+				return "color:#FF6600";
+			} else if (row.row.platformState == 1 && row.column.label == "订单状态") {
+				return "color:#3399FF";
+			} else if (row.row.platformState == 2 && row.column.label == "订单状态") {
+				return "color:#008000";
+			} else if (row.row.platformState == 3 && row.column.label == "订单状态") {
+				return "color:#333333";
+			} else if (row.row.platformState == 9 && row.column.label == "订单状态") {
+				return "color:#999999";
+			}
+		},
 		compareDate() {
 			if (new Date(this.searchDate1) > new Date(this.searchDate2)) {
 				this.$message.error("结束日期必须大于起始日期，请重新选择");

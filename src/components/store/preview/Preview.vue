@@ -42,9 +42,7 @@
 					<span style="color:#999999;">净含量：</span>
 					<span>{{MenuMsg.itemWeight}}克</span>
 				</el-col>
-				<el-col :span="24" style="padding:12px 0px;line-height:20px;">
-					{{MenuMsg.des}}
-				</el-col>
+				<el-col :span="24" style="padding:12px 0px;line-height:20px;">{{MenuMsg.des}}</el-col>
 			</el-col>
 		</div>
 	</div>

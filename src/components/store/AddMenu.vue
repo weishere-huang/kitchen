@@ -122,15 +122,18 @@
 					<el-input v-model="addMenu.des" type="textarea" rows="5" style="width:600px;"></el-input>
 				</el-form-item>
 				<el-form-item label>
-					<el-button size="small" type="primary">预览</el-button>
+					<el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button>
 					<el-button size="small" type="primary" @click="submitForm('addMenu')">保存</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
-		<el-dialog title="绑定菜谱" :visible.sync="dialogCoobook" width="600px" :close-on-click-modal="false">
+		<el-dialog title="绑定菜谱" :visible.sync="dialogCoobook" width="714px" :close-on-click-modal="false">
 			<div style="overflow:hidden;margin-top:16px;">
 				<dialog-coobook v-on:dialogCoobookHide="dialogCoobookHide"></dialog-coobook>
 			</div>
+		</el-dialog>
+		<el-dialog :visible.sync="dialogPreview" width="414px" class="showPic el_show">
+			<Preview :MenuMsg="addMenu"></Preview>
 		</el-dialog>
 	</div>
 </template>
@@ -138,10 +141,12 @@
 import ueditor from "../public/Ue";
 import areaList from "../public/Area";
 import dialogCoobook from "./addCookbook/addCookbook";
+import Preview from "./preview/Preview";
 export default {
 	inject: ["reload"],
 	data() {
 		return {
+			dialogPreview: false,
 			addMenu: {
 				itemName: "",
 				itemCate: "",
@@ -171,7 +176,7 @@ export default {
 				itemCate: [{ required: true, message: "请选择分类", trigger: "blur" }],
 				itemImg: [{ required: true, message: "请上传图片" }],
 				script: [
-					{ required: true, message: "请选择菜谱脚本", trigger: "focus" }
+					{ required: false, message: "请选择菜谱脚本", trigger: "focus" }
 				],
 				itemPrice: [
 					{
@@ -404,7 +409,7 @@ export default {
 			).then(result => {
 				console.log(result.data);
 				if (result.data.code === 200) {
-					this.$router.push("/store");
+					this.$router.back(-1);
 					this.reload();
 				} else {
 					this.$message.error("出库失败,请重新尝试");
@@ -420,7 +425,8 @@ export default {
 	components: {
 		ueditor,
 		areaList,
-		dialogCoobook
+		dialogCoobook,
+		Preview
 	}
 };
 </script>
@@ -534,6 +540,11 @@ export default {
 		vertical-align: bottom;
 		padding-left: 8px;
 		line-height: 40px;
+	}
+}
+.el_show {
+	.el-dialog {
+		background: #fff0;
 	}
 }
 </style>
