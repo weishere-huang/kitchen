@@ -2,7 +2,6 @@
 	<div class="edit_role">
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
-			<el-button size="small" type="primary" @click="updateContro">确认修改</el-button>
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
@@ -39,6 +38,9 @@
 						<span :title="data.name" class="listcontent">{{ data.name +" ("+data.dataUrl+")"}}</span>
 					</span>
 				</el-tree>
+			</div>
+			<div style="padding:16px 0 0 200px;">
+				<el-button size="small" type="primary" @click="updateContro">确认修改</el-button>
 			</div>
 		</div>
 	</div>

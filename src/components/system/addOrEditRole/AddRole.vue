@@ -2,7 +2,6 @@
 	<div class="add_role">
 		<div class="top_list">
 			<el-button size="small" type="primary" @click="$router.back(-1)" class="el-icon-arrow-left">返回</el-button>
-			<el-button size="small" type="primary" @click="addContro">确认添加</el-button>
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
@@ -38,6 +37,9 @@
 						<span :title="data.name" class="listcontent">{{ data.name +" ("+data.dataUrl+")"}}</span>
 					</span>
 				</el-tree>
+			</div>
+			<div style="padding:16px 0 0 200px;">
+				<el-button size="small" type="primary" @click="addContro">确认添加</el-button>
 			</div>
 		</div>
 	</div>
