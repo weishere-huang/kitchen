@@ -20,7 +20,7 @@
 			<el-table
 				:data="tableData"
 				style="width: 100%"
-				size="small"
+				size="mini"
 				stripe
 				tooltip-effect="light"
 				:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
@@ -42,8 +42,18 @@
 				</el-table-column>
 				<el-table-column label="状态" min-width="100" show-overflow-tooltip>
 					<template slot-scope="scope">
-						<span v-if="scope.row.state==0">正常</span>
-						<span v-if="scope.row.state==-1" style="color:red">禁用</span>
+						<span class="state_change" @click="changeState(scope.row,scope.$index)">
+							<span v-if="scope.row.state==0">
+								<el-tooltip class="item" effect="light" content="正常" placement="right">
+									<i class="iconfont" style="color:#1cc09f">&#xe78a;</i>
+								</el-tooltip>
+							</span>
+							<span v-if="scope.row.state==-1" style="color:red">
+								<el-tooltip class="item" effect="light" content="禁用" placement="right">
+									<i class="iconfont" style="color:#999999">&#xe63a;</i>
+								</el-tooltip>
+							</span>
+						</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>
@@ -120,6 +130,13 @@ export default {
 		};
 	},
 	methods: {
+		changeState(row, index) {
+			if (this.tableData[index].state == -1) {
+				this.tableData[index].state = 0;
+			} else {
+				this.tableData[index].state = -1;
+			}
+		},
 		resetPasswords(index, rowData) {
 			rowData.resetvisible = false;
 			let params = { type: "edit", index: index, rowData: rowData };
@@ -253,6 +270,12 @@ export default {
 	.table_list {
 		overflow: hidden;
 		padding: 10px;
+		.state_change {
+			cursor: pointer;
+			i {
+				font-size: 20px;
+			}
+		}
 	}
 }
 </style>

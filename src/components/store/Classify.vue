@@ -151,7 +151,7 @@ export default {
 				this.saveEdit();
 			} else {
 				this.$message.error("排序只能为正整数，请重新输入");
-				this.getClassfy();
+				// this.getClassfy();
 			}
 		},
 		validator(rule, value, callback) {

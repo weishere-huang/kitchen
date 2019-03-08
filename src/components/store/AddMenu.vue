@@ -122,7 +122,7 @@
 					<el-input v-model="addMenu.des" type="textarea" rows="5" style="width:600px;"></el-input>
 				</el-form-item>
 				<el-form-item label>
-					<el-button size="small" type="primary">预览</el-button>
+					<el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button>
 					<el-button size="small" type="primary" @click="submitForm('addMenu')">保存</el-button>
 				</el-form-item>
 			</el-form>
@@ -132,16 +132,21 @@
 				<dialog-coobook v-on:dialogCoobookHide="dialogCoobookHide"></dialog-coobook>
 			</div>
 		</el-dialog>
+		<el-dialog :visible.sync="dialogPreview" width="414px" class="showPic el_show">
+			<Preview :MenuMsg="addMenu"></Preview>
+		</el-dialog>
 	</div>
 </template>
 <script>
 import ueditor from "../public/Ue";
 import areaList from "../public/Area";
 import dialogCoobook from "./addCookbook/addCookbook";
+import Preview from "./preview/Preview";
 export default {
 	inject: ["reload"],
 	data() {
 		return {
+			dialogPreview: false,
 			addMenu: {
 				itemName: "",
 				itemCate: "",
@@ -420,7 +425,8 @@ export default {
 	components: {
 		ueditor,
 		areaList,
-		dialogCoobook
+		dialogCoobook,
+		Preview
 	}
 };
 </script>
@@ -534,6 +540,11 @@ export default {
 		vertical-align: bottom;
 		padding-left: 8px;
 		line-height: 40px;
+	}
+}
+.el_show {
+	.el-dialog {
+		background: #fff0;
 	}
 }
 </style>

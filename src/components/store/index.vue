@@ -259,7 +259,7 @@ export default {
 				}
 			],
 			pageIndex: 1,
-			pageSize: 10,
+			pageSize: 15,
 			keyword: "",
 			total: 0,
 			isHideList: this.$route.params.id !== undefined ? true : false
@@ -307,7 +307,7 @@ export default {
 				this.editfood(row);
 			} else {
 				this.$message.error("价格只能保留两位小数，且不能为负数，请重新输入");
-				this.foodlist();
+				// this.foodlist();
 			}
 			// this.tableData[index].itemPrice =
 			// 	row.itemPrice.match(/^\d*(\.?\d{0,2})/g)[0] || null;
@@ -321,7 +321,7 @@ export default {
 				this.editfood(row);
 			} else {
 				this.$message.error("烹饪时长只能为正整数，请重新输入");
-				this.foodlist();
+				// this.foodlist();
 			}
 		},
 		handleSortLevel(row, index) {
@@ -329,7 +329,7 @@ export default {
 				this.editfood(row);
 			} else {
 				this.$message.error("排序只能为正整数，请重新输入");
-				this.foodlist();
+				// this.foodlist();
 			}
 			// this.tableData[index].sortLevel =
 			// 	row.sortLevel.match(/^\d*(\d{0,0})/g)[0] || null;
@@ -437,6 +437,7 @@ export default {
 				this
 			).then(
 				result => {
+					console.log(result);
 					for (let i = 0; i < result.data.data.content.length; i++) {
 						result.data.data.content[i].itemPrice =
 							result.data.data.content[i].itemPrice / 100;
