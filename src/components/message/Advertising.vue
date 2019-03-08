@@ -111,16 +111,16 @@ export default {
 			currentPage: 1,
 			tableData: [],
 			pageIndex: 1,
-      pageSize: 10,
-      dialogShowPic:""
+			pageSize: 10,
+			dialogShowPic: ""
 		};
 	},
 	methods: {
-    getPic(value){
-      this.mainPicShow=true
-      this.dialogShowPic=value
-      console.log(value);
-    },
+		getPic(value) {
+			this.mainPicShow = true;
+			this.dialogShowPic = value;
+			console.log(value);
+		},
 		toadd() {
 			this.addMsg = {};
 			this.editMsg = {};

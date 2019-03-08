@@ -226,7 +226,7 @@ export default {
 				timeFrame1: ["9-00", "18-00"],
 				timeFrame2: null,
 				timeFrame3: null,
-				timeFrame4:null,
+				timeFrame4: null,
 				retentionTime: "",
 				allMoney: ""
 			},
@@ -336,9 +336,7 @@ export default {
 			}
 		};
 	},
-	methods: {
-		
-	},
+	methods: {}
 };
 </script>
 

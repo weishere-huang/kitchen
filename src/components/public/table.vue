@@ -85,10 +85,10 @@ export default {
 		},
 		handle: {
 			type: Number
-    },
-    cellStyle:{
-      type:Function
-    }
+		},
+		cellStyle: {
+			type: Function
+		}
 	},
 	methods: {
 		handleDetails(index, rowData) {
