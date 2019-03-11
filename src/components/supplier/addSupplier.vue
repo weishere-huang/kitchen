@@ -1,8 +1,36 @@
 <template>
-	<div class="store_list">
+	<div class="add_supplier">
+		<div class="top_list">
+			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
+		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>销售区域</h4>
+				<h4>添加供应商</h4>
+			</div>
+			<div class="supplier_form">
+				<el-form size="small" label-width="200px">
+					<el-form-item label="供应商名称：" prop="">
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="联系人：" prop="">
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="联系电话：" prop="">
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="详细地址：" prop="">
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="供应商账号：" prop="">
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="密码：" prop="">
+						<el-input type="password" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="确认密码：" prop="">
+						<el-input type="password" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+				</el-form>
 			</div>
 			<div class="table_list">
 				<el-col :span="8">
@@ -163,7 +191,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.store_list {
+.add_supplier {
 	font-size: 14px;
 	color: @font-normal;
 
