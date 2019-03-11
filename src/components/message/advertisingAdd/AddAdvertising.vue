@@ -153,36 +153,41 @@ export default {
 	created() {
 		if (this.addMsg.id != null) {
 			console.log("111");
-			this.mainPic = [
-				{
-					name: "mainpic.jpg",
-					url: this.addMsg.mainPic
-				}
-			];
-			this.content = [
-				{
-					name: "content.jpg",
-					url: this.addMsg.content
-				}
-			];
+        this.mainPic = [
+          {
+            name: "mainpic.jpg",
+            url: this.addMsg.mainPic
+          }
+        ];
+      if(this.addMsg.content!==null && this.addMsg.content!=="") {
+        this.content = [
+          {
+            name: "content.jpg",
+            url: this.addMsg.content
+          }
+        ];
+      }
 		}
 	},
 	watch: {
 		addMsg() {
+
 			if (this.addMsg.id != null) {
 				console.log("111");
-				this.mainPic = [
-					{
-						name: "mainpic.jpg",
-						url: this.addMsg.mainPic
-					}
-				];
-				this.content = [
-					{
-						name: "content.jpg",
-						url: this.addMsg.content
-					}
-				];
+          this.mainPic = [
+            {
+              name: "mainpic.jpg",
+              url: this.addMsg.mainPic
+            }
+          ];
+        if(this.addMsg.content!==null && this.addMsg.content!=="") {
+          this.content = [
+            {
+              name: "content.jpg",
+              url: this.addMsg.content
+            }
+          ];
+        }
 			}
 		}
 	}

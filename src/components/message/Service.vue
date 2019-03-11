@@ -385,7 +385,7 @@ export default {
         this.editMsg.phone==null||this.editMsg.phone===""||
         this.editMsg.title==null||this.editMsg.title===""||
         this.editMsg.workingHours==null||this.editMsg.workingHours===""||
-        this.editMsg.serviceMode==null){
+        this.editMsg.serviceMode==null||this.editMsg.serviceMode.length<1){
         flag=false;
       }
       if(flag){

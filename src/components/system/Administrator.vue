@@ -76,22 +76,16 @@ export default {
 				},
 				{
 					label: "角色权限",
-					prop: "name",
+					prop: "roleName",
 					width: 90
 				},
 				{
 					label: "创建时间",
-					prop: "gmtCreate",
+					prop: "gmt_create",
 					width: 140
 				}
 			],
-			tableData: [
-				{
-					admin: "roulen",
-					phone: "13888489527",
-					time: "2019-01-23 14:53:31"
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
 			currentPage: 1,
@@ -183,7 +177,9 @@ export default {
 					params: data,
 					url: "/api-platform/employee/updateState",
 					type: "post",
-					option: {}
+					option: {
+            enableMsg:false
+          }
 				},
 				this
 			).then(result => {
@@ -209,10 +205,12 @@ export default {
 				return;
 			}
 			console.log(this.userMsg);
-			let pass = this.userMsg.password;
-			pass = md5(pass);
-			let key = "*chang_hong_device_cloud";
-			this.userMsg.password = this.encryptByDES(pass, key);
+			if(this.userMsg.password!=null&&this.userMsg.password!==""&&this.userMsg.password!==undefined){
+        let pass = this.userMsg.password;
+        pass = md5(pass);
+        let key = "*chang_hong_device_cloud";
+        this.userMsg.password = this.encryptByDES(pass, key);
+      }
 			this.addAdmin();
 		},
 		addAdmin() {
@@ -228,7 +226,9 @@ export default {
 					params: data,
 					url: "/api-platform/employee/add",
 					type: "post",
-					option: {}
+					option: {
+            enableMsg:false
+          }
 				},
 				this
 			).then(result => {
@@ -252,8 +252,9 @@ export default {
 				return;
 			}
 			if (
-				this.editUserMsg.password != null ||
-				this.editUserMsg.password !== ""
+				this.editUserMsg.password != null &&
+				this.editUserMsg.password !== "" &&
+        this.editUserMsg.password !==undefined
 			) {
 				let pass = this.editUserMsg.password;
 				pass = md5(pass);
@@ -276,7 +277,9 @@ export default {
 					params: data,
 					url: "/api-platform/employee/update",
 					type: "post",
-					option: {}
+					option: {
+            enableMsg:false
+          }
 				},
 				this
 			).then(result => {
