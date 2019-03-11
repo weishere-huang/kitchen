@@ -5,7 +5,7 @@
 				size="small"
 				type="primary"
 				class="el-icon-circle-plus-outline"
-				@click="dialogVisible=true"
+				@click="addClassifyShow"
 			>添加分类</el-button>
 		</div>
 		<div class="bottom_list">
@@ -47,6 +47,7 @@
 								step="0"
 								v-model="scope.row.sortLevel"
 								style="width:80px;padding:0;"
+								@change="handleSortLevel(scope.row,scope.$index)"
 							></el-input>
 						</template>
 					</el-table-column>
@@ -73,13 +74,13 @@
 			</div>
 		</div>
 		<el-dialog title="添加分类" :visible.sync="dialogVisible" width="500px">
-			<el-form label-width="120px" style="padding-top:10px;" size="small">
+			<el-form label-width="120px" style="padding-top:10px;" size="small" :model="addClassifyName">
 				<el-form-item
 					label="分类名称："
 					prop="classifyName"
-					:rules="{ required: true, message: '名称不能为空', trigger: ['blur' ,'change']}"
+					:rules="{ required: true, message: '名称不能为空', trigger: 'blur'}"
 				>
-					<el-input type="text" size="small" style="width:90%;" v-model="classifyName"></el-input>
+					<el-input type="text" size="small" style="width:90%;" v-model="addClassifyName.classifyName"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -120,7 +121,9 @@ export default {
 				sortLevel: "",
 				cateName: ""
 			},
-			classifyName: "",
+			addClassifyName: {
+				classifyName: ""
+			},
 			editClassify: false,
 			isShow: "1",
 			dialogVisible: false,
@@ -142,6 +145,19 @@ export default {
 		};
 	},
 	methods: {
+		addClassifyShow() {
+			this.addClassifyName.classifyName = "";
+			this.dialogVisible = true;
+		},
+		handleSortLevel(row, index) {
+			if (/^[0-9]*[1-9][0-9]*$/.test(row.sortLevel)) {
+				this.editMsg = row;
+				this.saveEdit();
+			} else {
+				this.$message.error("排序只能为正整数，请重新输入");
+				// this.getClassfy();
+			}
+		},
 		validator(rule, value, callback) {
 			if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
 				callback(new Error("只能为正整数"));
@@ -150,12 +166,13 @@ export default {
 			}
 		},
 		addClassify() {
-			console.log(this.classifyName);
-			if (this.classifyName == "") {
+			if (this.addClassifyName.classifyName == "") {
 				this.$message.error("名称不能为空！");
 			} else {
 				let qs = require("qs");
-				let datas = qs.stringify({ cateName: this.classifyName });
+				let datas = qs.stringify({
+					cateName: this.addClassifyName.classifyName
+				});
 				this.Axios(
 					{
 						params: datas,
@@ -209,7 +226,7 @@ export default {
 						console.log(result);
 						if (result.data.code === 200) {
 							this.editClassify = false;
-							this.reload();
+							this.getClassfy();
 						}
 					},
 					({ type, info }) => {}
@@ -283,7 +300,8 @@ export default {
 	},
 	created() {
 		this.getClassfy();
-	}
+	},
+	watch: {}
 };
 </script>
 

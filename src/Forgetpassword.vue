@@ -31,7 +31,21 @@
 				<el-form-item style="margin-bottom:50px;">
 					<el-input type="text" placeholder="短信验证码" v-model="code">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe636;</i>
-						<el-button class="auth_code" slot="append" type="text" @click="togetAuthCode">获取验证码</el-button>
+						<el-button
+							class="auth_code"
+							v-if="!sendMsgDisabled"
+							slot="append"
+							type="text"
+							@click="togetAuthCode"
+						>获取验证码</el-button>
+						<el-button
+							class="auth_code"
+							v-if="sendMsgDisabled"
+							disabled="true"
+							slot="append"
+							type="text"
+							@click="togetAuthCode"
+						>{{time+'秒后重新获取'}}</el-button>
 					</el-input>
 				</el-form-item>
 				<el-form-item style>
@@ -89,6 +103,7 @@ import CryptoJS from "crypto-js/crypto-js.js";
 export default {
 	data() {
 		return {
+			sendMsgDisabled: false,
 			succeed: false,
 			isHide: true,
 			getUser: true,
@@ -101,7 +116,8 @@ export default {
 			newPasswordMsg: {
 				newPassword: "",
 				repetitionPassword: ""
-			}
+			},
+			time: 60
 		};
 	},
 	methods: {
@@ -151,6 +167,15 @@ export default {
 							result.data.data.substr(7);
 						this.getUser = false;
 						this.getAuthCode = true;
+						let me = this;
+						me.sendMsgDisabled = true;
+						let interval = window.setInterval(function() {
+							if (me.time-- <= 0) {
+								me.time = 60;
+								me.sendMsgDisabled = false;
+								window.clearInterval(interval);
+							}
+						}, 1000);
 					}
 				},
 				({ type, info }) => {

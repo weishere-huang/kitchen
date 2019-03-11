@@ -93,7 +93,7 @@
 						<router-view v-if="isRouterAlive"/>
 					</transition>
 				</el-main>
-				<el-footer>长虹智慧厨房({{version?(new Date(version).format("yyyy/MM/dd hh:mm:ss")):'no version'}})</el-footer>
+				<el-footer>长虹智慧厨房({{version?(new Date(version).format("yyyy/MM/dd hh:mm:ss")):'no version'}})&nbsp;&nbsp;版本号：{{versionNumber}}</el-footer>
 			</el-container>
 		</el-container>
 		<!-- <el-container >
@@ -132,7 +132,8 @@ export default {
 			province: [],
 			city: [],
 			block: [],
-			country: []
+			country: [],
+			versionNumber: this.global.versionNumber
 		};
 	},
 	computed: {},
