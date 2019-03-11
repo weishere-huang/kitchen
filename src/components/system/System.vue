@@ -198,7 +198,7 @@
 						></el-time-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button size="small" type="primary">保存</el-button>
+						<el-button size="small" type="primary" @click="submitForm('systemMsg')">保存</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -336,7 +336,35 @@ export default {
 			}
 		};
 	},
-	methods: {}
+	methods: {
+		submitForm(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					if (this.systemMsg.sendTime == 2) {
+						if (this.systemMsg.retentionTime == "") {
+							this.$message.error("请填写保留时间！");
+						} else if (this.systemMsg.moneyOff == true) {
+							if (this.systemMsg.allMoney == "") {
+								this.$message.error("请填写满减条件！");
+							} else {
+								this.$message.success("保存成功");
+							}
+						}
+					} else if (this.systemMsg.moneyOff == true) {
+						if (this.systemMsg.allMoney == "") {
+							this.$message.error("请填写满减条件！");
+						} else {
+							this.$message.success("保存成功");
+						}
+					} else {
+						this.$message.success("保存成功");
+					}
+				} else {
+					return false;
+				}
+			});
+		}
+	}
 };
 </script>
 
