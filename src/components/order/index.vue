@@ -159,7 +159,11 @@ export default {
 				{
 					label: "收货人/手机号",
 					prop: "phone",
-					width: 120
+					width: 120,
+					formatter: function(row, column) {
+						let str = row.address.consignee + " " + row.address.phone;
+						return str;
+					}
 				},
 				{
 					label: "总金额",
@@ -192,7 +196,7 @@ export default {
 			],
 
 			pageIndex: 1,
-			pageSize: 10,
+			pageSize: 15,
 			total: 0,
 			searchDate1: null,
 			searchDate2: null,
@@ -331,7 +335,12 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
+					console.log(result.data.data.content);
+					for (let i = 0; i < result.data.data.content.length; i++) {
+						result.data.data.content[i].address = JSON.parse(
+							result.data.data.content[i].address
+						);
+					}
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},

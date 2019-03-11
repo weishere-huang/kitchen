@@ -43,7 +43,13 @@
 			<el-dialog title="付款" :visible.sync="dialogPay" width="500px" :close-on-click-modal="false">
 				<el-form label-width="85px" style="padding-top:16px;">
 					<el-form-item label="操作说明：" style="margin-bottom:0px;">
-						<el-input type="textarea" rows="5" style="width:99%" placeholder="请输入说明文字，不少于五个字"></el-input>
+						<el-input
+							type="textarea"
+							rows="5"
+							style="width:99%"
+							v-model="payOI"
+							placeholder="请输入说明文字，不少于五个字"
+						></el-input>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -54,7 +60,13 @@
 			<el-dialog title="关闭" :visible.sync="dialogClose" width="500px" :close-on-click-modal="false">
 				<el-form label-width="85px" style="padding-top:16px;">
 					<el-form-item label="操作说明：" style="margin-bottom:0px;">
-						<el-input type="textarea" rows="5" style="width:99%" placeholder="请输入说明文字，不少于五个字"></el-input>
+						<el-input
+							type="textarea"
+							rows="5"
+							style="width:99%"
+							v-model="closeOI"
+							placeholder="请输入说明文字，不少于五个字"
+						></el-input>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -258,6 +270,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			payOI: "",
+			closeOI: "",
 			orderDetails: "",
 			state: 1,
 			dialogSend: false,
@@ -363,56 +377,64 @@ export default {
 			);
 		},
 		payOrder() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				orderId: this.$route.params.id
-			});
-			this.Axios(
-				{
-					params: data,
-					option: {
-						successMsg: "付款成功"
+			if (this.payOI == "") {
+				this.$message.error("请填写操作说明");
+			} else {
+				let qs = require("qs");
+				let data = qs.stringify({
+					orderId: this.$route.params.id
+				});
+				this.Axios(
+					{
+						params: data,
+						option: {
+							successMsg: "付款成功"
+						},
+						type: "post",
+						url: "/api-order/order/payOrder"
 					},
-					type: "post",
-					url: "/api-order/order/payOrder"
-				},
-				this
-			).then(
-				result => {
-					console.log(result);
-					if (result.data.code === 200) {
-						this.reload();
-						this.dialogPay = false;
-					}
-				},
-				({ type, info }) => {}
-			);
+					this
+				).then(
+					result => {
+						console.log(result);
+						if (result.data.code === 200) {
+							this.reload();
+							this.dialogPay = false;
+						}
+					},
+					({ type, info }) => {}
+				);
+			}
 		},
 		closeOrder() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				orderId: this.$route.params.id
-			});
-			this.Axios(
-				{
-					params: data,
-					option: {
-						successMsg: "订单已关闭"
+			if (this.closeOI == "") {
+				this.$message.error("请填写操作说明");
+			} else {
+				let qs = require("qs");
+				let data = qs.stringify({
+					orderId: this.$route.params.id
+				});
+				this.Axios(
+					{
+						params: data,
+						option: {
+							successMsg: "订单已关闭"
+						},
+						type: "post",
+						url: "/api-order/order/closeOrder"
 					},
-					type: "post",
-					url: "/api-order/order/closeOrder"
-				},
-				this
-			).then(
-				result => {
-					console.log(result);
-					if (result.data.code === 200) {
-						this.reload();
-						this.dialogClose = false;
-					}
-				},
-				({ type, info }) => {}
-			);
+					this
+				).then(
+					result => {
+						console.log(result);
+						if (result.data.code === 200) {
+							this.reload();
+							this.dialogClose = false;
+						}
+					},
+					({ type, info }) => {}
+				);
+			}
 		},
 		handleSelectionChange(select) {},
 		getRow(row, event) {
