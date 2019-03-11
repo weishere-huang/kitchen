@@ -111,13 +111,24 @@ export default [{
     ]
   },
   {
-    menu: '销售区域',
+    menu: '供应商',
     permissionCode: 'area',
     defaultDock: false,
     icon: '&#xe605;',
     subMenu: [{
-      menu: '销售区域',
-      route: '/SalesArea',
+      menu: '供应商列表',
+      route: '/Supplier',
+      permissionCode: 'area_list_lookup'
+    }, {
+      menu: '添加供应商',
+      route: '/Supplier/AddSupplier',
+      visible: true,
+      permissionCode: 'area_list_lookup'
+    }, {
+      menu: '修改供应商',
+      // route: '/Supplier/EditSupplier',
+      routeReg: /^\/Supplier\/EditSupplier\/\d{1,}$/i,
+      visible: true,
       permissionCode: 'area_list_lookup'
     }]
   },

@@ -10,7 +10,9 @@ import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
 import Problems from '@/components/message/Problems'
 import Advertising from '@/components/message/Advertising'
-import SalesArea from '@/components/salesArea/index'
+import Supplier from '@/components/supplier/index'
+import AddSupplier from '@/components/supplier/AddSupplier'
+import EditSupplier from '@/components/supplier/EditSupplier'
 import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
 import System from '@/components/system/System'
@@ -143,15 +145,38 @@ const router = new Router({
       },
     },
     {
-      path: '/SalesArea',
-      name: 'SalesArea',
-      component: SalesArea,
+      path: '/Supplier',
+      name: 'Supplier',
+      component: Supplier,
       props: {
-        pageName: '销售区域'
+        pageName: '供应商'
       },
       meta: {
         requireAuth: true,
       },
+      children: [{
+          path: 'AddSupplier',
+          name: 'AddSupplier',
+          component: AddSupplier,
+          props: {
+            pageName: '添加供应商'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'EditSupplier/:id',
+          name: 'EditSupplier',
+          component: EditSupplier,
+          props: {
+            pageName: '修改供应商'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        }
+      ]
     },
     {
       path: '/Administrator',
