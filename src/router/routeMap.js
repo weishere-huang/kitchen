@@ -122,11 +122,13 @@ export default [{
     }, {
       menu: '添加供应商',
       route: '/Supplier/AddSupplier',
+      visible: true,
       permissionCode: 'area_list_lookup'
     }, {
       menu: '修改供应商',
       // route: '/Supplier/EditSupplier',
       routeReg: /^\/Supplier\/EditSupplier\/\d{1,}$/i,
+      visible: true,
       permissionCode: 'area_list_lookup'
     }]
   },

@@ -23,6 +23,9 @@
 					</el-form-item>
 					<el-form-item label="供应商账号：" prop>
 						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-tooltip class="item" effect="light" content="账号格式：agent加3~5数字组成" placement="top">
+							<i class="el-icon-warning" style="color:#1cc09f"></i>
+						</el-tooltip>
 					</el-form-item>
 					<el-form-item label="密码：" prop>
 						<el-input type="password" size="small" style="width:350px;"></el-input>
