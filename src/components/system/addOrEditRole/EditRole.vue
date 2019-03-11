@@ -33,6 +33,7 @@
 					highlight-current
 					:props="defaultProps"
 					:default-checked-keys="editpermission"
+          :default-expanded-keys="[0,1]"
 				>
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span :title="data.name" class="listcontent">{{ data.name +" ("+data.dataUrl+")"}}</span>

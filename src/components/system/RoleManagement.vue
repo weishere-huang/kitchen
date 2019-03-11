@@ -1,49 +1,54 @@
 <template>
-	<div class="role_management">
-		<!-- <router-view></router-view> -->
-		<div v-show="isHideList">
-			<div class="top_list">
-				<el-button
-					size="small"
-					type="primary"
-					class="el-icon-circle-plus-outline"
-					@click="$router.push({path:'/RoleManagement/AddRole'})"
-				>添加角色</el-button>
-			</div>
-			<div class="bottom_list">
-				<div class="top_title">
-					<h4>角色列表</h4>
-				</div>
-				<div class="table_list">
-					<table-list
-						:selectShow="false"
-						:handleSelectionChange="handleSelectionChange"
-						:column="items"
-						v-on:handlechange="handlechange"
-						:data="tableData"
-						:rowDblclick="getRow"
-						:handle="100"
-						:deleteShow="true"
-						:handleShow="true"
-						:editShow="true"
-					></table-list>
-				</div>
-				<div class="block" style="margin-top:10px;float:right">
-					<el-pagination
-						background
-						@size-change="handleSizeChange"
-						@current-change="handleCurrentChange"
-						:current-page.sync="currentPage"
-						:page-sizes="[15, 30, 100]"
-						:page-size="10"
-						layout="sizes, prev, pager, next"
-						:total="total"
-					></el-pagination>
-				</div>
-			</div>
-		</div>
-		<router-view></router-view>
-	</div>
+  <div class="role_management">
+    <!-- <router-view></router-view> -->
+    <div :class="[{hide:isHideList}]">
+      <div class="top_list">
+        <el-button
+          size="small"
+          type="primary"
+          class="el-icon-circle-plus-outline"
+          @click="$router.push({path:'/RoleManagement/AddRole'})"
+        >添加角色</el-button>
+      </div>
+      <div class="bottom_list">
+        <div class="top_title">
+          <h4>角色列表</h4>
+        </div>
+        <div class="table_list">
+          <table-list
+            :selectShow="false"
+            :handleSelectionChange="handleSelectionChange"
+            :column="items"
+            v-on:handlechange="handlechange"
+            :data="tableData"
+            :rowDblclick="getRow"
+            :handle="100"
+            :deleteShow="true"
+            :handleShow="true"
+            :editShow="true"
+          ></table-list>
+
+        </div>
+        <div
+          class="block"
+          style="margin-top:10px;float:right"
+        >
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="[15, 30, 100]"
+            :page-size="10"
+            layout="sizes, prev, pager, next"
+            :total="total"
+          >
+          </el-pagination>
+        </div>
+      </div>
+    </div>
+    <router-view></router-view>
+  </div>
 </template>
 <script>
 import tableList from "../public/table";
@@ -138,7 +143,9 @@ export default {
 					params: data,
 					url: "/api-platform/role/delete",
 					type: "post",
-					option: {}
+					option: {
+					  enableMsg:false
+          }
 				},
 				this
 			).then(result => {
@@ -151,16 +158,22 @@ export default {
 	},
 	created() {
 		this.getRoleList();
+    let a = this.$route.matched.find(item => item.name === "AddRole")
+      ? true
+      : false;
+    let b = this.$route.params.id !== undefined ? true : false;
+    this.isHideList = a || b ? true : false;
 	},
 	components: {
 		tableList
 	},
 	watch: {
 		$route() {
-			this.$route.matched.find(item => item.name === "AddRole") ||
-			this.$route.params.id !== undefined
-				? (this.isHideList = false)
-				: (this.isHideList = true);
+      let a = this.$route.matched.find(item => item.name === "AddRole")
+        ? true
+        : false;
+      let b = this.$route.params.id !== undefined ? true : false;
+      this.isHideList = a || b ? true : false;
 		}
 	}
 };

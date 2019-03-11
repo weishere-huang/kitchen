@@ -188,18 +188,19 @@ export default {
 		beforeadd() {
 			console.log(this.addMsg);
 			let flag = true;
-			if (this.addMsg.mainPic == null && this.addMsg.content == null)
-				flag = false;
-			if (
-				this.addMsg.title == null ||
-				this.addMsg.mainPic == null ||
-				this.addMsg.startTime == null ||
-				this.addMsg.startTime == null ||
-				this.addMsg.endTime == null ||
-				this.addMsg.state == null
-			) {
-				flag = false;
-			}
+      if ((this.addMsg.linkUrl == null||this.addMsg.linkUrl === "")
+        && (this.addMsg.content == null||this.addMsg.content === "")){
+        flag = false;
+      }
+      if (
+        this.addMsg.title == null || this.addMsg.title === "" ||
+        this.addMsg.mainPic == null || this.addMsg.mainPic === "" ||
+        this.addMsg.startTime == null || this.addMsg.startTime === "" ||
+        this.addMsg.endTime == null || this.addMsg.endTime === "" ||
+        this.addMsg.state == null || this.addMsg.state === ""
+      ) {
+        flag = false;
+      }
 			if (flag) {
 				this.addAdvertising();
 			} else {
@@ -240,15 +241,16 @@ export default {
 		//修改广告
 		beforeupdate() {
 			let flag = true;
-			if (this.editMsg.mainPic == null && this.editMsg.content == null)
-				flag = false;
+			if ((this.editMsg.linkUrl == null||this.editMsg.linkUrl === "")
+        && (this.editMsg.content == null||this.editMsg.content === "")){
+        flag = false;
+      }
 			if (
-				this.editMsg.title == null ||
-				this.editMsg.mainPic == null ||
-				this.editMsg.startTime == null ||
-				this.editMsg.startTime == null ||
-				this.editMsg.endTime == null ||
-				this.editMsg.state == null
+				this.editMsg.title == null || this.editMsg.title === "" ||
+        this.editMsg.mainPic == null || this.editMsg.mainPic === "" ||
+				this.editMsg.startTime == null || this.editMsg.startTime === "" ||
+				this.editMsg.endTime == null || this.editMsg.endTime === "" ||
+				this.editMsg.state == null || this.editMsg.state === ""
 			) {
 				flag = false;
 			}
