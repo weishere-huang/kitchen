@@ -13,6 +13,7 @@
 					:on-success="handleAvatarSuccess"
 					v-model="addMsg.mainPic"
 					:file-list="mainPic"
+          :limit="1"
 				>
 					<i class="el-icon-plus"></i>
 					<div slot="tip" class="el-upload__tip">宽高750 × 290像素，＜500KB的jpg图片</div>
@@ -31,6 +32,7 @@
 					:on-success="handleAvatarSuccess1"
 					v-model="addMsg.content"
 					:file-list="content"
+          :limit="1"
 				>
 					<i class="el-icon-plus"></i>
 					<div slot="tip" class="el-upload__tip">宽高1000 × 不限，＜2MB的jpg图片</div>
