@@ -76,7 +76,14 @@ export default {
 					width: 140
 				}
 			],
-			tableData: [],
+			tableData: [
+                {
+                    name:"绵阳永辉超市（涪城店）",
+                    contacts:"张小芳",
+                    phone:"13888888888",
+                    userName:"agent0816"
+                }
+            ],
 			pageIndex: 1,
 			pageSize: 10,
 			total: 10,
@@ -98,7 +105,8 @@ export default {
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				console.log(params);
+                console.log(params);
+                this.$router.push("/Supplier/EditSupplier/" + params.rowData.phone);
 			}
 			if (params.type === "delete") {
 				console.log(params);

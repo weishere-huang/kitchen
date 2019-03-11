@@ -12,6 +12,7 @@ import Problems from '@/components/message/Problems'
 import Advertising from '@/components/message/Advertising'
 import Supplier from '@/components/supplier/index'
 import AddSupplier from '@/components/supplier/AddSupplier'
+import EditSupplier from '@/components/supplier/EditSupplier'
 import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
 import System from '@/components/system/System'
@@ -154,16 +155,28 @@ const router = new Router({
         requireAuth: true,
       },
       children: [{
-        path: 'AddSupplier',
-        name: 'AddSupplier',
-        component: AddSupplier,
-        props: {
-          pageName: '添加供应商'
+          path: 'AddSupplier',
+          name: 'AddSupplier',
+          component: AddSupplier,
+          props: {
+            pageName: '添加供应商'
+          },
+          meta: {
+            requireAuth: true,
+          },
         },
-        meta: {
-          requireAuth: true,
-        },
-      }]
+        {
+          path: 'EditSupplier/:id',
+          name: 'EditSupplier',
+          component: EditSupplier,
+          props: {
+            pageName: '修改供应商'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        }
+      ]
     },
     {
       path: '/Administrator',

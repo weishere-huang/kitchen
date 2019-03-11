@@ -1,5 +1,5 @@
 <template>
-	<div class="add_supplier">
+	<div class="edit_supplier">
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
 		</div>
@@ -180,7 +180,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.add_supplier {
+.edit_supplier {
 	font-size: 14px;
 	color: @font-normal;
 
