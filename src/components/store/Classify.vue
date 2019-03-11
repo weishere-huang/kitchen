@@ -5,7 +5,7 @@
 				size="small"
 				type="primary"
 				class="el-icon-circle-plus-outline"
-				@click="dialogVisible=true"
+				@click="addClassifyShow"
 			>添加分类</el-button>
 		</div>
 		<div class="bottom_list">
@@ -145,6 +145,10 @@ export default {
 		};
 	},
 	methods: {
+		addClassifyShow() {
+			this.addClassifyName.classifyName = "";
+			this.dialogVisible = true;
+		},
 		handleSortLevel(row, index) {
 			if (/^[0-9]*[1-9][0-9]*$/.test(row.sortLevel)) {
 				this.editMsg = row;
@@ -296,7 +300,8 @@ export default {
 	},
 	created() {
 		this.getClassfy();
-	}
+	},
+	watch: {}
 };
 </script>
 
