@@ -79,17 +79,17 @@
 								></el-input>
 							</template>
 						</el-table-column>
-						<el-table-column label="库存" min-width="80" show-overflow-tooltip>
+						<!-- <el-table-column label="库存" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.inventory }}</span>
 							</template>
-						</el-table-column>
-						<el-table-column label="*烹饪时长(分钟)" min-width="110" show-overflow-tooltip>
+						</el-table-column> -->
+						<el-table-column label="*库存" min-width="110" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<el-input
 									size="small"
 									type="number"
-									v-model="scope.row.cookingTime"
+									v-model="scope.row.stockNow"
 									style="width:60px;padding:0;"
 									v-popover:popover
 									@change="handleCookkingTime(scope.row,scope.$index)"
@@ -249,7 +249,7 @@ export default {
 					name: "素炒花菜",
 					price: "9.8",
 					classify: "素菜",
-					inventory: "10",
+					stockNow: "10",
 					time: "5",
 					content: "400克",
 					up: "0",
@@ -277,6 +277,7 @@ export default {
 				itemWeight: data.itemWeight,
 				itemSpec: data.itemSpec,
 				cookingTime: data.cookingTime,
+				stockNow:data.stockNow,
 				spicy: data.spicy,
 				des: data.des,
 				state: data.state,
@@ -317,7 +318,7 @@ export default {
 			// this.tableData[index].cookingTime =
 			// 	row.cookingTime.match(/^\d*(\d{0,0})/g)[0] || null;
 			// this.editfood(row);
-			if (/^[0-9]*[1-9][0-9]*$/.test(row.cookingTime)) {
+			if (/^[0-9]*[1-9][0-9]*$/.test(row.stockNow)) {
 				this.editfood(row);
 			} else {
 				this.$message.error("烹饪时长只能为正整数，请重新输入");

@@ -43,8 +43,8 @@
 						step="0.01"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="商品库存：" prop="number">
-					<el-input type="number" size="small" style="width:192px;" v-model.number="addMenu.number"></el-input>
+				<el-form-item label="商品库存：" prop="stockNow">
+					<el-input type="number" size="small" style="width:192px;" v-model.number="addMenu.stockNow"></el-input>
 				</el-form-item>
 				<el-form-item label="烹饪时长：" prop="cookingTime">
 					<el-input
@@ -155,7 +155,7 @@ export default {
 				itemWeight: "",
 				itemSpec: "",
 				cookingTime: "",
-				number: "",
+				stockNow: "",
 				spicy: "",
 				des: "",
 				state: "2",
@@ -212,7 +212,7 @@ export default {
 						trigger: "blur"
 					}
 				],
-				number: [
+				stockNow: [
 					{
 						required: true,
 						message: "请输入商品库存",
@@ -387,6 +387,7 @@ export default {
 				itemPrice: this.addMenu.itemPrice,
 				itemWeight: this.addMenu.itemWeight,
 				itemSpec: this.addMenu.itemSpec,
+				stockNow:this.addMenu.stockNow,
 				cookingTime: this.addMenu.cookingTime,
 				spicy: this.addMenu.spicy,
 				des: this.addMenu.des,
