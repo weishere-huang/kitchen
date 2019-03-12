@@ -235,3 +235,7 @@ input[type="number"] {
 .hide {
   display: none !important;
 }
+.upload_show {
+  height: 80px;
+  overflow: hidden;
+}

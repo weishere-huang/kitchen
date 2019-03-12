@@ -224,7 +224,7 @@ export default {
 					alipay: true
 				},
 				sendTime: "1",
-				timeFrame1: ["9-00", "18-00"],
+				timeFrame1: ["09-00", "18-00"],
 				timeFrame2: null,
 				timeFrame3: null,
 				timeFrame4: null,

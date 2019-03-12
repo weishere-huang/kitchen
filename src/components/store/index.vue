@@ -83,7 +83,7 @@
 							<template slot-scope="scope">
 								<span>{{ scope.row.inventory }}</span>
 							</template>
-						</el-table-column> -->
+						</el-table-column>-->
 						<el-table-column label="*库存" min-width="110" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<el-input
@@ -189,11 +189,6 @@
 									</div>
 									<el-button slot="reference" type="text">删除</el-button>
 								</el-popover>
-								<!-- <el-button
-                type="text"
-                size="mini"
-                @click.stop.prevent="handleDelete(scope.$index, scope.row)"
-								>删除</el-button>-->
 							</template>
 						</el-table-column>
 					</el-table>
@@ -277,7 +272,7 @@ export default {
 				itemWeight: data.itemWeight,
 				itemSpec: data.itemSpec,
 				cookingTime: data.cookingTime,
-				stockNow:data.stockNow,
+				stockNow: data.stockNow,
 				spicy: data.spicy,
 				des: data.des,
 				state: data.state,
