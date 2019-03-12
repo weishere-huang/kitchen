@@ -6,16 +6,17 @@
 		</el-col>
 		<el-col :span="24" class="content_case">
 			<el-col :span="24" style="padding:12px 0;">
-				<span v-if="recentSearch!=''">搜索结果：</span>
-				<span v-else>最近所搜：</span>
+				<span v-if="recentSearch==2">搜索结果：</span>
+				<span v-if="recentSearch==1">全部：</span>
 			</el-col>
 			<el-col :span="24" class="results" style="padding-bottom:16px;height:200px;overflow:scroll;">
-				<span
+				<el-col
+				
 					class="content_item"
 					@click="getValue(item)"
 					v-for="(item, index) in scriptData"
 					:key="index"
-				>{{item}}</span>
+				>{{item}}</el-col>
 			</el-col>
 		</el-col>
 	</div>
@@ -35,27 +36,18 @@ export default {
 				"老鸭汤",
 				"鱼香茄子"
 			],
-			recentSearch: [
-				"糖醋里脊",
-				"锅包肉",
-				"老鸭汤",
-				"鱼香茄子",
-				"红烧肉",
-				"鱼香肉丝",
-				"酸菜鱼",
-				"鸡公煲",
-				"酸辣土豆丝"
-			]
+			recentSearch: 1
 		};
 	},
 	methods: {
 		getValue(val) {
+			console.log(val);
 			let params = { value: val, isHide: false };
 			this.$emit("dialogCoobookHide", params);
 		}
 	},
 	created() {
-		this.scriptData = this.recentSearch;
+		// this.scriptData = this.recentSearch;
 	}
 };
 </script>
@@ -71,9 +63,9 @@ export default {
 	font-size: 14px;
 	color: @font-normal;
 	.results {
-		display: flex;
-		flex-wrap: wrap;
-		align-content: center;
+		// display: flex;
+		// flex-wrap: wrap;
+		// align-content: center;
 		// justify-content: space-between;
 	}
 	.content_item {

@@ -321,6 +321,7 @@ export default {
 			);
 		},
 		dialogCoobookHide(params) {
+			console.log(params);
 			this.dialogCoobook = params.ishide;
 			this.cookbook = params.value;
 		},

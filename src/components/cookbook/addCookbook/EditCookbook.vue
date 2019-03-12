@@ -197,9 +197,9 @@
 			</div>
 		</div>
 		<el-dialog
-			title="绑定菜谱脚本"
+			title="绑定烹饪流程"
 			:visible.sync="dialogScript"
-			width="600px"
+			width="714px"
 			:close-on-click-modal="false"
 		>
 			<div style="overflow:hidden;margin-top:16px;">
