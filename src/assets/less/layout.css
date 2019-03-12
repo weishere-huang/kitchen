@@ -219,6 +219,7 @@ input[type="number"] {
 .showPic .el-dialog__body {
   padding: 0;
   font-size: 0;
+  line-height: 0;
 }
 .color_text {
   color: #1cc09f;
@@ -234,4 +235,8 @@ input[type="number"] {
 }
 .hide {
   display: none !important;
+}
+.upload_show {
+  height: 80px;
+  overflow: hidden;
 }

@@ -22,18 +22,45 @@
 					</div>
 				</div>
 				<div class="table_list">
-					<table-list
-						:selectShow="false"
-						:handleSelectionChange="handleSelectionChange"
-						:column="items"
-						v-on:handlechange="handlechange"
+					<el-table
 						:data="tableData"
-						:rowDblclick="getRow"
-						:handle="100"
-						:editShow="true"
-						:deleteShow="true"
-						:handleShow="true"
-					></table-list>
+						style="width: 100%"
+						size="mini"
+						tooltip-effect="light"
+						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+					>
+						<el-table-column label="菜谱名称" min-width="100" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.itemName }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="分类" min-width="80" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.cateName }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="*上架" min-width="80">
+							<template slot-scope="scope">
+								<div @click.stop.prevent="changeUp(scope.$index, scope.row)">
+									<i
+										class="iconfont"
+										v-if="scope.row.state=='1'"
+										style="color:green;cursor: pointer;"
+									>&#xe659;</i>
+									<i class="iconfont" v-if="scope.row.state=='2'" style="color:red;cursor: pointer;">&#xe658;</i>
+								</div>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="100">
+							<template slot-scope="scope">
+								<el-button
+									type="text"
+									size="mini"
+									@click.stop.prevent="handleEdit(scope.$index, scope.row)"
+								>修改</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
 				</div>
 				<div class="block" style="margin-top:10px;float:right">
 					<el-pagination
@@ -49,7 +76,6 @@
 				</div>
 			</div>
 		</div>
-
 		<router-view></router-view>
 	</div>
 </template>
@@ -78,27 +104,31 @@ export default {
 			],
 			tableData: [
 				{
+					id: 1,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				},
 				{
+					id: 2,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				},
 				{
+					id: 3,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				},
 				{
+					id: 4,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				}
 			],
@@ -109,6 +139,13 @@ export default {
 		};
 	},
 	methods: {
+		changeUp(index, val) {
+			if (val.state == "1") {
+				this.tableData[index].state = "2";
+			} else {
+				this.tableData[index].state = "1";
+			}
+		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
@@ -120,17 +157,11 @@ export default {
 			this.pageIndex = val;
 			this.getServiceList();
 		},
-		handlechange(params) {
-			if (params.type === "edit") {
-				console.log(params);
-				this.$router.push({
-					path: "/Cookbook/EditCookbook/" + params.rowData.id
-				});
-			}
-			if (params.type === "delete") {
-				console.log(params);
-				// this.userIds = params.rowData.order;
-			}
+		handleEdit(index, row) {
+			console.log(row);
+			this.$router.push({
+				path: "/Cookbook/EditCookbook/" + row.id
+			});
 		},
 		handleSelectionChange(selection) {
 			console.log(selection);
@@ -163,7 +194,7 @@ export default {
 		}
 	},
 	created() {
-		this.getCookbookList();
+		// this.getCookbookList();
 		let a = this.$route.matched.find(item => item.name === "AddCookbook")
 			? true
 			: false;

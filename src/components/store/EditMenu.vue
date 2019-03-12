@@ -43,8 +43,8 @@
 						placeholder="单位：元"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="商品库存：" prop="number">
-					<el-input type="number" size="small" style="width:192px;" v-model.number="editmenu.number"></el-input>
+				<el-form-item label="商品库存：" prop="stockNow">
+					<el-input type="number" size="small" style="width:192px;" v-model.number="editmenu.stockNow"></el-input>
 				</el-form-item>
 				<el-form-item label="烹饪时长：" prop="cookingTime">
 					<el-input
@@ -215,7 +215,7 @@ export default {
 						trigger: "blur"
 					}
 				],
-				number: [
+				stockNow: [
 					{
 						required: true,
 						message: "请输入商品库存",
@@ -387,6 +387,7 @@ export default {
 				itemWeight: this.editmenu.itemWeight,
 				itemSpec: this.editmenu.itemSpec,
 				cookingTime: this.editmenu.cookingTime,
+				stockNow:this.editmenu.stockNow,
 				spicy: this.editmenu.spicy,
 				des: this.editmenu.des,
 				state: this.editmenu.state,
