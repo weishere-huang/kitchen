@@ -15,7 +15,7 @@
 					@click="getValue(item)"
 					v-for="(item, index) in scriptData"
 					:key="index"
-				>{{item}}</span>
+				>{{item.name}}</span>
 			</el-col>
 			<div class="block" style="margin-top:10px;float:right;margin-bottom:12px;">
 				<el-pagination
@@ -50,20 +50,43 @@ export default {
 			recentSearch: 1,
 			pageIndex: 1,
 			pageSize: 15,
-			total: 15
+			total: 15,
+			currentPage: 1,
 		};
 	},
 	methods: {
+		getScript() {
+			this.Axios(
+				{
+					params: {
+						keyword: "",
+						size:this.pageSize,
+						page:this.pageIndex
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/recipescript/list"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data.data);
+					this.scriptData=result.data.data.content
+					this.total=result.data.data.totalElement
+				},
+				({ type, info }) => {}
+			);
+		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getServiceList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getServiceList();
 		},
 		getValue(val) {
 			let params = { value: val, isHide: false };
@@ -74,6 +97,7 @@ export default {
 		}
 	},
 	created() {
+		this.getScript()
 		// this.scriptData = this.recentSearch;
 	}
 };

@@ -20,14 +20,24 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱分类：">
-						<el-select size="small" style="width:400px;" v-model="cookbook.classify">
+						<!-- <el-select size="small" style="width:400px;" v-model="cookbook.classify">
 							<el-option
 								v-for="item in classify"
 								:key="item.value"
 								:label="item.label"
 								:value="item.value"
 							></el-option>
-						</el-select>
+						</el-select>-->
+						<el-cascader
+							expand-trigger="hover"
+							:options="classify"
+							:props="showStyle"
+							v-model="cookbook.classify"
+							@change="handleChange"
+							style="width:400px;"
+							:show-all-levels="false"
+							change-on-select
+						></el-cascader>
 					</el-form-item>
 					<el-form-item label="菜谱名称：">
 						<el-input size="small" style="width:400px;" v-model="cookbook.name"></el-input>
@@ -86,8 +96,8 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item label="上/下架：" prop="state">
-						<el-radio v-model="cookbook.state" label="1">是</el-radio>
-						<el-radio v-model="cookbook.state" label="2">否</el-radio>
+						<el-radio v-model="cookbook.state" label="0">是</el-radio>
+						<el-radio v-model="cookbook.state" label="1">否</el-radio>
 					</el-form-item>
 					<el-form-item label="菜谱配图：">
 						<el-upload
@@ -217,7 +227,7 @@ export default {
 			cookbook: {
 				spicy: "0",
 				name: "",
-				classify: "",
+				classify: [13],
 				menuScript: "",
 				time: "",
 				pic: "",
@@ -240,6 +250,10 @@ export default {
 					value: "2213"
 				}
 			],
+			showStyle: {
+				label: "cateName",
+				value: "id"
+			},
 			dialogVisible: false,
 			dialogImageUrl: ""
 		};
@@ -280,12 +294,12 @@ export default {
 					type: "error"
 				});
 			}
-			
+
 			console.log(file);
 		},
 		dialogScriptHide(params) {
 			this.dialogScript = params.isHide;
-			this.cookbook.menuScript = params.value;
+			this.cookbook.menuScript = params.value.name;
 		},
 		handleRemove(file, fileList, index) {
 			console.log(file, fileList);
@@ -295,9 +309,60 @@ export default {
 		handlePictureCardPreview(file) {
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;
+		},
+		getClassifyList() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/recipeCate/listCate"
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					for (let i = 0; i < result.data.data.length; i++) {
+						result.data.data[i].visible = false;
+					}
+					if (result.data.code === 200) {
+						let arr = Math.min.apply(
+							null,
+							result.data.data.map(item => {
+								return item.parentNo;
+							})
+						);
+						this.classify = this.filterArray(result.data.data, arr);
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		handleChange(value) {
+			console.log(value);
+		},
+		filterArray(data, parent) {
+			let vm = this;
+			var tree = [];
+			var temp;
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].parentNo == parent) {
+					var obj = data[i];
+					temp = this.filterArray(data, data[i].cateNo);
+					if (temp.length > 0) {
+						obj.children = temp;
+					}
+					tree.push(obj);
+				}
+			}
+			return tree;
 		}
 	},
-	created() {},
+	created() {
+		this.getClassifyList();
+	},
 	components: {
 		DialogScript
 	}
