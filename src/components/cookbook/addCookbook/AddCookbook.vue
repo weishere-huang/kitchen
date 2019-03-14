@@ -162,18 +162,19 @@
 										v-model="item.path"
 										:action="imgApi()"
 										list-type="picture-card"
-										:on-preview="handlePictureCardPreview"
+										:on-preview="handlePictureCardPreview1"
 										:on-remove="(res,file)=>{ return handleRemove(res,file,index)} "
 										:on-success="(res,file)=>{ return handleAvatarSuccess(res,file,index)}"
 										:limit="1"
+										:before-upload="beforeAvatarUpload1"
 										class="upload_show"
 									>
 										<i class="el-icon-plus"></i>
 										<!-- <div slot="tip" class="el-upload__tip">600 × 600像素，≤80 KB的jpg图片</div> -->
 									</el-upload>
-									<el-dialog :visible.sync="dialogVisible" class="showPic">
+									<!-- <el-dialog :visible.sync="dialogVisible" class="showPic">
 										<img width="100%" :src="dialogImageUrl" alt>
-									</el-dialog>
+									</el-dialog>-->
 								</el-col>
 								<el-col :span="18">
 									<el-input
@@ -224,7 +225,7 @@
 <script>
 import DialogScript from "./DialogScript";
 export default {
-	inject:['reload'],
+	inject: ["reload"],
 	data() {
 		return {
 			dialogScript: false,
@@ -432,10 +433,6 @@ export default {
 			this.cookbook.step[index].path = "";
 			console.log(index);
 		},
-		handlePictureCardPreview(file) {
-			this.dialogImageUrl = file.url;
-			this.dialogVisible = true;
-		},
 		handleRemove1(file, fileList) {
 			console.log(file, fileList);
 			this.cookbook.recipeImg = null;
@@ -446,8 +443,8 @@ export default {
 		},
 		beforeAvatarUpload1(file) {
 			const isSize = new Promise(function(resolve, reject) {
-				let width = 600;
-				let height = 600;
+				let width = 11600;
+				let height = 11600;
 				let _URL = window.URL || window.webkitURL;
 				let img = new Image();
 				img.onload = function() {
@@ -464,7 +461,7 @@ export default {
 					return Promise.reject();
 				}
 			);
-			const isPicSize = file.size / 1024 <= 80;
+			const isPicSize = file.size / 1024 <= 800;
 			if (!isPicSize) {
 				this.$message.error("上传图片不能大于80KB");
 			}
