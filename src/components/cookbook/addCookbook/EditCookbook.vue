@@ -8,37 +8,48 @@
 				<h4>修改菜谱</h4>
 			</div>
 			<div class="table_list">
-				<el-form label-width="200px" size="small">
-					<el-form-item label="烹饪流程：">
+				<el-form
+					label-width="200px"
+					size="small"
+					:model="cookbook"
+					:rules="editCookbookRules"
+					ref="editCookbook"
+					:inline-message="true"
+					style="margin-top: 20px;"
+				>
+					<el-form-item label="烹饪流程：" prop="processName">
 						<el-input
 							size="small"
 							style="width:400px;"
-							v-model="cookbook.menuScript"
+							v-model="cookbook.processName"
 							@focus="dialogScript=true"
 							placeholder="请选择"
 							suffix-icon="el-icon-arrow-down"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="菜谱分类：">
-						<el-select size="small" style="width:400px;" v-model="cookbook.classify">
-							<el-option
-								v-for="item in classify"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
-							></el-option>
-						</el-select>
+					<el-form-item label="菜谱分类：" prop="cateId">
+						<el-cascader
+							expand-trigger="hover"
+							:options="classify"
+							:props="showStyle"
+							v-model="cookbook.cateId"
+							@change="handleChange"
+							style="width:400px;"
+							:show-all-levels="false"
+							change-on-select
+							ref="recipeCate"
+						></el-cascader>
 					</el-form-item>
-					<el-form-item label="菜谱名称：">
-						<el-input size="small" style="width:400px;" v-model="cookbook.name"></el-input>
+					<el-form-item label="菜谱名称：" prop="recipeName">
+						<el-input size="small" style="width:400px;" v-model="cookbook.recipeName"></el-input>
 					</el-form-item>
-					<el-form-item label="烹饪时长：">
+					<el-form-item label="烹饪时长：" prop="cookingTime">
 						<el-input
 							size="small"
 							:disabled="true"
 							style="width:400px;"
 							placeholder="单位：分钟"
-							v-model="cookbook.time"
+							v-model="cookbook.cookingTime"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
@@ -63,12 +74,12 @@
 							<span v-if="cookbook.spicy==3">特辣</span>
 						</span>
 					</el-form-item>
-					<el-form-item label="菜谱价格：">
-						<el-input size="small" style="width:400px;" placeholder="单位：元" v-model="cookbook.price"></el-input>
+					<el-form-item label="菜谱价格：" prop="recipePrice">
+						<el-input size="small" style="width:400px;" placeholder="单位：元" v-model="cookbook.recipePrice"></el-input>
 					</el-form-item>
-					<el-form-item label="净含量：" prop="itemWeight">
+					<el-form-item label="净含量：" prop="weight">
 						<el-input
-							v-model.number="cookbook.itemWeight"
+							v-model.number="cookbook.weight"
 							type="number"
 							size="small"
 							style="width:400px;"
@@ -76,9 +87,9 @@
 							step="1"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="食材搭配：" prop="itemSpec">
+					<el-form-item label="食材搭配：" prop="spec">
 						<el-input
-							v-model="cookbook.itemSpec"
+							v-model="cookbook.spec"
 							type="text"
 							size="small"
 							style="width:400px;"
@@ -86,15 +97,20 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item label="上/下架：" prop="state">
-						<el-radio v-model="cookbook.state" label="1">是</el-radio>
-						<el-radio v-model="cookbook.state" label="2">否</el-radio>
+						<el-radio v-model="cookbook.state" label="0">是</el-radio>
+						<el-radio v-model="cookbook.state" label="1">否</el-radio>
 					</el-form-item>
-					<el-form-item label="菜谱配图：">
+					<el-form-item label="菜谱配图：" prop="recipeImg">
 						<el-upload
-							action="https://jsonplaceholder.typicode.com/posts/"
+							:action="imgApi()"
 							list-type="picture-card"
-							:on-preview="handlePictureCardPreview"
-							:on-remove="handleRemove"
+							:on-preview="handlePictureCardPreview1"
+							:on-remove="handleRemove1"
+							:on-success="handleAvatarSuccess1"
+							:before-upload="beforeAvatarUpload1"
+							:file-list="filelist"
+							:limit="1"
+							v-model="cookbook.recipeImg"
 						>
 							<i class="el-icon-plus"></i>
 							<div slot="tip" class="el-upload__tip">600 × 600像素，≤80 KB的jpg图片</div>
@@ -103,7 +119,7 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="主料：">
+					<el-form-item label="主料：" prop="ingredient">
 						<el-input
 							size="small"
 							style="width:600px;"
@@ -111,10 +127,10 @@
 							rows="6"
 							class="textarea_style"
 							placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。"
-							v-model="cookbook.mainIngredient"
+							v-model="cookbook.ingredient"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="辅料：">
+					<el-form-item label="辅料：" prop="accessories">
 						<el-input
 							size="small"
 							style="width:600px;"
@@ -122,10 +138,10 @@
 							rows="6"
 							class="textarea_style"
 							placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。"
-							v-model="cookbook.ingredients"
+							v-model="cookbook.accessories"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="菜谱介绍：">
+					<el-form-item label="菜谱介绍：" prop="introduce">
 						<el-input
 							class="textarea_style"
 							size="small"
@@ -136,31 +152,29 @@
 							v-model="cookbook.introduce"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="步骤说明：">
+					<el-form-item label="步骤说明：" prop="step">
 						<div style="width:686px;">
 							<el-col
 								:span="24"
-								v-for="(item, index) in cookbook.imgPath"
+								v-for="(item, index) in cookbook.step"
 								:key="index"
 								style="margin-bottom:12px;"
 							>
 								<el-col :span="3">
 									<el-upload
-										v-model="item.path"
 										:action="imgApi()"
 										list-type="picture-card"
-										:on-preview="handlePictureCardPreview"
+										:on-preview="handlePictureCardPreview1"
 										:on-remove="(res,file)=>{ return handleRemove(res,file,index)} "
 										:on-success="(res,file)=>{ return handleAvatarSuccess(res,file,index)}"
 										:limit="1"
+										:before-upload="beforeAvatarUpload1"
+										:file-list="item.filelist"
 										class="upload_show"
 									>
 										<i class="el-icon-plus"></i>
 										<!-- <div slot="tip" class="el-upload__tip">600 × 600像素，≤80 KB的jpg图片</div> -->
 									</el-upload>
-									<el-dialog :visible.sync="dialogVisible" class="showPic">
-										<img width="100%" :src="dialogImageUrl" alt>
-									</el-dialog>
 								</el-col>
 								<el-col :span="18">
 									<el-input
@@ -191,7 +205,7 @@
 						</div>
 					</el-form-item>
 					<el-form-item>
-						<el-button size="small" type="primary">添加</el-button>
+						<el-button size="small" type="primary" @click="submitForm('editCookbook')">保存修改</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -211,26 +225,143 @@
 <script>
 import DialogScript from "./DialogScript";
 export default {
+	inject: ["reload"],
 	data() {
 		return {
 			dialogScript: false,
 			cookbook: {
+				processName: "",
+				processId: "",
+				recipeName: "",
+				cateName: "",
+				cateId: [],
+				cookingTime: "5",
 				spicy: "0",
-				name: "",
-				classify: "",
-				menuScript: "",
-				time: "",
-				pic: "",
-				mainIngredient: "",
-				ingredients: "",
+				recipePrice: "",
+				weight: "",
+				spec: "",
+				state: "",
+				recipeImg: "",
+				ingredient: "",
+				accessories: "",
 				introduce: "",
-				price: "",
-				imgPath: [
+				step: [
 					{
 						path: "",
 						explain: "",
 						plus: true,
-						minus: false
+						minus: false,
+						filelist: []
+					}
+				]
+			},
+			showStyle: {
+				label: "cateName",
+				value: "id"
+			},
+			editCookbookRules: {
+				processName: [
+					{
+						required: true,
+						message: "请选择烹饪流程",
+						trigger: "change"
+					}
+				],
+				cateId: [{ required: true, message: "请选择分类", trigger: "change" }],
+				recipeName: [
+					{ required: true, message: "请输入菜谱名称", trigger: "blur" }
+				],
+				recipeImg: [
+					{ required: true, message: "请上传图片", trigger: "change" }
+				],
+				recipePrice: [
+					{
+						required: true,
+						message: "请输入菜谱价格",
+						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+								callback(new Error("支持小数点后两位，且不能为负数"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				weight: [
+					{
+						required: true,
+						message: "请输入净含量",
+						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+								callback(new Error("只能为正整数"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				ingredient: [
+					{
+						required: true,
+						message: "请输入主料",
+						trigger: "blur"
+					}
+					// {
+					// 	validator: (rule, value, callback) => {
+					// 		if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+					// 			callback(new Error("只能为正整数"));
+					// 		} else {
+					// 			callback();
+					// 		}
+					// 	},
+					// 	trigger: "blur"
+					// }
+				],
+				spec: [
+					{
+						required: true,
+						message: "请输入食材搭配",
+						trigger: "blur"
+					}
+				],
+				state: [
+					{
+						required: true,
+						message: "请选择是否上/下架",
+						trigger: "blur"
+					}
+				],
+				cookingTime: [
+					{
+						required: false,
+						message: "请输入烹饪时长",
+						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+								callback(new Error("请输入正整数"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				spicy: [{ required: true, message: "请选择辣度", trigger: "blur" }],
+				accessories: [
+					{
+						required: true,
+						message: "请输入辅料",
+						trigger: "blur"
 					}
 				]
 			},
@@ -241,10 +372,66 @@ export default {
 				}
 			],
 			dialogVisible: false,
-			dialogImageUrl: ""
+			dialogImageUrl: "",
+			filelist: []
 		};
 	},
 	methods: {
+		filterArray(data, parent) {
+			let vm = this;
+			var tree = [];
+			var temp;
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].parentNo == parent) {
+					var obj = data[i];
+					temp = this.filterArray(data, data[i].cateNo);
+					if (temp.length > 0) {
+						obj.children = temp;
+					}
+					tree.push(obj);
+				}
+			}
+			return tree;
+		},
+		getClassifyList() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/recipeCate/listCate"
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					for (let i = 0; i < result.data.data.length; i++) {
+						result.data.data[i].visible = false;
+					}
+					if (result.data.code === 200) {
+						let arr = Math.min.apply(
+							null,
+							result.data.data.map(item => {
+								return item.parentNo;
+							})
+						);
+						this.classify = this.filterArray(result.data.data, arr);
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		submitForm(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.editRecipe();
+				} else {
+					return false;
+				}
+			});
+		},
 		addItem(index) {
 			let obj = {
 				path: "",
@@ -252,23 +439,29 @@ export default {
 				plus: true,
 				minus: true
 			};
-			this.cookbook.imgPath.push(obj);
-			this.cookbook.imgPath[index].plus = false;
-			this.cookbook.imgPath[index].minus = false;
+			this.cookbook.step.push(obj);
+			this.cookbook.step[index].plus = false;
+			this.cookbook.step[index].minus = false;
 		},
 		removeItem(index) {
-			this.cookbook.imgPath.pop();
-			this.cookbook.imgPath[index - 1].plus = true;
-			this.cookbook.imgPath[index - 1].minus = true;
-			this.cookbook.imgPath[0].minus = false;
+			this.cookbook.step.pop();
+			this.cookbook.step[index - 1].plus = true;
+			this.cookbook.step[index - 1].minus = true;
+			this.cookbook.step[0].minus = false;
 		},
 		imgApi() {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
+		handleChange(value) {
+			let labels = this.$refs["recipeCate"].currentLabels;
+			this.cookbook.cateName = labels[labels.length - 1];
+			// console.log(this.cookbook.cateName);
+		},
+		//流程图片上传
 		handleAvatarSuccess(res, file, index) {
 			if (res.code === 200) {
-				this.cookbook.imgPath[index].path =
+				this.cookbook.step[index].path =
 					this.global.imgPath + res.data.replace("img:", "");
 				this.$message({
 					message: "图片上传成功！",
@@ -280,26 +473,178 @@ export default {
 					type: "error"
 				});
 			}
-			console.log(a);
-			// console.log(file);
+
+			console.log(file);
 		},
 		dialogScriptHide(params) {
+			console.log(params);
 			this.dialogScript = params.isHide;
-			this.cookbook.menuScript = params.value;
+			this.cookbook.processName = params.value.name;
+			this.cookbook.processId = params.value.id;
 		},
 		handleRemove(file, fileList, index) {
 			console.log(file, fileList);
-			this.cookbook.imgPath[index].path = "";
+			this.cookbook.step[index].path = "";
 			console.log(index);
 		},
-		handlePictureCardPreview(file) {
+
+		//菜谱图片上传开始
+		handleRemove1(file, fileList) {
+			console.log(file, fileList);
+			this.cookbook.recipeImg = null;
+		},
+		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;
+		},
+		beforeAvatarUpload1(file) {
+			const isSize = new Promise(function(resolve, reject) {
+				let width = 600;
+				let height = 600;
+				let _URL = window.URL || window.webkitURL;
+				let img = new Image();
+				img.onload = function() {
+					let valid = img.width <= width && img.height <= height;
+					valid ? resolve() : reject();
+				};
+				img.src = _URL.createObjectURL(file);
+			}).then(
+				() => {
+					return file;
+				},
+				() => {
+					this.$message.error("上传的图片必须是等于或小于600*600!");
+					return Promise.reject();
+				}
+			);
+			const isPicSize = file.size / 1024 <= 80;
+			if (!isPicSize) {
+				this.$message.error("上传图片不能大于80KB");
+			}
+			return isSize && isPicSize;
+		},
+		handleAvatarSuccess1(res, file) {
+			if (res.code === 200) {
+				this.cookbook.recipeImg =
+					this.global.imgPath + res.data.replace("img:", "");
+				this.$message({
+					message: "图片上传成功！",
+					type: "success"
+				});
+				console.log(this.cookbook.recipeImg);
+			} else {
+				this.$message({
+					message: "图片上传不成功！",
+					type: "error"
+				});
+			}
+			console.log(res);
+			console.log(file);
+		},
+		//菜谱图片上传结束
+		editRecipe() {
+			for (let i = 0; i < this.cookbook.step.length; i++) {
+				delete this.cookbook.step[i].filelist;
+			}
+			let qs = require("qs");
+			let data = qs.stringify({
+				id: this.cookbook.id,
+				processName: this.cookbook.processName,
+				processId: this.cookbook.processId,
+				recipeName: this.cookbook.recipeName,
+				cateName: this.cookbook.cateName,
+				cateId: JSON.stringify(this.cookbook.cateId),
+				cookingTime: this.cookbook.cookingTime,
+				spicy: this.cookbook.spicy,
+				recipePrice: this.cookbook.recipePrice,
+				weight: this.cookbook.weight,
+				spec: this.cookbook.spec,
+				state: this.cookbook.state,
+				recipeImg: this.cookbook.recipeImg,
+				ingredient: this.cookbook.ingredient,
+				accessories: this.cookbook.accessories,
+				introduce: this.cookbook.introduce,
+				step: JSON.stringify(this.cookbook.step)
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-recipe/recipe/update",
+					type: "post",
+					option: {
+						successMsg: "修改成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result.data);
+				if (result.data.code === 200) {
+					this.$router.back(-1);
+					this.reload();
+				} else {
+					this.$message.error("修改失败,请重新尝试");
+				}
+			});
+		},
+		getMenu(id) {
+			this.Axios(
+				{
+					params: {
+						id: id
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/recipe/getOne"
+				},
+				this
+			).then(
+				result => {
+					// console.log(result.data.data);
+					if (result.data.code === 200) {
+						result.data.data.cateId = JSON.parse(result.data.data.cateId);
+						result.data.data.step = JSON.parse(result.data.data.step);
+						result.data.data.state = JSON.stringify(result.data.data.state);
+						this.cookbook = result.data.data;
+						for (let i = 0; i < this.cookbook.step.length; i++) {
+							this.cookbook.step[i].filelist = [
+								{
+									name: this.cookbook.step[i].path.substring(
+										this.cookbook.step[i].path.lastIndexOf("/") + 1
+									),
+									url: this.cookbook.step[i].path
+								}
+							];
+						}
+						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
+						console.log(this.cookbook);
+					}
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
-	created() {},
+	created() {
+		this.getMenu(this.$route.params.id);
+		this.getClassifyList();
+	},
 	components: {
 		DialogScript
+	},
+	watch: {
+		cookbook() {
+			if (this.cookbook.id != null) {
+				this.filelist = [
+					{
+						name: this.cookbook.recipeImg.substring(
+							this.cookbook.recipeImg.lastIndexOf("/") + 1
+						),
+						url: this.cookbook.recipeImg
+					}
+				];
+			}
+		}
 	}
 };
 </script>

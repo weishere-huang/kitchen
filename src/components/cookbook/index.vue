@@ -17,7 +17,7 @@
 							<el-input size="small" clearable placeholder="菜谱名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
-							<el-button size="small" plain>搜索</el-button>
+							<el-button size="small" plain @click="getCookbookList">搜索</el-button>
 						</el-col>
 					</div>
 				</div>
@@ -140,23 +140,60 @@ export default {
 		};
 	},
 	methods: {
+		changeState(val) {
+			let qs = require("qs");
+			let data = qs.stringify({
+				id: val.id
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "修改成功"
+					},
+					type: "post",
+					url: "/api-recipe/recipe/updatestate",
+					loadingConfig: {
+						target: document.querySelector(".cookbook_list")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					if (result.data.code === 200) {
+						this.getCookbookList();
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
 		changeUp(index, val) {
-			if (val.state == "0") {
-				this.tableData[index].state = "1";
+			if (val.state == 1) {
+				this.changeState(val);
 			} else {
-				this.tableData[index].state = "0";
+				this.$confirm("菜谱下架，绑定的商品也同样会下架, 是否继续?", "提示", {
+					confirmButtonText: "确定",
+					cancelButtonText: "取消",
+					type: "warning",
+					cancelButtonClass: "is-plain"
+				})
+					.then(() => {
+						this.changeState(val);
+					})
+					.catch(() => {});
 			}
 		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getServiceList();
+			this.getCookbookList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getServiceList();
+			this.getCookbookList();
 		},
 		handleEdit(index, row) {
 			console.log(row);
@@ -179,7 +216,9 @@ export default {
 			this.Axios(
 				{
 					params: data,
-					option: {},
+					option: {
+						enableMsg: false
+					},
 					type: "get",
 					url: "/api-recipe/recipe/list",
 					loadingConfig: {
@@ -193,6 +232,7 @@ export default {
 					if (result.data.code === 200) {
 						this.total = result.data.data.totalElement;
 						this.tableData = result.data.data.content;
+						this.total = result.data.data.totalElement;
 					}
 				},
 				({ type, info }) => {}
