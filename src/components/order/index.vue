@@ -12,21 +12,22 @@
 								type="date"
 								placeholder="起始日期"
 								size="small"
-								style="width:39%;"
+								style="width:40%;"
 								value-format="yyyy/MM/dd"
-							></el-date-picker>至
+							></el-date-picker>
+							至
 							<el-date-picker
 								v-model="searchDate2"
 								type="date"
 								placeholder="结束日期"
 								size="small"
-								style="width:39%;"
+								style="width:40%;"
 								value-format="yyyy/MM/dd"
 							></el-date-picker>
 						</el-col>
 						<el-col :span="5" style="padding:0 5px;">
 							<span>订单状态：</span>
-							<el-select v-model="platformState" placeholder="请选择" size="small" style="width:114px;">
+							<el-select v-model="platformState" placeholder="请选择" size="small" style="width:124px;">
 								<el-option
 									v-for="item in stateOptions"
 									:key="item.value"
