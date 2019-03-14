@@ -39,19 +39,6 @@
 						<span slot="title">{{item.menu}}</span>
 					</el-menu-item>
 				</el-menu>
-				<!-- <div
-          v-on:click="TroggleHandle"
-          class="isCollapse-group"
-        >
-          <i
-            v-show="isCollapse === true"
-            class="el-icon-arrow-right"
-          ></i>
-          <i
-            v-show="isCollapse === false"
-            class="el-icon-arrow-left"
-          ></i>
-				</div>-->
 			</el-aside>
 			<el-container>
 				<el-header style="background-color:#1CC09F;">
@@ -87,7 +74,6 @@
 						</ul>
 					</div>
 				</el-header>
-
 				<el-main class="mainContentWrapper" style="padding:8px;font-size:14px;">
 					<transition>
 						<router-view v-if="isRouterAlive"/>
@@ -96,11 +82,6 @@
 				<el-footer>长虹智慧厨房({{version?(new Date(version).format("yyyy/MM/dd hh:mm:ss")):'no version'}})&nbsp;&nbsp;版本号：{{versionNumber}}</el-footer>
 			</el-container>
 		</el-container>
-		<!-- <el-container >
-      <transition>
-        <router-view v-if="isRouterAlive"/>
-      </transition>
-		</el-container>-->
 	</div>
 </template>
 

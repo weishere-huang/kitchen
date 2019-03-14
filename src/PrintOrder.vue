@@ -67,7 +67,7 @@
 			<el-col :span="24">
 				<span style="float:right;">
 					<span style="margin-right:20px">打印时间：{{knowDate}}</span>
-					<span>打印人：roulen</span>
+					<span>打印人：{{user}}</span>
 				</span>
 			</el-col>
 		</div>
@@ -114,7 +114,8 @@ export default {
 					quantity: "1",
 					subtotal: "¥ 8.80元 "
 				}
-			]
+			],
+			user:""
 		};
 	},
 	methods: {
@@ -159,6 +160,7 @@ export default {
 			},
 			({ type, info }) => {}
 		);
+		this.user=JSON.parse(sessionStorage.getItem('user')).name
 	},
 	updated() {
 		this.preview(1);

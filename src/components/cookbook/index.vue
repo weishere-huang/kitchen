@@ -14,26 +14,53 @@
 					<h4>菜谱列表</h4>
 					<div class="top_search">
 						<el-col :span="20" style="padding:0 5px;">
-							<el-input size="small" clearable placeholder="菜谱名称"></el-input>
+							<el-input size="small" clearable placeholder="菜谱名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
-							<el-button size="small" plain>搜索</el-button>
+							<el-button size="small" plain @click="getCookbookList">搜索</el-button>
 						</el-col>
 					</div>
 				</div>
 				<div class="table_list">
-					<table-list
-						:selectShow="false"
-						:handleSelectionChange="handleSelectionChange"
-						:column="items"
-						v-on:handlechange="handlechange"
+					<el-table
 						:data="tableData"
-						:rowDblclick="getRow"
-						:handle="100"
-						:editShow="true"
-						:deleteShow="true"
-						:handleShow="true"
-					></table-list>
+						style="width: 100%"
+						size="mini"
+						tooltip-effect="light"
+						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+					>
+						<el-table-column label="菜谱名称" min-width="100" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.recipeName }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="分类" min-width="80" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.cateName }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="*上架" min-width="80">
+							<template slot-scope="scope">
+								<div @click.stop.prevent="changeUp(scope.$index, scope.row)">
+									<i
+										class="iconfont"
+										v-if="scope.row.state=='0'"
+										style="color:green;cursor: pointer;"
+									>&#xe659;</i>
+									<i class="iconfont" v-if="scope.row.state=='1'" style="color:red;cursor: pointer;">&#xe658;</i>
+								</div>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="100">
+							<template slot-scope="scope">
+								<el-button
+									type="text"
+									size="mini"
+									@click.stop.prevent="handleEdit(scope.$index, scope.row)"
+								>修改</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
 				</div>
 				<div class="block" style="margin-top:10px;float:right">
 					<el-pagination
@@ -49,7 +76,6 @@
 				</div>
 			</div>
 		</div>
-
 		<router-view></router-view>
 	</div>
 </template>
@@ -78,59 +104,102 @@ export default {
 			],
 			tableData: [
 				{
+					id: 1,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				},
 				{
+					id: 2,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				},
 				{
+					id: 3,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				},
 				{
+					id: 4,
 					name: "土豆肉丝",
 					classify: "猪肉",
-					menuScript: "土豆肉丝（2019版）",
+					state: 1,
 					visible: false
 				}
 			],
 			pageIndex: 1,
 			pageSize: 15,
 			total: 10,
+			keyword: "",
 			isHideList: this.$route.params.id !== undefined ? true : false
 		};
 	},
 	methods: {
+		changeState(val) {
+			let qs = require("qs");
+			let data = qs.stringify({
+				id: val.id
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "修改成功"
+					},
+					type: "post",
+					url: "/api-recipe/recipe/updatestate",
+					loadingConfig: {
+						target: document.querySelector(".cookbook_list")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					if (result.data.code === 200) {
+						this.getCookbookList();
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		changeUp(index, val) {
+			if (val.state == 1) {
+				this.changeState(val);
+			} else {
+				this.$confirm("菜谱下架，绑定的商品也同样会下架, 是否继续?", "提示", {
+					confirmButtonText: "确定",
+					cancelButtonText: "取消",
+					type: "warning",
+					cancelButtonClass: "is-plain"
+				})
+					.then(() => {
+						this.changeState(val);
+					})
+					.catch(() => {});
+			}
+		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getServiceList();
+			this.getCookbookList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getServiceList();
+			this.getCookbookList();
 		},
-		handlechange(params) {
-			if (params.type === "edit") {
-				console.log(params);
-				this.$router.push({
-					path: "/Cookbook/EditCookbook/" + params.rowData.id
-				});
-			}
-			if (params.type === "delete") {
-				console.log(params);
-				// this.userIds = params.rowData.order;
-			}
+		handleEdit(index, row) {
+			console.log(row);
+			this.$router.push({
+				path: "/Cookbook/EditCookbook/" + row.id
+			});
 		},
 		handleSelectionChange(selection) {
 			console.log(selection);
@@ -140,15 +209,18 @@ export default {
 		},
 		getCookbookList() {
 			let data = {
-				size: this.pageIndex,
-				page: this.pageSize
+				page: this.pageIndex,
+				size: this.pageSize,
+				keyword: this.keyword
 			};
 			this.Axios(
 				{
 					params: data,
-					option: {},
+					option: {
+						enableMsg: false
+					},
 					type: "get",
-					url: "/recipe/listRecipeCate",
+					url: "/api-recipe/recipe/list",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}
@@ -156,7 +228,12 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
+					console.log(result.data);
+					if (result.data.code === 200) {
+						this.total = result.data.data.totalElement;
+						this.tableData = result.data.data.content;
+						this.total = result.data.data.totalElement;
+					}
 				},
 				({ type, info }) => {}
 			);

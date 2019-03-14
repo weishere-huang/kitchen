@@ -1,10 +1,44 @@
 <template>
-	<div class="store_list">
+	<div class="add_supplier">
+		<div class="top_list">
+			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
+		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>销售区域</h4>
+				<h4>添加供应商</h4>
 			</div>
-			<div class="table_list">
+			<div class="supplier_form">
+				<el-form size="small" label-width="180px">
+					<el-form-item label="供应商名称：" prop>
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="联系人：" prop>
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="联系电话：" prop>
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="详细地址：" prop>
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="供应商账号：" prop>
+						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-tooltip class="item" effect="light" content="账号格式：agent加3~5数字组成" placement="top">
+							<i class="el-icon-warning" style="color:#1cc09f"></i>
+						</el-tooltip>
+					</el-form-item>
+					<el-form-item label="密码：" prop>
+						<el-input type="password" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+					<el-form-item label="确认密码：" prop>
+						<el-input type="password" size="small" style="width:350px;"></el-input>
+					</el-form-item>
+				</el-form>
+			</div>
+			<div class="supplier_area">
+				<h4>供应区域</h4>
+			</div>
+			<div class="table_list" style="padding:10px 20px 10px 180px">
 				<el-col :span="8">
 					<el-tree
 						:data="data1"
@@ -48,12 +82,9 @@
 					></el-tree>
 				</el-col>
 			</div>
-			<div class="top_list">
-				<el-button size="small" type="primary" @click="reload()">
-					<i class="el-icon-refresh"></i> 刷新
-				</el-button>
+			<div class="top_list" style="padding:10px 200px">
 				<el-button size="small" type="primary" @click="beforesave">
-					<i class="iconfont">&#xe62d;</i> 保存修改
+					<i class="iconfont">&#xe62d;</i> 保存
 				</el-button>
 			</div>
 		</div>
@@ -102,18 +133,7 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		beforesave() {
-			this.$confirm("确认保存销售区域吗?", "提示", {
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
-				type: "warning",
-				center: true
-			})
-				.then(() => {
-					this.savearea();
-				})
-				.catch(() => {});
-		},
+		beforesave() {},
 		savearea() {
 			let arr = [];
 			arr = arr
@@ -163,7 +183,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.store_list {
+.add_supplier {
 	font-size: 14px;
 	color: @font-normal;
 
@@ -188,10 +208,23 @@ export default {
 		}
 		.table_list {
 			overflow: hidden;
-			padding: 10px;
+			padding: 10px 200px;
 			.el-col {
 				max-height: 600px;
 				overflow: scroll;
+			}
+		}
+		.supplier_form {
+			padding: 20px 20px 0;
+			.el-form {
+				border-bottom: @border;
+				padding-bottom: 20px;
+			}
+		}
+		.supplier_area {
+			padding: 0 44px;
+			h4 {
+				line-height: 40px;
 			}
 		}
 	}

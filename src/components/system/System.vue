@@ -207,28 +207,29 @@
 </template>
 <script>
 export default {
+	inject: ["reload"],
 	data() {
 		return {
 			systemMsg: {
-				sendMoney: "",
-				shippingFee: "",
-				receiveTimeout: "",
-				payTimeout: "",
-				carLimit: "",
-				itemLimit: "",
-				phone: "",
+				sendMoney: null,
+				shippingFee: null,
+				receiveTimeout: null,
+				payTimeout: null,
+				carLimit: null,
+				itemLimit: null,
+				phone: null,
 				moneyOff: false,
 				payType: {
 					wechat: true,
 					alipay: true
 				},
 				sendTime: "1",
-				timeFrame1: ["9-00", "18-00"],
+				timeFrame1: ["09-00", "18-00"],
 				timeFrame2: null,
 				timeFrame3: null,
 				timeFrame4: null,
 				retentionTime: "",
-				allMoney: ""
+				allMoney: null
 			},
 			systemRules: {
 				phone: [{ required: true, message: "请设置客服热线", trigger: "blur" }],
@@ -341,28 +342,118 @@ export default {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					if (this.systemMsg.sendTime == 2) {
-						if (this.systemMsg.retentionTime == "") {
+						if (this.systemMsg.retentionTime == "" || null) {
 							this.$message.error("请填写保留时间！");
 						} else if (this.systemMsg.moneyOff == true) {
-							if (this.systemMsg.allMoney == "") {
+							if (this.systemMsg.allMoney == "" || null) {
 								this.$message.error("请填写满减条件！");
 							} else {
-								this.$message.success("保存成功");
+								this.save();
 							}
 						}
 					} else if (this.systemMsg.moneyOff == true) {
-						if (this.systemMsg.allMoney == "") {
+						if (this.systemMsg.allMoney == "" || null) {
 							this.$message.error("请填写满减条件！");
 						} else {
-							this.$message.success("保存成功");
+							this.save();
 						}
 					} else {
-						this.$message.success("保存成功");
+						this.save();
 					}
 				} else {
 					return false;
 				}
 			});
+		},
+		getlist() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/systemconfig/list"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					if (result.data.code === 200) {
+						if (result.data.data.allMoney != "" || null) {
+							this.systemMsg.moneyOff = true;
+							this.systemMsg.allMoney = result.data.data.allMoney;
+						} else {
+							this.systemMsg.allMoney = result.data.data.allMoney;
+						}
+						this.systemMsg.phone = result.data.data.phone;
+						this.systemMsg.shippingFee = result.data.data.shippingFee;
+						this.systemMsg.receiveTimeout = result.data.data.receiveTimeout;
+						this.systemMsg.payTimeout = result.data.data.payTimeout;
+						this.systemMsg.carLimit = result.data.data.carLimit;
+						this.systemMsg.itemLimit = result.data.data.itemLimit;
+						this.systemMsg.sendMoney = result.data.data.sendMoney;
+						this.systemMsg.payType = JSON.parse(result.data.data.payType);
+						this.systemMsg.sendTime = result.data.data.sendTime;
+						this.systemMsg.timeFrame1 = JSON.parse(result.data.data.timeFrame1);
+						this.systemMsg.timeFrame2 = JSON.parse(result.data.data.timeFrame2);
+						this.systemMsg.timeFrame3 = JSON.parse(result.data.data.timeFrame3);
+						this.systemMsg.timeFrame4 = JSON.parse(result.data.data.timeFrame4);
+						this.systemMsg.retentionTime = result.data.data.retentionTime;
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		save() {
+			this.systemMsg.payType = JSON.stringify(this.systemMsg.payType);
+			let qs = require("qs");
+			let data = qs.stringify({
+				phone: this.systemMsg.phone,
+				shippingFee: this.systemMsg.shippingFee,
+				receiveTimeout: this.systemMsg.receiveTimeout,
+				payTimeout: this.systemMsg.payTimeout,
+				carLimit: this.systemMsg.carLimit,
+				itemLimit: this.systemMsg.itemLimit,
+				sendMoney: this.systemMsg.sendMoney,
+				payType: this.systemMsg.payType,
+				sendTime: this.systemMsg.sendTime,
+				timeFrame1: JSON.stringify(this.systemMsg.timeFrame1),
+				timeFrame2: JSON.stringify(this.systemMsg.timeFrame2),
+				timeFrame3: JSON.stringify(this.systemMsg.timeFrame3),
+				timeFrame4: JSON.stringify(this.systemMsg.timeFrame4),
+				allMoney: this.systemMsg.allMoney,
+				retentionTime: this.systemMsg.retentionTime
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-platform/systemconfig/save",
+					type: "post",
+					option: {
+						successMsg: "系统配置保存成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result.data);
+				if (result.data.code === 200) {
+					this.reload();
+				}
+			});
+		}
+	},
+	created() {
+		this.getlist();
+	},
+	watch: {
+		systemMsg: {
+			handler(newValue, oldValue) {
+				if (newValue.sendTime == 1) {
+					this.systemMsg.retentionTime = "";
+				}
+			},
+			deep: true
 		}
 	}
 };
