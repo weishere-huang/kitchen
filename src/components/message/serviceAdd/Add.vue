@@ -35,7 +35,7 @@
 				<el-input v-model="addMsg.title" size="small" style="width:99%"></el-input>
 			</el-form-item>
 			<el-form-item label="详细地址：">
-				<el-input v-model="addMsg.address" size="small" style="width:99%"></el-input>
+				<el-input v-model="addMsg.address" size="small" style="width:99%" maxlength="50" ></el-input>
 			</el-form-item>
 			<el-form-item label="服务热线：">
 				<el-input v-model="addMsg.phone" size="small" style="width:200px" placeholder="如：028-12345678" type="number"></el-input>
