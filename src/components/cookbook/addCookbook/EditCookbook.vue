@@ -15,6 +15,7 @@
 					:rules="editCookbookRules"
 					ref="editCookbook"
 					:inline-message="true"
+					style="margin-top: 20px;"
 				>
 					<el-form-item label="烹饪流程：" prop="processName">
 						<el-input
@@ -266,7 +267,7 @@ export default {
 						trigger: "change"
 					}
 				],
-				cateId: [{ required: true, message: "请选择分类", trigger: "blur" }],
+				cateId: [{ required: true, message: "请选择分类", trigger: "change" }],
 				recipeName: [
 					{ required: true, message: "请输入菜谱名称", trigger: "blur" }
 				],
