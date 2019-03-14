@@ -5,7 +5,7 @@
 				<div class="top_title">
 					<h4>订单列表</h4>
 					<div class="top_search">
-						<el-col :span="11">
+						<el-col :span="9">
 							<span>日期：</span>
 							<el-date-picker
 								v-model="searchDate1"
@@ -22,10 +22,9 @@
 								size="small"
 								style="width:39%;"
 								value-format="yyyy/MM/dd"
-								@change="compareDate"
 							></el-date-picker>
 						</el-col>
-						<el-col :span="6" style="padding:0 5px;">
+						<el-col :span="5" style="padding:0 5px;">
 							<span>订单状态：</span>
 							<el-select v-model="platformState" placeholder="请选择" size="small" style="width:114px;">
 								<el-option
@@ -36,11 +35,11 @@
 								></el-option>
 							</el-select>
 						</el-col>
-						<el-col :span="5" style="padding:0 5px;">
-							<el-input size="small" style="width:100%;" clearable placeholder="收货人、订单号" v-model="keyWord"></el-input>
+						<el-col :span="8" style="padding:0 5px;">
+							<el-input size="small" style="width:100%;" clearable placeholder="订单编号/用户/收货人/收货人手机号" v-model="keyWord"></el-input>
 						</el-col>
 						<el-col :span="2" style="padding:0 5px;">
-							<el-button size="small" @click="compareDate" plain>搜索</el-button>
+							<el-button size="small" style="width:100%" @click="compareDate" plain>搜索</el-button>
 						</el-col>
 					</div>
 				</div>
@@ -219,8 +218,12 @@ export default {
 			}
 		},
 		compareDate() {
-			if (new Date(this.searchDate1) > new Date(this.searchDate2)) {
-				this.$message.error("结束日期必须大于起始日期，请重新选择");
+			if (this.searchDate2 != null || "") {
+				if (new Date(this.searchDate1) > new Date(this.searchDate2)) {
+					this.$message.error("结束日期必须大于起始日期，请重新选择");
+				} else {
+					this.listOrder();
+				}
 			} else {
 				this.listOrder();
 			}
@@ -393,7 +396,7 @@ export default {
 				float: left;
 			}
 			.top_search {
-				width: 800px;
+				width: 1000px;
 				float: right;
 			}
 		}

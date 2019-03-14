@@ -7,7 +7,7 @@
 			<div class="top_title">
 				<h4>添加商品</h4>
 			</div>
-			<el-form
+			<!-- <el-form
 				label-width="200px"
 				size="small"
 				:model="addMenu"
@@ -120,6 +120,166 @@
 				</el-form-item>
 				<el-form-item label="详细内容：" prop="des">
 					<el-input v-model="addMenu.des" type="textarea" rows="5" style="width:600px;"></el-input>
+				</el-form-item>
+				<el-form-item label>
+					<el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button>
+					<el-button size="small" type="primary" @click="submitForm('addMenu')">保存</el-button>
+				</el-form-item>
+			</el-form>-->
+			<el-form label-width="200px" size="mini" :inline-message="true">
+				<el-form-item label="菜谱选择：" prop>
+					<el-input
+						size="small"
+						suffix-icon="el-icon-arrow-down"
+						type="text"
+						style="width:300px;"
+						placeholder="请选择"
+						@focus="dialogCoobook = true"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="商品分类：" prop="itemCate">
+					<el-select v-model="addMenu.itemCate" placeholder="请选择" size="small" style="width:300px;">
+						<el-option v-for="item in classify" :key="item.value" :label="item.cateName" :value="item.no"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="商品价格：" prop="itemPrice">
+					<el-input
+						v-model.number="addMenu.itemPrice"
+						type="number"
+						size="small"
+						style="width:300px;"
+						placeholder="单位：元"
+						step="0.01"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="商品库存：" prop="stockNow">
+					<el-input type="number" size="small" style="width:300px;" v-model.number="addMenu.stockNow"></el-input>
+				</el-form-item>
+				<el-form-item label="上/下架：" prop="state">
+					<el-radio v-model="addMenu.state" label="1">上架</el-radio>
+					<el-radio v-model="addMenu.state" label="2">下架</el-radio>
+				</el-form-item>
+				<el-form-item label="加入推荐：" prop="recommendType">
+					<el-checkbox v-model="addMenu.recommendType.hotMenu">热销</el-checkbox>
+					<el-checkbox v-model="addMenu.recommendType.newMenu">新品</el-checkbox>
+				</el-form-item>
+				<div class="line"></div>
+				<el-form-item label="商品名称：">
+					<el-input
+						type="text"
+						size="small"
+						:disabled="true"
+						style="width:300px;"
+						v-model.number="addMenu.stockNow"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="商品分类：">
+					<el-input
+						type="text"
+						size="small"
+						:disabled="true"
+						style="width:300px;"
+						v-model.number="addMenu.stockNow"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="烹饪时长：">
+					<el-input
+						type="text"
+						size="small"
+						:disabled="true"
+						style="width:300px;"
+						v-model.number="addMenu.stockNow"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
+					<el-radio-group v-model="addMenu.spicy" size="small" style="width:192px;" :disabled="true">
+						<el-radio-button label="0">
+							<i class="iconfont" style="color:#999999;">&#xe612;</i>
+						</el-radio-button>
+						<el-radio-button label="1">
+							<i class="iconfont" style="color:red;">&#xe612;</i>
+						</el-radio-button>
+						<el-radio-button label="2">
+							<i class="iconfont" style="color:red;">&#xe613;</i>
+						</el-radio-button>
+						<el-radio-button label="3">
+							<i class="iconfont" style="color:red;">&#xe614;</i>
+						</el-radio-button>
+					</el-radio-group>
+					<span>
+						<span v-if="cookbook.spicy==0">无辣</span>
+						<span v-if="cookbook.spicy==1">微辣</span>
+						<span v-if="cookbook.spicy==2">中辣</span>
+						<span v-if="cookbook.spicy==3">特辣</span>
+					</span>
+				</el-form-item>
+				<el-form-item label="净含量：" prop="itemWeight">
+					<el-input
+						type="text"
+						size="small"
+						:disabled="true"
+						style="width:300px;"
+						v-model.number="addMenu.stockNow"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="食材搭配：" prop="itemSpec">
+					<el-input
+						type="text"
+						size="small"
+						:disabled="true"
+						style="width:300px;"
+						v-model.number="addMenu.stockNow"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="商品图片：">
+					<el-upload
+						action="https://jsonplaceholder.typicode.com/posts/"
+						list-type="picture-card"
+						:on-preview="handlePictureCardPreview"
+						:on-remove="handleRemove"
+						:disabled="true"
+					>
+						<i class="el-icon-plus"></i>
+					</el-upload>
+					<el-dialog :visible.sync="dialogVisible" class="showPic">
+						<img width="100%" :src="dialogImageUrl" alt>
+					</el-dialog>
+				</el-form-item>
+				<el-form-item label="主料：">
+					<el-input
+						:disabled="true"
+						size="small"
+						style="width:600px;"
+						type="textarea"
+						rows="6"
+						class="textarea_style"
+						placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。"
+						v-model="cookbook.mainIngredient"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="辅料：">
+					<el-input
+						:disabled="true"
+						size="small"
+						style="width:600px;"
+						type="textarea"
+						rows="6"
+						class="textarea_style"
+						placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。"
+						v-model="cookbook.ingredients"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="介绍：">
+					<el-input
+						:disabled="true"
+						class="textarea_style"
+						size="small"
+						style="width:600px;"
+						type="textarea"
+						rows="6"
+						placeholder="（选填）"
+						v-model="cookbook.introduce"
+					></el-input>
 				</el-form-item>
 				<el-form-item label>
 					<el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button>
@@ -282,13 +442,13 @@ export default {
 	},
 	methods: {
 		submitForm(formName) {
-			this.$refs[formName].validate(valid => {
-				if (valid) {
-					this.savespu();
-				} else {
-					return false;
-				}
-			});
+			// this.$refs[formName].validate(valid => {
+			// 	if (valid) {
+			// 		this.savespu();
+			// 	} else {
+			// 		return false;
+			// 	}
+			// });
 		},
 		// handleInput(row) {
 		//   row.target.value = row.target.value.match(/^\d*(\.?\d{0,2})/g)[0] || null;
@@ -388,7 +548,7 @@ export default {
 				itemPrice: this.addMenu.itemPrice,
 				itemWeight: this.addMenu.itemWeight,
 				itemSpec: this.addMenu.itemSpec,
-				stockNow:this.addMenu.stockNow,
+				stockNow: this.addMenu.stockNow,
 				cookingTime: this.addMenu.cookingTime,
 				spicy: this.addMenu.spicy,
 				des: this.addMenu.des,
@@ -451,6 +611,12 @@ export default {
 		margin-top: 10px;
 		padding-bottom: 10px;
 		overflow: hidden;
+		.line {
+			width: 90%;
+			border-bottom: @border;
+			margin: auto;
+			margin-bottom: 20px;
+		}
 		.top_title {
 			padding: 0 10px;
 			line-height: 60px;
@@ -542,6 +708,11 @@ export default {
 		vertical-align: bottom;
 		padding-left: 8px;
 		line-height: 40px;
+	}
+	.textarea_style {
+		textarea {
+			height: 80px;
+		}
 	}
 }
 .el_show {

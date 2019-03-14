@@ -14,7 +14,7 @@
 					<h4>菜谱列表</h4>
 					<div class="top_search">
 						<el-col :span="20" style="padding:0 5px;">
-							<el-input size="small" clearable placeholder="菜谱名称"></el-input>
+							<el-input size="small" clearable placeholder="菜谱名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
 							<el-button size="small" plain>搜索</el-button>
@@ -31,7 +31,7 @@
 					>
 						<el-table-column label="菜谱名称" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.itemName }}</span>
+								<span>{{ scope.row.recipeName }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="分类" min-width="80" show-overflow-tooltip>
@@ -44,10 +44,10 @@
 								<div @click.stop.prevent="changeUp(scope.$index, scope.row)">
 									<i
 										class="iconfont"
-										v-if="scope.row.state=='1'"
+										v-if="scope.row.state=='0'"
 										style="color:green;cursor: pointer;"
 									>&#xe659;</i>
-									<i class="iconfont" v-if="scope.row.state=='2'" style="color:red;cursor: pointer;">&#xe658;</i>
+									<i class="iconfont" v-if="scope.row.state=='1'" style="color:red;cursor: pointer;">&#xe658;</i>
 								</div>
 							</template>
 						</el-table-column>
@@ -135,15 +135,16 @@ export default {
 			pageIndex: 1,
 			pageSize: 15,
 			total: 10,
+			keyword: "",
 			isHideList: this.$route.params.id !== undefined ? true : false
 		};
 	},
 	methods: {
 		changeUp(index, val) {
-			if (val.state == "1") {
-				this.tableData[index].state = "2";
-			} else {
+			if (val.state == "0") {
 				this.tableData[index].state = "1";
+			} else {
+				this.tableData[index].state = "0";
 			}
 		},
 		handleSizeChange(val) {
@@ -171,15 +172,16 @@ export default {
 		},
 		getCookbookList() {
 			let data = {
-				size: this.pageIndex,
-				page: this.pageSize
+				page: this.pageIndex,
+				size: this.pageSize,
+				keyword: this.keyword
 			};
 			this.Axios(
 				{
 					params: data,
 					option: {},
 					type: "get",
-					url: "/recipe/listRecipeCate",
+					url: "/api-recipe/recipe/list",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}
@@ -187,14 +189,18 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
+					console.log(result.data);
+					if (result.data.code === 200) {
+						this.total = result.data.data.totalElement;
+						this.tableData = result.data.data.content;
+					}
 				},
 				({ type, info }) => {}
 			);
 		}
 	},
 	created() {
-		// this.getCookbookList();
+		this.getCookbookList();
 		let a = this.$route.matched.find(item => item.name === "AddCookbook")
 			? true
 			: false;
