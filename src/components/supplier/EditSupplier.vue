@@ -21,17 +21,19 @@
 					<el-form-item label="详细地址：" prop>
 						<el-input type="text" size="small" style="width:350px;"></el-input>
 					</el-form-item>
+					<el-form-item label="角色选择：">
+						<el-select
+							v-model="supplierMsg.roleId"
+							placeholder="请选择"
+							style="width:350px"
+							size="small"
+							@change="getroleId"
+						>
+							<el-option v-for="item in ruleOptions" :key="item.value" :label="item.name" :value="item.id"></el-option>
+						</el-select>
+					</el-form-item>
 					<el-form-item label="供应商账号：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
-						<el-tooltip class="item" effect="light" content="账号格式：agent加3~5数字组成" placement="top">
-							<i class="el-icon-warning" style="color:#1cc09f"></i>
-						</el-tooltip>
-					</el-form-item>
-					<el-form-item label="密码：" prop>
-						<el-input type="password" size="small" style="width:350px;"></el-input>
-					</el-form-item>
-					<el-form-item label="确认密码：" prop>
-						<el-input type="password" size="small" style="width:350px;"></el-input>
+						<span></span>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -95,6 +97,7 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			ruleOptions: [],
 			data: [],
 			data1: [],
 			data2: [],
@@ -105,10 +108,36 @@ export default {
 				value: "adcode"
 			},
 			// selectarea:["110000","120000","350000","530000","820000"],
-			selectarea: []
+			selectarea: [],
+			supplierMsg: {
+				supplierName: "",
+				contacts: "",
+				phone: "",
+				address: "",
+				areaCode: []
+			}
 		};
 	},
 	methods: {
+		getRoleList() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/role/listAllRole"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					this.ruleOptions = result.data.data;
+				},
+				({ type, info }) => {}
+			);
+		},
 		handleNodeClick(data) {
 			console.log(data);
 		},
@@ -170,7 +199,7 @@ export default {
 		this.data1 = this.data.slice(0, 12);
 		this.data2 = this.data.slice(12, 24);
 		this.data3 = this.data.slice(24, 34);
-		this.getarea();
+		this.getRoleList();
 	},
 	components: {}
 };

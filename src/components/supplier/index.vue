@@ -2,14 +2,14 @@
 	<div class="supplier_list">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加代理商</el-button>
+				<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加供应商</el-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
-					<h4>代理商列表</h4>
+					<h4>供应商列表</h4>
 					<div class="top_search">
 						<el-col :span="19" style="padding:0 5px;">
-							<el-input size="small" placeholder="代理商名称"></el-input>
+							<el-input size="small" placeholder="供应商名称"></el-input>
 						</el-col>
 						<el-col :span="5" style="padding:0 5px;">
 							<el-button size="small" plain @click="beforeSearch">搜索</el-button>

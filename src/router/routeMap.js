@@ -118,18 +118,18 @@ export default [{
     subMenu: [{
       menu: '供应商列表',
       route: '/Supplier',
-      permissionCode: 'area_list_lookup'
+      permissionCode: 'supplier_list_lookup'
     }, {
       menu: '添加供应商',
       route: '/Supplier/AddSupplier',
       visible: true,
-      permissionCode: 'area_list_lookup'
+        permissionCode: 'supplier_add_lookup'
     }, {
       menu: '修改供应商',
       // route: '/Supplier/EditSupplier',
       routeReg: /^\/Supplier\/EditSupplier\/\d{1,}$/i,
       visible: true,
-      permissionCode: 'area_list_lookup'
+        permissionCode: 'supplier_update_lookup'
     }]
   },
   // {

@@ -8,21 +8,32 @@
 				<h4>添加供应商</h4>
 			</div>
 			<div class="supplier_form">
-				<el-form size="small" label-width="180px">
+				<el-form size="small" label-width="180px" :model="supplierMsg">
 					<el-form-item label="供应商名称：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.supplierName"></el-input>
 					</el-form-item>
 					<el-form-item label="联系人：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.contacts"></el-input>
 					</el-form-item>
 					<el-form-item label="联系电话：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.phone"></el-input>
 					</el-form-item>
 					<el-form-item label="详细地址：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.address"></el-input>
+					</el-form-item>
+					<el-form-item label="角色选择：">
+						<el-select
+							v-model="supplierMsg.roleId"
+							placeholder="请选择"
+							style="width:350px"
+							size="small"
+							@change="getroleId"
+						>
+							<el-option v-for="item in ruleOptions" :key="item.value" :label="item.name" :value="item.id"></el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item label="供应商账号：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.supplierName"></el-input>
 						<el-tooltip class="item" effect="light" content="账号格式：agent加3~5数字组成" placement="top">
 							<i class="el-icon-warning" style="color:#1cc09f"></i>
 						</el-tooltip>
@@ -83,7 +94,7 @@
 				</el-col>
 			</div>
 			<div class="top_list" style="padding:10px 200px">
-				<el-button size="small" type="primary" @click="beforesave">
+				<el-button size="small" type="primary" @click="addSupplier">
 					<i class="iconfont">&#xe62d;</i> 保存
 				</el-button>
 			</div>
@@ -95,6 +106,7 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			ruleOptions: [],
 			data: [],
 			data1: [],
 			data2: [],
@@ -105,10 +117,38 @@ export default {
 				value: "adcode"
 			},
 			// selectarea:["110000","120000","350000","530000","820000"],
-			selectarea: []
+			selectarea: [],
+			supplierMsg: {
+				supplierName: "",
+				contacts: "",
+				phone: "",
+				address: "",
+				areaCode: [],
+				password: "",
+				roleId: ""
+			}
 		};
 	},
 	methods: {
+		getRoleList() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/role/listAllRole"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					this.ruleOptions = result.data.data;
+				},
+				({ type, info }) => {}
+			);
+		},
 		handleNodeClick(data) {
 			console.log(data);
 		},
@@ -133,7 +173,6 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		beforesave() {},
 		savearea() {
 			let arr = [];
 			arr = arr
@@ -162,6 +201,27 @@ export default {
 				},
 				({ type, info }) => {}
 			);
+		},
+		addSupplier() {
+			let qs = require("qs");
+			let data = qs.stringify({});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "保存成功"
+					},
+					type: "post",
+					url: "/supplier/saveSupplier"
+				},
+				this
+			).then(
+				result => {
+					// if (result.data.code === 200) {
+					// }
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 	created() {
@@ -170,7 +230,8 @@ export default {
 		this.data1 = this.data.slice(0, 12);
 		this.data2 = this.data.slice(12, 24);
 		this.data3 = this.data.slice(24, 34);
-		this.getarea();
+		// this.getarea();
+		this.getRoleList();
 	},
 	components: {}
 };
