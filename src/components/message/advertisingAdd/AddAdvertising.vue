@@ -2,7 +2,7 @@
 	<div class="add_advertising">
 		<el-form label-width="110px" size="small" :model="addMsg">
 			<el-form-item label="广告名称：" props="title">
-				<el-input v-model="addMsg.title" size="small" style="width:99%"></el-input>
+				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="50"></el-input>
 			</el-form-item>
 			<el-form-item label="广告缩略图：">
 				<el-upload
@@ -47,6 +47,7 @@
 					placeholder="http或https开头(内容图与链接2选1)"
 					style="width:99%"
 					v-model="addMsg.linkUrl"
+          maxlength="200"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="是否显示：">
