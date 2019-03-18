@@ -120,6 +120,7 @@ export default {
 	},
 	methods: {
 		getSaleArea(id){
+		  debugger
 			this.Axios(
 				{
 					params: {
@@ -129,13 +130,15 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/lesterritoryArea/findAll"
+					url: "api-mall/area/findBySupplierId"
 				},
 				this
 			).then(
 				result => {
 					console.log(result.data);
-					// this.ruleOptions = result.data.data;
+          this.supplierMsg = result.data.data[0];
+          console.log("suppliermsg");
+          console.log(this.supplierMsg);
 				},
 				({ type, info }) => {}
 			);
