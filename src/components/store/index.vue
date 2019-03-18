@@ -200,7 +200,7 @@
 						@current-change="handleCurrentChange"
 						:current-page.sync="currentPage"
 						:page-sizes="[15, 30, 100]"
-						:page-size="10"
+						:page-size="pageSize"
 						layout="sizes, prev, pager, next"
 						:total="total"
 					></el-pagination>
@@ -265,18 +265,11 @@ export default {
 			let qs = require("qs");
 			let datas = qs.stringify({
 				id: data.id,
-				itemName: data.itemName,
-				itemCate: data.itemCate,
-				itemImg: "123",
 				itemPrice: data.itemPrice,
-				itemWeight: data.itemWeight,
-				itemSpec: data.itemSpec,
-				cookingTime: data.cookingTime,
 				stockNow: data.stockNow,
-				spicy: data.spicy,
-				des: data.des,
 				state: data.state,
 				sortLevel: data.sortLevel,
+				menuId: data.menuId,
 				recommendType: JSON.stringify(data.recommendType)
 			});
 
@@ -299,7 +292,8 @@ export default {
 			});
 		},
 		handleInput(row, index) {
-			if (/^\+?(\d*\.\d{2})$/.test(row.itemPrice)) {
+			console.log(row);
+			if (/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){0,2})?$/.test(row.itemPrice)) {
 				this.editfood(row);
 			} else {
 				this.$message.error("价格只能保留两位小数，且不能为负数，请重新输入");
@@ -337,13 +331,10 @@ export default {
 		},
 		handleDelete(index, rowData) {
 			rowData.visible = false;
-			let params = { type: "delete", index: index, rowData: rowData };
-
 			let qs = require("qs");
 			let datas = qs.stringify({
-				itemId: params.rowData.id
+				itemId: rowData.id
 			});
-
 			this.Axios(
 				{
 					params: datas,
