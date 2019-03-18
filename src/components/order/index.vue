@@ -14,8 +14,7 @@
 								size="small"
 								style="width:40%;"
 								value-format="yyyy/MM/dd"
-							></el-date-picker>
-							至
+							></el-date-picker>至
 							<el-date-picker
 								v-model="searchDate2"
 								type="date"
@@ -37,7 +36,13 @@
 							</el-select>
 						</el-col>
 						<el-col :span="8" style="padding:0 5px;">
-							<el-input size="small" style="width:100%;" clearable placeholder="订单编号/用户/收货人/收货人手机号" v-model="keyWord"></el-input>
+							<el-input
+								size="small"
+								style="width:100%;"
+								clearable
+								placeholder="订单编号/用户/收货人/收货人手机号"
+								v-model="keyWord"
+							></el-input>
 						</el-col>
 						<el-col :span="2" style="padding:0 5px;">
 							<el-button size="small" style="width:100%" @click="compareDate" plain>搜索</el-button>
@@ -282,7 +287,7 @@ export default {
 				this.$message.error("请勾选要打印的订单！");
 			} else {
 				sessionStorage.setItem("orderIds", this.orderIds.join(","));
-				window.open("printorder.html", "_blank");
+				window.open("/printorder.html", "_blank");
 			}
 		},
 		handleSizeChange(val) {

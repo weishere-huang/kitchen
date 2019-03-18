@@ -442,7 +442,8 @@ export default {
 		},
 		toPrintOrder() {
 			sessionStorage.setItem("orderIds", this.$route.params.id);
-			window.open("printorder.html", "_blank");
+			window.open("/printorder.html", "_blank");
+			// window.location.href="/printorder.html"
 		},
 		getDetails(id) {
 			this.Axios(
