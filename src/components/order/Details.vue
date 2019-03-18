@@ -150,20 +150,20 @@
 				<h4>收货人信息</h4>
 			</div>
 			<div class="table_list">
-				<el-col :span="12" class="form_case">
+				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="收货人：">
 							<span>{{orderDetails.address.consignee}}</span>
 						</el-form-item>
-						<el-form-item label="收货地址：">
-							<span>{{orderDetails.address.address}}</span>
+						<el-form-item label="手机号：">
+							<span>{{orderDetails.address.phone}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="12" class="form_case">
+				<el-col :span="16" class="form_case">
 					<el-form label-width="30%">
-						<el-form-item label="手机号：">
-							<span>{{orderDetails.address.phone}}</span>
+						<el-form-item label="收货地址：">
+							<span>{{orderDetails.address.address}}</span>
 						</el-form-item>
 						<el-form-item label="配送时间：">
 							<span style="color:#1cc09f">立即送出</span>
@@ -177,7 +177,7 @@
 				<h4>订单信息</h4>
 			</div>
 			<div class="table_list">
-				<el-col :span="12" class="form_case">
+				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="订单编号：">
 							<span>{{orderDetails.orderNo}}</span>
@@ -197,7 +197,7 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="12" class="form_case">
+				<el-col :span="16" class="form_case">
 					<el-form label-width="30%">
 						<el-form-item label="订单状态：">
 							<span style="color:#FF6600" v-if="orderDetails.platformState==0">待付款</span>
