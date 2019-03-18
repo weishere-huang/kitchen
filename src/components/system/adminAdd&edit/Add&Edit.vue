@@ -7,6 +7,7 @@
 					size="small"
 					style="width:95%"
 					v-model="addInfo.account"
+          maxlength="20"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="登录密码：">
@@ -16,6 +17,7 @@
 					style="width:95%"
 					type="password"
 					v-model="addInfo.password"
+          maxlength="20"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="确认密码：">
@@ -25,10 +27,11 @@
 					style="width:95%"
 					type="password"
 					v-model="addInfo.confirmPassword"
+          maxlength="20"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="绑定手机：">
-				<el-input placeholder="输入11位手机号码（可用于登录）" size="small" style="width:95%" v-model="addInfo.phone"></el-input>
+				<el-input placeholder="输入11位手机号码（可用于登录）" size="small" style="width:95%" v-model="addInfo.phone" maxlength="20"></el-input>
 			</el-form-item>
 			<el-form-item label="角色选择：" style="margin-bottom:5px;">
 				<el-select

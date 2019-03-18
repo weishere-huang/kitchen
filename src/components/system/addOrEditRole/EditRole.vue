@@ -11,7 +11,7 @@
 				<el-col :span="16">
 					<el-form label-width="200px">
 						<el-form-item label="角色名：">
-							<el-input size="small" v-model="name"></el-input>
+							<el-input size="small" v-model="name" maxlength="20"></el-input>
 						</el-form-item>
 						<el-form-item label="描述：">
 							<el-input type="textarea" rows="6" size="small" v-model="description"></el-input>

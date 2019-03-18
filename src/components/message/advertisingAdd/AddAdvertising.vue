@@ -2,7 +2,7 @@
 	<div class="add_advertising">
 		<el-form label-width="110px" size="small" :model="addMsg">
 			<el-form-item label="广告名称：" props="title">
-				<el-input v-model="addMsg.title" size="small" style="width:99%"></el-input>
+				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="50"></el-input>
 			</el-form-item>
 			<el-form-item label="广告缩略图：">
 				<el-upload
@@ -13,6 +13,7 @@
 					:on-success="handleAvatarSuccess"
 					v-model="addMsg.mainPic"
 					:file-list="mainPic"
+          :limit="1"
 				>
 					<i class="el-icon-plus"></i>
 					<div slot="tip" class="el-upload__tip">宽高750 × 290像素，＜500KB的jpg图片</div>
@@ -31,6 +32,7 @@
 					:on-success="handleAvatarSuccess1"
 					v-model="addMsg.content"
 					:file-list="content"
+          :limit="1"
 				>
 					<i class="el-icon-plus"></i>
 					<div slot="tip" class="el-upload__tip">宽高1000 × 不限，＜2MB的jpg图片</div>
@@ -45,6 +47,7 @@
 					placeholder="http或https开头(内容图与链接2选1)"
 					style="width:99%"
 					v-model="addMsg.linkUrl"
+          maxlength="200"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="是否显示：">
