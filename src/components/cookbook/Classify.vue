@@ -15,14 +15,15 @@
 					:rules="classifyRules"
 					ref="classify"
 				>
-					<el-form-item label="上级分类：" prop="label">
-						<el-input
+					<el-form-item label="上级分类：" prop="parentNo">
+						<!-- <el-input
 							size="small"
 							style="width:99%;"
 							suffix-icon="el-icon-caret-bottom"
 							@focus="selectShow=true"
 							v-model="classify.label"
-						></el-input>
+						></el-input>-->
+						<select-list v-on:handlechange="handlechange"></select-list>
 					</el-form-item>
 					<el-form-item label="分类名称：" prop="cateName">
 						<el-input size="small" style="width:99%;" v-model="classify.cateName"></el-input>
@@ -119,7 +120,7 @@ export default {
 				cateName: ""
 			},
 			classifyRules: {
-				label: [
+				parentNo: [
 					{
 						required: true,
 						message: "请选择上级分类",
@@ -262,8 +263,10 @@ export default {
 		},
 		handlechange(params) {
 			this.selectShow = false;
-			this.classify.label = params.cateName;
-			this.classify.parentNo = params.cateNo;
+			// this.classify.label = params.cateName;
+			// this.classify.parentNo = params.cateNo;
+			console.log(params);
+			this.classify.parentNo = params;
 		},
 		getClassifyList() {
 			this.Axios(

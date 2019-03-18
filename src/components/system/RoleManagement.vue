@@ -128,7 +128,7 @@ export default {
 			).then(
 				result => {
 					console.log(result.data);
-					this.tableData = result.data.data;
+					this.tableData = result.data.data.content;
 				},
 				({ type, info }) => {}
 			);

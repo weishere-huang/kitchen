@@ -72,7 +72,7 @@ export default {
 			this.Axios(
 				{
 					params: {
-						page: this.pageIndex,
+						page: -1,
 						size: this.pageSize
 					},
 					option: {
