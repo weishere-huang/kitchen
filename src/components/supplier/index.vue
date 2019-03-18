@@ -57,7 +57,7 @@ export default {
 			items: [
 				{
 					label: "代理商名称",
-					prop: "name",
+					prop: "supplierName",
 					width: 200
 				},
 				{
@@ -72,20 +72,20 @@ export default {
 				},
 				{
 					label: "账号",
-					prop: "userName",
+					prop: "supplierAccount",
 					width: 140
 				}
 			],
 			tableData: [
-                {
-                    name:"绵阳永辉超市（涪城店）",
-                    contacts:"张小芳",
-                    phone:"13888888888",
-                    userName:"agent0816"
-                }
-            ],
+				{
+					name: "绵阳永辉超市（涪城店）",
+					contacts: "张小芳",
+					phone: "13888888888",
+					userName: "agent0816"
+				}
+			],
 			pageIndex: 1,
-			pageSize: 10,
+			pageSize: 15,
 			total: 10,
 			isHideList: this.$route.params.id !== undefined ? true : false
 		};
@@ -105,15 +105,41 @@ export default {
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-                console.log(params);
-                this.$router.push("/Supplier/EditSupplier/" + params.rowData.phone);
+				console.log(params);
+				this.$router.push("/Supplier/EditSupplier/" + params.rowData.id);
 			}
 			if (params.type === "delete") {
-				console.log(params);
+				console.log(params.rowData.id);
+				this.deleteSupplier(params.rowData.id);
 			}
 			if (params.type === "detalis") {
 				console.log(params);
 			}
+		},
+		deleteSupplier(id) {
+			this.Axios(
+				{
+					params: {
+						supplierId: id
+					},
+					option: {
+						successMsg: "删除成功！"
+					},
+					type: "get",
+					url: "/api-platform/supplier/delSupplier"
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+						this.getSupplierList();
+					}
+					// this.tableData = result.data.data.content;
+					// this.total = result.data.data.totalElement;
+				},
+				({ type, info }) => {}
+			);
 		},
 		handleSelectionChange(selection) {
 			console.log(selection);
@@ -123,26 +149,29 @@ export default {
 		},
 		beforeSearch() {},
 		//获取所有网点
-		getServiceList() {
+		getSupplierList() {
 			this.Axios(
 				{
 					params: {
 						page: this.pageIndex,
-						size: this.pageSize,
-						areaName: this.areaName
+						size: this.pageSize
+						// areaName: this.areaName
 					},
 					option: {
-						successMsg: "服务网点加载完成~"
+						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/network/list"
+					url: "/api-platform/supplier/findAllList"
 				},
 				this
 			).then(
 				result => {
-					console.log(result.data);
-					this.tableData = result.data.data.content;
-					this.total = result.data.data.totalElement;
+					console.log(result.data.data.content);
+					if (result.data.code === 200) {
+						this.tableData = result.data.data.content;
+					}
+					// this.tableData = result.data.data.content;
+					// this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
 			);
@@ -171,6 +200,7 @@ export default {
 		}
 	},
 	created() {
+		this.getSupplierList();
 		let a = this.$route.matched.find(item => item.name === "AddSupplier")
 			? true
 			: false;

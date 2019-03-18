@@ -8,32 +8,26 @@
 				<h4>添加供应商</h4>
 			</div>
 			<div class="supplier_form">
-				<el-form size="small" label-width="180px">
+				<el-form size="small" label-width="180px" :model="supplierMsg">
 					<el-form-item label="供应商名称：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" v-model="supplierMsg.supplierName" size="small" style="width:350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="联系人：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" v-model="supplierMsg.contacts" size="small" style="width:350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="联系电话：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" v-model="supplierMsg.phone" size="small" style="width:350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="详细地址：" prop>
-						<el-input type="text" size="small" style="width:350px;"></el-input>
+						<el-input type="text" v-model="supplierMsg.address" size="small" style="width:350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="角色选择：">
-						<el-select
-							v-model="supplierMsg.roleId"
-							placeholder="请选择"
-							style="width:350px"
-							size="small"
-							@change="getroleId"
-						>
+						<el-select v-model="supplierMsg.supplierRoleId" placeholder="请选择" style="width:350px" size="small">
 							<el-option v-for="item in ruleOptions" :key="item.value" :label="item.name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="供应商账号：" prop>
-						<span></span>
+						<span>{{supplierMsg.supplierAccount}}</span>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -97,6 +91,10 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			province: [],
+			city: [],
+			block: [],
+			country: [],
 			ruleOptions: [],
 			data: [],
 			data1: [],
@@ -114,20 +112,45 @@ export default {
 				contacts: "",
 				phone: "",
 				address: "",
-				areaCode: []
+				areaCode: [],
+				supplierRoleId: "",
+				supplierAccount: ""
 			}
 		};
 	},
 	methods: {
-		getRoleList() {
+		getSaleArea(id){
 			this.Axios(
 				{
-					params: {},
+					params: {
+						supplierId: id
+					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/role/listAllRole"
+					url: "/api-platform/lesterritoryArea/findAll"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					// this.ruleOptions = result.data.data;
+				},
+				({ type, info }) => {}
+			);
+		},
+		getOneSupplier(id) {
+			this.Axios(
+				{
+					params: {
+						supplierId: id
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/supplier/findSupplier"
 				},
 				this
 			).then(
@@ -146,7 +169,7 @@ export default {
 				{
 					params: {},
 					option: {
-						successMsg: "销售区域加载完成~"
+						enableMsg: false
 					},
 					type: "get",
 					url: "/api-mall/area/list"
@@ -154,10 +177,66 @@ export default {
 				this
 			).then(
 				result => {
-					result.data.data.map(item => {
-						this.selectarea.push(item.adCode);
-					});
-					this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
+					// console.log(typeof JSON.parse(JSON.stringify(result.data.data)));
+					let that = this;
+					let data = JSON.parse(JSON.stringify(result.data.data));
+					for (var item in data) {
+						if (data[item].adCode.match(/100000$/)) {
+							that.country.push({
+								adCode: data[item].adCode,
+								areaName: data[item].areaName,
+								children: []
+							});
+						} else if (data[item].adCode.match(/0000$/)) {
+							//省
+							that.province.push({
+								adCode: data[item].adCode,
+								areaName: data[item].areaName,
+								children: []
+							});
+						} else if (data[item].adCode.match(/00$/)) {
+							//市
+							that.city.push({
+								adCode: data[item].adCode,
+								areaName: data[item].areaName,
+								children: []
+							});
+						} else {
+							//区
+							that.block.push({
+								adCode: data[item].adCode,
+								areaName: data[item].areaName
+							});
+						}
+					}
+					// 分类市级
+					for (var index in that.province) {
+						for (var index1 in that.city) {
+							if (
+								that.province[index].adCode.slice(0, 2) ===
+								that.city[index1].adCode.slice(0, 2)
+							) {
+								that.province[index].children.push(that.city[index1]);
+							}
+						}
+					}
+					//  分类区级
+					for (var item1 in that.city) {
+						for (var item2 in that.block) {
+							if (
+								that.block[item2].adCode.slice(0, 4) ===
+								that.city[item1].adCode.slice(0, 4)
+							) {
+								that.city[item1].children.push(that.block[item2]);
+							}
+						}
+					}
+					that.country[0].children.push(that.province);
+					// console.log(that.country);
+					this.data = that.country[0].children[0];
+					this.data1 = this.data.slice(0, 12);
+					this.data2 = this.data.slice(12, 24);
+					this.data3 = this.data.slice(24, 34);
 				},
 				({ type, info }) => {}
 			);
@@ -195,11 +274,9 @@ export default {
 	},
 	created() {
 		// console.log(this.$store.state.getArea);
-		this.data = JSON.parse(sessionStorage.getItem("area"))[0].children[0];
-		this.data1 = this.data.slice(0, 12);
-		this.data2 = this.data.slice(12, 24);
-		this.data3 = this.data.slice(24, 34);
-		this.getRoleList();
+		this.getarea();
+		this.getSaleArea(this.$route.params.id)
+		this.getOneSupplier(this.$route.params.id);
 	},
 	components: {}
 };

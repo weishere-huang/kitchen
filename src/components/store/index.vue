@@ -385,6 +385,20 @@ export default {
 			this.foodlist();
 		},
 		changeNew(index, val) {
+			// if (val.state == 1) {
+			// 	this.changeState(val);
+			// } else {
+			// 	this.$confirm("菜谱下架，绑定的商品也同样会下架, 是否继续?", "提示", {
+			// 		confirmButtonText: "确定",
+			// 		cancelButtonText: "取消",
+			// 		type: "warning",
+			// 		cancelButtonClass: "is-plain"
+			// 	})
+			// 		.then(() => {
+			// 			this.changeState(val);
+			// 		})
+			// 		.catch(() => {});
+			// }
 			if (val.recommendType.newMenu === false) {
 				this.tableData[index].recommendType.newMenu = true;
 				this.editfood(val);
