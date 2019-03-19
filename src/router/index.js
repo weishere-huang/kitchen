@@ -2,9 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home/index'
 import Order from '@/components/order/index'
+import AdminOrder from '@/components/order/AdminOrder'
 import Store from '@/components/store/index'
+import AdminStore from '@/components/store/adminStore/AdminStore'
+import AdminStoreDetails from '@/components/store/adminStore/AdminDetails'
 import Classify from '@/components/store/Classify'
 import Details from '@/components/order/Details'
+import AdminDetails from '@/components/order/AdminDetails'
 import AddMenu from '@/components/store/AddMenu'
 import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
@@ -24,6 +28,7 @@ import AddCookbook from '@/components/cookbook/addCookbook/AddCookbook'
 import EditCookbook from '@/components/cookbook/addCookbook/EditCookbook'
 import User from '@/components/user/User'
 import GuestBook from '@/components/user/GuestBook'
+
 
 Vue.use(Router)
 const router = new Router({
@@ -65,7 +70,28 @@ const router = new Router({
         },
       }, ]
     },
-
+    {
+      path: '/AdminOrder',
+      name: 'AdminOrder',
+      component: AdminOrder,
+      props: {
+        pageName: '订单列表'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'AdminDetails/:id/',
+        name: 'AdminDetails',
+        component: AdminDetails,
+        props: {
+          pageName: '订单详情'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
+    },
     {
       path: '/Store',
       name: 'Store',
@@ -99,6 +125,28 @@ const router = new Router({
           },
         },
       ]
+    },
+    {
+      path: '/AdminStore',
+      name: 'AdminStore',
+      component: AdminStore,
+      props: {
+        pageName: '商城列表'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'AdminStoreDetails/:id/',
+        name: 'AdminStoreDetails',
+        component: AdminStoreDetails,
+        props: {
+          pageName: '修改商品'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
     },
     {
       path: '/Classify',

@@ -218,7 +218,8 @@ export default {
 			this.$confirm("您确定要退出登录吗？", "确认", {
 				confirmButtonText: "确定",
 				cancelButtonText: "取消",
-				type: "warning"
+				type: "warning",
+				cancelButtonClass: "is-plain"
 			}).then(() => {
 				this.$message({
 					message: "您已退出登录",

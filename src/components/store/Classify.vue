@@ -78,7 +78,7 @@
 				<el-form-item
 					label="分类名称："
 					prop="classifyName"
-					:rules="{ required: true, message: '名称不能为空', trigger: 'blur'}"
+					:rules="[{ required: true, message: '名称不能为空', trigger: 'blur'},{max: 5, message: '输入内容个数需小于等于5'}]"
 				>
 					<el-input type="text" size="small" style="width:90%;" v-model="addClassifyName.classifyName"></el-input>
 				</el-form-item>
@@ -93,7 +93,7 @@
 				<el-form-item
 					label="分类名称："
 					prop="cateName"
-					:rules="{ required: true, message: '名称不能为空', trigger: ['blur' ,'change']}"
+					:rules="[{ required: true, message: '名称不能为空', trigger: ['blur' ,'change']},{max: 5, message: '输入内容个数需小于等于5'}]"
 				>
 					<el-input type="text" size="small" style="width:90%;" v-model="editMsg.cateName"></el-input>
 				</el-form-item>

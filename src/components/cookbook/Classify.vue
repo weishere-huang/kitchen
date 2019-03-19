@@ -15,21 +15,22 @@
 					:rules="classifyRules"
 					ref="classify"
 				>
-					<el-form-item label="上级分类：" prop="label">
-						<el-input
+					<el-form-item label="上级分类：" prop="parentNo">
+						<!-- <el-input
 							size="small"
 							style="width:99%;"
 							suffix-icon="el-icon-caret-bottom"
 							@focus="selectShow=true"
 							v-model="classify.label"
-						></el-input>
+						></el-input>-->
+						<select-list v-on:handlechange="handlechange"></select-list>
 					</el-form-item>
 					<el-form-item label="分类名称：" prop="cateName">
-						<el-input size="small" style="width:99%;" v-model="classify.cateName"></el-input>
+						<el-input size="small" style="width:99%;" :max="10" v-model="classify.cateName"></el-input>
 					</el-form-item>
-					<div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
+					<!-- <div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
 						<select-list v-on:handlechange="handlechange"></select-list>
-					</div>
+					</div>-->
 				</el-form>
 				<span slot="footer" class="dialog-footer">
 					<el-button @click="dialogAdd = false" plain size="small">取 消</el-button>
@@ -119,7 +120,7 @@ export default {
 				cateName: ""
 			},
 			classifyRules: {
-				label: [
+				parentNo: [
 					{
 						required: true,
 						message: "请选择上级分类",
@@ -127,13 +128,17 @@ export default {
 					}
 				],
 				cateName: [
-					{ required: true, message: "请填写分类名称", trigger: "blur" }
+					{ required: true, message: "请填写分类名称", trigger: "blur" },
+					{ max: 5, message: "输入内容个数需小于等于5" }
 				]
 			},
-			editClassify: {},
+			editClassify: {
+				cateName: ""
+			},
 			editClassifyRules: {
 				cateName: [
-					{ required: true, message: "请填写分类名称", trigger: "blur" }
+					{ required: true, message: "请填写分类名称", trigger: "blur" },
+					{ max: 5, message: "输入内容个数需小于等于5" }
 				]
 			},
 			selectShow: false,
@@ -262,8 +267,10 @@ export default {
 		},
 		handlechange(params) {
 			this.selectShow = false;
-			this.classify.label = params.cateName;
-			this.classify.parentNo = params.cateNo;
+			// this.classify.label = params.cateName;
+			// this.classify.parentNo = params.cateNo;
+			console.log(params);
+			this.classify.parentNo = params;
 		},
 		getClassifyList() {
 			this.Axios(

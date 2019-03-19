@@ -170,7 +170,7 @@ export default {
 			let qs = require("qs");
 			let data = qs.stringify({
 				employeeIds: id,
-				enableOrDisable: 1
+				enableOrDisable: -1
 			});
 			this.Axios(
 				{

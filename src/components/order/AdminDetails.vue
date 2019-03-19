@@ -3,7 +3,7 @@
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
 			<div style="float:right;">
-				<el-button
+				<!-- <el-button
 					size="small"
 					type="primary"
 					@click="dialogSend=true"
@@ -20,7 +20,7 @@
 					type="primary"
 					@click="dialogClose=true"
 					v-if="orderDetails.platformState!=3&&orderDetails.platformState!=9"
-				>关闭</el-button>
+				>关闭</el-button> -->
 				<el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button>
 				<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
 			</div>

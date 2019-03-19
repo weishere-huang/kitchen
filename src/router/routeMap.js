@@ -23,6 +23,17 @@ export default [{
         permissionCode: 'order_list_lookup'
       },
       {
+        menu: '订单列表',
+        route: '/AdminOrder',
+        permissionCode: 'order_list_lookup'
+      },
+      {
+        menu: '订单详情',
+        routeReg: /^\/AdminOrder\/AdminDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'order_detail_lookup'
+      },
+      {
         menu: '订单详情',
         routeReg: /^\/Order\/Details\/\d{1,}$/i,
         visible: true,
@@ -31,13 +42,18 @@ export default [{
     ]
   },
   {
-    menu: '商城管理',
+    menu: '商品管理',
     permissionCode: 'store',
     defaultDock: false,
     icon: '&#xe634;',
     subMenu: [{
         menu: '商品列表',
         route: '/Store',
+        permissionCode: 'mall_list_lookup'
+      },
+      {
+        menu: '商品列表',
+        route: '/AdminStore',
         permissionCode: 'mall_list_lookup'
       },
       {
@@ -54,6 +70,12 @@ export default [{
       {
         menu: '修改商品',
         routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'mall_update_lookup'
+      },
+      {
+        menu: '修改商品',
+        routeReg: /^\/AdminStore\/AdminStoreDetails\/\d{1,}$/i,
         visible: true,
         permissionCode: 'mall_update_lookup'
       }
@@ -118,18 +140,18 @@ export default [{
     subMenu: [{
       menu: '供应商列表',
       route: '/Supplier',
-      permissionCode: 'area_list_lookup'
+      permissionCode: 'supplier_list_lookup'
     }, {
       menu: '添加供应商',
       route: '/Supplier/AddSupplier',
       visible: true,
-      permissionCode: 'area_list_lookup'
+      permissionCode: 'supplier_add_lookup'
     }, {
       menu: '修改供应商',
       // route: '/Supplier/EditSupplier',
       routeReg: /^\/Supplier\/EditSupplier\/\d{1,}$/i,
       visible: true,
-      permissionCode: 'area_list_lookup'
+      permissionCode: 'supplier_update_lookup'
     }]
   },
   // {

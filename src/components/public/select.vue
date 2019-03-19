@@ -1,11 +1,23 @@
 <template>
 	<div class="tree_case">
-		<el-tree
+		<!-- <el-tree
 			:data="data"
 			:props="defaultProps"
 			@node-click="handleNodeClick"
 			:expand-on-click-node="false"
-		></el-tree>
+		></el-tree>-->
+		<el-cascader
+			expand-trigger="hover"
+			:options="data"
+			:props="defaultProps"
+			v-model="cookbook"
+			@change="handleChange"
+			:show-all-levels="false"
+			change-on-select
+			ref="selectValue"
+			style="width:99%;"
+			size="small"
+		></el-cascader>
 		<!-- default-expand-all -->
 	</div>
 </template>
@@ -13,14 +25,22 @@
 export default {
 	data() {
 		return {
+			cookbook: [],
 			data: [],
 			defaultProps: {
-				children: "children",
+				value: "cateNo",
 				label: "cateName"
 			}
 		};
 	},
 	methods: {
+		handleChange(value) {
+			// let labels = this.$refs["recipeCate"].currentLabels;
+			// this.cookbook.cateName = labels[labels.length - 1];
+			// console.log(this.cookbook.cateName);
+			console.log(value);
+			this.$emit("handlechange", value.join(""));
+		},
 		handleNodeClick(data) {
 			this.$emit("handlechange", data);
 		},
@@ -51,6 +71,7 @@ export default {
 							cateNo: 0
 						});
 						// }
+						console.log(this.data);
 					}
 				},
 				({ type, info }) => {}
