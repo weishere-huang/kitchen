@@ -39,7 +39,7 @@ export default {
 		return {
 			userMsg: {
 				name: localStorage.getItem("loginName"),
-				password: localStorage.getItem("loginPassword"),
+				password: "",
 				verifyCode: ""
 			},
 			userMsgRules: {
@@ -58,6 +58,21 @@ export default {
 		};
 	},
 	methods: {
+		decryptByDES(ciphertext, key) {
+			let keyHex = CryptoJS.enc.Utf8.parse(key);
+			// direct decrypt ciphertext
+			let decrypted = CryptoJS.DES.decrypt(
+				{
+					ciphertext: CryptoJS.enc.Base64.parse(ciphertext)
+				},
+				keyHex,
+				{
+					mode: CryptoJS.mode.ECB,
+					padding: CryptoJS.pad.Pkcs7
+				}
+			);
+			return decrypted.toString(CryptoJS.enc.Utf8);
+		},
 		encryptByDES(message, key) {
 			const keyHex = CryptoJS.enc.Utf8.parse(key);
 			const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
@@ -102,14 +117,22 @@ export default {
 						sessionStorage.user = JSON.stringify(result.data.data);
 						window.location.href = "/Home";
 						localStorage.setItem("loginName", this.userMsg.name);
-						localStorage.setItem("loginPassword", this.userMsg.password);
+						localStorage.setItem(
+							"loginPassword",
+							this.encryptByDES(this.userMsg.password, key)
+						);
 					}
 				},
 				({ type, info }) => {}
 			);
 		}
 	},
-	created() {}
+	created() {
+		this.userMsg.password = this.decryptByDES(
+			localStorage.getItem("loginPassword"),
+			"*chang_hong_device_cloud"
+		);
+	}
 };
 </script>
 
