@@ -136,6 +136,7 @@ export default {
 			} else {
 				this.tableData[index].state = -1;
 			}
+
 		},
 		resetPasswords(index, rowData) {
 			rowData.resetvisible = false;
@@ -232,7 +233,8 @@ export default {
 				}
 				console.log(result.data);
 			});
-		}
+		},
+
 	},
 	created() {
 		this.getlist();
