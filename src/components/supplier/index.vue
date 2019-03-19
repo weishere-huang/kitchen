@@ -92,10 +92,12 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
+      this.getSupplierList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
+      this.getSupplierList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
@@ -143,6 +145,7 @@ export default {
 		},
 		beforeSearch() {
       this.pageIndex = 1;
+      this.getSupplierList();
     },
 		//获取所有网点
 		getSupplierList() {
