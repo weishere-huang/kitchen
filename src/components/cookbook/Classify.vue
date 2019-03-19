@@ -26,11 +26,11 @@
 						<select-list v-on:handlechange="handlechange"></select-list>
 					</el-form-item>
 					<el-form-item label="分类名称：" prop="cateName">
-						<el-input size="small" style="width:99%;" v-model="classify.cateName"></el-input>
+						<el-input size="small" style="width:99%;" :max="10" v-model="classify.cateName"></el-input>
 					</el-form-item>
-					<div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
+					<!-- <div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
 						<select-list v-on:handlechange="handlechange"></select-list>
-					</div>
+					</div>-->
 				</el-form>
 				<span slot="footer" class="dialog-footer">
 					<el-button @click="dialogAdd = false" plain size="small">取 消</el-button>
@@ -128,13 +128,17 @@ export default {
 					}
 				],
 				cateName: [
-					{ required: true, message: "请填写分类名称", trigger: "blur" }
+					{ required: true, message: "请填写分类名称", trigger: "blur" },
+					{ max: 5, message: "输入内容个数需小于等于5" }
 				]
 			},
-			editClassify: {},
+			editClassify: {
+				cateName: ""
+			},
 			editClassifyRules: {
 				cateName: [
-					{ required: true, message: "请填写分类名称", trigger: "blur" }
+					{ required: true, message: "请填写分类名称", trigger: "blur" },
+					{ max: 5, message: "输入内容个数需小于等于5" }
 				]
 			},
 			selectShow: false,

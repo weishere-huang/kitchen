@@ -66,7 +66,7 @@
 					></table-list>
 					<div style="margin-top:20px;float:left;padding-left:10px;padding-bottom:10px;">
 						<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
-						<el-button size="small" type="primary" @click="shipments">发货</el-button>
+						<!-- <el-button size="small" type="primary" @click="shipments">发货</el-button> -->
 					</div>
 					<div class="block" style="margin-top:20px;float:right;padding-bottom:10px;">
 						<el-pagination
@@ -166,7 +166,8 @@ export default {
 					prop: "phone",
 					width: 120,
 					formatter: function(row, column) {
-						return row.address.consignee + " " + row.address.phone;
+						let str = row.address.consignee + " " + row.address.phone;
+						return str;
 					}
 				},
 				{
@@ -309,7 +310,7 @@ export default {
 			}
 			if (params.type === "detalis") {
 				console.log(params);
-				this.$router.push("/Order/Details/" + params.rowData.id);
+				this.$router.push("/AdminOrder/AdminDetails/" + params.rowData.id);
 				// this.$router.push({ path: "/Order/Details/" + this.userIds });
 			}
 		},
@@ -350,10 +351,6 @@ export default {
 						);
 					}
 					this.tableData = result.data.data.content;
-					for (let j = 0; j < this.tableData.length; j++) {
-						this.tableData[j].address.consignee =
-							result.data.data.content[j].address.consignee;
-					}
 					this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}

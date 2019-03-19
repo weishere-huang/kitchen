@@ -1,7 +1,7 @@
 <template>
 	<div class="add_cookbook">
 		<el-col :span="24" class="serach_case">
-			<el-input size="small" style="width:617px;" clearable></el-input>
+			<el-input size="small" style="width:617px;" clearable v-model="keyword"></el-input>
 			<el-button type="primary" size="small" @click="searchItem">搜索</el-button>
 		</el-col>
 		<el-col :span="24" class="content_case">
@@ -15,7 +15,7 @@
 					@click="getValue(item)"
 					v-for="(item, index) in scriptData"
 					:key="index"
-				>{{item}}</span>
+				>{{item.recipeName}}</span>
 			</el-col>
 			<div class="block" style="margin-top:10px;float:right;margin-bottom:12px;">
 				<el-pagination
@@ -23,8 +23,8 @@
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page.sync="currentPage"
-					:page-sizes="[15, 30, 100]"
-					:page-size="15"
+					:page-sizes="[30,60]"
+					:page-size="pageSize"
 					layout="sizes, prev, pager, next"
 					:total="total"
 				></el-pagination>
@@ -36,6 +36,7 @@
 export default {
 	data() {
 		return {
+			currentPage:1,
 			scriptData: [
 				"红烧肉",
 				"鱼香肉丝",
@@ -49,8 +50,9 @@ export default {
 			],
 			recentSearch: 1,
 			pageIndex: 1,
-			pageSize: 15,
-			total: 15
+			pageSize: 30,
+			total: null,
+			keyword: ""
 		};
 	},
 	methods: {
@@ -64,16 +66,48 @@ export default {
 			this.pageIndex = val;
 		},
 		getValue(val) {
-			console.log(val);
+			// console.log(val);
 			let params = { value: val, isHide: false };
 			this.$emit("dialogCoobookHide", params);
 		},
 		searchItem() {
 			this.recentSearch = 2;
+			this.getCookbookList();
+		},
+		getCookbookList() {
+			let data = {
+				page: this.pageIndex,
+				size: this.pageSize,
+				keyword: this.keyword
+			};
+			this.Axios(
+				{
+					params: data,
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/recipe/list",
+					loadingConfig: {
+						target: document.querySelector(".cookbook_list")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					if (result.data.code === 200) {
+						this.scriptData = result.data.data.content;
+						this.total = result.data.data.totalElement;
+					}
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 	created() {
 		// this.scriptData = this.recentSearch;
+		this.getCookbookList();
 	}
 };
 </script>

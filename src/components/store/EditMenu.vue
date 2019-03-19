@@ -7,126 +7,15 @@
 			<div class="top_title">
 				<h4>修改商品</h4>
 			</div>
-			<!-- <el-form
+			<el-form
 				label-width="200px"
-				size="small"
-				:model="editmenu"
-				:rules="editmenuRules"
-				ref="editmenu"
+				size="mini"
 				:inline-message="true"
+				:rules="editmenuRules"
+				:model="editmenu"
+				ref="editmenu"
 			>
-				<el-form-item label="商品名称：" prop="itemName">
-					<el-input type="text" size="small" style="width:300px;" v-model="editmenu.itemName"></el-input>
-				</el-form-item>
-				<el-form-item label="商品分类：" prop="itemCate">
-					<el-select v-model="editmenu.itemCate" placeholder="请选择" size="small">
-						<el-option v-for="item in classify" :key="item.value" :label="item.cateName" :value="item.no"></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="绑定菜谱：" prop="script">
-					<el-input
-						type="text"
-						size="small"
-						style="width:192px;"
-						@focus="dialogCookbook=true"
-						placeholder="请选择"
-						clearable
-						v-model="editmenu.script"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="商品价格：" prop="itemPrice">
-					<el-input
-						v-model.number="editmenu.itemPrice"
-						type="number"
-						size="small"
-						style="width:192px;"
-						placeholder="单位：元"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="商品库存：" prop="stockNow">
-					<el-input type="number" size="small" style="width:192px;" v-model.number="editmenu.stockNow"></el-input>
-				</el-form-item>
-				<el-form-item label="烹饪时长：" prop="cookingTime">
-					<el-input
-						v-model.number="editmenu.cookingTime"
-						type="number"
-						size="small"
-						style="width:192px;"
-						placeholder="单位：分钟"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
-					<el-radio-group v-model="editmenu.spicy" style="width:192px;" size="small">
-						<el-radio-button label="0">
-							<i class="iconfont" style="color:#999999;">&#xe612;</i>
-						</el-radio-button>
-						<el-radio-button label="1">
-							<i class="iconfont" style="color:red;">&#xe612;</i>
-						</el-radio-button>
-						<el-radio-button label="2">
-							<i class="iconfont" style="color:red;">&#xe613;</i>
-						</el-radio-button>
-						<el-radio-button label="3">
-							<i class="iconfont" style="color:red;">&#xe614;</i>
-						</el-radio-button>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="净含量：" prop="itemWeight">
-					<el-input
-						v-model.number="editmenu.itemWeight"
-						type="number"
-						size="small"
-						style="width:192px;"
-						placeholder="单位：克"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="食材搭配：" prop="itemSpec">
-					<el-input
-						v-model="editmenu.itemSpec"
-						type="text"
-						size="small"
-						style="width:300px;"
-						placeholder=" 如：精选五花肉，青椒，蒜片，姜片"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="商品图片：" prop="itemImg">
-					<el-upload
-						:action="imgApi()"
-						list-type="picture-card"
-						:on-preview="handlePictureCardPreview"
-						:on-remove="handleRemove"
-						:on-success="handleAvatarSuccess"
-						:file-list="filelist"
-						:limit="1"
-						v-model="editmenu.itemImg"
-						:before-upload="beforeAvatarUpload"
-						accept=".jpg, .jpeg, .png"
-					>
-						<i class="el-icon-plus"></i>
-						<div slot="tip" class="el-upload__tip">600 × 600像素，≤80 KB的jpg/png图片</div>
-					</el-upload>
-					<el-dialog :visible.sync="dialogVisible">
-						<img width="100%" :src="dialogImageUrl" alt>
-					</el-dialog>
-				</el-form-item>
-				<el-form-item label="是否上架：" prop="state">
-					<el-radio v-model="editmenu.state" label="1">是</el-radio>
-					<el-radio v-model="editmenu.state" label="2">否</el-radio>
-				</el-form-item>
-				<el-form-item label="加入推荐：" prop="recommendType">
-					<el-checkbox v-model="editmenu.recommendType.hotMenu">热销</el-checkbox>
-					<el-checkbox v-model="editmenu.recommendType.newMenu">新品</el-checkbox>
-				</el-form-item>
-				<el-form-item label="详细内容：" prop="des">
-					<el-input v-model="editmenu.des" type="textarea" rows="5" style="width:600px;"></el-input>
-				</el-form-item>
-				<el-form-item label>
-					<el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button>
-					<el-button size="small" type="primary" @click="submitForm('editmenu')">保存</el-button>
-				</el-form-item>
-			</el-form> -->
-			<el-form label-width="200px" size="mini" :inline-message="true">
-				<el-form-item label="菜谱选择：" prop>
+				<el-form-item label="菜谱选择：" prop="recipeName">
 					<el-input
 						size="small"
 						suffix-icon="el-icon-arrow-down"
@@ -134,6 +23,7 @@
 						style="width:300px;"
 						placeholder="请选择"
 						@focus="dialogCookbook=true"
+						v-model="editmenu.recipeName"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品分类：" prop="itemCate">
@@ -169,7 +59,7 @@
 						size="small"
 						:disabled="true"
 						style="width:300px;"
-						v-model.number="editmenu.stockNow"
+						v-model.number="cookbook.recipeName"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品分类：">
@@ -178,7 +68,7 @@
 						size="small"
 						:disabled="true"
 						style="width:300px;"
-						v-model.number="editmenu.stockNow"
+						v-model.number="cookbook.cateName"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="烹饪时长：">
@@ -187,11 +77,11 @@
 						size="small"
 						:disabled="true"
 						style="width:300px;"
-						v-model.number="editmenu.stockNow"
+						v-model.number="cookbook.cookingTime"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
-					<el-radio-group v-model="editmenu.spicy" size="small" style="width:192px;" :disabled="true">
+					<el-radio-group v-model="cookbook.spicy" size="small" style="width:192px;" :disabled="true">
 						<el-radio-button label="0">
 							<i class="iconfont" style="color:#999999;">&#xe612;</i>
 						</el-radio-button>
@@ -218,20 +108,20 @@
 						size="small"
 						:disabled="true"
 						style="width:300px;"
-						v-model.number="editmenu.stockNow"
+						v-model.number="cookbook.weight"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="食材搭配：" prop="itemSpec">
+				<el-form-item label="食材搭配：" prop="spec">
 					<el-input
 						type="text"
 						size="small"
 						:disabled="true"
 						style="width:300px;"
-						v-model.number="editmenu.stockNow"
+						v-model="cookbook.spec"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品图片：">
-					<el-upload
+					<!-- <el-upload
 						action="https://jsonplaceholder.typicode.com/posts/"
 						list-type="picture-card"
 						:on-preview="handlePictureCardPreview"
@@ -239,10 +129,18 @@
 						:disabled="true"
 					>
 						<i class="el-icon-plus"></i>
-					</el-upload>
+					</el-upload>-->
 					<el-dialog :visible.sync="dialogVisible" class="showPic">
 						<img width="100%" :src="dialogImageUrl" alt>
 					</el-dialog>
+					<div style="width:80px;height:80px;">
+						<img
+							:src="cookbook.recipeImg"
+							alt
+							style="width:80px;height:80px;"
+							@click="handlePictureCardPreview(cookbook.recipeImg)"
+						>
+					</div>
 				</el-form-item>
 				<el-form-item label="主料：">
 					<el-input
@@ -253,7 +151,7 @@
 						rows="6"
 						class="textarea_style"
 						placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。"
-						v-model="cookbook.mainIngredient"
+						v-model="cookbook.ingredient"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="辅料：">
@@ -265,7 +163,7 @@
 						rows="6"
 						class="textarea_style"
 						placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。"
-						v-model="cookbook.ingredients"
+						v-model="cookbook.accessories"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="介绍：">
@@ -281,7 +179,7 @@
 					></el-input>
 				</el-form-item>
 				<el-form-item label>
-					<el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button>
+					<!-- <el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button> -->
 					<el-button size="small" type="primary" @click="submitForm('editmenu')">保存</el-button>
 				</el-form-item>
 			</el-form>
@@ -311,35 +209,26 @@ export default {
 			dialogPreview: false,
 			filelist: [],
 			editmenu: {
-				itemName: "",
+				recipeName: "",
 				itemCate: "",
-				itemImg: "",
 				itemPrice: "",
-				itemWeight: "",
-				itemSpec: "",
-				cookingTime: "",
-				spicy: "",
-				des: "",
-				script: "",
-				number: "",
-				state: "1",
+				stockNow: "",
+				state: "2",
 				recommendType: {
 					newMenu: false,
 					hotMenu: false
 				}
 			},
 			editmenuRules: {
-				itemName: [
+				recipeName: [
 					{
 						required: true,
 						message: "请输入商品名称",
 						trigger: "blur"
 					}
 				],
-				itemCate: [{ required: true, message: "请选择分类", trigger: "blur" }],
-				itemImg: [{ required: true, message: "请上传图片" }],
-				script: [
-					{ required: false, message: "请选择菜谱脚本", trigger: "focus" }
+				itemCate: [
+					{ required: true, message: "请选择分类", trigger: "change" }
 				],
 				itemPrice: [
 					{
@@ -351,23 +240,6 @@ export default {
 						validator: (rule, value, callback) => {
 							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
 								callback(new Error("支持小数点后两位，且不能为负数"));
-							} else {
-								callback();
-							}
-						},
-						trigger: "blur"
-					}
-				],
-				itemWeight: [
-					{
-						required: true,
-						message: "请输入商品净含量",
-						trigger: "blur"
-					},
-					{
-						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
-								callback(new Error("只能为正整数"));
 							} else {
 								callback();
 							}
@@ -389,38 +261,6 @@ export default {
 								callback();
 							}
 						},
-						trigger: "blur"
-					}
-				],
-				itemSpec: [
-					{
-						required: true,
-						message: "请输入商品食材搭配",
-						trigger: "blur"
-					}
-				],
-				cookingTime: [
-					{
-						required: true,
-						message: "请输入烹饪时长",
-						trigger: "blur"
-					},
-					{
-						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
-								callback(new Error("请输入正整数"));
-							} else {
-								callback();
-							}
-						},
-						trigger: "blur"
-					}
-				],
-				spicy: [{ required: true, message: "请选择辣度", trigger: "blur" }],
-				des: [
-					{
-						required: false,
-						message: "请输入详细内容",
 						trigger: "blur"
 					}
 				]
@@ -446,13 +286,13 @@ export default {
 	},
 	methods: {
 		submitForm(formName) {
-			// this.$refs[formName].validate(valid => {
-			// 	if (valid) {
-			// 		this.editfood();
-			// 	} else {
-			// 		return false;
-			// 	}
-			// });
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.editfood();
+				} else {
+					return false;
+				}
+			});
 		},
 		imgApi() {
 			let url = this.global.apiImg + "/api-upload/upload";
@@ -479,8 +319,10 @@ export default {
 			);
 		},
 		dialogCoobookHide(params) {
+			console.log(params);
 			this.dialogCookbook = params.ishide;
-			this.editmenu.script = params.value;
+			this.cookbook = params.value;
+			// this.editmenu.script = params.value;
 		},
 		getUEContent() {
 			this.editfood();
@@ -490,7 +332,7 @@ export default {
 			this.editmenu.itemImg = null;
 		},
 		handlePictureCardPreview(file) {
-			this.dialogImageUrl = file.url;
+			this.dialogImageUrl = file;
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload(file) {
@@ -540,17 +382,13 @@ export default {
 			let qs = require("qs");
 			let data = qs.stringify({
 				id: this.$route.params.id,
-				itemName: this.editmenu.itemName,
+				itemName: this.cookbook.recipeName,
 				itemCate: this.editmenu.itemCate,
-				itemImg: this.editmenu.itemImg,
 				itemPrice: this.editmenu.itemPrice,
-				itemWeight: this.editmenu.itemWeight,
-				itemSpec: this.editmenu.itemSpec,
-				cookingTime: this.editmenu.cookingTime,
+				itemWeight: this.cookbook.weight,
 				stockNow: this.editmenu.stockNow,
-				spicy: this.editmenu.spicy,
-				des: this.editmenu.des,
 				state: this.editmenu.state,
+				menuId: this.cookbook.id,
 				recommendType: JSON.stringify(this.editmenu.recommendType)
 			});
 			this.Axios(
@@ -588,16 +426,47 @@ export default {
 				this
 			).then(
 				result => {
-					result.data.data.itemPrice = result.data.data.itemPrice / 100;
-					result.data.data.itemWeight = result.data.data.itemWeight / 100;
-					result.data.data.recommendType = JSON.parse(
-						result.data.data.recommendType
-					);
-					result.data.data.state = result.data.data.state.toString();
-					console.log(result.data.data);
-					this.editmenu = result.data.data;
-					// console.log(result.data.data);
+					if (result.data.code === 200) {
+						result.data.data.itemPrice = result.data.data.itemPrice / 100;
+						result.data.data.itemWeight = result.data.data.itemWeight / 100;
+						result.data.data.recommendType = JSON.parse(
+							result.data.data.recommendType
+						);
+						result.data.data.state = result.data.data.state.toString();
+						this.editmenu = result.data.data;
+						this.getOneCookbook(this.editmenu.menuId);
+					}
+
 					console.log(this.editmenu);
+				},
+				({ type, info }) => {}
+			);
+		},
+		getOneCookbook(id) {
+			this.Axios(
+				{
+					params: {
+						id: id
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/recipe/getOne"
+				},
+				this
+			).then(
+				result => {
+					// console.log(result.data.data);
+					if (result.data.code === 200) {
+						result.data.data.cateId = JSON.parse(result.data.data.cateId);
+						result.data.data.step = JSON.parse(result.data.data.step);
+						result.data.data.state = JSON.stringify(result.data.data.state);
+						this.cookbook = result.data.data;
+						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
+						console.log(this.cookbook);
+						this.editmenu.recipeName = this.cookbook.recipeName;
+					}
 				},
 				({ type, info }) => {}
 			);
