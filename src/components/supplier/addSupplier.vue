@@ -325,7 +325,8 @@ export default {
 				address: this.supplierMsg.address,
 				areaCode: this.supplierMsg.areaCode.join(","),
 				supplierPassword: pass,
-				supplierRoleId: this.supplierMsg.supplierRoleId,
+				// supplierRoleId: this.supplierMsg.supplierRoleId,
+				supplierRoleId: 2,
 				supplierAccount: this.supplierMsg.supplierAccount
 			});
 			this.Axios(

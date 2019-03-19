@@ -9,7 +9,7 @@
 					<h4>供应商列表</h4>
 					<div class="top_search">
 						<el-col :span="19" style="padding:0 5px;">
-							<el-input size="small" placeholder="供应商名称"></el-input>
+							<el-input size="small" placeholder="供应商名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="5" style="padding:0 5px;">
 							<el-button size="small" plain @click="beforeSearch">搜索</el-button>
@@ -76,18 +76,12 @@ export default {
 					width: 140
 				}
 			],
-			tableData: [
-				{
-					name: "绵阳永辉超市（涪城店）",
-					contacts: "张小芳",
-					phone: "13888888888",
-					userName: "agent0816"
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 15,
 			total: 10,
-			isHideList: this.$route.params.id !== undefined ? true : false
+			isHideList: this.$route.params.id !== undefined ? true : false,
+      keyword:null
 		};
 	},
 	methods: {
@@ -147,15 +141,17 @@ export default {
 		getRow(row, event) {
 			console.log(row);
 		},
-		beforeSearch() {},
+		beforeSearch() {
+      this.pageIndex = 1;
+    },
 		//获取所有网点
 		getSupplierList() {
 			this.Axios(
 				{
 					params: {
 						page: this.pageIndex,
-						size: this.pageSize
-						// areaName: this.areaName
+						size: this.pageSize,
+            keyWord:this.keyword
 					},
 					option: {
 						enableMsg: false

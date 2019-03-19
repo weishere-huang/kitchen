@@ -45,7 +45,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adcode"
+						node-key="adCode"
 						ref="tree1"
 					></el-tree>
 				</el-col>
@@ -59,7 +59,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adcode"
+						node-key="adCode"
 						ref="tree2"
 					></el-tree>
 				</el-col>
@@ -73,7 +73,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adcode"
+						node-key="adCode"
 						ref="tree3"
 					></el-tree>
 				</el-col>
@@ -120,7 +120,6 @@ export default {
 	},
 	methods: {
 		getSaleArea(id){
-		  debugger
 			this.Axios(
 				{
 					params: {
@@ -130,15 +129,72 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "api-mall/area/findBySupplierId"
+					url: "/api-mall/area/findBySupplierId"
 				},
 				this
 			).then(
 				result => {
 					console.log(result.data);
-          this.supplierMsg = result.data.data[0];
-          console.log("suppliermsg");
-          console.log(this.supplierMsg);
+          let that = this;
+          let data = JSON.parse(JSON.stringify(result.data.data));
+          for (var item in data) {
+            if (data[item].adCode.match(/100000$/)) {
+              that.country.push({
+                adCode: data[item].adCode,
+                areaName: data[item].areaName,
+                children: []
+              });
+            } else if (data[item].adCode.match(/0000$/)) {
+              //省
+              that.province.push({
+                adCode: data[item].adCode,
+                areaName: data[item].areaName,
+                children: []
+              });
+            } else if (data[item].adCode.match(/00$/)) {
+              //市
+              that.city.push({
+                adCode: data[item].adCode,
+                areaName: data[item].areaName,
+                children: []
+              });
+            } else {
+              //区
+              that.block.push({
+                adCode: data[item].adCode,
+                areaName: data[item].areaName
+              });
+            }
+          }
+          // 分类市级
+          for (var index in that.province) {
+            for (var index1 in that.city) {
+              if (
+                that.province[index].adCode.slice(0, 2) ===
+                that.city[index1].adCode.slice(0, 2)
+              ) {
+                that.province[index].children.push(that.city[index1]);
+              }
+            }
+          }
+          //  分类区级
+          for (var item1 in that.city) {
+            for (var item2 in that.block) {
+              if (
+                that.block[item2].adCode.slice(0, 4) ===
+                that.city[item1].adCode.slice(0, 4)
+              ) {
+                that.city[item1].children.push(that.block[item2]);
+              }
+            }
+          }
+          that.country[0].children.push(that.province);
+          // console.log(that.country);
+          this.data = that.country[0].children[0];
+          this.data1 = this.data.slice(0, 12);
+          this.data2 = this.data.slice(12, 24);
+          this.data3 = this.data.slice(24, 34);
+          this.getOneSupplier(id);
 				},
 				({ type, info }) => {}
 			);
@@ -155,11 +211,15 @@ export default {
 					type: "get",
 					url: "/api-platform/supplier/findSupplier"
 				},
-				this
+        this
 			).then(
 				result => {
 					console.log(result.data);
-					this.ruleOptions = result.data.data;
+					console.log("getOneSupplier");
+					this.supplierMsg = result.data.data.supplierDO;
+          result.data.data.area.map(item => this.selectarea.push(item.areaCode))
+          console.log(this.selectarea);
+          this.selectarea=JSON.parse(JSON.stringify(this.selectarea));
 				},
 				({ type, info }) => {}
 			);
@@ -167,84 +227,9 @@ export default {
 		handleNodeClick(data) {
 			console.log(data);
 		},
-		getarea() {
-			this.Axios(
-				{
-					params: {},
-					option: {
-						enableMsg: false
-					},
-					type: "get",
-					url: "/api-mall/area/list"
-				},
-				this
-			).then(
-				result => {
-					// console.log(typeof JSON.parse(JSON.stringify(result.data.data)));
-					let that = this;
-					let data = JSON.parse(JSON.stringify(result.data.data));
-					for (var item in data) {
-						if (data[item].adCode.match(/100000$/)) {
-							that.country.push({
-								adCode: data[item].adCode,
-								areaName: data[item].areaName,
-								children: []
-							});
-						} else if (data[item].adCode.match(/0000$/)) {
-							//省
-							that.province.push({
-								adCode: data[item].adCode,
-								areaName: data[item].areaName,
-								children: []
-							});
-						} else if (data[item].adCode.match(/00$/)) {
-							//市
-							that.city.push({
-								adCode: data[item].adCode,
-								areaName: data[item].areaName,
-								children: []
-							});
-						} else {
-							//区
-							that.block.push({
-								adCode: data[item].adCode,
-								areaName: data[item].areaName
-							});
-						}
-					}
-					// 分类市级
-					for (var index in that.province) {
-						for (var index1 in that.city) {
-							if (
-								that.province[index].adCode.slice(0, 2) ===
-								that.city[index1].adCode.slice(0, 2)
-							) {
-								that.province[index].children.push(that.city[index1]);
-							}
-						}
-					}
-					//  分类区级
-					for (var item1 in that.city) {
-						for (var item2 in that.block) {
-							if (
-								that.block[item2].adCode.slice(0, 4) ===
-								that.city[item1].adCode.slice(0, 4)
-							) {
-								that.city[item1].children.push(that.block[item2]);
-							}
-						}
-					}
-					that.country[0].children.push(that.province);
-					// console.log(that.country);
-					this.data = that.country[0].children[0];
-					this.data1 = this.data.slice(0, 12);
-					this.data2 = this.data.slice(12, 24);
-					this.data3 = this.data.slice(24, 34);
-				},
-				({ type, info }) => {}
-			);
-		},
-		beforesave() {},
+		beforesave() {
+		  this.savearea();
+    },
 		savearea() {
 			let arr = [];
 			arr = arr
@@ -253,7 +238,13 @@ export default {
 				.concat(this.$refs.tree3.getCheckedKeys());
 			let qs = require("qs");
 			let data = qs.stringify({
-				codes: arr.toString()
+        supplierName:this.supplierMsg.supplierName,
+        contacts:this.supplierMsg.contacts,
+        phone:this.supplierMsg.phone,
+        address:this.supplierMsg.address,
+        supplierRoleId:2,
+        id:this.$route.params.id,
+        areaCode: arr.toString()
 			});
 			this.Axios(
 				{
@@ -262,24 +253,22 @@ export default {
 						enableMsg: false
 					},
 					type: "post",
-					url: "/api-mall/area/save"
+					url: "/api-platform/supplier/updateSupplier"
 				},
 				this
 			).then(
 				result => {
-					if (result.data.code === 200) {
-						this.$message.success("保存成功");
-					}
+          if (result.data.code === 200) {
+            this.$router.back(-1);
+            this.reload();
+          }
 				},
 				({ type, info }) => {}
 			);
 		}
 	},
 	created() {
-		// console.log(this.$store.state.getArea);
-		this.getarea();
-		this.getSaleArea(this.$route.params.id)
-		this.getOneSupplier(this.$route.params.id);
+		this.getSaleArea(this.$route.params.id);
 	},
 	components: {}
 };
