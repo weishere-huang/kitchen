@@ -49,7 +49,7 @@
 					</div>
 					<div class="stateList">
 						<ul>
-							<li>&nbsp;欢迎您：{{user}}</li>
+							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
 							<li>
 								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">
 									<i class="iconfont" @click="pathto(0)">&#xe63b;</i>
@@ -103,21 +103,26 @@
 				:rules="editPasswordRules"
 			>
 				<el-form-item label="账号：">
-					<span></span>
+					<span>{{editPassword.account}}</span>
 				</el-form-item>
-				<el-form-item label="原密码：">
-					<el-input type="password" rows="4" style="width:99%;"></el-input>
+				<el-form-item label="原密码：" prop="oldPassword">
+					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.oldPassword"></el-input>
 				</el-form-item>
-				<el-form-item label="新密码：">
-					<el-input type="password" rows="4" style="width:99%;"></el-input>
+				<el-form-item label="新密码：" prop="newPassword">
+					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.newPassword"></el-input>
 				</el-form-item>
-				<el-form-item label="再次输入：">
-					<el-input type="password" rows="4" style="width:99%;"></el-input>
+				<el-form-item label="再次输入：" prop="repetitionPassword">
+					<el-input
+						type="password"
+						rows="4"
+						style="width:99%;"
+						v-model="editPassword.repetitionPassword"
+					></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisible = false" size="small" plain>取 消</el-button>
-				<el-button type="primary" @click="dialogFormVisible=false" size="small">确 定</el-button>
+				<el-button type="primary" @click="setEditPassword('editPassword')" size="small">确 定</el-button>
 			</span>
 		</el-dialog>
 	</div>
@@ -127,7 +132,8 @@
 import breadCrumb from "./BreadCrumb.vue";
 import menuSourceMap from "./router/routeMap";
 import clone from "clone";
-
+import md5 from "js-md5/src/md5.js";
+import CryptoJS from "crypto-js/crypto-js.js";
 export default {
 	provide() {
 		return {
@@ -137,8 +143,33 @@ export default {
 	name: "App",
 	data() {
 		return {
-			editPassword: {},
-			editPasswordRules: {},
+			editPassword: {
+				oldPassword: "",
+				newPassword: "",
+				account: "",
+				repetitionPassword: ""
+			},
+			editPasswordRules: {
+				oldPassword: [
+					{ required: true, message: "请输入旧密码", trigger: "blur" }
+				],
+				newPassword: [
+					{ required: true, message: "请输入新密码", trigger: "blur" }
+				],
+				repetitionPassword: [
+					{ required: true, message: "请再次输入新密码", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (value !== this.editPassword.newPassword) {
+								callback(new Error("两次输入密码不一致"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				]
+			},
 			dialogFormVisible: false,
 			token: undefined,
 			user: "",
@@ -159,6 +190,63 @@ export default {
 	},
 	computed: {},
 	methods: {
+		setEditPassword(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.setPasswordApi();
+				} else {
+					return false;
+				}
+			});
+		},
+		encryptByDES(message, key) {
+			const keyHex = CryptoJS.enc.Utf8.parse(key);
+			const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+				mode: CryptoJS.mode.ECB,
+				padding: CryptoJS.pad.Pkcs7
+			});
+			return encrypted.toString();
+		},
+		setPasswordApi() {
+			let newPassword = this.editPassword.newPassword;
+			let oldPassword = this.editPassword.oldPassword;
+			newPassword = md5(newPassword);
+			oldPassword = md5(oldPassword);
+			let key = "*chang_hong_device_cloud";
+			oldPassword = this.encryptByDES(oldPassword, key);
+			newPassword = this.encryptByDES(newPassword, key);
+			let qs = require("qs");
+			let data = qs.stringify({
+				oldPassword: oldPassword,
+				newPassword: newPassword,
+				account: this.editPassword.account
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "修改成功，请重新登录！"
+					},
+					type: "post",
+					url: "/api-platform/employee/resetpsw",
+					loadingConfig: {
+						target: document.querySelector(".login")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.dialogFormVisible = false;
+						sessionStorage.removeItem("token");
+						sessionStorage.removeItem("user");
+						sessionStorage.removeItem("permissionUrl");
+						window.location.href = "/login.html";
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
 		//获取地区JSON文件
 		getArea() {
 			this.axios.get("./static/area.json").then(res => {
@@ -339,6 +427,9 @@ export default {
 	created() {
 		this.initPermission();
 		// this.getArea();
+		this.editPassword.account = JSON.parse(
+			sessionStorage.getItem("user")
+		).account;
 	},
 	components: {
 		breadCrumb
