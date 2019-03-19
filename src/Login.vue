@@ -38,8 +38,8 @@ export default {
 	data() {
 		return {
 			userMsg: {
-				name: "",
-				password: "",
+				name: localStorage.getItem("loginName"),
+				password: localStorage.getItem("loginPassword"),
 				verifyCode: ""
 			},
 			userMsgRules: {
@@ -101,6 +101,8 @@ export default {
 						sessionStorage.token = result.data.data.tokenStr;
 						sessionStorage.user = JSON.stringify(result.data.data);
 						window.location.href = "/Home";
+						localStorage.setItem("loginName", this.userMsg.name);
+						localStorage.setItem("loginPassword", this.userMsg.password);
 					}
 				},
 				({ type, info }) => {}
