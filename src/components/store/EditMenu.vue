@@ -322,6 +322,7 @@ export default {
 			console.log(params);
 			this.dialogCookbook = params.ishide;
 			this.cookbook = params.value;
+			this.editmenu.recipeName=this.cookbook.recipeName
 			// this.editmenu.script = params.value;
 		},
 		getUEContent() {
