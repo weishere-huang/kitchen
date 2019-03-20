@@ -27,7 +27,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="供应商账号：" prop>
-						<span>{{supplierMsg.supplierAccount}}</span>
+						<span>{{supplierMsg.account}}</span>
 					</el-form-item>
 				</el-form>
 			</div>

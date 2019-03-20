@@ -48,7 +48,7 @@
 									<i class="iconfont" style="color:#1cc09f">&#xe78a;</i>
 								</el-tooltip>
 							</span>
-							<span v-if="scope.row.state==-1" style="color:red">
+							<span v-if="scope.row.state==1" style="color:red">
 								<el-tooltip class="item" effect="light" content="禁用" placement="right">
 									<i class="iconfont" style="color:#999999">&#xe63a;</i>
 								</el-tooltip>
@@ -121,7 +121,7 @@ export default {
 				},
 				{
 					label: "禁用",
-					value: -1
+					value: 1
 				}
 			],
 			tableData: [],
@@ -131,11 +131,35 @@ export default {
 	},
 	methods: {
 		changeState(row, index) {
-			if (this.tableData[index].state == -1) {
-				this.tableData[index].state = 0;
-			} else {
-				this.tableData[index].state = -1;
-			}
+			// if (this.tableData[index].state == -1) {
+			// 	this.tableData[index].state = 0;
+			// } else {
+			// 	this.tableData[index].state = -1;
+			// }
+      console.log(this.tableData[index].id);
+      let qs = require("qs");
+      let data = qs.stringify({
+        userInfoId:this.tableData[index].id
+      });
+      this.Axios(
+        {
+          params:data,
+          option: {
+            successMsg:"操作成功"
+          },
+          type: "post",
+          url: "/api-user/userInfo/forbiddenUser"
+        },
+        this
+      ).then(
+        result => {
+          if(result.data.code===200){
+            this.reload();
+          }
+        },
+        ({type, info}) => {
+        }
+      );
 
 		},
 		resetPasswords(index, rowData) {
@@ -164,7 +188,6 @@ export default {
 			this.getlist();
 		},
 		getlist() {
-			console.log("Zhixing");
 			this.Axios(
 				{
 					params: {

@@ -1,7 +1,7 @@
 <template>
 	<div class="add_service">
-		<el-form label-width="90px" :model="addMsg" ref="addMsg" :rules="serviceRules">
-			<el-form-item label="地区：">
+		<el-form label-width="100px" :model="addMsg" ref="addMsg" :rules="serviceRules">
+			<el-form-item label="地区：" prop="areaCode"	>
 				<el-select
 					v-model="provinceCode"
 					placeholder="请选择"
@@ -31,24 +31,25 @@
 					></el-option>
 				</el-select>
 			</el-form-item>
-			<el-form-item label="网点名称：">
-				<el-input v-model="addMsg.title" size="small" style="width:99%"></el-input>
+			<el-form-item label="网点名称：" prop="title">
+				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="20"></el-input>
 			</el-form-item>
-			<el-form-item label="详细地址：">
+			<el-form-item label="详细地址：" prop="address">
 				<el-input v-model="addMsg.address" size="small" style="width:99%" maxlength="50" ></el-input>
 			</el-form-item>
-			<el-form-item label="服务热线：">
-				<el-input v-model="addMsg.phone" size="small" style="width:200px" placeholder="如：028-12345678" type="number"></el-input>
+			<el-form-item label="服务热线：" prop="phone">
+				<el-input v-model="addMsg.phone" size="small" style="width:200px" placeholder="如：028-12345678" type="number" maxlength="20"></el-input>
 			</el-form-item>
-			<el-form-item label="工作时间：">
+			<el-form-item label="工作时间：" prop="workingHours">
 				<el-input
 					v-model="addMsg.workingHours"
 					size="small"
 					style="width:200px"
 					placeholder="如：09:00-18:00"
+          maxlength="20"
 				></el-input>
 			</el-form-item>
-			<el-form-item label="服务范围：" style="margin-bottom: 0px;">
+			<el-form-item label="服务范围：" style="margin-bottom: 0px;" prop="serviceMode">
 				<el-checkbox-group v-model="serviceMode" @change="changeMode">
 					<el-checkbox label="送修"></el-checkbox>
 					<el-checkbox label="检修"></el-checkbox>
@@ -61,7 +62,36 @@
 export default {
 	data() {
 		return {
-			serviceRules: {},
+			serviceRules: {
+        areaCode:[],
+        title:[
+          { required: true, message: '请输入网点名称', trigger: 'blur' }
+        ],
+        address:[
+        ],
+        phone:[
+          { required: true, message: '请输入电话', trigger: 'blur' },
+          { min: 8, max: 15, message: '长度在 8 到 15 个数字', trigger: 'blur' }
+        ],
+        workingHours:[
+          { required: true, message: '请输入服务时间', trigger: 'blur' }
+        ],
+        serviceMode:[
+          { type: 'array',required: true, message: '请选择服务范围', trigger: 'change' },
+          {
+
+            //todo 这里的验证不完善
+            validator: (rule, value, callback) => {
+              if (value.wechat === false && value.alipay === false) {
+                callback(new Error("必须选择一种支付方式"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "change"
+          }
+        ]
+      },
 			province: [],
 			cities: [],
 			serviceMode: [],
