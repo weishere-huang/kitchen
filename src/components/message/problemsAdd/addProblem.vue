@@ -2,7 +2,7 @@
 	<div class="add_problem">
 		<el-form label-width="90px">
 			<el-form-item label="标题：">
-				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="100"></el-input>
+				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="80"></el-input>
 			</el-form-item>
 			<el-form-item label="分类：">
 				<el-select
@@ -17,7 +17,7 @@
 			</el-form-item>
 
 			<el-form-item label="内容：">
-				<el-input v-model="addMsg.content" type="textarea" rows="6" size="small" style="width:99%"></el-input>
+				<el-input v-model="addMsg.content" type="textarea" rows="6" size="small" style="width:99%" maxlength="200"></el-input>
 			</el-form-item>
 		</el-form>
 	</div>

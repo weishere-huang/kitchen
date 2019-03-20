@@ -14,7 +14,7 @@
 							<el-input size="small" v-model="name" maxlength="20"></el-input>
 						</el-form-item>
 						<el-form-item label="描述：">
-							<el-input type="textarea" rows="6" size="small" v-model="description"></el-input>
+							<el-input type="textarea" rows="6" size="small" v-model="description" maxlength="100"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
