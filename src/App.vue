@@ -17,6 +17,7 @@
 					text-color="#fff"
 					active-text-color="#ffd04b"
 					:collapse="isCollapse"
+					:unique-opened="true"
 				>
 					<el-submenu
 						:index="item.permissionCode"
@@ -48,27 +49,32 @@
 					</div>
 					<div class="stateList">
 						<ul>
-							<li>&nbsp;欢迎您：{{user}}</li>
+							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
 							<li>
-								<el-tooltip class="item" effect="dark" content="设备状态" placement="bottom-end">
-									<i class="iconfont" @click="pathto(0)">&#xe609;</i>
+								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">
+									<i class="iconfont" @click="pathto(0)">&#xe63b;</i>
 								</el-tooltip>
 							</li>
 							<li>
-								<el-tooltip class="item" effect="dark" content="我的消息" placement="bottom-end">
+								<el-tooltip class="item" effect="light" content="商品" placement="bottom-end">
 									<el-badge :value="msgcount===0?'':msgcount" :max="99" class="item">
-										<i class="iconfont" @click="pathto(1)">&#xe601;</i>
+										<i class="iconfont" @click="pathto(1)">&#xe637;</i>
 									</el-badge>
 								</el-tooltip>
 							</li>
 							<li>
-								<el-tooltip class="item" effect="dark" content="我的工单" placement="bottom-end">
-									<i class="iconfont" @click="pathto(2)">&#xe61d;</i>
+								<el-tooltip class="item" effect="light" content="留言反馈" placement="bottom-end">
+									<i class="iconfont" @click="pathto(2)">&#xe69e;</i>
 								</el-tooltip>
 							</li>
 							<li>
-								<el-tooltip class="item" effect="dark" content="退出" placement="bottom-end">
-									<i class="iconfont" @click="out">&#xe6af;</i>
+								<el-tooltip class="item" effect="light" content="修改密码" placement="bottom-end">
+									<i class="iconfont" @click="pathto(3)">&#xe62a;</i>
+								</el-tooltip>
+							</li>
+							<li>
+								<el-tooltip class="item" effect="light" content="退出登录" placement="bottom-end">
+									<i class="iconfont" @click="out">&#xe639;</i>
 								</el-tooltip>
 							</li>
 						</ul>
@@ -82,6 +88,43 @@
 				<el-footer>长虹智慧厨房({{version?(new Date(version).format("yyyy/MM/dd hh:mm:ss")):'no version'}})&nbsp;&nbsp;版本号：{{versionNumber}}</el-footer>
 			</el-container>
 		</el-container>
+		<el-dialog
+			:close-on-click-modal="false"
+			title="修改密码"
+			:visible.sync="dialogFormVisible"
+			width="500px"
+		>
+			<el-form
+				label-width="100px"
+				size="small"
+				style="margin-top:20px;"
+				:model="editPassword"
+				ref="editPassword"
+				:rules="editPasswordRules"
+			>
+				<el-form-item label="账号：">
+					<span>{{editPassword.account}}</span>
+				</el-form-item>
+				<el-form-item label="原密码：" prop="oldPassword">
+					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.oldPassword"></el-input>
+				</el-form-item>
+				<el-form-item label="新密码：" prop="newPassword">
+					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.newPassword"></el-input>
+				</el-form-item>
+				<el-form-item label="再次输入：" prop="repetitionPassword">
+					<el-input
+						type="password"
+						rows="4"
+						style="width:99%;"
+						v-model="editPassword.repetitionPassword"
+					></el-input>
+				</el-form-item>
+			</el-form>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisible = false" size="small" plain>取 消</el-button>
+				<el-button type="primary" @click="setEditPassword('editPassword')" size="small">确 定</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -89,7 +132,8 @@
 import breadCrumb from "./BreadCrumb.vue";
 import menuSourceMap from "./router/routeMap";
 import clone from "clone";
-
+import md5 from "js-md5/src/md5.js";
+import CryptoJS from "crypto-js/crypto-js.js";
 export default {
 	provide() {
 		return {
@@ -99,6 +143,34 @@ export default {
 	name: "App",
 	data() {
 		return {
+			editPassword: {
+				oldPassword: "",
+				newPassword: "",
+				account: "",
+				repetitionPassword: ""
+			},
+			editPasswordRules: {
+				oldPassword: [
+					{ required: true, message: "请输入旧密码", trigger: "blur" }
+				],
+				newPassword: [
+					{ required: true, message: "请输入新密码", trigger: "blur" }
+				],
+				repetitionPassword: [
+					{ required: true, message: "请再次输入新密码", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (value !== this.editPassword.newPassword) {
+								callback(new Error("两次输入密码不一致"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				]
+			},
+			dialogFormVisible: false,
 			token: undefined,
 			user: "",
 			show: true,
@@ -109,7 +181,6 @@ export default {
 			version: versionInfo,
 			menuSource: [],
 			permissionUrl: "",
-
 			province: [],
 			city: [],
 			block: [],
@@ -119,6 +190,63 @@ export default {
 	},
 	computed: {},
 	methods: {
+		setEditPassword(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.setPasswordApi();
+				} else {
+					return false;
+				}
+			});
+		},
+		encryptByDES(message, key) {
+			const keyHex = CryptoJS.enc.Utf8.parse(key);
+			const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+				mode: CryptoJS.mode.ECB,
+				padding: CryptoJS.pad.Pkcs7
+			});
+			return encrypted.toString();
+		},
+		setPasswordApi() {
+			let newPassword = this.editPassword.newPassword;
+			let oldPassword = this.editPassword.oldPassword;
+			newPassword = md5(newPassword);
+			oldPassword = md5(oldPassword);
+			let key = "*chang_hong_device_cloud";
+			oldPassword = this.encryptByDES(oldPassword, key);
+			newPassword = this.encryptByDES(newPassword, key);
+			let qs = require("qs");
+			let data = qs.stringify({
+				oldPassword: oldPassword,
+				newPassword: newPassword,
+				account: this.editPassword.account
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "修改成功，请重新登录！"
+					},
+					type: "post",
+					url: "/api-platform/employee/resetpsw",
+					loadingConfig: {
+						target: document.querySelector(".login")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.dialogFormVisible = false;
+						sessionStorage.removeItem("token");
+						sessionStorage.removeItem("user");
+						sessionStorage.removeItem("permissionUrl");
+						window.location.href = "/login.html";
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
 		//获取地区JSON文件
 		getArea() {
 			this.axios.get("./static/area.json").then(res => {
@@ -199,21 +327,8 @@ export default {
 			this.isCollapse = !this.isCollapse;
 			EventBus.$emit("sideBarTroggleHandle", this.isCollapse);
 		},
-		// handleOpen(key, keyPath) {
-		//   console.log(key, keyPath);
-		// },
-		// handleClose(key, keyPath) {
-		//   console.log(key, keyPath);
-		// }
 
 		out() {
-			// this.Axios(
-			//   {
-			//     url: "/user/logout",
-			//     type:"post",
-			//     option:{enableMsg:false}
-			//   },
-			// ).then(response=>{
 			self = this;
 			this.$confirm("您确定要退出登录吗？", "确认", {
 				confirmButtonText: "确定",
@@ -230,42 +345,49 @@ export default {
 				sessionStorage.removeItem("user");
 				sessionStorage.removeItem("permissionUrl");
 				window.location.href = "/login.html";
-				// this.$router.push({
-				// 	path: "/login.html"
-				// 	// redirect: "/login.html"
-				// });
 			});
 			// },({type,info})=>{})
 		},
-		//未读消息数
-		// MsgCount() {
-		//   this.Axios(
-		//     {
-		//       url: "/message/NotReadMsgCount/",
-		//       type: "get",
-		//       option: {
-		//         requestTarget: "m",
-		//         enableMsg: false,
-		//         enableLoad: false
-		//       }
-		//     },
-		//     this
-		//   )
-		//     .then(result => {
-		//       this.msgcount = result.data.data;
-		//     })
-		//     .catch(err => {});
-		// },
-		//路径跳转
+
 		pathto(a) {
-			//0跳转设备状态,1跳转消息,2跳转工单
-			// if (a === 0) {
-			//   this.$router.push({ path: "/Monit" });
-			// } else if (a === 1) {
-			//   this.$router.push({ path: "/Message" });
-			// } else if (a === 2) {
-			//   this.$router.push({ path: "/WorkOrder" });
-			// }
+			console.log(
+				this.$router.app.$options.router.options.routes.find(item => {
+					return item.path == "/AdminOrder";
+				})
+			);
+			if (a === 0) {
+				if (
+					this.$router.app.$options.router.options.routes.find(item => {
+						return item.path == "/AdminOrder";
+					}).path === "/AdminOrder"
+				) {
+					this.$router.push({ path: "/AdminOrder" });
+				} else if (
+					this.$router.app.$options.router.options.routes.find(item => {
+						return item.path == "/Order";
+					}).path === "/Order"
+				) {
+					this.$router.push({ path: "/Order" });
+				}
+			} else if (a === 1) {
+				if (
+					this.$router.app.$options.router.options.routes.find(item => {
+						return item.path == "/AdminStore";
+					}).path === "/AdminStore"
+				) {
+					this.$router.push({ path: "/AdminStore" });
+				} else if (
+					this.$router.app.$options.router.options.routes.find(item => {
+						return item.path == "/Store";
+					}).path === "/Store"
+				) {
+					this.$router.push({ path: "/Store" });
+				}
+			} else if (a === 2) {
+				this.$router.push({ path: "/GuestBook" });
+			} else if (a === 3) {
+				this.dialogFormVisible = true;
+			}
 		},
 		initPermission() {
 			this.user =
@@ -301,44 +423,18 @@ export default {
 			this.menuSource = _menuSource;
 		}
 	},
-	// watch: {
-	//   $route() {
-	//     this.token = localStorage.getItem("token");
-	//     this.user = JSON.parse(localStorage.getItem("user"))&&JSON.parse(localStorage.getItem("user")).name;
-	//     this.permissionUrl = JSON.parse(
-	//       localStorage.getItem("permissionUrl") || "[]"
-	//     );
-	//     this.MsgCount()
-	//   },
-	//   permissionUrl(){
-
-	//   },
-	//   token(val) {
-	//     if (val) {
-	//       this.initPermission();
-	//     } else {
-	//       this.$router.replace("/Login");
-	//     }
-	//   }
-	// },
 	computed: {},
 	created() {
-		// if(localStorage.getItem("token")){
 		this.initPermission();
-		this.getArea();
-		// }
-		//setInterval(this.MsgCount,1000)
+		// this.getArea();
+		this.editPassword.account = JSON.parse(
+			sessionStorage.getItem("user")
+		).account;
 	},
 	components: {
 		breadCrumb
 	},
-	mounted() {
-		// 关闭浏览器窗口的时候清空浏览器缓存在localStorage的数据
-		// window.onbeforeunload = function(e) {
-		//   var storage = window.localStorage;
-		//   storage.clear();
-		// };
-	}
+	mounted() {}
 };
 </script>
 
@@ -392,7 +488,7 @@ export default {
 	height: 25px;
 	color: white;
 	i {
-		font-size: 14px;
+		font-size: 16px;
 		margin: 0 2px;
 		&:hover {
 			color: #830404;

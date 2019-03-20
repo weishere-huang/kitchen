@@ -427,7 +427,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-mall/mallManage/itemList",
+					url: "/api-mall/mallManage/itemListOnAdmin",
 					loadingConfig: {
 						target: document.querySelector(".store_list")
 					}

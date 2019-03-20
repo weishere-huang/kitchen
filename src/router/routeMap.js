@@ -20,7 +20,7 @@ export default [{
     subMenu: [{
         menu: '订单列表',
         route: '/Order',
-        permissionCode: 'order_list_lookup'
+        permissionCode: 'supplierOrder_list_lookup'
       },
       {
         menu: '订单列表',
@@ -37,7 +37,7 @@ export default [{
         menu: '订单详情',
         routeReg: /^\/Order\/Details\/\d{1,}$/i,
         visible: true,
-        permissionCode: 'order_detail_lookup'
+        permissionCode: 'supplierOrder_detail_lookup'
       }
     ]
   },
@@ -49,7 +49,7 @@ export default [{
     subMenu: [{
         menu: '商品列表',
         route: '/Store',
-        permissionCode: 'mall_list_lookup'
+        permissionCode: 'supplierMall_list_lookup'
       },
       {
         menu: '商品列表',
@@ -59,19 +59,19 @@ export default [{
       {
         menu: '商品分类',
         route: '/Classify',
-        permissionCode: 'mall_cate_lookup'
+        permissionCode: 'supplierMall_cate_lookup'
       },
       {
         menu: '添加商品',
         route: '/Store/AddMenu',
         visible: true,
-        permissionCode: 'mall_add_lookup'
+        permissionCode: 'supplierMall_add_lookup'
       },
       {
         menu: '修改商品',
         routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
         visible: true,
-        permissionCode: 'mall_update_lookup'
+        permissionCode: 'supplierMall_update_lookup'
       },
       {
         menu: '修改商品',
