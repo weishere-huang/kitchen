@@ -109,10 +109,12 @@
 							:on-success="handleAvatarSuccess1"
 							:before-upload="beforeAvatarUpload1"
 							:limit="1"
+							class="upload_show"
+							accept="image/png, image/jpeg"
 						>
 							<i class="el-icon-plus"></i>
-							<div slot="tip" class="el-upload__tip">600 × 600像素，≤80 KB的jpg图片</div>
 						</el-upload>
+						<div class="el-upload__tip tip_style">600 × 600像素，≤80 KB的jpg图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
@@ -169,6 +171,7 @@
 										:limit="1"
 										:before-upload="beforeAvatarUpload1"
 										class="upload_show"
+										accept="image/png, image/jpeg"
 									>
 										<i class="el-icon-plus"></i>
 										<!-- <div slot="tip" class="el-upload__tip">600 × 600像素，≤80 KB的jpg图片</div> -->
@@ -443,30 +446,33 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isSize = new Promise(function(resolve, reject) {
-				let width = 11600;
-				let height = 11600;
-				let _URL = window.URL || window.webkitURL;
-				let img = new Image();
-				img.onload = function() {
-					let valid = img.width <= width && img.height <= height;
-					valid ? resolve() : reject();
-				};
-				img.src = _URL.createObjectURL(file);
-			}).then(
-				() => {
-					return file;
-				},
-				() => {
-					this.$message.error("上传的图片必须是等于或小于600*600!");
-					return Promise.reject();
-				}
-			);
-			const isPicSize = file.size / 1024 <= 800;
-			if (!isPicSize) {
+			const isPicSize = file.size / 1024 <= 80;
+			console.log(isPicSize);
+			if (isPicSize == false) {
 				this.$message.error("上传图片不能大于80KB");
+				return false;
+			} else {
+				const isSize = new Promise(function(resolve, reject) {
+					let width = 600;
+					let height = 600;
+					let _URL = window.URL || window.webkitURL;
+					let img = new Image();
+					img.onload = function() {
+						let valid = img.width <= width && img.height <= height;
+						valid ? resolve() : reject();
+					};
+					img.src = _URL.createObjectURL(file);
+				}).then(
+					() => {
+						return file;
+					},
+					() => {
+						this.$message.error("上传的图片必须是等于或小于600*600!");
+						return Promise.reject();
+					}
+				);
+				return isSize;
 			}
-			return isSize && isPicSize;
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
@@ -476,15 +482,13 @@ export default {
 					message: "图片上传成功！",
 					type: "success"
 				});
-				console.log(this.cookbook.recipeImg);
+				// console.log(this.cookbook.recipeImg);
 			} else {
 				this.$message({
 					message: "图片上传不成功！",
 					type: "error"
 				});
 			}
-			console.log(res);
-			console.log(file);
 		},
 		getClassifyList() {
 			this.Axios(

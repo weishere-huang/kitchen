@@ -39,7 +39,7 @@
 								<span>{{ scope.row.cateName }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="*上架" min-width="80">
+						<el-table-column label="*上/下架" min-width="80">
 							<template slot-scope="scope">
 								<div @click.stop.prevent="changeUp(scope.$index, scope.row)">
 									<i
