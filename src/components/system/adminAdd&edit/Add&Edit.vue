@@ -139,7 +139,8 @@ export default {
 			).then(
 				result => {
 					console.log(result.data);
-					this.options = result.data.data;
+          this.options = result.data.data.filter(item=> item.id!==2)
+
 				},
 				({ type, info }) => {}
 			);

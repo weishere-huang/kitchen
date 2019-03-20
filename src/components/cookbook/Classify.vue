@@ -129,7 +129,7 @@ export default {
 				],
 				cateName: [
 					{ required: true, message: "请填写分类名称", trigger: "blur" },
-					{ max: 5, message: "输入内容个数需小于等于5" }
+					{ max: 8, message: "只能输入8个以内汉字" }
 				]
 			},
 			editClassify: {
@@ -138,7 +138,7 @@ export default {
 			editClassifyRules: {
 				cateName: [
 					{ required: true, message: "请填写分类名称", trigger: "blur" },
-					{ max: 5, message: "输入内容个数需小于等于5" }
+					{ max: 8, message: "只能输入8个以内汉字" }
 				]
 			},
 			selectShow: false,

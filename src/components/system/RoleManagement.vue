@@ -89,11 +89,19 @@ export default {
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
+        if(params.rowData.id===1){
+          this.$message.warning("超级管理员禁止修改权限!")
+          return
+        }
 				console.log(params);
 				this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
 			}
 			if (params.type === "delete") {
 				console.log(params);
+				if(params.rowData.id===1||params.rowData.id===2){
+				  this.$message.warning("特殊角色禁止删除!")
+          return
+        }
 				this.deleteRole(params.rowData.id);
 			}
 			if (params.type === "detalis") {
