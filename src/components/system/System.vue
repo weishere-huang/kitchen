@@ -382,17 +382,17 @@ export default {
 					if (result.data.code === 200) {
 						if (result.data.data.allMoney != "" || null) {
 							this.systemMsg.moneyOff = true;
-							this.systemMsg.allMoney = result.data.data.allMoney;
+							this.systemMsg.allMoney = result.data.data.allMoney/100;
 						} else {
-							this.systemMsg.allMoney = result.data.data.allMoney;
+							this.systemMsg.allMoney = result.data.data.allMoney/100;
 						}
 						this.systemMsg.phone = result.data.data.phone;
-						this.systemMsg.shippingFee = result.data.data.shippingFee;
+						this.systemMsg.shippingFee = result.data.data.shippingFee/100;
 						this.systemMsg.receiveTimeout = result.data.data.receiveTimeout;
 						this.systemMsg.payTimeout = result.data.data.payTimeout;
 						this.systemMsg.carLimit = result.data.data.carLimit;
 						this.systemMsg.itemLimit = result.data.data.itemLimit;
-						this.systemMsg.sendMoney = result.data.data.sendMoney;
+						this.systemMsg.sendMoney = result.data.data.sendMoney/100;
 						this.systemMsg.payType = JSON.parse(result.data.data.payType);
 						this.systemMsg.sendTime = result.data.data.sendTime;
 						this.systemMsg.timeFrame1 = JSON.parse(result.data.data.timeFrame1);
