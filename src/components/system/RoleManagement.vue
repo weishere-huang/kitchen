@@ -1,54 +1,49 @@
 <template>
-  <div class="role_management">
-    <!-- <router-view></router-view> -->
-    <div :class="[{hide:isHideList}]">
-      <div class="top_list">
-        <el-button
-          size="small"
-          type="primary"
-          class="el-icon-circle-plus-outline"
-          @click="$router.push({path:'/RoleManagement/AddRole'})"
-        >添加角色</el-button>
-      </div>
-      <div class="bottom_list">
-        <div class="top_title">
-          <h4>角色列表</h4>
-        </div>
-        <div class="table_list">
-          <table-list
-            :selectShow="false"
-            :handleSelectionChange="handleSelectionChange"
-            :column="items"
-            v-on:handlechange="handlechange"
-            :data="tableData"
-            :rowDblclick="getRow"
-            :handle="100"
-            :deleteShow="true"
-            :handleShow="true"
-            :editShow="true"
-          ></table-list>
-
-        </div>
-        <div
-          class="block"
-          style="margin-top:10px;float:right"
-        >
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-sizes="[15, 30, 100]"
-            :page-size="10"
-            layout="sizes, prev, pager, next"
-            :total="total"
-          >
-          </el-pagination>
-        </div>
-      </div>
-    </div>
-    <router-view></router-view>
-  </div>
+	<div class="role_management">
+		<!-- <router-view></router-view> -->
+		<div :class="[{hide:isHideList}]">
+			<div class="top_list">
+				<el-button
+					size="small"
+					type="primary"
+					class="el-icon-circle-plus-outline"
+					@click="$router.push({path:'/RoleManagement/AddRole'})"
+				>添加角色</el-button>
+			</div>
+			<div class="bottom_list">
+				<div class="top_title">
+					<h4>角色列表</h4>
+				</div>
+				<div class="table_list">
+					<table-list
+						:selectShow="false"
+						:handleSelectionChange="handleSelectionChange"
+						:column="items"
+						v-on:handlechange="handlechange"
+						:data="tableData"
+						:rowDblclick="getRow"
+						:handle="100"
+						:deleteShow="true"
+						:handleShow="true"
+						:editShow="true"
+					></table-list>
+				</div>
+				<div class="block" style="margin-top:10px;float:right">
+					<el-pagination
+						background
+						@size-change="handleSizeChange"
+						@current-change="handleCurrentChange"
+						:current-page.sync="pageIndex"
+						:page-sizes="[10, 20,40, 100]"
+						:page-size="pageSize"
+						layout="sizes, prev, pager, next"
+						:total="total"
+					></el-pagination>
+				</div>
+			</div>
+		</div>
+		<router-view></router-view>
+	</div>
 </template>
 <script>
 import tableList from "../public/table";
@@ -89,19 +84,19 @@ export default {
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-        if(params.rowData.id===1){
-          this.$message.warning("超级管理员禁止修改权限!")
-          return
-        }
+				if (params.rowData.id === 1) {
+					this.$message.warning("超级管理员禁止修改权限!");
+					return;
+				}
 				console.log(params);
 				this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
 			}
 			if (params.type === "delete") {
 				console.log(params);
-				if(params.rowData.id===1||params.rowData.id===2){
-				  this.$message.warning("特殊角色禁止删除!")
-          return
-        }
+				if (params.rowData.id === 1 || params.rowData.id === 2) {
+					this.$message.warning("特殊角色禁止删除!");
+					return;
+				}
 				this.deleteRole(params.rowData.id);
 			}
 			if (params.type === "detalis") {
@@ -152,8 +147,8 @@ export default {
 					url: "/api-platform/role/delete",
 					type: "post",
 					option: {
-					  enableMsg:false
-          }
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {
@@ -166,22 +161,22 @@ export default {
 	},
 	created() {
 		this.getRoleList();
-    let a = this.$route.matched.find(item => item.name === "AddRole")
-      ? true
-      : false;
-    let b = this.$route.params.id !== undefined ? true : false;
-    this.isHideList = a || b ? true : false;
+		let a = this.$route.matched.find(item => item.name === "AddRole")
+			? true
+			: false;
+		let b = this.$route.params.id !== undefined ? true : false;
+		this.isHideList = a || b ? true : false;
 	},
 	components: {
 		tableList
 	},
 	watch: {
 		$route() {
-      let a = this.$route.matched.find(item => item.name === "AddRole")
-        ? true
-        : false;
-      let b = this.$route.params.id !== undefined ? true : false;
-      this.isHideList = a || b ? true : false;
+			let a = this.$route.matched.find(item => item.name === "AddRole")
+				? true
+				: false;
+			let b = this.$route.params.id !== undefined ? true : false;
+			this.isHideList = a || b ? true : false;
 		}
 	}
 };

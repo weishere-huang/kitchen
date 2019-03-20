@@ -52,9 +52,9 @@
 					background
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
-					:current-page.sync="currentPage"
-					:page-sizes="[15, 30, 100]"
-					:page-size="10"
+					:current-page.sync="pageIndex"
+					:page-sizes="[10, 20,40, 100]"
+					:page-size="pageSize"
 					layout="sizes, prev, pager, next"
 					:total="total"
 				></el-pagination>
