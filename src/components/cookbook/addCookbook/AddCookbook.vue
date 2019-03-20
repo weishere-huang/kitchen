@@ -447,7 +447,6 @@ export default {
 		},
 		beforeAvatarUpload1(file) {
 			const isPicSize = file.size / 1024 <= 80;
-			console.log(isPicSize);
 			if (isPicSize == false) {
 				this.$message.error("上传图片不能大于80KB");
 				return false;
