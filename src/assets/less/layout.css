@@ -238,7 +238,12 @@ input[type="number"] {
 }
 .upload_show {
   height: 80px;
+  width: 80px;
   overflow: hidden;
+  display: inline-block;
+}
+.tip_style {
+  display: inline-block;
 }
 .el-cascader .el-input.is-focus .el-input__inner {
   border-color: #1cc09f;

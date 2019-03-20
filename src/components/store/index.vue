@@ -108,7 +108,7 @@
 								<span>{{ scope.row.itemWeight}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="*上架" min-width="60">
+						<el-table-column label="*上/下架" min-width="60">
 							<template slot-scope="scope">
 								<div @click.stop.prevent="changeUp(scope.$index, scope.row)">
 									<i
@@ -266,7 +266,8 @@ export default {
 					url: "/api-mall/mallManage/updateItem",
 					type: "post",
 					option: {
-						successMsg: "编辑成功"
+						// successMsg: "编辑成功"
+						enableMsg: false
 					}
 				},
 				this
