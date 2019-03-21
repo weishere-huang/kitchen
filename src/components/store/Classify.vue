@@ -244,41 +244,9 @@ export default {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
 			if (rowData.goodsCount > 0) {
-				this.$confirm("该分类包含已发布的商品, 是否继续删除?", "提示", {
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					type: "warning",
-					cancelButtonClass: "is-plain"
-				})
-					.then(() => {
-						let qs = require("qs");
-						let datas = qs.stringify({
-							cateId: rowData.id
-						});
-						this.Axios(
-							{
-								params: datas,
-								option: {
-									successMsg: "删除成功"
-								},
-								type: "post",
-								url: "/api-mall/itemCat/delCate",
-								loadingConfig: {
-									target: document.querySelector(".classify_list")
-								}
-							},
-							this
-						).then(
-							result => {
-								console.log(result);
-								if (result.data.code === 200) {
-									this.reload();
-								}
-							},
-							({ type, info }) => {}
-						);
-					})
-					.catch(() => {});
+				this.$message.error(
+					"该分类包含商品信息，请转移或删除商品后，再删除该分类。"
+				);
 			} else {
 				let qs = require("qs");
 				let datas = qs.stringify({

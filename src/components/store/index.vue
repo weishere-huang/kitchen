@@ -295,10 +295,10 @@ export default {
 			// this.tableData[index].cookingTime =
 			// 	row.cookingTime.match(/^\d*(\d{0,0})/g)[0] || null;
 			// this.editfood(row);
-			if (/^[0-9]*[1-9][0-9]*$/.test(row.stockNow)) {
+			if (/^[0-9]*[0-9][0-9]*$/.test(row.stockNow)) {
 				this.editfood(row);
 			} else {
-				this.$message.error("烹饪时长只能为正整数，请重新输入");
+				this.$message.error("库存只能为正整数，请重新输入");
 				// this.foodlist();
 			}
 		},
