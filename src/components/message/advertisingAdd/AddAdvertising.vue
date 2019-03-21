@@ -1,10 +1,10 @@
 <template>
 	<div class="add_advertising">
 		<el-form label-width="110px" size="small" :model="addMsg" ref="addMsg" :rules="advertisingRules">
-			<el-form-item label="广告名称：" props="title">
+			<el-form-item label="广告名称：" prop="title">
 				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="50"></el-input>
 			</el-form-item>
-			<el-form-item label="广告缩略图：">
+			<el-form-item label="广告缩略图：" prop="mainPic">
 				<el-upload
 					action="http://192.168.1.104:8861/api-upload/upload"
 					list-type="picture-card"
@@ -23,7 +23,7 @@
 				</el-dialog>
 			</el-form-item>
 
-			<el-form-item label="广告内容图：">
+			<el-form-item label="广告内容图：" prop="content">
 				<el-upload
 					action="http://192.168.1.104:8861/api-upload/upload"
 					list-type="picture-card"
@@ -41,7 +41,7 @@
 					<img width="100%" :src="dialogImageUrl1" alt>
 				</el-dialog>
 			</el-form-item>
-			<el-form-item label="广告链接地址：">
+			<el-form-item label="广告链接地址：" prop="linkUrl">
 				<el-input
 					size="small"
 					placeholder="http或https开头(内容图与链接2选1)"
@@ -50,13 +50,13 @@
           maxlength="200"
 				></el-input>
 			</el-form-item>
-			<el-form-item label="是否显示：">
+			<el-form-item label="是否显示：" prop="state">
 				<el-radio-group v-model="addMsg.state">
-					<el-radio :label="0">是</el-radio>
-					<el-radio :label="1">否</el-radio>
+					<el-radio :label="0" name="state">是</el-radio>
+					<el-radio :label="1" name="state">否</el-radio>
 				</el-radio-group>
 			</el-form-item>
-			<el-form-item label="开始时间：">
+			<el-form-item label="开始时间：" prop="startTime">
 				<el-date-picker
 					v-model="startTime"
 					type="datetime"
@@ -68,7 +68,7 @@
 					@change="edittime"
 				></el-date-picker>
 			</el-form-item>
-			<el-form-item label="结束时间：">
+			<el-form-item label="结束时间：" prop="endTime">
 				<el-date-picker
 					v-model="endTime"
 					type="datetime"
@@ -93,7 +93,25 @@ export default {
 			startTime: this.addMsg.startTime,
 			endTime: this.addMsg.endTime,
 			mainPic: [],
-			content: []
+			content: [],
+      advertisingRules:{
+        title:[
+          { required: true, message: "请填写广告标题", trigger: "blur" }
+        ],
+        mainPic:[
+          { required: true, message: "请添加图片", trigger: "blur" }
+        ],
+        startTime:[
+          {type: 'date', required: true, message: "请添加开始日期", trigger: "change" }
+        ],
+        state:[
+          { required: true, message: '请选择是否显示', trigger: 'change' }
+        ],
+        endTime:[
+          {type: 'date', required: true, message: "请填写结束日期", trigger: "change" }
+        ],
+
+      }
 		};
 	},
 	props: {
@@ -105,7 +123,8 @@ export default {
 			startTime: {},
 			endTime: {},
 			linkUrl: {}
-		}
+		},
+
 	},
 	methods: {
 		edittime() {
