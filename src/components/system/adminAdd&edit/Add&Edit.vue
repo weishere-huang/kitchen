@@ -62,7 +62,7 @@ export default {
 	data() {
 		return {
 			options: {},
-			roleId: this.editInfo.roleId,
+			roleId: '',
 			rules: {
 				account: [
 					{ required: true, message: "请输入账号", trigger: "blur" },
@@ -115,7 +115,7 @@ export default {
 	},
 	props: {
 		editInfo: {
-			userName: {},
+			account: {},
 			password: {},
 			confirmPassword: {},
 			phone: {},
@@ -176,13 +176,13 @@ export default {
 		this.getRoleList();
 		console.log("this.addInfo");
 		console.log(this.addInfo);
-		if (this.editInfo.roleId != null) {
+		if (this.editInfo != null) {
 			this.addInfo = this.editInfo;
 		}
 	},
 	watch: {
 		editInfo() {
-			if (this.editInfo.roleId != null) {
+			if (this.editInfo != null) {
 				this.addInfo = this.editInfo;
 			}
 		}

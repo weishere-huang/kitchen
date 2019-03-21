@@ -208,7 +208,7 @@ export default {
 		}
 	},
 	created() {
-		if (this.editMsg.id != null && undefined) {
+		if (this.editMsg != null) {
 			console.log("111");
 			this.addMsg = this.editMsg;
 			this.mainPic = [
@@ -229,7 +229,7 @@ export default {
 	},
 	watch: {
 		editMsg() {
-			if (this.editMsg.id != null && undefined) {
+			if (this.editMsg != null) {
 				this.addMsg = this.editMsg;
 				console.log("111");
 				this.mainPic = [

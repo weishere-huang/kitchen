@@ -222,14 +222,14 @@ export default {
 	created() {
 		this.province = JSON.parse(sessionStorage.getItem("area"))[0].children[0];
 		//编辑用
-		if (this.editMsg.id != null || undefined) {
+		if (this.editMsg != null) {
 			this.addMsg = this.editMsg;
 			this.startedit();
 		}
 	},
 	watch: {
 		editMsg() {
-			if (this.editMsg.id != null || undefined) {
+			if (this.editMsg != null) {
 				this.addMsg = this.editMsg;
 				this.startedit();
 			}
