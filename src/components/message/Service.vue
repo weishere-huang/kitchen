@@ -3,11 +3,11 @@
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加网点</el-button>
 			<el-dialog :close-on-click-modal="false" title="添加网点" :visible.sync="dialogAdd" width="500px">
-				<add-servive :addMsg="addMsg"></add-servive>
-				<span slot="footer" class="dialog-footer">
+				<add-servive v-on:beforeadd="beforeadd"></add-servive>
+				<!-- <span slot="footer" class="dialog-footer">
 					<el-button @click="dialogAdd = false" size="small" plain>取 消</el-button>
 					<el-button type="primary" @click="beforeadd" size="small">确 定</el-button>
-				</span>
+				</span>-->
 			</el-dialog>
 		</div>
 		<div class="bottom_list">
@@ -79,11 +79,11 @@
 			</div>
 		</div>
 		<el-dialog :close-on-click-modal="false" title="修改网点" :visible.sync="dialogEdit" width="500px">
-			<add-servive :addMsg="editMsg"></add-servive>
-			<span slot="footer" class="dialog-footer">
+			<add-servive v-on:beforeadd="beforeupdate" :editMsg="editMsg"></add-servive>
+			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="dialogEdit = false" size="small" plain>取 消</el-button>
 				<el-button type="primary" @click="beforeupdate" size="small">确 定</el-button>
-			</span>
+			</span>-->
 		</el-dialog>
 	</div>
 </template>
@@ -277,27 +277,17 @@ export default {
 			}
 		},
 		//添加
-		beforeadd() {
-			let flag = true;
-			if (
-				this.addMsg.address == null ||
-				this.addMsg.address === "" ||
-				this.addMsg.areaCode == null ||
-				this.addMsg.areaCode === "" ||
-				this.addMsg.phone == null ||
-				this.addMsg.phone === "" ||
-				this.addMsg.title == null ||
-				this.addMsg.title === "" ||
-				this.addMsg.workingHours == null ||
-				this.addMsg.workingHours === "" ||
-				this.addMsg.serviceMode == null
-			) {
-				flag = false;
+		beforeadd(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.dialogAdd = params.isHide;
 			}
-			if (flag) {
+			if (params.type == "affirm") {
+				console.log(params);
+				this.addMsg = params.value;
+				console.log(this.addMsg);
 				this.addService();
-			} else {
-				this.$message.warning("请完善信息!");
+				this.dialogAdd = params.isHide;
 			}
 		},
 		addService() {
@@ -329,28 +319,17 @@ export default {
 			});
 		},
 		//修改
-		beforeupdate() {
-			let flag = true;
-			if (
-				this.editMsg.address == null ||
-				this.editMsg.address === "" ||
-				this.editMsg.areaCode == null ||
-				this.editMsg.areaCode === "" ||
-				this.editMsg.phone == null ||
-				this.editMsg.phone === "" ||
-				this.editMsg.title == null ||
-				this.editMsg.title === "" ||
-				this.editMsg.workingHours == null ||
-				this.editMsg.workingHours === "" ||
-				this.editMsg.serviceMode == null ||
-				this.editMsg.serviceMode.length < 1
-			) {
-				flag = false;
+		beforeupdate(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.dialogEdit = params.isHide;
 			}
-			if (flag) {
+			if (params.type == "affirm") {
+				console.log(params);
+				this.editMsg = params.value;
+				console.log(this.addMsg);
 				this.updateService();
-			} else {
-				this.$message.warning("请完善信息!");
+				this.dialogEdit = params.isHide;
 			}
 		},
 		updateService() {

@@ -1,7 +1,7 @@
 <template>
 	<div class="add_service">
-		<el-form label-width="100px" :model="addMsg" ref="addMsg" :rules="serviceRules">
-			<el-form-item label="地区：" prop="areaCode"	>
+		<el-form label-width="100px" :model="addMsg" ref="addMsg" size="mini" :rules="serviceRules">
+			<el-form-item label="地区：" prop="areaCode">
 				<el-select
 					v-model="provinceCode"
 					placeholder="请选择"
@@ -35,10 +35,17 @@
 				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="20"></el-input>
 			</el-form-item>
 			<el-form-item label="详细地址：" prop="address">
-				<el-input v-model="addMsg.address" size="small" style="width:99%" maxlength="50" ></el-input>
+				<el-input v-model="addMsg.address" size="small" style="width:99%" maxlength="50"></el-input>
 			</el-form-item>
 			<el-form-item label="服务热线：" prop="phone">
-				<el-input v-model="addMsg.phone" size="small" style="width:200px" placeholder="如：028-12345678" type="number" maxlength="20"></el-input>
+				<el-input
+					v-model="addMsg.phone"
+					size="small"
+					style="width:200px"
+					placeholder="如：028-12345678"
+					type="number"
+					maxlength="20"
+				></el-input>
 			</el-form-item>
 			<el-form-item label="工作时间：" prop="workingHours">
 				<el-input
@@ -46,16 +53,20 @@
 					size="small"
 					style="width:200px"
 					placeholder="如：09:00-18:00"
-          maxlength="20"
+					maxlength="20"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="服务范围：" style="margin-bottom: 0px;" prop="serviceMode">
-				<el-checkbox-group v-model="serviceMode" @change="changeMode">
-					<el-checkbox label="送修"></el-checkbox>
-					<el-checkbox label="检修"></el-checkbox>
+				<el-checkbox-group v-model="addMsg.serviceMode" @change="changeMode">
+					<el-checkbox label="送修" name="serviceMode"></el-checkbox>
+					<el-checkbox label="检修" name="serviceMode"></el-checkbox>
 				</el-checkbox-group>
 			</el-form-item>
 		</el-form>
+		<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
+			<el-button @click="handleCancel" size="small" plain>取 消</el-button>
+			<el-button type="primary" @click="handleAffirm('addMsg')" size="small">确 定</el-button>
+		</div>
 	</div>
 </template>
 <script>
@@ -63,35 +74,36 @@ export default {
 	data() {
 		return {
 			serviceRules: {
-        areaCode:[],
-        title:[
-          { required: true, message: '请输入网点名称', trigger: 'blur' }
-        ],
-        address:[
-        ],
-        phone:[
-          { required: true, message: '请输入电话', trigger: 'blur' },
-          { min: 8, max: 15, message: '长度在 8 到 15 个数字', trigger: 'blur' }
-        ],
-        workingHours:[
-          { required: true, message: '请输入服务时间', trigger: 'blur' }
-        ],
-        serviceMode:[
-          { type: 'array',required: true, message: '请选择服务范围', trigger: 'change' },
-          {
-
-            //todo 这里的验证不完善
-            validator: (rule, value, callback) => {
-              if (value.wechat === false && value.alipay === false) {
-                callback(new Error("必须选择一种支付方式"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "change"
-          }
-        ]
-      },
+				areaCode: [],
+				title: [{ required: true, message: "请输入网点名称", trigger: "blur" }],
+				address: [],
+				phone: [
+					{ required: true, message: "请输入电话", trigger: "blur" },
+					{ min: 8, max: 15, message: "长度在 8 到 15 个数字", trigger: "blur" }
+				],
+				workingHours: [
+					{ required: true, message: "请输入服务时间", trigger: "blur" }
+				],
+				serviceMode: [
+					{
+						type: "array",
+						required: true,
+						message: "请选择服务范围",
+						trigger: "change"
+					}
+					// {
+					// 	//todo 这里的验证不完善
+					// 	validator: (rule, value, callback) => {
+					// 		if (value != []) {
+					// 			callback(new Error("必须选择一种支付方式"));
+					// 		} else {
+					// 			callback();
+					// 		}
+					// 	},
+					// 	trigger: "change"
+					// }
+				]
+			},
 			province: [],
 			cities: [],
 			serviceMode: [],
@@ -99,11 +111,21 @@ export default {
 			provinceCode: null,
 			citycode: null,
 			cname: null,
-			pname: null
+			pname: null,
+			addMsg: {
+				province: "",
+				city: "",
+				title: "",
+				address: "",
+				phone: "",
+				workingHours: "",
+				serviceMode: [],
+				areaCode: ""
+			}
 		};
 	},
 	props: {
-		addMsg: {
+		editMsg: {
 			title: {},
 			address: {},
 			phone: {},
@@ -113,8 +135,22 @@ export default {
 		}
 	},
 	methods: {
+		handleCancel(value) {
+			let params = { type: "cancel", isHide: false };
+			this.$emit("beforeadd", params);
+		},
+		handleAffirm(formName) {
+			let params = { type: "affirm", value: this.addMsg, isHide: false };
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.$emit("beforeadd", params);
+				} else {
+					return false;
+				}
+			});
+		},
 		changeMode() {
-			this.addMsg.serviceMode = this.serviceMode;
+			// this.addMsg1 = this.addMsg;
 		},
 
 		//获取市
@@ -158,7 +194,7 @@ export default {
 		//编辑赋值方法 , 服务范围可以
 		startedit() {
 			//截取地区
-			let arr = this.addMsg.areaCode.split(" ");
+			let arr = this.editMsg.areaCode.split(" ");
 			//赋值省
 			let p = this.province.find(item => {
 				return arr[0] === item.areaName;
@@ -184,15 +220,18 @@ export default {
 		}
 	},
 	created() {
+		debugger;
 		this.province = JSON.parse(sessionStorage.getItem("area"))[0].children[0];
 		//编辑用
-		if (this.addMsg.id != null) {
+		if (this.editMsg.id != null) {
+			this.addMsg = this.editMsg;
 			this.startedit();
 		}
 	},
 	watch: {
-		addMsg() {
-			if (this.addMsg.id != null) {
+		editMsg() {
+			if (this.editMsg.id != null) {
+				this.addMsg = this.editMsg;
 				this.startedit();
 			}
 		}
@@ -213,7 +252,7 @@ export default {
 		padding-top: 16px;
 	}
 	.el-form-item {
-		margin-bottom: 12px;
+		// margin-bottom: 12px;
 	}
 }
 </style>
