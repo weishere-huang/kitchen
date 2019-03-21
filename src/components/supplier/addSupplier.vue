@@ -104,7 +104,7 @@
 				</el-col>
 			</div>
 			<div class="top_list" style="padding:10px 200px">
-				<el-button size="small" type="primary" @click="addSupplier">
+				<el-button size="small" type="primary" @click="submitForm('supplierMsg')">
 					<i class="iconfont">&#xe62d;</i> 保存
 				</el-button>
 			</div>
@@ -152,7 +152,18 @@ export default {
 				contacts: [
 					{ required: true, message: "请填写联系人", trigger: "blur" }
 				],
-				phone: [{ required: true, message: "请填写电话", trigger: "blur" }],
+				phone: [{ required: true, message: "请填写电话", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^1[34578]\d{9}$/.test(value) == false) {
+                callback(new Error("请输入正确的电话号码"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
 				address: [
 					{ required: true, message: "请填写详细地址", trigger: "blur" }
 				],
@@ -310,6 +321,16 @@ export default {
 			});
 			return encrypted.toString();
 		},
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.addSupplier();
+        } else {
+          this.$message.warning("请填写完整信息！");
+          return false;
+        }
+      });
+    },
 		addSupplier() {
 			this.savearea();
 			let pass = this.supplierMsg.supplierPassword;

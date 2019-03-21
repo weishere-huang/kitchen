@@ -243,7 +243,8 @@ export default {
 			let flag = true;
 			if ((this.editMsg.linkUrl == null||this.editMsg.linkUrl === "")
         && (this.editMsg.content == null||this.editMsg.content === "")){
-        flag = false;
+			  this.$message.warning("内容图与跳转链接不能同时为空")
+        return
       }
 			if (
 				this.editMsg.title == null || this.editMsg.title === "" ||

@@ -5,23 +5,23 @@
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>添加供应商</h4>
+				<h4>修改供应商</h4>
 			</div>
 			<div class="supplier_form">
-				<el-form size="small" label-width="180px" :model="supplierMsg">
-					<el-form-item label="供应商名称：" prop>
+				<el-form size="small" label-width="180px" :model="supplierMsg" :rules="supplierMsgRules" ref="supplierMsg">
+					<el-form-item label="供应商名称：" prop="supplierName">
 						<el-input type="text" v-model="supplierMsg.supplierName" size="small" style="width:350px;"></el-input>
 					</el-form-item>
-					<el-form-item label="联系人：" prop>
+					<el-form-item label="联系人：" prop="contacts">
 						<el-input type="text" v-model="supplierMsg.contacts" size="small" style="width:350px;"></el-input>
 					</el-form-item>
-					<el-form-item label="联系电话：" prop>
+					<el-form-item label="联系电话：" prop="phone">
 						<el-input type="text" v-model="supplierMsg.phone" size="small" style="width:350px;"></el-input>
 					</el-form-item>
-					<el-form-item label="详细地址：" prop>
+					<el-form-item label="详细地址：" prop="address">
 						<el-input type="text" v-model="supplierMsg.address" size="small" style="width:350px;"></el-input>
 					</el-form-item>
-					<el-form-item label="角色选择：">
+					<el-form-item label="角色选择：" prop>
 						<el-select v-model="supplierMsg.supplierRoleId" placeholder="请选择" style="width:350px" size="small">
 							<el-option v-for="item in ruleOptions" :key="item.value" :label="item.name" :value="item.id"></el-option>
 						</el-select>
@@ -79,7 +79,7 @@
 				</el-col>
 			</div>
 			<div class="top_list" style="padding:10px 200px">
-				<el-button size="small" type="primary" @click="beforesave">
+				<el-button size="small" type="primary" @click="beforesave('supplierMsg')">
 					<i class="iconfont">&#xe62d;</i> 保存
 				</el-button>
 			</div>
@@ -114,8 +114,31 @@ export default {
 				address: "",
 				areaCode: [],
 				supplierRoleId: "",
-				supplierAccount: ""
-			}
+				supplierAccount: "",
+			},
+      supplierMsgRules: {
+        supplierName: [
+          { required: true, message: "请填写供应商名称", trigger: "blur" }
+        ],
+        contacts: [
+          { required: true, message: "请填写联系人", trigger: "blur" }
+        ],
+        phone: [{ required: true, message: "请填写电话", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^1[34578]\d{9}$/.test(value) == false) {
+                callback(new Error("请输入正确的电话号码"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+          ],
+        address: [
+          { required: true, message: "请填写详细地址", trigger: "blur" }
+        ],
+      }
 		};
 	},
 	methods: {
@@ -227,8 +250,15 @@ export default {
 		handleNodeClick(data) {
 			console.log(data);
 		},
-		beforesave() {
-		  this.savearea();
+		beforesave(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.savearea();
+        } else {
+          this.$message.warning("请填写完整信息！");
+          return false;
+        }
+      });
     },
 		savearea() {
 			let arr = [];
@@ -236,6 +266,10 @@ export default {
 				.concat(this.$refs.tree1.getCheckedKeys())
 				.concat(this.$refs.tree2.getCheckedKeys())
 				.concat(this.$refs.tree3.getCheckedKeys());
+			if(arr.length===0){
+			  this.$message.warning("请选择销售区域");
+			  return
+      }
 			let qs = require("qs");
 			let data = qs.stringify({
         supplierName:this.supplierMsg.supplierName,
