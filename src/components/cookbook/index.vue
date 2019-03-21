@@ -41,14 +41,14 @@
 						</el-table-column>
 						<el-table-column label="*上/下架" min-width="80">
 							<template slot-scope="scope">
-								<div @click.stop.prevent="changeUp(scope.$index, scope.row)">
+								<span @click.stop.prevent="changeUp(scope.$index, scope.row)">
 									<i
 										class="iconfont"
 										v-if="scope.row.state=='0'"
 										style="color:green;cursor: pointer;"
 									>&#xe659;</i>
 									<i class="iconfont" v-if="scope.row.state=='1'" style="color:red;cursor: pointer;">&#xe658;</i>
-								</div>
+								</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="100">
@@ -67,9 +67,9 @@
 						background
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page.sync="currentPage"
-						:page-sizes="[15, 30, 100]"
-						:page-size="15"
+						:current-page.sync="pageIndex"
+						:page-sizes="[10, 20,40, 100]"
+						:page-size="pageSize"
 						layout="sizes, prev, pager, next"
 						:total="total"
 					></el-pagination>
@@ -133,7 +133,7 @@ export default {
 				}
 			],
 			pageIndex: 1,
-			pageSize: 15,
+			pageSize: 10,
 			total: 10,
 			keyword: "",
 			isHideList: this.$route.params.id !== undefined ? true : false

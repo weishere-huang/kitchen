@@ -103,7 +103,7 @@
 								></el-popover>
 							</template>
 						</el-table-column>
-						<el-table-column label="净含量" min-width="100" show-overflow-tooltip>
+						<el-table-column label="净含量（克）" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.itemWeight}}</span>
 							</template>
@@ -198,8 +198,8 @@
 						background
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page.sync="currentPage"
-						:page-sizes="[15, 30, 100]"
+						:current-page.sync="pageIndex"
+						:page-sizes="[10, 20,40, 100]"
 						:page-size="pageSize"
 						layout="sizes, prev, pager, next"
 						:total="total"
@@ -241,7 +241,7 @@ export default {
 			],
 			tableData: [],
 			pageIndex: 1,
-			pageSize: 15,
+			pageSize: 10,
 			keyword: "",
 			total: 0,
 			isHideList: this.$route.params.id !== undefined ? true : false

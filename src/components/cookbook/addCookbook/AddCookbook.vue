@@ -266,7 +266,60 @@ export default {
 						trigger: "change"
 					}
 				],
-				cateId: [{ required: true, message: "请选择分类", trigger: "change" }],
+				cateId: [
+					{ required: true, message: "请选择分类", trigger: "change" },
+					{
+						validator: (rule, value, callback) => {
+							console.log();
+							if (value.length == 1) {
+								if (
+									this.classify
+										.find(item => {
+											return item.id === value[0];
+										})
+										.hasOwnProperty("children")
+								) {
+									callback(new Error("不能选择含有子项的分类"));
+								} else {
+									callback();
+								}
+							} else if (value.length > 1) {
+								if (
+									this.classify
+										.find(item => {
+											return item.id === value[0];
+										})
+										.children.find(i => {
+											return i.id === value[value.length - 1];
+										})
+										.hasOwnProperty("children")
+								) {
+									callback(new Error("不能选择含有子项的分类"));
+								} else {
+									callback();
+								}
+							}
+							// if (
+							// 	this.classify
+							// 		.find(item => {
+							// 			return item.id === value[0];
+							// 		})
+							// 		.hasOwnProperty("children") ||
+							// 	this.classify
+							// 		.find(item => {
+							// 			return item.id === value[0];
+							// 		})
+							// 		.children.find(i => {
+							// 			return i.id === value[value.length - 1];
+							// 		})
+							// 		.hasOwnProperty("children")
+							// ) {
+							// 	callback(new Error("不能选择含有子项的分类"));
+							// }
+						},
+						trigger: ["change", "blur"]
+					}
+				],
 				recipeName: [
 					{ required: true, message: "请输入菜谱名称", trigger: "blur" }
 				],
