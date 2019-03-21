@@ -220,17 +220,16 @@ export default {
 		}
 	},
 	created() {
-		debugger;
 		this.province = JSON.parse(sessionStorage.getItem("area"))[0].children[0];
 		//编辑用
-		if (this.editMsg.id != null) {
+		if (this.editMsg.id != null || undefined) {
 			this.addMsg = this.editMsg;
 			this.startedit();
 		}
 	},
 	watch: {
 		editMsg() {
-			if (this.editMsg.id != null) {
+			if (this.editMsg.id != null || undefined) {
 				this.addMsg = this.editMsg;
 				this.startedit();
 			}

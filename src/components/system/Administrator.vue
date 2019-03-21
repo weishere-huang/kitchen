@@ -34,19 +34,24 @@
 				></el-pagination>
 			</div>
 		</div>
-		<el-dialog title="添加管理员" :visible.sync="dialogVisible" width="460px">
-			<add :addInfo="userMsg"></add>
-			<span slot="footer" class="dialog-footer">
+		<el-dialog
+			:close-on-click-modal="false"
+			title="添加管理员"
+			:visible.sync="dialogVisible"
+			width="460px"
+		>
+			<add :addInfo="userMsg" v-on:beforeadd="beforeadd"></add>
+			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false" size="small" plain>取 消</el-button>
 				<el-button type="primary" @click="beforeadd" size="small">确 定</el-button>
-			</span>
+			</span>-->
 		</el-dialog>
-		<el-dialog title="修改管理员" :visible.sync="edit" width="460px">
-			<add :addInfo="editUserMsg"></add>
-			<span slot="footer" class="dialog-footer">
+		<el-dialog :close-on-click-modal="false" title="修改管理员" :visible.sync="edit" width="460px">
+			<add :editInfo="editUserMsg" v-on:beforeadd="beforeupdate"></add>
+			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="edit = false" size="small" plain>取 消</el-button>
 				<el-button type="primary" @click="beforeupdate" size="small">确 定</el-button>
-			</span>
+			</span> -->
 		</el-dialog>
 	</div>
 </template>
@@ -190,32 +195,44 @@ export default {
 			});
 		},
 		//添加管理员
-		beforeadd() {
-			if (this.userMsg.confirmPassword !== this.userMsg.password) {
-				this.$message.warning("两次密码输入不一致,请重新输入!!!");
-				return;
+		beforeadd(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.dialogVisible = params.isHide;
 			}
-			if (
-				this.userMsg.account == null ||
-				this.userMsg.password == null ||
-				this.userMsg.phone == null ||
-				this.userMsg.roleId == null
-			) {
-				this.$message.warning("请完善信息!");
-				return;
-			}
-			console.log(this.userMsg);
-			if (
-				this.userMsg.password != null &&
-				this.userMsg.password !== "" &&
-				this.userMsg.password !== undefined
-			) {
+			if (params.type == "affirm") {
+				console.log(params);
+				this.addMsg = params.value;
+				console.log(this.addMsg);
+				// this.addService();
+				this.dialogVisible = params.isHide;
 				let pass = this.userMsg.password;
 				pass = md5(pass);
 				let key = "*chang_hong_device_cloud";
 				this.userMsg.password = this.encryptByDES(pass, key);
+				this.addAdmin();
 			}
-			this.addAdmin();
+			// if (this.userMsg.confirmPassword !== this.userMsg.password) {
+			// 	this.$message.warning("两次密码输入不一致,请重新输入!!!");
+			// 	return;
+			// }
+			// if (
+			// 	this.userMsg.account == null ||
+			// 	this.userMsg.password == null ||
+			// 	this.userMsg.phone == null ||
+			// 	this.userMsg.roleId == null
+			// ) {
+			// 	this.$message.warning("请完善信息!");
+			// 	return;
+			// }
+			// console.log(this.userMsg);
+			// if (
+			// 	this.userMsg.password != null &&
+			// 	this.userMsg.password !== "" &&
+			// 	this.userMsg.password !== undefined
+			// ) {
+
+			// }
 		},
 		addAdmin() {
 			let qs = require("qs");
@@ -242,30 +259,52 @@ export default {
 			});
 		},
 		//修改管理员
-		beforeupdate() {
-			if (this.editUserMsg.confirmPassword !== this.editUserMsg.password) {
-				this.$message.warning("两次密码输入不一致,请重新输入!!!");
-				return;
+		beforeupdate(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.edit = params.isHide;
 			}
-			if (
-				this.editUserMsg.account == null ||
-				this.editUserMsg.phone == null ||
-				this.editUserMsg.roleId == null
-			) {
-				this.$message.warning("请完善信息!");
-				return;
+			if (params.type == "affirm") {
+				console.log(params);
+				this.editUserMsg = params.value;
+				console.log(this.addMsg);
+				// this.updateService();
+				this.edit = params.isHide;
+				if (
+					this.editUserMsg.password != null &&
+					this.editUserMsg.password !== "" &&
+					this.editUserMsg.password !== undefined
+				) {
+					let pass = this.editUserMsg.password;
+					pass = md5(pass);
+					let key = "*chang_hong_device_cloud";
+					this.editUserMsg.password = this.encryptByDES(pass, key);
+				}
+				this.updateAdmin();
 			}
-			if (
-				this.editUserMsg.password != null &&
-				this.editUserMsg.password !== "" &&
-				this.editUserMsg.password !== undefined
-			) {
-				let pass = this.editUserMsg.password;
-				pass = md5(pass);
-				let key = "*chang_hong_device_cloud";
-				this.editUserMsg.password = this.encryptByDES(pass, key);
-			}
-			this.updateAdmin();
+			// if (this.editUserMsg.confirmPassword !== this.editUserMsg.password) {
+			// 	this.$message.warning("两次密码输入不一致,请重新输入!!!");
+			// 	return;
+			// }
+			// if (
+			// 	this.editUserMsg.account == null ||
+			// 	this.editUserMsg.phone == null ||
+			// 	this.editUserMsg.roleId == null
+			// ) {
+			// 	this.$message.warning("请完善信息!");
+			// 	return;
+			// }
+			// if (
+			// 	this.editUserMsg.password != null &&
+			// 	this.editUserMsg.password !== "" &&
+			// 	this.editUserMsg.password !== undefined
+			// ) {
+			// 	let pass = this.editUserMsg.password;
+			// 	pass = md5(pass);
+			// 	let key = "*chang_hong_device_cloud";
+			// 	this.editUserMsg.password = this.encryptByDES(pass, key);
+			// }
+			// this.updateAdmin();
 		},
 		updateAdmin() {
 			let qs = require("qs");
