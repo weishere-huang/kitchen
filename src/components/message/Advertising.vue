@@ -3,11 +3,11 @@
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加广告</el-button>
 			<el-dialog :close-on-click-modal="false" title="添加广告" :visible.sync="dialogAdd" width="600px">
-				<add-advertising :addMsg="addMsg"></add-advertising>
-				<span slot="footer" class="dialog-footer">
+				<add-advertising v-on:beforeadd="beforeadd"></add-advertising>
+				<!-- <span slot="footer" class="dialog-footer">
 					<el-button @click="dialogAdd = false" size="small" plain>取 消</el-button>
 					<el-button type="primary" size="small" @click="beforeadd">确 定</el-button>
-				</span>
+				</span>-->
 			</el-dialog>
 		</div>
 		<div class="bottom_list">
@@ -84,11 +84,11 @@
 			<div class="hint">提示：最多可添加6条广告。</div>
 		</div>
 		<el-dialog :close-on-click-modal="false" title="修改广告" :visible.sync="dialogEdit" width="600px">
-			<add-advertising :addMsg="editMsg"></add-advertising>
-			<span slot="footer" class="dialog-footer">
+			<add-advertising v-on:beforeadd="beforeupdate" :editMsg="editMsg"></add-advertising>
+			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="dialogEdit = false" size="small" plain>取 消</el-button>
 				<el-button type="primary" size="small" @click="beforeupdate">确 定</el-button>
-			</span>
+			</span>-->
 		</el-dialog>
 		<el-dialog :visible.sync="mainPicShow" append-to-body class="showPic">
 			<img width="100%" :src="dialogShowPic" alt>
@@ -131,7 +131,7 @@ export default {
 			this.editMsg = {};
 			this.addMsg = {};
 			Object.assign(this.editMsg, rowData);
-			console.log(params);
+			console.log(this.editMsg);
 			this.dialogEdit = true;
 		},
 		handleDelete(index, rowData) {
@@ -185,26 +185,17 @@ export default {
 			});
 		},
 		//添加广告
-		beforeadd() {
-			console.log(this.addMsg);
-			let flag = true;
-      if ((this.addMsg.linkUrl == null||this.addMsg.linkUrl === "")
-        && (this.addMsg.content == null||this.addMsg.content === "")){
-        flag = false;
-      }
-      if (
-        this.addMsg.title == null || this.addMsg.title === "" ||
-        this.addMsg.mainPic == null || this.addMsg.mainPic === "" ||
-        this.addMsg.startTime == null || this.addMsg.startTime === "" ||
-        this.addMsg.endTime == null || this.addMsg.endTime === "" ||
-        this.addMsg.state == null || this.addMsg.state === ""
-      ) {
-        flag = false;
-      }
-			if (flag) {
+		beforeadd(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.dialogAdd = params.isHide;
+			}
+			if (params.type == "affirm") {
+				console.log(params);
+				this.addMsg = params.value;
+				console.log(this.addMsg);
 				this.addAdvertising();
-			} else {
-				this.$message.warning("请完善信息");
+				this.dialogAdd = params.isHide;
 			}
 		},
 		addAdvertising() {
@@ -239,26 +230,17 @@ export default {
 			});
 		},
 		//修改广告
-		beforeupdate() {
-			let flag = true;
-			if ((this.editMsg.linkUrl == null||this.editMsg.linkUrl === "")
-        && (this.editMsg.content == null||this.editMsg.content === "")){
-			  this.$message.warning("内容图与跳转链接不能同时为空")
-        return
-      }
-			if (
-				this.editMsg.title == null || this.editMsg.title === "" ||
-        this.editMsg.mainPic == null || this.editMsg.mainPic === "" ||
-				this.editMsg.startTime == null || this.editMsg.startTime === "" ||
-				this.editMsg.endTime == null || this.editMsg.endTime === "" ||
-				this.editMsg.state == null || this.editMsg.state === ""
-			) {
-				flag = false;
+		beforeupdate(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.dialogEdit = params.isHide;
 			}
-			if (flag) {
+			if (params.type == "affirm") {
+				console.log(params);
+				this.editMsg = params.value;
+				console.log(this.addMsg);
 				this.updateAdvertising();
-			} else {
-				this.$message.warning("请完善信息");
+				this.dialogEdit = params.isHide;
 			}
 		},
 		updateAdvertising() {
