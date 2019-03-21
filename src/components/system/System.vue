@@ -15,7 +15,7 @@
 					:inline-message="true"
 				>
 					<el-form-item label="客服热线：" prop="phone">
-						<el-tooltip class="item" effect="light" content="作用于App端-意见反馈拨号" placement="top">
+						<el-tooltip class="item" effect="light" content="作用于App端-意见反馈拨号" placement="right">
 							<el-input
 								type="text"
 								size="small"
@@ -34,7 +34,7 @@
 						</el-checkbox>
 					</el-form-item>
 					<el-form-item label="单商品购买上限：" prop="itemLimit">
-						<el-tooltip class="item" effect="light" content="单个商品最多能购买多少份，0为不限制" placement="top">
+						<el-tooltip class="item" effect="light" content="单个商品最多能购买多少份，0为不限制" placement="right">
 							<el-input
 								type="number"
 								size="small"
@@ -45,7 +45,7 @@
 						</el-tooltip>
 					</el-form-item>
 					<el-form-item label="购物车总商品上限：" prop="carLimit">
-						<el-tooltip class="item" effect="light" content="每个订单可购买商品的总数，0为不限制。" placement="top">
+						<el-tooltip class="item" effect="light" content="每个订单可购买商品的总数，0为不限制。" placement="right">
 							<el-input
 								type="number"
 								size="small"
@@ -60,7 +60,7 @@
 							class="item"
 							effect="light"
 							content="用户下单后需在设定时间内完成支付，超时后系统自动取消订单。建议15或30分钟。"
-							placement="top"
+							placement="right"
 						>
 							<el-input
 								type="number"
@@ -68,7 +68,9 @@
 								v-model="systemMsg.payTimeout"
 								style="width:300px;"
 								placeholder="分钟"
-							></el-input>
+							>
+								<template slot="append">分钟</template>
+							</el-input>
 						</el-tooltip>
 					</el-form-item>
 					<el-form-item label="用户收货时限：" prop="receiveTimeout">
@@ -76,7 +78,7 @@
 							class="item"
 							effect="light"
 							content="若用户未主动确认收货，系统将按设定时间自动收货。建议48小时。"
-							placement="top"
+							placement="right"
 						>
 							<el-input
 								type="number"
@@ -84,11 +86,13 @@
 								v-model="systemMsg.receiveTimeout"
 								style="width:300px;"
 								placeholder="小时"
-							></el-input>
+							>
+								<template slot="append">小时</template>
+							</el-input>
 						</el-tooltip>
 					</el-form-item>
 					<el-form-item label="配送费：" prop="shippingFee">
-						<el-tooltip class="item" effect="light" content="需要 ≥ 0" placement="top">
+						<el-tooltip class="item" effect="light" content="需要 ≥ 0" placement="right">
 							<el-input
 								type="number"
 								size="small"
@@ -96,20 +100,26 @@
 								style="width:100px;"
 								placeholder="元"
 								step="0.01"
-							></el-input>
+							>
+								<template slot="append">元</template>
+							</el-input>
 						</el-tooltip>
-						<el-checkbox v-model="systemMsg.moneyOff">满减</el-checkbox>
+						<el-tooltip class="item" effect="light" content="满多少减免运费" placement="right">
+							<el-checkbox v-model="systemMsg.moneyOff">满减运费</el-checkbox>
+						</el-tooltip>
 						<el-input
+							title="满多少减免运费"
 							size="small"
-							placeholder="满多少减免配送费"
 							type="number"
-							style="width:140px;"
+							style="width:112px;"
 							v-model="systemMsg.allMoney"
 							v-if="systemMsg.moneyOff===true"
-						></el-input>
+						>
+							<template slot="append">元</template>
+						</el-input>
 					</el-form-item>
 					<el-form-item label="起送金额：" prop="sendMoney">
-						<el-tooltip class="item" effect="light" content="当用户购买商品总价大于该设置，才允许下单。需要 ≥ 0" placement="top">
+						<el-tooltip class="item" effect="light" content="当用户购买商品总价大于该设置，才允许下单。需要 ≥ 0" placement="right">
 							<el-input
 								type="number"
 								size="small"
@@ -117,7 +127,9 @@
 								style="width:300px;"
 								placeholder="元"
 								step="0.01"
-							></el-input>
+							>
+								<template slot="append">元</template>
+							</el-input>
 						</el-tooltip>
 					</el-form-item>
 					<el-form-item label="配送日期：" prop="sendTime">
@@ -130,12 +142,14 @@
 								v-model="systemMsg.retentionTime"
 								placeholder="保留时间：小时"
 								style="width:116px;"
-							></el-input>
+							>
+								<template slot="append">小时</template>
+							</el-input>
 							<el-tooltip
 								class="item"
 								effect="light"
 								content="商品结算时间+保留时间=用户可选时段范围。【设置保存后，建议到App中核对】"
-								placement="top"
+								placement="right"
 							>
 								<i class="el-icon-warning" style="color:#1cc09f"></i>
 							</el-tooltip>
@@ -229,10 +243,22 @@ export default {
 				timeFrame3: null,
 				timeFrame4: null,
 				retentionTime: "",
-				allMoney: null
+				allMoney: ""
 			},
 			systemRules: {
-				phone: [{ required: true, message: "请设置客服热线", trigger: "blur" }],
+				phone: [
+					{ required: true, message: "请设置客服热线", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/^0\d{2,3}-\d{7,8}$/.test(value) == false) {
+								callback(new Error("电话格式不正确"));
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur"]
+					}
+				],
 				payType: [
 					{ required: true, message: "请设置支付方式", trigger: "change" },
 					{
@@ -280,7 +306,7 @@ export default {
 					{ required: true, message: "请设置支付超时时限", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
+							if (/(^[1-9]{1}[0-9]*$)/g.test(value) == false) {
 								callback(new Error("只能是正整数"));
 							} else {
 								callback();
@@ -339,6 +365,7 @@ export default {
 	},
 	methods: {
 		submitForm(formName) {
+			console.log("OK");
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					if (this.systemMsg.sendTime == 2) {
@@ -350,6 +377,9 @@ export default {
 							} else {
 								this.save();
 							}
+						} else if (this.systemMsg.moneyOff == false) {
+							this.systemMsg.allMoney == "";
+							this.save();
 						}
 					} else if (this.systemMsg.moneyOff == true) {
 						if (this.systemMsg.allMoney == "" || null) {
@@ -378,21 +408,24 @@ export default {
 				this
 			).then(
 				result => {
+					// result.data.data.allMoney = JSON.parse(result.data.data.allMoney);
 					console.log(result.data);
 					if (result.data.code === 200) {
-						if (result.data.data.allMoney != "" || null) {
+						if (result.data.data.allMoney != null && "") {
 							this.systemMsg.moneyOff = true;
-							this.systemMsg.allMoney = result.data.data.allMoney/100;
+							if (result.data.data.allMoney != null && "") {
+								this.systemMsg.allMoney = result.data.data.allMoney / 100;
+							}
 						} else {
-							this.systemMsg.allMoney = result.data.data.allMoney/100;
+							this.systemMsg.allMoney = result.data.data.allMoney / 100;
 						}
 						this.systemMsg.phone = result.data.data.phone;
-						this.systemMsg.shippingFee = result.data.data.shippingFee/100;
+						this.systemMsg.shippingFee = result.data.data.shippingFee / 100;
 						this.systemMsg.receiveTimeout = result.data.data.receiveTimeout;
 						this.systemMsg.payTimeout = result.data.data.payTimeout;
 						this.systemMsg.carLimit = result.data.data.carLimit;
 						this.systemMsg.itemLimit = result.data.data.itemLimit;
-						this.systemMsg.sendMoney = result.data.data.sendMoney/100;
+						this.systemMsg.sendMoney = result.data.data.sendMoney / 100;
 						this.systemMsg.payType = JSON.parse(result.data.data.payType);
 						this.systemMsg.sendTime = result.data.data.sendTime;
 						this.systemMsg.timeFrame1 = JSON.parse(result.data.data.timeFrame1);
@@ -406,7 +439,9 @@ export default {
 			);
 		},
 		save() {
-			this.systemMsg.payType = JSON.stringify(this.systemMsg.payType);
+			if (this.systemMsg.moneyOff == false) {
+				this.systemMsg.allMoney = "";
+			}
 			let qs = require("qs");
 			let data = qs.stringify({
 				phone: this.systemMsg.phone,
@@ -416,7 +451,7 @@ export default {
 				carLimit: this.systemMsg.carLimit,
 				itemLimit: this.systemMsg.itemLimit,
 				sendMoney: this.systemMsg.sendMoney,
-				payType: this.systemMsg.payType,
+				payType: JSON.stringify(this.systemMsg.payType),
 				sendTime: this.systemMsg.sendTime,
 				timeFrame1: JSON.stringify(this.systemMsg.timeFrame1),
 				timeFrame2: JSON.stringify(this.systemMsg.timeFrame2),
