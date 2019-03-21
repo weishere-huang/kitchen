@@ -163,7 +163,7 @@ export default {
 				},
 				{
 					label: "收货人/手机号",
-					prop: "phone",
+					prop: "address",
 					width: 120,
 					formatter: function(row, column) {
 						let str = row.address.consignee + " " + row.address.phone;
@@ -173,7 +173,10 @@ export default {
 				{
 					label: "总金额",
 					prop: "orderMoney",
-					width: 70
+					width: 70,
+					formatter: function(row, column) {
+						return "￥" + row.orderMoney;
+					}
 				},
 				{
 					label: "支付方式",
