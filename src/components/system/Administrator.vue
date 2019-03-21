@@ -26,9 +26,9 @@
 					background
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
-					:current-page.sync="currentPage"
-					:page-sizes="[15, 30, 100]"
-					:page-size="10"
+					:current-page.sync="pageIndex"
+					:page-sizes="[10, 20,40, 100]"
+					:page-size="pageSize"
 					layout="sizes, prev, pager, next"
 					:total="total"
 				></el-pagination>
@@ -178,8 +178,8 @@ export default {
 					url: "/api-platform/employee/updateState",
 					type: "post",
 					option: {
-            enableMsg:false
-          }
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {
@@ -205,12 +205,16 @@ export default {
 				return;
 			}
 			console.log(this.userMsg);
-			if(this.userMsg.password!=null&&this.userMsg.password!==""&&this.userMsg.password!==undefined){
-        let pass = this.userMsg.password;
-        pass = md5(pass);
-        let key = "*chang_hong_device_cloud";
-        this.userMsg.password = this.encryptByDES(pass, key);
-      }
+			if (
+				this.userMsg.password != null &&
+				this.userMsg.password !== "" &&
+				this.userMsg.password !== undefined
+			) {
+				let pass = this.userMsg.password;
+				pass = md5(pass);
+				let key = "*chang_hong_device_cloud";
+				this.userMsg.password = this.encryptByDES(pass, key);
+			}
 			this.addAdmin();
 		},
 		addAdmin() {
@@ -227,8 +231,8 @@ export default {
 					url: "/api-platform/employee/add",
 					type: "post",
 					option: {
-            enableMsg:false
-          }
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {
@@ -254,7 +258,7 @@ export default {
 			if (
 				this.editUserMsg.password != null &&
 				this.editUserMsg.password !== "" &&
-        this.editUserMsg.password !==undefined
+				this.editUserMsg.password !== undefined
 			) {
 				let pass = this.editUserMsg.password;
 				pass = md5(pass);
@@ -278,8 +282,8 @@ export default {
 					url: "/api-platform/employee/update",
 					type: "post",
 					option: {
-            enableMsg:false
-          }
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {

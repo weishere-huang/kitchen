@@ -35,9 +35,9 @@
 						background
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
-						:current-page.sync="currentPage"
-						:page-sizes="[15, 30, 100]"
-						:page-size="10"
+						:current-page.sync="pageIndex"
+						:page-sizes="[10, 20,40, 100]"
+						:page-size="pageSize"
 						layout="sizes, prev, pager, next"
 						:total="total"
 					></el-pagination>
@@ -78,10 +78,10 @@ export default {
 			],
 			tableData: [],
 			pageIndex: 1,
-			pageSize: 15,
+			pageSize: 10,
 			total: 10,
 			isHideList: this.$route.params.id !== undefined ? true : false,
-      keyword:null
+			keyword: null
 		};
 	},
 	methods: {
@@ -92,12 +92,12 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-      this.getSupplierList();
+			this.getSupplierList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-      this.getSupplierList();
+			this.getSupplierList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
@@ -144,9 +144,9 @@ export default {
 			console.log(row);
 		},
 		beforeSearch() {
-      this.pageIndex = 1;
-      this.getSupplierList();
-    },
+			this.pageIndex = 1;
+			this.getSupplierList();
+		},
 		//获取所有网点
 		getSupplierList() {
 			this.Axios(
@@ -154,7 +154,7 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-            keyWord:this.keyword
+						keyWord: this.keyword
 					},
 					option: {
 						enableMsg: false
