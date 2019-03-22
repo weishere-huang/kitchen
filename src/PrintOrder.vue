@@ -75,6 +75,8 @@
 	</div>
 </template>
 <script>
+import axios from "axios";
+
 function getCurrentDate(format) {
 	var now = new Date();
 	var year = now.getFullYear(); //得到年份
@@ -107,15 +109,8 @@ export default {
 		return {
 			printData: [],
 			knowDate: getCurrentDate(2),
-			tableData: [
-				{
-					name: "素炒花菜",
-					price: "¥ 8.80元 ",
-					quantity: "1",
-					subtotal: "¥ 8.80元 "
-				}
-			],
-			user:""
+			tableData: [],
+			user: ""
 		};
 	},
 	methods: {
@@ -135,6 +130,11 @@ export default {
 		}
 	},
 	created() {
+		var instance = axios.create({});
+		let isLogin = sessionStorage.getItem("token");
+		instance.defaults.headers.common["token"] = isLogin;
+
+		this.user = JSON.parse(sessionStorage.getItem("user")).account;
 		this.Axios(
 			{
 				params: {
@@ -150,17 +150,17 @@ export default {
 		).then(
 			result => {
 				if (result.data.code === 200) {
-					for (let i = 0; i < result.data.data.length; i++) {
-						result.data.data[i].address = JSON.parse(
-							result.data.data[i].address
-						);
+					// sessionStorage.setItem("printData", JSON.stringify(result.data.data));
+					let ordersMsg = result.data.data;
+					for (let i = 0; i < ordersMsg.length; i++) {
+						ordersMsg[i].address = JSON.parse(ordersMsg[i].address);
 					}
-					this.printData = Object.assign([], result.data.data);
+					this.printData = Object.assign([], ordersMsg);
+					console.log(this.printData);
 				}
 			},
 			({ type, info }) => {}
 		);
-		this.user=JSON.parse(sessionStorage.getItem('user')).name
 	},
 	updated() {
 		this.preview(1);

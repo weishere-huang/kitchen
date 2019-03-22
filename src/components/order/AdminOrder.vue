@@ -140,11 +140,7 @@ export default {
 					value: 9
 				}
 			],
-			tableData: [
-				{
-					orderNo: "111"
-				}
-			],
+			tableData: [],
 			items: [
 				{
 					label: "订单编号",

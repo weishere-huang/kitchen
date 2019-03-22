@@ -140,11 +140,7 @@ export default {
 					value: 9
 				}
 			],
-			tableData: [
-				{
-					orderNo: "111"
-				}
-			],
+			tableData: [],
 			items: [
 				{
 					label: "订单编号",
@@ -174,7 +170,7 @@ export default {
 					prop: "orderMoney",
 					width: 70,
 					formatter: function(row, column) {
-						return '￥'+row.orderMoney
+						return "￥" + row.orderMoney;
 					}
 				},
 				{
@@ -201,7 +197,6 @@ export default {
 					}
 				}
 			],
-
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
