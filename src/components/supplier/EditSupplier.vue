@@ -21,11 +21,6 @@
 					<el-form-item label="详细地址：" prop="address">
 						<el-input type="text" v-model="supplierMsg.address" size="small" style="width:350px;"></el-input>
 					</el-form-item>
-					<el-form-item label="角色选择：" prop>
-						<el-select v-model="supplierMsg.supplierRoleId" placeholder="请选择" style="width:350px" size="small">
-							<el-option v-for="item in ruleOptions" :key="item.value" :label="item.name" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
 					<el-form-item label="供应商账号：" prop>
 						<span>{{supplierMsg.account}}</span>
 					</el-form-item>
