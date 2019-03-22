@@ -9,7 +9,7 @@
 					</el-select>
 				</el-col>
 				<el-col :span="11" style="padding:0 5px;">
-					<el-input size="small" style="width:100%;" clearable placeholder v-model="keyWord"></el-input>
+					<el-input size="small" style="width:100%;" clearable placeholder="昵称/手机号" v-model="keyWord"></el-input>
 				</el-col>
 				<el-col :span="4" style="padding:0 5px;">
 					<el-button size="small" plain @click="searchlist">搜索</el-button>
@@ -42,7 +42,17 @@
 				</el-table-column>
 				<el-table-column label="状态" min-width="100" show-overflow-tooltip>
 					<template slot-scope="scope">
-						<span class="state_change" @click="changeState(scope.row,scope.$index)">
+						<el-tooltip :content="scope.row.state=='1'?'禁用':'正常'" placement="top" effect="light">
+							<el-switch
+								v-model="scope.row.state"
+								active-color="#13ce66"
+								inactive-color="#ff4949"
+								active-value="0"
+								inactive-value="1"
+								@change="changeState(scope.row,scope.$index)"
+							></el-switch>
+						</el-tooltip>
+						<!-- <span class="state_change" @click="changeState(scope.row,scope.$index)">
 							<span v-if="scope.row.state==0">
 								<el-tooltip class="item" effect="light" content="正常" placement="right">
 									<i class="iconfont" style="color:#1cc09f">&#xe78a;</i>
@@ -53,7 +63,7 @@
 									<i class="iconfont" style="color:#999999">&#xe63a;</i>
 								</el-tooltip>
 							</span>
-						</span>
+						</span>-->
 					</template>
 				</el-table-column>
 				<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>
@@ -131,12 +141,12 @@ export default {
 	},
 	methods: {
 		changeState(row, index) {
-			// if (this.tableData[index].state == -1) {
+			// if (this.tableData[index].state == 1) {
 			// 	this.tableData[index].state = 0;
 			// } else {
-			// 	this.tableData[index].state = -1;
+			// 	this.tableData[index].state = 1;
 			// }
-			console.log(this.tableData[index].id);
+			console.log(this.tableData[index].state);
 			let qs = require("qs");
 			let data = qs.stringify({
 				userInfoId: this.tableData[index].id
@@ -153,11 +163,16 @@ export default {
 				this
 			).then(
 				result => {
+					console.log(result);
 					if (result.data.code === 200) {
-						this.reload();
+						this.getlist();
+					} else {
+						this.getlist();
 					}
 				},
-				({ type, info }) => {}
+				({ type, info }) => {
+					this.getlist();
+				}
 			);
 		},
 		resetPasswords(index, rowData) {
@@ -195,7 +210,7 @@ export default {
 						keyWord: this.keyWord
 					},
 					option: {
-						successMsg: "用户列表加载完成~"
+						enableMsg: false
 					},
 					type: "get",
 					url: "/api-user/userInfo/listUserInfo"
