@@ -25,6 +25,7 @@
 							@focus="dialogScript=true"
 							placeholder="请选择"
 							suffix-icon="el-icon-arrow-down"
+							maxlength="20"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱分类：" prop="cateId">
@@ -41,7 +42,7 @@
 						></el-cascader>
 					</el-form-item>
 					<el-form-item label="菜谱名称：" prop="recipeName">
-						<el-input size="small" style="width:400px;" v-model="cookbook.recipeName"></el-input>
+						<el-input maxlength="20" size="small" style="width:400px;" v-model="cookbook.recipeName"></el-input>
 					</el-form-item>
 					<el-form-item label="烹饪时长：" prop="cookingTime">
 						<el-input
@@ -50,6 +51,7 @@
 							style="width:400px;"
 							placeholder="单位：分钟"
 							v-model="cookbook.cookingTime"
+							maxlength="20"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
@@ -75,7 +77,13 @@
 						</span>
 					</el-form-item>
 					<el-form-item label="菜谱价格：" prop="recipePrice">
-						<el-input size="small" style="width:400px;" placeholder="单位：元" v-model="cookbook.recipePrice"></el-input>
+						<el-input
+							maxlength="20"
+							size="small"
+							style="width:400px;"
+							placeholder="单位：元"
+							v-model="cookbook.recipePrice"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="净含量：" prop="weight">
 						<el-input
@@ -84,7 +92,7 @@
 							size="small"
 							style="width:400px;"
 							placeholder="单位：克"
-							step="1"
+							maxlength="10"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="食材搭配：" prop="spec">
@@ -94,6 +102,7 @@
 							size="small"
 							style="width:400px;"
 							placeholder=" 如：精选五花肉，青椒，蒜片，姜片"
+							maxlength="50"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="上/下架：" prop="state">
@@ -347,6 +356,12 @@ export default {
 					{
 						required: true,
 						message: "请输入净含量",
+						trigger: "blur"
+					},
+					{
+						type: "number",
+						max: 10,
+						message: "请输入小于10位",
 						trigger: "blur"
 					},
 					{

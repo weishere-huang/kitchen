@@ -26,7 +26,7 @@
 						<select-list v-on:handlechange="handlechange"></select-list>
 					</el-form-item>
 					<el-form-item label="分类名称：" prop="cateName">
-						<el-input size="small" style="width:99%;" :max="10" v-model="classify.cateName"></el-input>
+						<el-input size="small" style="width:99%;" maxlength="20" v-model="classify.cateName"></el-input>
 					</el-form-item>
 					<!-- <div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
 						<select-list v-on:handlechange="handlechange"></select-list>
@@ -94,7 +94,7 @@
 					></el-input>
 				</el-form-item>-->
 				<el-form-item label="分类名称：" prop="cateName">
-					<el-input size="small" style="width:99%;" v-model="editClassify.cateName"></el-input>
+					<el-input size="small" maxlength="20" style="width:99%;" v-model="editClassify.cateName"></el-input>
 				</el-form-item>
 				<!-- <div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
 					<select-list v-on:handlechange="handlechange"></select-list>
@@ -144,26 +144,7 @@ export default {
 			selectShow: false,
 			dialogAdd: false,
 			dialogEdit: false,
-			classifyData: [
-				{
-					label: "第一级",
-					children: [
-						{
-							id: 7,
-							label: "二级 3-1",
-							children: [
-								{
-									id: 7,
-									label: "三级 3-1"
-								}
-							]
-						}
-					]
-				},
-				{
-					label: "第一级"
-				}
-			],
+			classifyData: [],
 			defaultProps: {
 				children: "children",
 				label: "cateName"

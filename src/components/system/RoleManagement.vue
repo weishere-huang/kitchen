@@ -64,12 +64,7 @@ export default {
 					width: 90
 				}
 			],
-			tableData: [
-				{
-					admin: "商城管理员",
-					phone: "张小红专用"
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
 			currentPage: 1,

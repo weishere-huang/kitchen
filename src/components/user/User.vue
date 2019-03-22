@@ -136,31 +136,29 @@ export default {
 			// } else {
 			// 	this.tableData[index].state = -1;
 			// }
-      console.log(this.tableData[index].id);
-      let qs = require("qs");
-      let data = qs.stringify({
-        userInfoId:this.tableData[index].id
-      });
-      this.Axios(
-        {
-          params:data,
-          option: {
-            successMsg:"操作成功"
-          },
-          type: "post",
-          url: "/api-user/userInfo/forbiddenUser"
-        },
-        this
-      ).then(
-        result => {
-          if(result.data.code===200){
-            this.reload();
-          }
-        },
-        ({type, info}) => {
-        }
-      );
-
+			console.log(this.tableData[index].id);
+			let qs = require("qs");
+			let data = qs.stringify({
+				userInfoId: this.tableData[index].id
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "操作成功"
+					},
+					type: "post",
+					url: "/api-user/userInfo/forbiddenUser"
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.reload();
+					}
+				},
+				({ type, info }) => {}
+			);
 		},
 		resetPasswords(index, rowData) {
 			rowData.resetvisible = false;
@@ -256,8 +254,7 @@ export default {
 				}
 				console.log(result.data);
 			});
-		},
-
+		}
 	},
 	created() {
 		this.getlist();

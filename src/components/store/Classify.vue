@@ -80,7 +80,13 @@
 					prop="classifyName"
 					:rules="[{ required: true, message: '名称不能为空', trigger: 'blur'},{max: 8, message: '只能输入8个以内汉字'}]"
 				>
-					<el-input type="text" size="small" style="width:90%;" v-model="addClassifyName.classifyName"></el-input>
+					<el-input
+						type="text"
+						maxlength="20"
+						size="small"
+						style="width:90%;"
+						v-model="addClassifyName.classifyName"
+					></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -95,7 +101,13 @@
 					prop="cateName"
 					:rules="[{ required: true, message: '名称不能为空', trigger: ['blur' ,'change']},{max: 8, message: '只能输入8个以内汉字'}]"
 				>
-					<el-input type="text" size="small" style="width:90%;" v-model="editMsg.cateName"></el-input>
+					<el-input
+						type="text"
+						maxlength="20"
+						size="small"
+						style="width:90%;"
+						v-model="editMsg.cateName"
+					></el-input>
 				</el-form-item>
 				<el-form-item
 					label="排序："
@@ -128,20 +140,7 @@ export default {
 			isShow: "1",
 			dialogVisible: false,
 			value: "",
-			tableData: [
-				{
-					name: "炒菜",
-					price: "9.8",
-					classify: "素菜",
-					number: "10",
-					time: "5",
-					content: "400克",
-					show: "0",
-					new: "0",
-					hot: "1",
-					sort: "100"
-				}
-			]
+			tableData: []
 		};
 	},
 	methods: {
