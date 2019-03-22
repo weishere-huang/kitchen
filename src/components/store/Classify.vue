@@ -80,7 +80,13 @@
 					prop="classifyName"
 					:rules="[{ required: true, message: '名称不能为空', trigger: 'blur'},{max: 8, message: '只能输入8个以内汉字'}]"
 				>
-					<el-input type="text" size="small" style="width:90%;" v-model="addClassifyName.classifyName"></el-input>
+					<el-input
+						type="text"
+						maxlength="20"
+						size="small"
+						style="width:90%;"
+						v-model="addClassifyName.classifyName"
+					></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -95,7 +101,13 @@
 					prop="cateName"
 					:rules="[{ required: true, message: '名称不能为空', trigger: ['blur' ,'change']},{max: 8, message: '只能输入8个以内汉字'}]"
 				>
-					<el-input type="text" size="small" style="width:90%;" v-model="editMsg.cateName"></el-input>
+					<el-input
+						type="text"
+						maxlength="20"
+						size="small"
+						style="width:90%;"
+						v-model="editMsg.cateName"
+					></el-input>
 				</el-form-item>
 				<el-form-item
 					label="排序："
@@ -128,20 +140,7 @@ export default {
 			isShow: "1",
 			dialogVisible: false,
 			value: "",
-			tableData: [
-				{
-					name: "炒菜",
-					price: "9.8",
-					classify: "素菜",
-					number: "10",
-					time: "5",
-					content: "400克",
-					show: "0",
-					new: "0",
-					hot: "1",
-					sort: "100"
-				}
-			]
+			tableData: []
 		};
 	},
 	methods: {
@@ -244,41 +243,9 @@ export default {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
 			if (rowData.goodsCount > 0) {
-				this.$confirm("该分类包含已发布的商品, 是否继续删除?", "提示", {
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					type: "warning",
-					cancelButtonClass: "is-plain"
-				})
-					.then(() => {
-						let qs = require("qs");
-						let datas = qs.stringify({
-							cateId: rowData.id
-						});
-						this.Axios(
-							{
-								params: datas,
-								option: {
-									successMsg: "删除成功"
-								},
-								type: "post",
-								url: "/api-mall/itemCat/delCate",
-								loadingConfig: {
-									target: document.querySelector(".classify_list")
-								}
-							},
-							this
-						).then(
-							result => {
-								console.log(result);
-								if (result.data.code === 200) {
-									this.reload();
-								}
-							},
-							({ type, info }) => {}
-						);
-					})
-					.catch(() => {});
+				this.$message.error(
+					"该分类包含商品信息，请转移或删除商品后，再删除该分类。"
+				);
 			} else {
 				let qs = require("qs");
 				let datas = qs.stringify({

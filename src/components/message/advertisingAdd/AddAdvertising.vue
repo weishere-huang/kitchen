@@ -1,6 +1,12 @@
 <template>
 	<div class="add_advertising">
-		<el-form label-width="110px" size="small" :model="addMsg" ref="addMsg" :rules="advertisingRules">
+		<el-form
+			label-width="110px"
+			size="small"
+			:model="addMsg"
+			ref="addAdvertising"
+			:rules="advertisingRules"
+		>
 			<el-form-item label="广告名称：" prop="title">
 				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="50"></el-input>
 			</el-form-item>
@@ -11,13 +17,15 @@
 					:on-preview="handlePictureCardPreview"
 					:on-remove="handleRemove"
 					:on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload1"
+          class="upload_show"
 					v-model="addMsg.mainPic"
 					:file-list="mainPic"
-          :limit="1"
+					:limit="1"
 				>
 					<i class="el-icon-plus"></i>
-					<div slot="tip" class="el-upload__tip">宽高750 × 290像素，＜500KB的jpg图片</div>
 				</el-upload>
+        <div  class="el-upload__tip tip_style">宽高750 × 290像素，＜500KB的jpg图片</div>
 				<el-dialog :visible.sync="dialogVisible" append-to-body>
 					<img width="100%" :src="dialogImageUrl" alt class="showPic">
 				</el-dialog>
@@ -30,13 +38,15 @@
 					:on-preview="handlePictureCardPreview1"
 					:on-remove="handleRemove1"
 					:on-success="handleAvatarSuccess1"
+          :before-upload="beforeAvatarUpload2"
+          class="upload_show"
 					v-model="addMsg.content"
 					:file-list="content"
-          :limit="1"
+					:limit="1"
 				>
 					<i class="el-icon-plus"></i>
-					<div slot="tip" class="el-upload__tip">宽高1000 × 不限，＜2MB的jpg图片</div>
 				</el-upload>
+        <div class="el-upload__tip tip_style">宽高1000 × 不限，＜2MB的jpg图片</div>
 				<el-dialog :visible.sync="dialogVisible" append-to-body class="showPic">
 					<img width="100%" :src="dialogImageUrl1" alt>
 				</el-dialog>
@@ -47,7 +57,7 @@
 					placeholder="http或https开头(内容图与链接2选1)"
 					style="width:99%"
 					v-model="addMsg.linkUrl"
-          maxlength="200"
+					maxlength="200"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="是否显示：" prop="state">
@@ -58,64 +68,93 @@
 			</el-form-item>
 			<el-form-item label="开始时间：" prop="startTime">
 				<el-date-picker
-					v-model="startTime"
+					v-model="addMsg.startTime"
 					type="datetime"
 					placeholder="选择日期"
 					size="small"
 					style="width:250px"
 					format="yyyy/MM/dd HH:mm:ss"
 					value-format="yyyy/MM/dd HH:mm:ss"
-					@change="edittime"
 				></el-date-picker>
 			</el-form-item>
 			<el-form-item label="结束时间：" prop="endTime">
 				<el-date-picker
-					v-model="endTime"
+					v-model="addMsg.endTime"
 					type="datetime"
 					placeholder="选择日期"
 					size="small"
 					style="width:250px"
 					format="yyyy/MM/dd HH:mm:ss"
 					value-format="yyyy/MM/dd HH:mm:ss"
-					@change="edittime1"
 				></el-date-picker>
 			</el-form-item>
 		</el-form>
+		<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
+			<el-button @click="handleCancel" size="small" plain>取 消</el-button>
+			<el-button type="primary" @click="handleAffirm('addAdvertising')" size="small">确 定</el-button>
+		</div>
 	</div>
 </template>
 <script>
 export default {
 	data() {
 		return {
-			dialogImageUrl: this.addMsg.mainPic,
-			dialogImageUrl1: this.addMsg.content,
+			dialogImageUrl: null,
+			dialogImageUrl1: null,
 			dialogVisible: false,
-			startTime: this.addMsg.startTime,
-			endTime: this.addMsg.endTime,
+			startTime: null,
+			endTime: null,
 			mainPic: [],
 			content: [],
-      advertisingRules:{
-        title:[
-          { required: true, message: "请填写广告标题", trigger: "blur" }
+			advertisingRules: {
+				title: [{ required: true, message: "请填写广告标题", trigger: "blur" }],
+				mainPic: [{ required: true, message: "请添加图片", trigger: "change" }],
+        content: [
+          {
+            validator: (rule, value, callback) => {
+              if ((this.addMsg.content==""||this.addMsg.content==null)&&
+                (this.addMsg.linkUrl==""||this.addMsg.linkUrl==null)) {
+                callback(new Error("内容图和跳转链接必须填写一项!"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
         ],
-        mainPic:[
-          { required: true, message: "请添加图片", trigger: "blur" }
-        ],
-        startTime:[
-          {type: 'date', required: true, message: "请添加开始日期", trigger: "change" }
-        ],
-        state:[
-          { required: true, message: '请选择是否显示', trigger: 'change' }
-        ],
-        endTime:[
-          {type: 'date', required: true, message: "请填写结束日期", trigger: "change" }
-        ],
-
-      }
+				startTime: [
+					{
+						type: "string",
+						required: true,
+						message: "请添加开始日期",
+						trigger: "change"
+					}
+				],
+				state: [
+					{ required: true, message: "请选择是否显示", trigger: "change" }
+				],
+				endTime: [
+					{
+						type: "string",
+						required: true,
+						message: "请填写结束日期",
+						trigger: "change"
+					}
+				]
+			},
+			addMsg: {
+				title: "",
+				mainPic: "",
+				content: "",
+				state: "",
+				startTime: null,
+				endTime: null,
+				linkUrl: ""
+			}
 		};
 	},
 	props: {
-		addMsg: {
+		editMsg: {
 			title: {},
 			mainPic: {},
 			content: {},
@@ -123,10 +162,79 @@ export default {
 			startTime: {},
 			endTime: {},
 			linkUrl: {}
-		},
-
+		}
 	},
 	methods: {
+    beforeAvatarUpload1(file) {
+      const isPicSize = file.size / 1024 <= 500;
+      if (isPicSize == false) {
+        this.$message.error("上传图片不能大于80KB");
+        return false;
+      } else {
+        const isSize = new Promise(function(resolve, reject) {
+          let width = 750;
+          let height = 290;
+          let _URL = window.URL || window.webkitURL;
+          let img = new Image();
+          img.onload = function() {
+            let valid = img.width <= width && img.height <= height;
+            valid ? resolve() : reject();
+          };
+          img.src = _URL.createObjectURL(file);
+        }).then(
+          () => {
+            return file;
+          },
+          () => {
+            this.$message.error("上传的图片必须是等于或小于750*290!");
+            return Promise.reject();
+          }
+        );
+        return isSize;
+      }
+    },
+    beforeAvatarUpload2(file) {
+      const isPicSize = file.size / 1024/1024 <= 2;
+      if (isPicSize == false) {
+        this.$message.error("上传图片不能大于2MB");
+        return false;
+      } else {
+        const isSize = new Promise(function(resolve, reject) {
+          let width = 1000;
+          let height = 50000;
+          let _URL = window.URL || window.webkitURL;
+          let img = new Image();
+          img.onload = function() {
+            let valid = img.width <= width && img.height <= height;
+            valid ? resolve() : reject();
+          };
+          img.src = _URL.createObjectURL(file);
+        }).then(
+          () => {
+            return file;
+          },
+          () => {
+            this.$message.error("上传的图片宽必须是1000像素以内!");
+            return Promise.reject();
+          }
+        );
+        return isSize;
+      }
+    },
+		handleCancel(value) {
+			let params = { type: "cancel", isHide: false };
+			this.$emit("beforeadd", params);
+		},
+		handleAffirm(formName) {
+			let params = { type: "affirm", value: this.addMsg, isHide: false };
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.$emit("beforeadd", params);
+				} else {
+					return false;
+				}
+			});
+		},
 		edittime() {
 			this.addMsg.startTime = this.startTime;
 		},
@@ -173,43 +281,44 @@ export default {
 		}
 	},
 	created() {
-		if (this.addMsg.id != null) {
+		if (this.editMsg != null) {
 			console.log("111");
-        this.mainPic = [
-          {
-            name: "mainpic.jpg",
-            url: this.addMsg.mainPic
-          }
-        ];
-      if(this.addMsg.content!==null && this.addMsg.content!=="") {
-        this.content = [
-          {
-            name: "content.jpg",
-            url: this.addMsg.content
-          }
-        ];
-      }
+			this.addMsg = this.editMsg;
+			this.mainPic = [
+				{
+					name: "mainpic.jpg",
+					url: this.editMsg.mainPic
+				}
+			];
+			if (this.editMsg.content !== null && this.editMsg.content !== "") {
+				this.content = [
+					{
+						name: "content.jpg",
+						url: this.editMsg.content
+					}
+				];
+			}
 		}
 	},
 	watch: {
-		addMsg() {
-
-			if (this.addMsg.id != null) {
+		editMsg() {
+			if (this.editMsg != null) {
+				this.addMsg = this.editMsg;
 				console.log("111");
-          this.mainPic = [
-            {
-              name: "mainpic.jpg",
-              url: this.addMsg.mainPic
-            }
-          ];
-        if(this.addMsg.content!==null && this.addMsg.content!=="") {
-          this.content = [
-            {
-              name: "content.jpg",
-              url: this.addMsg.content
-            }
-          ];
-        }
+				this.mainPic = [
+					{
+						name: "mainpic.jpg",
+						url: this.editMsg.mainPic
+					}
+				];
+				if (this.editMsg.content !== null && this.editMsg.content !== "") {
+					this.content = [
+						{
+							name: "content.jpg",
+							url: this.editMsg.content
+						}
+					];
+				}
 			}
 		}
 	}

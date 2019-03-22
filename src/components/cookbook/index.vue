@@ -102,36 +102,7 @@ export default {
 					width: 140
 				}
 			],
-			tableData: [
-				{
-					id: 1,
-					name: "土豆肉丝",
-					classify: "猪肉",
-					state: 1,
-					visible: false
-				},
-				{
-					id: 2,
-					name: "土豆肉丝",
-					classify: "猪肉",
-					state: 1,
-					visible: false
-				},
-				{
-					id: 3,
-					name: "土豆肉丝",
-					classify: "猪肉",
-					state: 1,
-					visible: false
-				},
-				{
-					id: 4,
-					name: "土豆肉丝",
-					classify: "猪肉",
-					state: 1,
-					visible: false
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
 			total: 10,

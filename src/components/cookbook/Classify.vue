@@ -16,21 +16,11 @@
 					ref="classify"
 				>
 					<el-form-item label="上级分类：" prop="parentNo">
-						<!-- <el-input
-							size="small"
-							style="width:99%;"
-							suffix-icon="el-icon-caret-bottom"
-							@focus="selectShow=true"
-							v-model="classify.label"
-						></el-input>-->
 						<select-list v-on:handlechange="handlechange"></select-list>
 					</el-form-item>
 					<el-form-item label="分类名称：" prop="cateName">
-						<el-input size="small" style="width:99%;" :max="10" v-model="classify.cateName"></el-input>
+						<el-input size="small" style="width:99%;" maxlength="20" v-model="classify.cateName"></el-input>
 					</el-form-item>
-					<!-- <div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
-						<select-list v-on:handlechange="handlechange"></select-list>
-					</div>-->
 				</el-form>
 				<span slot="footer" class="dialog-footer">
 					<el-button @click="dialogAdd = false" plain size="small">取 消</el-button>
@@ -58,8 +48,6 @@
 						<span>{{ node.label }}</span>
 						<span style="display:inline-block;width:190px;" @click.stop>
 							<el-button type="text" size="mini" @click="() => append(data)">修改</el-button>
-
-							<!-- <el-button type="text" size="mini" @click="() => remove(node, data)">删除</el-button> -->
 							<el-popover placement="top" width="180" v-model="data.visible">
 								<p style="line-height:32px;text-align:center;">
 									<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -83,22 +71,9 @@
 				:rules="editClassifyRules"
 				ref="editClassify"
 			>
-				<!-- <el-form-item label="上级分类：">
-					<el-input
-						size="small"
-						style="width:99%;"
-						suffix-icon="el-icon-caret-bottom"
-						@focus="selectShow=true"
-						v-model="editClassify.cateName"
-						:disabled="true"
-					></el-input>
-				</el-form-item>-->
 				<el-form-item label="分类名称：" prop="cateName">
-					<el-input size="small" style="width:99%;" v-model="editClassify.cateName"></el-input>
+					<el-input size="small" maxlength="20" style="width:99%;" v-model="editClassify.cateName"></el-input>
 				</el-form-item>
-				<!-- <div class="select_case" v-show="selectShow" v-clickoutside="handleClose">
-					<select-list v-on:handlechange="handlechange"></select-list>
-				</div>-->
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="dialogEdit = false" plain size="small">取 消</el-button>
@@ -144,26 +119,7 @@ export default {
 			selectShow: false,
 			dialogAdd: false,
 			dialogEdit: false,
-			classifyData: [
-				{
-					label: "第一级",
-					children: [
-						{
-							id: 7,
-							label: "二级 3-1",
-							children: [
-								{
-									id: 7,
-									label: "三级 3-1"
-								}
-							]
-						}
-					]
-				},
-				{
-					label: "第一级"
-				}
-			],
+			classifyData: [],
 			defaultProps: {
 				children: "children",
 				label: "cateName"
@@ -323,6 +279,13 @@ export default {
 	},
 	components: {
 		selectList
+	},
+	watch: {
+		dialogAdd() {
+			if (this.dialogAdd === false) {
+				this.classify.cateName = "";
+			}
+		}
 	}
 };
 </script>

@@ -140,11 +140,7 @@ export default {
 					value: 9
 				}
 			],
-			tableData: [
-				{
-					orderNo: "111"
-				}
-			],
+			tableData: [],
 			items: [
 				{
 					label: "订单编号",
@@ -163,7 +159,7 @@ export default {
 				},
 				{
 					label: "收货人/手机号",
-					prop: "phone",
+					prop: "address",
 					width: 120,
 					formatter: function(row, column) {
 						let str = row.address.consignee + " " + row.address.phone;
@@ -173,7 +169,10 @@ export default {
 				{
 					label: "总金额",
 					prop: "orderMoney",
-					width: 70
+					width: 70,
+					formatter: function(row, column) {
+						return "￥" + row.orderMoney / 100;
+					}
 				},
 				{
 					label: "支付方式",
@@ -183,7 +182,7 @@ export default {
 				{
 					label: "订单状态",
 					prop: "platformState",
-					width: 100,
+					width: 80,
 					formatter: function(row, column) {
 						return row.platformState == 0
 							? "待付款"
@@ -197,6 +196,11 @@ export default {
 							? "已关闭"
 							: "";
 					}
+				},
+				{
+					label: "供应商名称",
+					prop: "payType",
+					width: 100
 				}
 			],
 

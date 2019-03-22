@@ -82,11 +82,7 @@ export default {
 				faqType: "",
 				content: ""
 			},
-			editMsg: {
-				// title: "",
-				// classify: "",
-				// content: ""
-			},
+			editMsg: {},
 			dialogAdd: false,
 			dialogEdit: false,
 			classify: [

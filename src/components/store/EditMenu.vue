@@ -24,6 +24,8 @@
 						placeholder="请选择"
 						@focus="dialogCookbook=true"
 						v-model="editmenu.recipeName"
+						maxlength="20"
+						:readonly="true"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品分类：" prop="itemCate">
@@ -39,10 +41,17 @@
 						style="width:300px;"
 						placeholder="单位：元"
 						step="0.01"
+						maxlength="20"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品库存：" prop="stockNow">
-					<el-input type="number" size="small" style="width:300px;" v-model.number="editmenu.stockNow"></el-input>
+					<el-input
+						maxlength="20"
+						type="number"
+						size="small"
+						style="width:300px;"
+						v-model.number="editmenu.stockNow"
+					></el-input>
 				</el-form-item>
 				<el-form-item label="上/下架：" prop="state">
 					<el-radio v-model="editmenu.state" label="1">上架</el-radio>
@@ -322,7 +331,7 @@ export default {
 			console.log(params);
 			this.dialogCookbook = params.ishide;
 			this.cookbook = params.value;
-			this.editmenu.recipeName=this.cookbook.recipeName
+			this.editmenu.recipeName = this.cookbook.recipeName;
 			// this.editmenu.script = params.value;
 		},
 		getUEContent() {

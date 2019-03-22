@@ -16,18 +16,42 @@
 					ref="supplierMsg"
 				>
 					<el-form-item label="供应商名称：" prop="supplierName">
-						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.supplierName"></el-input>
+						<el-input
+							type="text"
+							size="small"
+							maxlength="20"
+							style="width:350px;"
+							v-model="supplierMsg.supplierName"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="联系人：" prop="contacts">
-						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.contacts"></el-input>
+						<el-input
+							type="text"
+							size="small"
+							maxlength="20"
+							style="width:350px;"
+							v-model="supplierMsg.contacts"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="联系电话：" prop="phone">
-						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.phone"></el-input>
+						<el-input
+							type="text"
+							size="small"
+							maxlength="11"
+							style="width:350px;"
+							v-model="supplierMsg.phone"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="详细地址：" prop="address">
-						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.address"></el-input>
+						<el-input
+							type="text"
+							size="small"
+							maxlength="30"
+							style="width:350px;"
+							v-model="supplierMsg.address"
+						></el-input>
 					</el-form-item>
-					<el-form-item label="角色选择：" prop="supplierRoleId">
+					<!-- <el-form-item label="角色选择：" prop="supplierRoleId">
 						<el-select
 							v-model="supplierMsg.supplierRoleId"
 							placeholder="请选择"
@@ -36,9 +60,15 @@
 						>
 							<el-option v-for="item in ruleOptions" :key="item.value" :label="item.name" :value="item.id"></el-option>
 						</el-select>
-					</el-form-item>
+					</el-form-item>-->
 					<el-form-item label="供应商账号：" prop="supplierAccount">
-						<el-input type="text" size="small" style="width:350px;" v-model="supplierMsg.supplierAccount"></el-input>
+						<el-input
+							type="text"
+							maxlength="20"
+							size="small"
+							style="width:350px;"
+							v-model="supplierMsg.supplierAccount"
+						></el-input>
 						<el-tooltip class="item" effect="light" content="账号格式：agent加3~5数字组成" placement="top">
 							<i class="el-icon-warning" style="color:#1cc09f"></i>
 						</el-tooltip>
@@ -48,11 +78,18 @@
 							type="password"
 							size="small"
 							style="width:350px;"
+							maxlength="20"
 							v-model="supplierMsg.supplierPassword"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="确认密码：" prop="password">
-						<el-input type="password" size="small" style="width:350px;" v-model="supplierMsg.password"></el-input>
+						<el-input
+							type="password"
+							maxlength="20"
+							size="small"
+							style="width:350px;"
+							v-model="supplierMsg.password"
+						></el-input>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -152,18 +189,19 @@ export default {
 				contacts: [
 					{ required: true, message: "请填写联系人", trigger: "blur" }
 				],
-				phone: [{ required: true, message: "请填写电话", trigger: "blur" },
-          {
-            validator: (rule, value, callback) => {
-              if (/^1[34578]\d{9}$/.test(value) == false) {
-                callback(new Error("请输入正确的电话号码"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "blur"
-          }
-        ],
+				phone: [
+					{ required: true, message: "请填写电话", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/^1[3456789]\d{9}$/.test(value) == false) {
+								callback(new Error("请输入正确的电话号码"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
 				address: [
 					{ required: true, message: "请填写详细地址", trigger: "blur" }
 				],
@@ -184,14 +222,15 @@ export default {
 					}
 				],
 				supplierRoleId: [
-					{ required: true, message: "请选择角色", trigger: "change" }
+					{ required: false, message: "请选择角色", trigger: "change" }
 				],
 				supplierAccount: [
 					{ required: true, message: "请填写账号", trigger: "blur" },
+					{ max: 10, min: 8, message: "请输入格式为：agent加3~5个数字组成", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (value.includes("agent") == false) {
-								callback(new Error("请输入格式为：agent加3~5数字组成"));
+							if (/^(?:agent\d+|\d{3,5})$/.test(value) === false) {
+								callback(new Error("请输入格式为：agent加3~5个数字组成"));
 							} else {
 								callback();
 							}
@@ -321,16 +360,16 @@ export default {
 			});
 			return encrypted.toString();
 		},
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.addSupplier();
-        } else {
-          this.$message.warning("请填写完整信息！");
-          return false;
-        }
-      });
-    },
+		submitForm(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.addSupplier();
+				} else {
+					this.$message.warning("请填写完整信息！");
+					return false;
+				}
+			});
+		},
 		addSupplier() {
 			this.savearea();
 			let pass = this.supplierMsg.supplierPassword;

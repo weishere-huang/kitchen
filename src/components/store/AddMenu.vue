@@ -24,6 +24,8 @@
 						placeholder="请选择"
 						v-model="addMenu.recipeName"
 						@focus="dialogCoobook = true"
+						maxlength="20"
+						:readonly="true"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品分类：" prop="itemCate">
@@ -39,10 +41,17 @@
 						style="width:300px;"
 						placeholder="单位：元"
 						step="0.01"
+						maxlength="20"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品库存：" prop="stockNow">
-					<el-input type="number" size="small" style="width:300px;" v-model.number="addMenu.stockNow"></el-input>
+					<el-input
+						maxlength="20"
+						type="number"
+						size="small"
+						style="width:300px;"
+						v-model.number="addMenu.stockNow"
+					></el-input>
 				</el-form-item>
 				<el-form-item label="上/下架：" prop="state">
 					<el-radio v-model="addMenu.state" label="1">上架</el-radio>
@@ -55,6 +64,7 @@
 				<div class="line"></div>
 				<el-form-item label="商品名称：">
 					<el-input
+						maxlength="20"
 						type="text"
 						size="small"
 						:disabled="true"

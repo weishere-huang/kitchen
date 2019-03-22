@@ -106,15 +106,15 @@
 					<span>{{editPassword.account}}</span>
 				</el-form-item>
 				<el-form-item label="原密码：" prop="oldPassword">
-					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.oldPassword"></el-input>
+					<el-input type="password" maxlength="25" style="width:99%;" v-model="editPassword.oldPassword"></el-input>
 				</el-form-item>
 				<el-form-item label="新密码：" prop="newPassword">
-					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.newPassword"></el-input>
+					<el-input type="password" maxlength="20" style="width:99%;" v-model="editPassword.newPassword"></el-input>
 				</el-form-item>
 				<el-form-item label="再次输入：" prop="repetitionPassword">
 					<el-input
 						type="password"
-						rows="4"
+						maxlength="20"
 						style="width:99%;"
 						v-model="editPassword.repetitionPassword"
 					></el-input>
@@ -154,7 +154,19 @@ export default {
 					{ required: true, message: "请输入旧密码", trigger: "blur" }
 				],
 				newPassword: [
-					{ required: true, message: "请输入新密码", trigger: "blur" }
+					{ required: true, message: "请输入新密码", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/^\w{6,20}$/.test(value) === false) {
+								callback(new Error("请输入6到20位的密码"));
+							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+								callback(new Error("你的密码过于简单，请重新输入"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
 				],
 				repetitionPassword: [
 					{ required: true, message: "请再次输入新密码", trigger: "blur" },
@@ -350,36 +362,19 @@ export default {
 		},
 
 		pathto(a) {
-			console.log(
-				this.$router.app.$options.router.options.routes.find(item => {
-					return item.path == "/AdminOrder";
-				})
-			);
 			if (a === 0) {
-				if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/AdminOrder";
-					}).path === "/AdminOrder"
-				) {
+				if (JSON.parse(sessionStorage.getItem("user")).employeeType == 0) {
 					this.$router.push({ path: "/AdminOrder" });
 				} else if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/Order";
-					}).path === "/Order"
+					JSON.parse(sessionStorage.getItem("user")).employeeType == 1
 				) {
 					this.$router.push({ path: "/Order" });
 				}
 			} else if (a === 1) {
-				if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/AdminStore";
-					}).path === "/AdminStore"
-				) {
+				if (JSON.parse(sessionStorage.getItem("user")).employeeType == 0) {
 					this.$router.push({ path: "/AdminStore" });
 				} else if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/Store";
-					}).path === "/Store"
+					JSON.parse(sessionStorage.getItem("user")).employeeType == 1
 				) {
 					this.$router.push({ path: "/Store" });
 				}
@@ -491,7 +486,7 @@ export default {
 		font-size: 16px;
 		margin: 0 2px;
 		&:hover {
-			color: #830404;
+			color: #e7d31f;
 			font-weight: bold;
 		}
 	}

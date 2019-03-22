@@ -251,3 +251,7 @@ input[type="number"] {
 .el-cascader-menu__item.is-active {
   color: #1cc09f;
 }
+.el-input-group__append,
+.el-input-group__prepend {
+  padding: 0 8px;
+}

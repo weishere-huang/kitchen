@@ -3,12 +3,14 @@
 		<!-- <router-view></router-view> -->
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<el-button
+        <permission-button
+          permCode='system_role_list_lookup.system_role_list_add'
+          banType='hide'
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/RoleManagement/AddRole'})"
-				>添加角色</el-button>
+				>添加角色</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -64,12 +66,7 @@ export default {
 					width: 90
 				}
 			],
-			tableData: [
-				{
-					admin: "商城管理员",
-					phone: "张小红专用"
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
 			currentPage: 1,
@@ -87,9 +84,10 @@ export default {
 				if (params.rowData.id === 1) {
 					this.$message.warning("超级管理员禁止修改权限!");
 					return;
+				} else {
+					this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
 				}
 				console.log(params);
-				this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
 			}
 			if (params.type === "delete") {
 				console.log(params);
