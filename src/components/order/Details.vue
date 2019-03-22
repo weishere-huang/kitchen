@@ -186,14 +186,14 @@
 							<span>{{orderDetails.phone}}</span>
 						</el-form-item>
 						<el-form-item label="商品总金额：">
-							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney+orderDetails.postFee}}</span>
+							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100+orderDetails.postFee}}</span>
 							<span>（含配送费 {{orderDetails.postFee}}元）</span>
 						</el-form-item>
 						<el-form-item label="- 优惠：">
 							<span>¥ 0.00</span>
 						</el-form-item>
 						<el-form-item label="实付：">
-							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney+orderDetails.postFee}}</span>
+							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100+orderDetails.postFee}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -236,7 +236,7 @@
 				></table-list>
 				<div class="total">
 					<span style=" font-weight: 700;font-size:16px;">
-						合计：￥{{orderDetails.orderMoney+orderDetails.postFee}}
+						合计：￥{{orderDetails.orderMoney/100+orderDetails.postFee}}
 						<span
 							style=" font-weight:0;font-size:14px;"
 						>（含运费{{orderDetails.postFee}}元）</span>
@@ -287,7 +287,10 @@ export default {
 				{
 					label: "价格",
 					prop: "itemPrice",
-					width: 90
+					width: 90,
+					formatter: function(row, column) {
+						return "￥" + row.itemPrice/100;
+					}
 				},
 				{
 					label: "数量",
@@ -299,7 +302,7 @@ export default {
 					prop: "subtotal",
 					width: 120,
 					formatter: function(row, column) {
-						return (row.subtotal = row.itemPrice * row.number);
+						return (row.subtotal = row.itemPrice/100 * row.number);
 					}
 				}
 			],

@@ -362,36 +362,19 @@ export default {
 		},
 
 		pathto(a) {
-			console.log(
-				this.$router.app.$options.router.options.routes.find(item => {
-					return item.path == "/AdminOrder";
-				})
-			);
 			if (a === 0) {
-				if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/AdminOrder";
-					}).path === "/AdminOrder"
-				) {
+				if (JSON.parse(sessionStorage.getItem("user")).employeeType == 0) {
 					this.$router.push({ path: "/AdminOrder" });
 				} else if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/Order";
-					}).path === "/Order"
+					JSON.parse(sessionStorage.getItem("user")).employeeType == 1
 				) {
 					this.$router.push({ path: "/Order" });
 				}
 			} else if (a === 1) {
-				if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/AdminStore";
-					}).path === "/AdminStore"
-				) {
+				if (JSON.parse(sessionStorage.getItem("user")).employeeType == 0) {
 					this.$router.push({ path: "/AdminStore" });
 				} else if (
-					this.$router.app.$options.router.options.routes.find(item => {
-						return item.path == "/Store";
-					}).path === "/Store"
+					JSON.parse(sessionStorage.getItem("user")).employeeType == 1
 				) {
 					this.$router.push({ path: "/Store" });
 				}
@@ -503,7 +486,7 @@ export default {
 		font-size: 16px;
 		margin: 0 2px;
 		&:hover {
-			color: #830404;
+			color: #e7d31f;
 			font-weight: bold;
 		}
 	}

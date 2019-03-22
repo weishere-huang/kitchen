@@ -26,6 +26,7 @@
 							placeholder="请选择"
 							suffix-icon="el-icon-arrow-down"
 							maxlength="20"
+							:readonly="true"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱分类：" prop="cateId">

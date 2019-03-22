@@ -25,6 +25,7 @@
 						v-model="addMenu.recipeName"
 						@focus="dialogCoobook = true"
 						maxlength="20"
+						:readonly="true"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品分类：" prop="itemCate">
