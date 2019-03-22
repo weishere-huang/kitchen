@@ -74,7 +74,7 @@ export default {
 	data() {
 		return {
 			serviceRules: {
-				areaCode: [],
+				areaCode: [{ required: true, message: "请选择网点地区", trigger: "blur" }],
 				title: [{ required: true, message: "请输入网点名称", trigger: "blur" }],
 				address: [],
 				phone: [
@@ -91,17 +91,6 @@ export default {
 						message: "请选择服务范围",
 						trigger: "change"
 					}
-					// {
-					// 	//todo 这里的验证不完善
-					// 	validator: (rule, value, callback) => {
-					// 		if (value != []) {
-					// 			callback(new Error("必须选择一种支付方式"));
-					// 		} else {
-					// 			callback();
-					// 		}
-					// 	},
-					// 	trigger: "change"
-					// }
 				]
 			},
 			province: [],
@@ -163,13 +152,13 @@ export default {
 			let p = this.province.find(item => {
 				return this.provinceCode === item.adcode;
 			});
-			console.log(p);
 			if (p != null) {
 				this.pname = p.areaName;
 				this.cities = p.children;
 			} else {
 				this.pname = null;
 			}
+			// todo 默认为第一个市
 			this.addMsg.areaCode = this.pname;
 		},
 
@@ -214,7 +203,6 @@ export default {
 				}
 			}
 			// 服务范围
-			console.log("执行");
 			this.addMsg.serviceMode = this.addMsg.serviceMode.split(",");
 			this.serviceMode = this.addMsg.serviceMode;
 		}

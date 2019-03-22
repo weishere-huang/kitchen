@@ -3,12 +3,14 @@
 		<!-- <router-view></router-view> -->
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<el-button
+        <permission-button
+          permCode='system_role_list_lookup.system_role_list_add'
+          banType='hide'
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/RoleManagement/AddRole'})"
-				>添加角色</el-button>
+				>添加角色</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
