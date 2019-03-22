@@ -87,7 +87,8 @@ export default {
               } else {
                 callback();
               }
-            },
+            }
+          }
 				],
 				phone: [
 					{ required: true, message: "请输入电话", trigger: "blur" },
