@@ -106,15 +106,15 @@
 					<span>{{editPassword.account}}</span>
 				</el-form-item>
 				<el-form-item label="原密码：" prop="oldPassword">
-					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.oldPassword"></el-input>
+					<el-input type="password" maxlength="25" style="width:99%;" v-model="editPassword.oldPassword"></el-input>
 				</el-form-item>
 				<el-form-item label="新密码：" prop="newPassword">
-					<el-input type="password" rows="4" style="width:99%;" v-model="editPassword.newPassword"></el-input>
+					<el-input type="password" maxlength="20" style="width:99%;" v-model="editPassword.newPassword"></el-input>
 				</el-form-item>
 				<el-form-item label="再次输入：" prop="repetitionPassword">
 					<el-input
 						type="password"
-						rows="4"
+						maxlength="20"
 						style="width:99%;"
 						v-model="editPassword.repetitionPassword"
 					></el-input>
@@ -154,7 +154,19 @@ export default {
 					{ required: true, message: "请输入旧密码", trigger: "blur" }
 				],
 				newPassword: [
-					{ required: true, message: "请输入新密码", trigger: "blur" }
+					{ required: true, message: "请输入新密码", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/^\w{6,20}$/.test(value) === false) {
+								callback(new Error("请输入6到20位的密码"));
+							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+								callback(new Error("你的密码过于简单，请重新输入"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
 				],
 				repetitionPassword: [
 					{ required: true, message: "请再次输入新密码", trigger: "blur" },

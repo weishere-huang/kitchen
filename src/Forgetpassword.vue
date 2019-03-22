@@ -64,7 +64,7 @@
 				</el-form-item>
 				<el-form-item
 					prop="newPassword"
-					:rules="[{ required: true, message: '密码不能为空', trigger: 'blur'}]"
+					:rules="[{ required: true, message: '密码不能为空', trigger: 'blur'},{validator:validator1,trigger:'blur'}]"
 				>
 					<el-input type="password" placeholder="输入新密码" v-model="newPasswordMsg.newPassword">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
@@ -127,6 +127,15 @@ export default {
 				this.newPasswordMsg.repetitionPassword
 			) {
 				callback(new Error("两次输入的密码不一致"));
+			} else {
+				callback();
+			}
+		},
+		validator1(rule, value, callback) {
+			if (/^\w{6,20}$/.test(value) === false) {
+				callback(new Error("请输入6到20位的密码"));
+			} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+				callback(new Error("不能是6位全部一样"));
 			} else {
 				callback();
 			}
