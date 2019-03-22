@@ -503,7 +503,7 @@ export default {
 		font-size: 16px;
 		margin: 0 2px;
 		&:hover {
-			color: #830404;
+			color: #e7d31f;
 			font-weight: bold;
 		}
 	}

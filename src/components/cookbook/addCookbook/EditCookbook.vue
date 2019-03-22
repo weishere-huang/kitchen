@@ -26,6 +26,7 @@
 							placeholder="请选择"
 							suffix-icon="el-icon-arrow-down"
 							maxlength="20"
+							:readonly="true"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱分类：" prop="cateId">
@@ -77,7 +78,13 @@
 						</span>
 					</el-form-item>
 					<el-form-item label="菜谱价格：" prop="recipePrice">
-						<el-input maxlength="20" size="small" style="width:400px;" placeholder="单位：元" v-model="cookbook.recipePrice"></el-input>
+						<el-input
+							maxlength="20"
+							size="small"
+							style="width:400px;"
+							placeholder="单位：元"
+							v-model="cookbook.recipePrice"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="净含量：" prop="weight">
 						<el-input

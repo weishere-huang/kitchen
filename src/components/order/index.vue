@@ -170,7 +170,7 @@ export default {
 					prop: "orderMoney",
 					width: 70,
 					formatter: function(row, column) {
-						return "￥" + row.orderMoney;
+						return "￥" + row.orderMoney/100;
 					}
 				},
 				{

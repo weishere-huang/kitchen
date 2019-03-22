@@ -25,6 +25,7 @@
 						@focus="dialogCookbook=true"
 						v-model="editmenu.recipeName"
 						maxlength="20"
+						:readonly="true"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品分类：" prop="itemCate">

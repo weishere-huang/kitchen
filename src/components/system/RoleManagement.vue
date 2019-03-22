@@ -82,9 +82,10 @@ export default {
 				if (params.rowData.id === 1) {
 					this.$message.warning("超级管理员禁止修改权限!");
 					return;
+				} else {
+					this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
 				}
 				console.log(params);
-				this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
 			}
 			if (params.type === "delete") {
 				console.log(params);

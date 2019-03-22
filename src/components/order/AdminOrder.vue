@@ -171,7 +171,7 @@ export default {
 					prop: "orderMoney",
 					width: 70,
 					formatter: function(row, column) {
-						return "￥" + row.orderMoney;
+						return "￥" + row.orderMoney / 100;
 					}
 				},
 				{
@@ -182,7 +182,7 @@ export default {
 				{
 					label: "订单状态",
 					prop: "platformState",
-					width: 100,
+					width: 80,
 					formatter: function(row, column) {
 						return row.platformState == 0
 							? "待付款"
@@ -196,6 +196,11 @@ export default {
 							? "已关闭"
 							: "";
 					}
+				},
+				{
+					label: "供应商名称",
+					prop: "payType",
+					width: 100
 				}
 			],
 
