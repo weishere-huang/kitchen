@@ -74,7 +74,9 @@ export default {
 	data() {
 		return {
 			serviceRules: {
-				areaCode: [{ required: true, message: "请选择网点地区", trigger: "blur" }],
+				areaCode: [
+					{ required: true, message: "请选择网点地区", trigger: "blur" }
+				],
 				title: [{ required: true, message: "请输入网点名称", trigger: "blur" }],
 				address: [],
 				phone: [
@@ -211,14 +213,14 @@ export default {
 		this.province = JSON.parse(sessionStorage.getItem("area"))[0].children[0];
 		//编辑用
 		if (this.editMsg != null) {
-			this.addMsg = this.editMsg;
+			Object.assign(this.addMsg, this.editMsg);
 			this.startedit();
 		}
 	},
 	watch: {
 		editMsg() {
 			if (this.editMsg != null) {
-				this.addMsg = this.editMsg;
+				Object.assign(this.addMsg, this.editMsg);
 				this.startedit();
 			}
 		}

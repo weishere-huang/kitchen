@@ -4,7 +4,7 @@
 			label-width="100px"
 			style="margin-top:20px;"
 			:model="addInfo"
-			:rules="rules"
+			:rules="rulesAddInfo"
 			ref="ruleForm"
 		>
 			<el-form-item label="登录名：" prop="account">
@@ -63,7 +63,7 @@ export default {
 		return {
 			options: {},
 			roleId: "",
-			rules: {
+			rulesAddInfo: {
 				account: [
 					{ required: true, message: "请输入账号", trigger: "blur" },
 					{
@@ -78,6 +78,7 @@ export default {
 					}
 				],
 				password: [
+				
 					{
 						validator: (rule, value, callback) => {
 							if (value === "" || value == null) {
@@ -86,12 +87,15 @@ export default {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));
+							} else {
+								callback();
 							}
 						},
 						trigger: "change"
 					}
 				],
 				confirmPassword: [
+				
 					{
 						validator: (rule, value, callback) => {
 							if (value !== this.addInfo.password) {
@@ -143,8 +147,11 @@ export default {
 		},
 		handleAffirm(formName) {
 			let params = { type: "affirm", value: this.addInfo, isHide: false };
+			// console.log(params);
 			this.$refs[formName].validate(valid => {
+				console.log(valid);
 				if (valid) {
+					console.log(params);
 					this.$emit("beforeadd", params);
 				} else {
 					return false;
