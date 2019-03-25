@@ -26,7 +26,7 @@
 					maxlength="20"
 				></el-input>
 			</el-form-item>
-			<el-form-item label="确认密码：">
+			<el-form-item label="确认密码：" prop="confirmPassword">
 				<el-input
 					placeholder="请再次输入登录密码"
 					size="small"
@@ -68,7 +68,7 @@ export default {
 					{ required: true, message: "请输入账号", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^[a-zA-Z]([-_a-zA-Z0-9]{6,20})$/.test(value) == false) {
+							if (/^[a-zA-Z]([-_a-zA-Z0-9]{5,20})$/.test(value) == false) {
 								callback(new Error("必须为6~20位字符组成,以字母开头"));
 							} else {
 								callback();
@@ -80,14 +80,27 @@ export default {
 				password: [
 					{
 						validator: (rule, value, callback) => {
-							if (/^\w{6,20}$/.test(value) === false) {
+							if (value === "" || value == null) {
+								callback();
+							} else if (/^\w{6,20}$/.test(value) === false) {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));
+							}
+						},
+						trigger: "change"
+					}
+				],
+				confirmPassword: [
+					{
+						validator: (rule, value, callback) => {
+							if (value !== this.addInfo.password) {
+								callback(new Error("两次密码输入不一致"));
 							} else {
 								callback();
 							}
-						}
+						},
+						trigger: "blur"
 					}
 				],
 				phone: [
@@ -106,7 +119,7 @@ export default {
 				roleId: [{ required: true, message: "请选择角色", trigger: "change" }]
 			},
 			addInfo: {
-				userName: "",
+				account: "",
 				password: "",
 				confirmPassword: "",
 				phone: "",
