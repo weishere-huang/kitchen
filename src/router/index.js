@@ -19,6 +19,7 @@ import AddSupplier from '@/components/supplier/AddSupplier'
 import EditSupplier from '@/components/supplier/EditSupplier'
 import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
+import SystemLog from '@/components/system/SystemLog'
 import System from '@/components/system/System'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
 import EditRole from '@/components/system/addOrEditRole/EditRole'
@@ -243,6 +244,17 @@ const router = new Router({
       component: System,
       props: {
         pageName: '系统设置'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/SystemLog',
+      name: 'SystemLog',
+      component: SystemLog,
+      props: {
+        pageName: '系统日志'
       },
       meta: {
         requireAuth: true,

@@ -52,16 +52,16 @@
 					</tr>
 					<tr v-for="(item1, index) in item.items" :key="index">
 						<td>{{item1.itemName}}</td>
-						<td>￥{{item1.itemPrice}}元</td>
+						<td>￥{{item1.itemPrice/100}}元</td>
 						<td>{{item1.number}}</td>
-						<td>￥{{item1.itemPrice*item1.number}}元</td>
+						<td>￥{{item1.itemPrice/100*item1.number}}元</td>
 					</tr>
 				</table>
 			</el-col>
 			<el-col :span="24">
 				<span style="float:right;">
-					<h5 style="display:inline-block;font-size:14px;">合计：¥ {{item.orderMoney+item.postFee}}</h5>
-					（含运费{{item.postFee}}元）
+					<h5 style="display:inline-block;font-size:14px;">合计：¥ {{item.orderMoney/100+item.postFee}}</h5>
+					（含运费{{item.postFee/100}}元）
 				</span>
 			</el-col>
 			<el-col :span="24">
@@ -163,7 +163,7 @@ export default {
 		);
 	},
 	updated() {
-		this.preview(1);
+		// this.preview(1);
 	}
 };
 </script>

@@ -62,7 +62,7 @@ export default {
 	data() {
 		return {
 			options: {},
-			roleId: '',
+			roleId: "",
 			rules: {
 				account: [
 					{ required: true, message: "请输入账号", trigger: "blur" },
@@ -78,17 +78,17 @@ export default {
 					}
 				],
 				password: [
-          {
-            validator: (rule, value, callback) => {
-              if (/^\w{6,20}$/.test(value) === false) {
-                callback(new Error("请输入6到20位的密码"));
-              } else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
-                callback(new Error("你的密码过于简单，请重新输入"));
-              } else {
-                callback();
-              }
-            }
-          }
+					{
+						validator: (rule, value, callback) => {
+							if (/^\w{6,20}$/.test(value) === false) {
+								callback(new Error("请输入6到20位的密码"));
+							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+								callback(new Error("你的密码过于简单，请重新输入"));
+							} else {
+								callback();
+							}
+						}
+					}
 				],
 				phone: [
 					{ required: true, message: "请输入电话", trigger: "blur" },

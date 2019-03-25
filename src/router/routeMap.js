@@ -189,6 +189,7 @@ export default [{
         defaultDock: true,
         permissionCode: 'system_employee_lookup'
       },
+
       {
         menu: '管理员列表',
         route: '/Administrator',
@@ -210,6 +211,12 @@ export default [{
         routeReg: /^\/RoleManagement\/EditRole\/\d{1,}$/i,
         visible: true,
         permissionCode: 'system_role_update_lookup'
+      },
+      {
+        menu: '系统日志',
+        route: '/SystemLog',
+        defaultDock: true,
+        permissionCode: 'system_employee_lookup'
       },
     ]
   },

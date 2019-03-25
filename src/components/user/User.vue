@@ -166,8 +166,6 @@ export default {
 					console.log(result);
 					if (result.data.code === 200) {
 						this.getlist();
-					} else {
-						this.getlist();
 					}
 				},
 				({ type, info }) => {
@@ -220,6 +218,9 @@ export default {
 				result => {
 					console.log(result);
 					this.tableData = result.data.data.content;
+					// for (let i = 0; i < this.tableData.length; i++) {
+					// 	this.tableData[i].state = this.tableData[i].state.toString;
+					// }
 					this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
