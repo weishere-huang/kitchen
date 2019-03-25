@@ -78,12 +78,9 @@ export default {
 					}
 				],
 				password: [
-				
 					{
 						validator: (rule, value, callback) => {
-							if (value === "" || value == null) {
-								callback();
-							} else if (/^\w{6,20}$/.test(value) === false) {
+							if (/^\w{6,20}$/.test(value) === false) {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));
@@ -95,7 +92,6 @@ export default {
 					}
 				],
 				confirmPassword: [
-				
 					{
 						validator: (rule, value, callback) => {
 							if (value !== this.addInfo.password) {
@@ -141,6 +137,13 @@ export default {
 		}
 	},
 	methods: {
+		judge() {
+			if (this.editInfo == "" || this.editInfo == undefined) {
+				return false;
+			} else {
+				return true;
+			}
+		},
 		handleCancel(value) {
 			let params = { type: "cancel", isHide: false };
 			this.$emit("beforeadd", params);
@@ -200,11 +203,35 @@ export default {
 		if (this.editInfo != null) {
 			this.addInfo = this.editInfo;
 		}
+		if (this.editInfo == null) {
+			this.rulesAddInfo.password.push({
+				required: true,
+				message: "请输入密码",
+				trigger: "blur"
+			});
+			this.rulesAddInfo.confirmPassword.push({
+				required: true,
+				message: "请再次输入密码",
+				trigger: "blur"
+			});
+		}
 	},
 	watch: {
 		editInfo() {
 			if (this.editInfo != null) {
 				this.addInfo = this.editInfo;
+			}
+			if (this.editInfo == null) {
+				this.rulesAddInfo.password.push({
+					required: true,
+					message: "请输入密码",
+					trigger: "blur"
+				});
+				this.rulesAddInfo.confirmPassword.push({
+					required: true,
+					message: "请再次输入密码",
+					trigger: "blur"
+				});
 			}
 		}
 	}
