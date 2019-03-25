@@ -29,6 +29,9 @@ import AddCookbook from '@/components/cookbook/addCookbook/AddCookbook'
 import EditCookbook from '@/components/cookbook/addCookbook/EditCookbook'
 import User from '@/components/user/User'
 import GuestBook from '@/components/user/GuestBook'
+import Information from '@/components/information/index'
+import NewInformation from '@/components/information/NewInformation'
+import DetailsInformation from '@/components/information/DetailsInformation'
 
 
 Vue.use(Router)
@@ -160,28 +163,6 @@ const router = new Router({
         requireAuth: true,
       },
     },
-    // {
-    //   path: '/AddMenu',
-    //   name: 'AddMenu',
-    //   component: AddMenu,
-    //   props: {
-    //     pageName: '添加商品'
-    //   },
-    //   meta: {
-    //     requireAuth: true,
-    //   },
-    // },
-    // {
-    //   path: '/EditMenu',
-    //   name: 'EditMenu',
-    //   component: EditMenu,
-    //   props: {
-    //     pageName: '修改商品'
-    //   },
-    //   meta: {
-    //     requireAuth: true,
-    //   },
-    // },
     {
       path: '/Service',
       name: 'Service',
@@ -382,6 +363,40 @@ const router = new Router({
       meta: {
         requireAuth: true,
       },
+    },
+    {
+      path: '/Information',
+      name: 'Information',
+      component: Information,
+      props: {
+        pageName: '消息通知'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+          path: 'NewInformation',
+          name: 'NewInformation',
+          component: NewInformation,
+          props: {
+            pageName: '发送消息'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'DetailsInformation/:id/',
+          name: 'DetailsInformation',
+          component: DetailsInformation,
+          props: {
+            pageName: '查看详情'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        }
+      ]
     },
   ]
 })

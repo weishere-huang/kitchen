@@ -179,6 +179,30 @@ export default [{
     ]
   },
   {
+    menu: '消息通知',
+    permissionCode: 'information',
+    defaultDock: false,
+    icon: '&#xe646;',
+    subMenu: [{
+        menu: '消息通知',
+        route: '/Information',
+        permissionCode: 'user_manager_list_lookup'
+      },
+      {
+        menu: '发送消息',
+        route: '/Information/NewInformation',
+        visible: true,
+        permissionCode: 'user_manager_list_lookup'
+      },
+      {
+        menu: '查看详情',
+        routeReg: /^\/Information\/DetailsInformation\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'user_manager_list_lookup'
+      }
+    ]
+  },
+  {
     menu: '系统管理',
     permissionCode: 'system',
     defaultDock: false,

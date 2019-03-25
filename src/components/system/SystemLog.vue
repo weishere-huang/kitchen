@@ -118,7 +118,7 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			currentPage: 1,
-			total: 0,
+			total: 10,
 			searchDate1: null,
 			searchDate2: null,
 			logType: [
