@@ -38,7 +38,7 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.itemLimit"
+								v-model.number="systemMsg.itemLimit"
 								style="width:300px;"
 								placeholder="如20"
 							></el-input>
@@ -49,7 +49,7 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.carLimit"
+								v-model.number="systemMsg.carLimit"
 								style="width:300px;"
 								placeholder="如99"
 							></el-input>
@@ -65,7 +65,7 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.payTimeout"
+								v-model.number="systemMsg.payTimeout"
 								style="width:300px;"
 								placeholder="分钟"
 							>
@@ -83,7 +83,7 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.receiveTimeout"
+								v-model.number="systemMsg.receiveTimeout"
 								style="width:300px;"
 								placeholder="小时"
 							>
@@ -96,7 +96,7 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.shippingFee"
+								v-model.number="systemMsg.shippingFee"
 								style="width:100px;"
 								placeholder="元"
 								step="0.01"
@@ -128,7 +128,7 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.sendMoney"
+								v-model.number="systemMsg.sendMoney"
 								style="width:300px;"
 								placeholder="元"
 								step="0.01"
