@@ -11,6 +11,7 @@
 				<el-form label-width="200px" size="small" :inline-message="true" style="margin-top: 20px;">
 					<el-form-item label="消息标题：" prop>
 						<el-input
+              v-model="addInfo.title"
 							:readonly="true"
 							type="text"
 							maxlength="20"
@@ -24,6 +25,7 @@
 					</el-form-item>
 					<el-form-item label="消息内容：" prop>
 						<el-input
+              v-model="addInfo.content"
 							:readonly="true"
 							type="textarea"
 							size="small"
@@ -34,7 +36,7 @@
 					</el-form-item>
 					<el-form-item label="消息图片：" prop>
 						<div class="show_msg_pic" @click="showMsgPic">
-							<img :src="msgPic" alt v-if="msgPic!=''">
+							<img :src="addInfo.img" alt v-if="addInfo.img!=''">
 							<img src="../../assets/image/pic.png" alt v-else>
 						</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
@@ -56,7 +58,12 @@ export default {
 		return {
 			msgPic: "",
 			dialogVisible: false,
-			dialogImageUrl: ""
+			dialogImageUrl: "",
+      addInfo:{
+        title: "",
+        content: "",
+        img: "",
+      },
 		};
 	},
 	methods: {
@@ -128,9 +135,34 @@ export default {
 					type: "error"
 				});
 			}
-		}
+		},
+    getone(id){
+      this.Axios(
+        {
+          params: {
+            messageId:id
+          },
+          option: {},
+          type: "get",
+          url: "/api-message/message/getOne"
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.addInfo = result.data.data;
+          console.log(this.addInfo);
+        },
+        ({type, info}) => {
+        }
+      );
+
+    }
 	},
-	created() {}
+	created() {
+	  let id = this.$route.params.id
+	  this.getone(id);
+  }
 };
 </script>
 
