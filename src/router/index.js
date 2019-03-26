@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home/index'
+import AdminHome from '@/components/home/AdminHome'
 import Order from '@/components/order/index'
 import AdminOrder from '@/components/order/AdminOrder'
 import Store from '@/components/store/index'
@@ -45,6 +46,17 @@ const router = new Router({
       path: '/Home',
       name: 'Home',
       component: Home,
+      props: {
+        pageName: '主页'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/AdminHome',
+      name: 'AdminHome',
+      component: AdminHome,
       props: {
         pageName: '主页'
       },

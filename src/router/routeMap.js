@@ -7,10 +7,16 @@ export default [{
     defaultDock: true,
     icon: '&#xe626;',
     subMenu: [{
-      menu: '首页',
-      route: '/Home',
-      permissionCode: ''
-    }]
+        menu: '首页',
+        route: '/Home',
+        permissionCode: ''
+      },
+      {
+        menu: '首页',
+        route: '/AdminHome',
+        permissionCode: ''
+      }
+    ]
   },
   {
     menu: '订单管理',

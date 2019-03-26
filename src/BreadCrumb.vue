@@ -42,7 +42,7 @@ export default {
 			let matched = this.$route.matched.filter(item => item && item.name);
 			let rList = [{ path: "/Home", meta: { pageName: "主页" } }];
 			matched.forEach(item => {
-				if (item.path !== "/Home")
+				if (item.path !== "/Home" && item.path !== "/AdminHome")
 					rList.push({
 						path: item.path,
 						meta: { pageName: item.props.default.pageName }
