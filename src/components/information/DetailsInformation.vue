@@ -11,7 +11,7 @@
 				<el-form label-width="200px" size="small" :inline-message="true" style="margin-top: 20px;">
 					<el-form-item label="消息标题：" prop>
 						<el-input
-              v-model="addInfo.title"
+							v-model="addInfo.title"
 							:readonly="true"
 							type="text"
 							maxlength="20"
@@ -25,7 +25,7 @@
 					</el-form-item>
 					<el-form-item label="消息内容：" prop>
 						<el-input
-              v-model="addInfo.content"
+							v-model="addInfo.content"
 							:readonly="true"
 							type="textarea"
 							size="small"
@@ -35,8 +35,8 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item label="消息图片：" prop>
-						<div class="show_msg_pic" @click="showMsgPic">
-							<img :src="addInfo.img" alt v-if="addInfo.img!=''">
+						<div class="show_msg_pic">
+							<img :src="addInfo.img" alt v-if="addInfo.img!=''" @click="showMsgPic">
 							<img src="../../assets/image/pic.png" alt v-else>
 						</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
@@ -59,17 +59,17 @@ export default {
 			msgPic: "",
 			dialogVisible: false,
 			dialogImageUrl: "",
-      addInfo:{
-        title: "",
-        content: "",
-        img: "",
-      },
+			addInfo: {
+				title: "",
+				content: "",
+				img: ""
+			}
 		};
 	},
 	methods: {
 		showMsgPic() {
 			this.dialogVisible = true;
-			this.dialogImageUrl = this.msgPic;
+			this.dialogImageUrl = this.addInfo.img;
 		},
 
 		submitForm(formName) {
@@ -136,33 +136,31 @@ export default {
 				});
 			}
 		},
-    getone(id){
-      this.Axios(
-        {
-          params: {
-            messageId:id
-          },
-          option: {},
-          type: "get",
-          url: "/api-message/message/getOne"
-        },
-        this
-      ).then(
-        result => {
-          console.log(result.data);
-          this.addInfo = result.data.data;
-          console.log(this.addInfo);
-        },
-        ({type, info}) => {
-        }
-      );
-
-    }
+		getone(id) {
+			this.Axios(
+				{
+					params: {
+						messageId: id
+					},
+					option: {},
+					type: "get",
+					url: "/api-message/message/getOne"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					this.addInfo = result.data.data;
+					console.log(this.addInfo);
+				},
+				({ type, info }) => {}
+			);
+		}
 	},
 	created() {
-	  let id = this.$route.params.id
-	  this.getone(id);
-  }
+		let id = this.$route.params.id;
+		this.getone(id);
+	}
 };
 </script>
 
