@@ -60,17 +60,11 @@ export default {
 				},
 				{
 					label: "发送时间",
-					prop: "sendTime",
+					prop: "gmtCreate",
 					width: 100
 				}
 			],
-			tableData: [
-				{
-					sendTime: "2019-03-15 11:44:01",
-					title: "订单发货，订单编号10429340238",
-					id: "32"
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
 			currentPage: 1,
@@ -100,25 +94,52 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
+      this.list();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
+			this.list();
 		},
 		handleSelectionChange() {},
 		handlechange(params) {
 			if (params.type === "detalis") {
 				console.log(params);
 				this.$router.push(
-					"/Information/DetailsInformation/" + params.rowData.id
+					"/Information/DetailsInformation/" + params.rowData.messageId
 				);
 			}
 		},
 		getRow(row, event) {
 			console.log(row);
-		}
+		},
+    list(){
+      this.Axios(
+        {
+          params: {
+            page:this.pageIndex,
+            size:this.pageSize
+          },
+          option: {
+            successMsg:"推送消息加载完成"
+          },
+          type: "get",
+          url: "/api-message/message/findList"
+
+        },
+        this
+      ).then(
+        result => {
+          console.log(result.data);
+          this.tableData = result.data.data.content;
+        },
+        ({type, info}) => {
+        }
+      );
+    },
 	},
 	created() {
+    this.list();
 		let a = this.$route.matched.find(item => item.name === "NewInformation")
 			? true
 			: false;
