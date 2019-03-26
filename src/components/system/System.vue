@@ -112,7 +112,7 @@
 							size="small"
 							type="number"
 							style="width:112px;"
-							v-model="systemMsg.allMoney"
+							v-model.number="systemMsg.allMoney"
 							v-if="systemMsg.moneyOff===true"
 						>
 							<template slot="append">元</template>
@@ -144,7 +144,7 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.retentionTime"
+								v-model.number="systemMsg.retentionTime"
 								placeholder="保留时间：小时"
 								style="width:116px;"
 							>
