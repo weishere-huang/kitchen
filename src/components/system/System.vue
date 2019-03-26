@@ -119,7 +119,12 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item label="起送金额：" prop="sendMoney">
-						<el-tooltip class="item" effect="light" content="当用户购买商品总价大于该设置，才允许下单。需要 ≥ 0" placement="right">
+						<el-tooltip
+							class="item"
+							effect="light"
+							content="当用户购买商品总价大于该设置，才允许下单。需要 ≥ 0"
+							placement="right"
+						>
 							<el-input
 								type="number"
 								size="small"
@@ -411,9 +416,15 @@ export default {
 					// result.data.data.allMoney = JSON.parse(result.data.data.allMoney);
 					console.log(result.data);
 					if (result.data.code === 200) {
-						if (result.data.data.allMoney != null && "") {
+						if (
+							result.data.data.allMoney != null &&
+							result.data.data.allMoney != ""
+						) {
 							this.systemMsg.moneyOff = true;
-							if (result.data.data.allMoney != null && "") {
+							if (
+								result.data.data.allMoney != null &&
+								result.data.data.allMoney != ""
+							) {
 								this.systemMsg.allMoney = result.data.data.allMoney / 100;
 							}
 						} else {

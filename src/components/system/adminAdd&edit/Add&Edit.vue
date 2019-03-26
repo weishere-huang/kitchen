@@ -4,7 +4,7 @@
 			label-width="100px"
 			style="margin-top:20px;"
 			:model="addInfo"
-			:rules="rules"
+			:rules="rulesAddInfo"
 			ref="ruleForm"
 		>
 			<el-form-item label="登录名：" prop="account">
@@ -62,8 +62,8 @@ export default {
 	data() {
 		return {
 			options: {},
-			roleId: '',
-			rules: {
+			roleId: "",
+			rulesAddInfo: {
 				account: [
 					{ required: true, message: "请输入账号", trigger: "blur" },
 					{
@@ -78,31 +78,31 @@ export default {
 					}
 				],
 				password: [
-          {
-            validator: (rule, value, callback) => {
-              if (value===""||value==null) {
-                callback();
-              }else if(/^\w{6,20}$/.test(value) === false){
-                callback(new Error("请输入6到20位的密码"));
-              }else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
-                callback(new Error("你的密码过于简单，请重新输入"));
-              }
-            },
-            trigger: "change"
-          },
+					{
+						validator: (rule, value, callback) => {
+							if (/^\w{6,20}$/.test(value) === false) {
+								callback(new Error("请输入6到20位的密码"));
+							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+								callback(new Error("你的密码过于简单，请重新输入"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "change"
+					}
 				],
-        confirmPassword:[
-          {
-            validator: (rule, value, callback) => {
-              if (value!== this.addInfo.password) {
-                callback(new Error("两次密码输入不一致"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "blur"
-          }
-        ],
+				confirmPassword: [
+					{
+						validator: (rule, value, callback) => {
+							if (value !== this.addInfo.password) {
+								callback(new Error("两次密码输入不一致"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
 				phone: [
 					{ required: true, message: "请输入电话", trigger: "blur" },
 					{
@@ -119,7 +119,7 @@ export default {
 				roleId: [{ required: true, message: "请选择角色", trigger: "change" }]
 			},
 			addInfo: {
-        account: "",
+				account: "",
 				password: "",
 				confirmPassword: "",
 				phone: "",
@@ -137,14 +137,24 @@ export default {
 		}
 	},
 	methods: {
+		judge() {
+			if (this.editInfo == "" || this.editInfo == undefined) {
+				return false;
+			} else {
+				return true;
+			}
+		},
 		handleCancel(value) {
 			let params = { type: "cancel", isHide: false };
 			this.$emit("beforeadd", params);
 		},
 		handleAffirm(formName) {
 			let params = { type: "affirm", value: this.addInfo, isHide: false };
+			// console.log(params);
 			this.$refs[formName].validate(valid => {
+				console.log(valid);
 				if (valid) {
+					console.log(params);
 					this.$emit("beforeadd", params);
 				} else {
 					return false;
@@ -193,11 +203,35 @@ export default {
 		if (this.editInfo != null) {
 			this.addInfo = this.editInfo;
 		}
+		if (this.editInfo == null) {
+			this.rulesAddInfo.password.push({
+				required: true,
+				message: "请输入密码",
+				trigger: "blur"
+			});
+			this.rulesAddInfo.confirmPassword.push({
+				required: true,
+				message: "请再次输入密码",
+				trigger: "blur"
+			});
+		}
 	},
 	watch: {
 		editInfo() {
 			if (this.editInfo != null) {
 				this.addInfo = this.editInfo;
+			}
+			if (this.editInfo == null) {
+				this.rulesAddInfo.password.push({
+					required: true,
+					message: "请输入密码",
+					trigger: "blur"
+				});
+				this.rulesAddInfo.confirmPassword.push({
+					required: true,
+					message: "请再次输入密码",
+					trigger: "blur"
+				});
 			}
 		}
 	}

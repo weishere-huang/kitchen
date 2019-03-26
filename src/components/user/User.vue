@@ -42,13 +42,11 @@
 				</el-table-column>
 				<el-table-column label="状态" min-width="100" show-overflow-tooltip>
 					<template slot-scope="scope">
-						<el-tooltip :content="scope.row.state=='1'?'禁用':'正常'" placement="top" effect="light">
+						<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
 							<el-switch
 								v-model="scope.row.state"
 								active-color="#13ce66"
 								inactive-color="#ff4949"
-								active-value="0"
-								inactive-value="1"
 								@change="changeState(scope.row,scope.$index)"
 							></el-switch>
 						</el-tooltip>
@@ -141,11 +139,6 @@ export default {
 	},
 	methods: {
 		changeState(row, index) {
-			// if (this.tableData[index].state == 1) {
-			// 	this.tableData[index].state = 0;
-			// } else {
-			// 	this.tableData[index].state = 1;
-			// }
 			console.log(this.tableData[index].state);
 			let qs = require("qs");
 			let data = qs.stringify({
@@ -165,8 +158,6 @@ export default {
 				result => {
 					console.log(result);
 					if (result.data.code === 200) {
-						this.getlist();
-					} else {
 						this.getlist();
 					}
 				},
@@ -218,8 +209,16 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
+					// console.log(result);
 					this.tableData = result.data.data.content;
+					for (let i = 0; i < this.tableData.length; i++) {
+						if (this.tableData[i].state == 0) {
+							this.tableData[i].state = true;
+						} else {
+							this.tableData[i].state = false;
+						}
+						// this.tableData[i].state = this.tableData[i].state.toString;
+					}
 					this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
