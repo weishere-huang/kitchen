@@ -80,6 +80,19 @@
 			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
 					<h4>销售额</h4>
+					<el-date-picker
+						class="data_style"
+						v-model="searchValue"
+						size="small"
+						type="daterange"
+						align="right"
+						unlink-panels
+						range-separator="~"
+						start-placeholder="开始日期"
+						end-placeholder="结束日期"
+						:picker-options="pickerOptions2"
+						value-format="yyyy/MM/dd"
+					></el-date-picker>
 				</div>
 				<div class="histogram_style">
 					<h4 style="text-align: center;line-height:52px;">销售额趋势</h4>
@@ -204,7 +217,39 @@ export default {
 					name: "回锅肉",
 					money: "44444"
 				}
-			]
+			],
+			pickerOptions2: {
+				shortcuts: [
+					{
+						text: "最近一周",
+						onClick(picker) {
+							const end = new Date();
+							const start = new Date();
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+							picker.$emit("pick", [start, end]);
+						}
+					},
+					{
+						text: "最近一个月",
+						onClick(picker) {
+							const end = new Date();
+							const start = new Date();
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+							picker.$emit("pick", [start, end]);
+						}
+					},
+					{
+						text: "最近三个月",
+						onClick(picker) {
+							const end = new Date();
+							const start = new Date();
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+							picker.$emit("pick", [start, end]);
+						}
+					}
+				]
+			},
+			searchValue: []
 		};
 	},
 	mounted() {
@@ -360,7 +405,15 @@ export default {
 			line-height: 60px;
 			overflow: hidden;
 			border-bottom: @border;
+			h4 {
+				display: inline-block;
+			}
+			.data_style {
+				margin-top: 15px;
+				float: right;
+			}
 		}
+
 		.histogram_style {
 		}
 	}
