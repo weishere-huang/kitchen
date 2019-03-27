@@ -275,7 +275,12 @@ export default {
 			]
 		};
 		echarts.init(document.getElementById("order_pie")).setOption({
+			tooltip: {
+				trigger: "item",
+				formatter: "{a} <br/>{b} : {c} ({d}%)"
+			},
 			series: {
+				name: "订单状态",
 				type: "pie",
 				data: [
 					{
