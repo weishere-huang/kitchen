@@ -39,8 +39,13 @@ export default {
 			//     matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
 			// }
 			// this.levelList = matched
+			let rList;
+			if (JSON.parse(sessionStorage.getItem("user")).employeeType == 1) {
+				rList = [{ path: "/Home", meta: { pageName: "主页" } }];
+			} else if (JSON.parse(sessionStorage.getItem("user")).employeeType == 0) {
+				rList = [{ path: "/AdminHome", meta: { pageName: "主页" } }];
+			}
 			let matched = this.$route.matched.filter(item => item && item.name);
-			let rList = [{ path: "/Home", meta: { pageName: "主页" } }];
 			matched.forEach(item => {
 				if (item.path !== "/Home" && item.path !== "/AdminHome")
 					rList.push({
