@@ -4,23 +4,23 @@
 			<h2>登录</h2>
 			<el-form :model="userMsg" :rules="userMsgRules" :status-icon="true" ref="userMsg">
 				<el-form-item prop="name">
-					<el-input v-model="userMsg.name" type="text" placeholder="手机号/用户名">
+					<el-input v-model="userMsg.name" type="text" maxlength="20" placeholder="手机号/用户名">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe646;</i>
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input v-model="userMsg.password" type="password" placeholder="密码">
+					<el-input v-model="userMsg.password" type="password" maxlength="20" placeholder="密码">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="verifyCode">
-					<el-input type="number" placeholder="验证码" style="width:60%;">
+					<el-input type="number" placeholder="验证码" maxlength="20" style="width:60%;">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe636;</i>
 					</el-input>
-					<span style="width:38%;display:inline-block;height:90%;border:1px solid red;">验证码</span>
+					<span style="width:37%;display:inline-block;height:90%;border:1px solid red;">验证码</span>
 				</el-form-item>
 				<el-form-item style="margin-bottom:5px;">
-					<el-button type="primary" round style="width:100%;" @click="login">登录</el-button>
+					<el-button type="primary" round style="width:100%;" @click="login('userMsg')">登录</el-button>
 				</el-form-item>
 				<el-form-item>
 					<div class="forget_password">
@@ -81,50 +81,61 @@ export default {
 			});
 			return encrypted.toString();
 		},
-		login() {
-			let pass = this.userMsg.password;
-			pass = md5(pass);
-			let key = "*chang_hong_device_cloud";
-			let a = pass;
-			pass = this.encryptByDES(a, key);
-			let qs = require("qs");
-			let data = qs.stringify({
-				phoneOrName: this.userMsg.name,
-				passWord: pass,
-				verifyCode: 1015
-			});
-			this.Axios(
-				{
-					params: data,
-					option: {},
-					type: "post",
-					url: "/api-platform/employee/login",
-					loadingConfig: {
-						target: document.querySelector(".login")
-					}
-				},
-				this
-			).then(
-				result => {
-					console.log(result);
+		login(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let pass = this.userMsg.password;
+					pass = md5(pass);
+					let key = "*chang_hong_device_cloud";
+					let a = pass;
+					pass = this.encryptByDES(a, key);
+					let qs = require("qs");
+					let data = qs.stringify({
+						phoneOrName: this.userMsg.name,
+						passWord: pass,
+						verifyCode: 1015
+					});
+					this.Axios(
+						{
+							params: data,
+							option: {},
+							type: "post",
+							url: "/api-platform/employee/login",
+							loadingConfig: {
+								target: document.querySelector(".login")
+							}
+						},
+						this
+					).then(
+						result => {
+							console.log(result);
 
-					if (result.data.code === 200) {
-						console.log(result);
-						sessionStorage.permissionUrl = JSON.stringify(
-							result.data.data.permissionUrl
-						);
-						sessionStorage.token = result.data.data.tokenStr;
-						sessionStorage.user = JSON.stringify(result.data.data);
-						window.location.href = "/Home";
-						localStorage.setItem("loginName", this.userMsg.name);
-						localStorage.setItem(
-							"loginPassword",
-							this.encryptByDES(this.userMsg.password, key)
-						);
-					}
-				},
-				({ type, info }) => {}
-			);
+							if (result.data.code === 200) {
+								sessionStorage.permissionUrl = JSON.stringify(
+									result.data.data.permissionUrl
+								);
+								sessionStorage.token = result.data.data.tokenStr;
+								sessionStorage.user = JSON.stringify(result.data.data);
+								localStorage.setItem("loginName", this.userMsg.name);
+								localStorage.setItem(
+									"loginPassword",
+									this.encryptByDES(this.userMsg.password, key)
+								);
+								if (result.data.data.employeeType == 0) {
+									window.location.href = "/AdminHome";
+								}
+								if (result.data.data.employeeType == 1) {
+									window.location.href = "/Home";
+								}
+							}
+						},
+						({ type, info }) => {}
+					);
+				} else {
+					this.$message.error("请输入账号和密码！");
+					return false;
+				}
+			});
 		}
 	},
 	created() {

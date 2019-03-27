@@ -19,6 +19,7 @@
 							<el-input
 								type="text"
 								size="small"
+								maxlength="20"
 								v-model="systemMsg.phone"
 								style="width:300px;"
 								placeholder="如 0816-6666666"
@@ -38,7 +39,8 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.itemLimit"
+								maxlength="20"
+								v-model.number="systemMsg.itemLimit"
 								style="width:300px;"
 								placeholder="如20"
 							></el-input>
@@ -49,7 +51,8 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.carLimit"
+								maxlength="20"
+								v-model.number="systemMsg.carLimit"
 								style="width:300px;"
 								placeholder="如99"
 							></el-input>
@@ -65,8 +68,9 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.payTimeout"
+								v-model.number="systemMsg.payTimeout"
 								style="width:300px;"
+								maxlength="20"
 								placeholder="分钟"
 							>
 								<template slot="append">分钟</template>
@@ -83,7 +87,8 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.receiveTimeout"
+								maxlength="20"
+								v-model.number="systemMsg.receiveTimeout"
 								style="width:300px;"
 								placeholder="小时"
 							>
@@ -96,7 +101,8 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.shippingFee"
+								maxlength="20"
+								v-model.number="systemMsg.shippingFee"
 								style="width:100px;"
 								placeholder="元"
 								step="0.01"
@@ -111,8 +117,9 @@
 							title="满多少减免运费"
 							size="small"
 							type="number"
+							maxlength="20"
 							style="width:112px;"
-							v-model="systemMsg.allMoney"
+							v-model.number="systemMsg.allMoney"
 							v-if="systemMsg.moneyOff===true"
 						>
 							<template slot="append">元</template>
@@ -128,7 +135,8 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.sendMoney"
+								maxlength="20"
+								v-model.number="systemMsg.sendMoney"
 								style="width:300px;"
 								placeholder="元"
 								step="0.01"
@@ -144,7 +152,8 @@
 							<el-input
 								type="number"
 								size="small"
-								v-model="systemMsg.retentionTime"
+								maxlength="20"
+								v-model.number="systemMsg.retentionTime"
 								placeholder="保留时间：小时"
 								style="width:116px;"
 							>

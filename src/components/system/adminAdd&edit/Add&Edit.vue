@@ -68,8 +68,8 @@ export default {
 					{ required: true, message: "请输入账号", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^[a-zA-Z]([-_a-zA-Z0-9]{5,20})$/.test(value) == false) {
-								callback(new Error("必须为6~20位字符组成,以字母开头"));
+							if (/^[a-zA-Z]([-_a-zA-Z0-9]{5,15})$/.test(value) == false) {
+								callback(new Error("必须为6~15位字符组成,以字母开头"));
 							} else {
 								callback();
 							}
@@ -80,11 +80,13 @@ export default {
 				password: [
 					{
 						validator: (rule, value, callback) => {
-							if (/^\w{6,20}$/.test(value) === false) {
+							if (/^\w{7,20}$/.test(value) === false) {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));
-							} else {
+							} else if(/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value)===true){
+                callback(new Error("密码中不能含有空格与汉字"));
+              }else {
 								callback();
 							}
 						},
