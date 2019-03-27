@@ -88,7 +88,7 @@
 			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
 					<h4>销售额</h4>
-					<el-date-picker
+					<!-- <el-date-picker
 						class="data_style"
 						v-model="searchValue"
 						size="small"
@@ -99,8 +99,13 @@
 						start-placeholder="开始日期"
 						end-placeholder="结束日期"
 						:picker-options="pickerOptions2"
-                        value-format="yyyy/MM/dd"
-					></el-date-picker>
+						value-format="yyyy/MM/dd"
+					></el-date-picker>-->
+					<el-button-group class="data_style">
+						<el-button plain size="small">最近一周</el-button>
+						<el-button plain size="small">最近一月</el-button>
+						<el-button plain size="small">最近一年</el-button>
+					</el-button-group>
 				</div>
 				<div class="histogram_style">
 					<h4 style="text-align: center;line-height:52px;">销售额趋势</h4>
@@ -348,7 +353,10 @@ export default {
 			title: {
 				text: ""
 			},
-			tooltip: {},
+			tooltip: {
+				trigger: "axis",
+				formatter: ""
+			},
 			legend: {
 				data: []
 			},
@@ -360,11 +368,19 @@ export default {
 				{
 					name: "销量",
 					type: "bar",
-					data: [5, 20, 36, 10, 10, 20]
+					data: [5, 20, 36, 10, 10, 20],
+					itemStyle: {
+						normal: {
+							color: "#1cc09f"
+						}
+					}
 				}
 			]
 		};
 		myChart.setOption(option);
+		window.onresize = function() {
+			myChart.resize();
+		};
 	},
 	methods: {
 		handleStyle(index) {
@@ -505,6 +521,11 @@ export default {
 			.data_style {
 				margin-top: 15px;
 				float: right;
+				.el-button.is-plain:focus,
+				.el-button.is-plain:hover {
+					background-color: @main-color;
+					color: white;
+				}
 			}
 		}
 		.histogram_style {
