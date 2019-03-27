@@ -7,7 +7,7 @@
 					<span>请输入需要找回密码的手机号或用户名</span>
 				</el-form-item>
 				<el-form-item style="margin-bottom:50px;">
-					<el-input type="text" placeholder="用户名或手机号" v-model="phoneOraccount">
+					<el-input type="text" maxlength="20" placeholder="用户名或手机号" v-model="phoneOraccount">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe646;</i>
 					</el-input>
 				</el-form-item>
@@ -29,7 +29,7 @@
 					</span>
 				</el-form-item>
 				<el-form-item style="margin-bottom:50px;">
-					<el-input type="text" placeholder="短信验证码" v-model="code">
+					<el-input type="text" maxlength="20" placeholder="短信验证码" v-model="code">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe636;</i>
 						<el-button
 							class="auth_code"
@@ -41,7 +41,7 @@
 						<el-button
 							class="auth_code"
 							v-if="sendMsgDisabled"
-							disabled="true"
+							:disabled="true"
 							slot="append"
 							type="text"
 							@click="togetAuthCode"
@@ -66,7 +66,7 @@
 					prop="newPassword"
 					:rules="[{ required: true, message: '密码不能为空', trigger: 'blur'},{validator:validator1,trigger:'blur'}]"
 				>
-					<el-input type="password" placeholder="输入新密码" v-model="newPasswordMsg.newPassword">
+					<el-input type="password" maxlength="20" placeholder="输入新密码" v-model="newPasswordMsg.newPassword">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
@@ -74,7 +74,7 @@
 					prop="repetitionPassword"
 					:rules="[{ required: true, message: '确认密码不能为空', trigger: 'blur'},{validator:validator,trigger:'blur'}]"
 				>
-					<el-input type="password" placeholder="确认新密码" v-model="newPasswordMsg.repetitionPassword">
+					<el-input type="password" maxlength="20" placeholder="确认新密码" v-model="newPasswordMsg.repetitionPassword">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
