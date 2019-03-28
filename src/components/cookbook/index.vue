@@ -2,12 +2,14 @@
 	<div class="cookbook_list">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<el-button
+				<permission-button
+					permCode="manu_list_lookup.menu_list_add"
+					banType="disable"
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/Cookbook/AddCookbook'})"
-				>添加菜谱</el-button>
+				>添加菜谱</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -53,11 +55,13 @@
 						</el-table-column>
 						<el-table-column label="操作" width="100">
 							<template slot-scope="scope">
-								<el-button
+								<permission-button
+									permCode="manu_list_lookup.menu_list_update"
+									banType="disable"
 									type="text"
 									size="mini"
 									@click.stop.prevent="handleEdit(scope.$index, scope.row)"
-								>修改</el-button>
+								>修改</permission-button>
 							</template>
 						</el-table-column>
 					</el-table>

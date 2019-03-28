@@ -298,22 +298,6 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
-			// time1: {
-			// 	startTime: "",
-			// 	endTime: ""
-			// },
-			// time2: {
-			// 	startTime: "",
-			// 	endTime: ""
-			// },
-			// time3: {
-			// 	startTime: "",
-			// 	endTime: ""
-			// },
-			// time4: {
-			// 	startTime: "",
-			// 	endTime: ""
-			// },
 			systemMsg: {
 				sendMoney: null,
 				shippingFee: null,
@@ -627,42 +611,6 @@ export default {
 				return 3;
 			}
 		},
-
-		// defaultValue(a) {
-		// 	if (a == 1) {
-		// 		console.log(a);
-		// 		if (
-		// 			this.systemMsg.timeFrame1 == null ||
-		// 			this.systemMsg.timeFrame1 == []
-		// 		) {
-		// 			this.systemMsg.timeFrame1 = ["00-00", "23-59"];
-		// 		}
-		// 	}
-		// 	if (a == 2) {
-		// 		if (
-		// 			this.systemMsg.timeFrame2 == null ||
-		// 			this.systemMsg.timeFrame2 == []
-		// 		) {
-		// 			this.systemMsg.timeFrame2 = ["00-00", "23-59"];
-		// 		}
-		// 	}
-		// 	if (a == 3) {
-		// 		if (
-		// 			this.systemMsg.timeFrame3 == null ||
-		// 			this.systemMsg.timeFrame3 == []
-		// 		) {
-		// 			this.systemMsg.timeFrame3 = ["00-00", "23-59"];
-		// 		}
-		// 	}
-		// 	if (a == 4) {
-		// 		if (
-		// 			this.systemMsg.timeFrame4 == null ||
-		// 			this.systemMsg.timeFrame4 == []
-		// 		) {
-		// 			this.systemMsg.timeFrame4 = ["00-00", "23-59"];
-		// 		}
-		// 	}
-		// },
 		submitForm(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
@@ -799,42 +747,6 @@ export default {
 			},
 			deep: true
 		}
-		// time1: {
-		// 	handler(newValue, oldValue) {
-		// 		if (newValue.startTime != "" && newValue.endTime != "") {
-		// 			this.systemMsg.timeFrame1[0].push(newValue.startTime);
-		// 			this.systemMsg.timeFrame1[1].push(newValue.endTime);
-		// 		}
-		// 	},
-		// 	deep: true
-		// },
-		// time2: {
-		// 	handler(newValue, oldValue) {
-		// 		if (newValue.startTime != "" && newValue.endTime != "") {
-		// 			this.systemMsg.timeFrame2[0].push(newValue.startTime);
-		// 			this.systemMsg.timeFrame2[1].push(newValue.endTime);
-		// 		}
-		// 	},
-		// 	deep: true
-		// },
-		// time3: {
-		// 	handler(newValue, oldValue) {
-		// 		if (newValue.startTime != "" && newValue.endTime != "") {
-		// 			this.systemMsg.timeFrame3[0] = newValue.startTime;
-		// 			this.systemMsg.timeFrame3[1] = newValue.endTime;
-		// 		}
-		// 	},
-		// 	deep: true
-		// },
-		// time4: {
-		// 	handler(newValue, oldValue) {
-		// 		if (newValue.startTime != "" && newValue.endTime != "") {
-		// 			this.systemMsg.timeFrame4[0] = newValue.startTime;
-		// 			this.systemMsg.timeFrame4[1] = newValue.endTime;
-		// 		}
-		// 	},
-		// 	deep: true
-		// }
 	}
 };
 </script>
