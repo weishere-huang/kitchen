@@ -3,9 +3,9 @@
 		<!-- <router-view></router-view> -->
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-        <permission-button
-          permCode='system_role_list_lookup.system_role_list_add'
-          banType='hide'
+				<permission-button
+					permCode="system_role_list_lookup.system_role_list_add"
+					banType="hide"
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
@@ -28,6 +28,8 @@
 						:deleteShow="true"
 						:handleShow="true"
 						:editShow="true"
+						:permissionuUpdate="permissionuUpdate"
+						:permissionDetele="permissionDetele"
 					></table-list>
 				</div>
 				<div class="block" style="margin-top:10px;float:right">
@@ -54,6 +56,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionuUpdate: "system_role_list_lookup.system_role_list_update",
+			permissionDetele: "system_role_list_lookup.system_role_list_delete",
 			items: [
 				{
 					label: "角色名",

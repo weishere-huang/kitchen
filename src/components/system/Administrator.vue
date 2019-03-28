@@ -19,6 +19,8 @@
 					:deleteShow="true"
 					:handleShow="true"
 					:editShow="true"
+					:permissionuUpdate="permissionuUpdate"
+					:permissionDetele="permissionDetele"
 				></table-list>
 			</div>
 			<div class="block" style="margin-top:10px;float:right">
@@ -65,6 +67,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionuUpdate: "system_employee_lookup.system_employee_update",
+			permissionDetele: "system_employee_lookup.system_employee_delete",
 			userMsg: {},
 			editUserMsg: {},
 			dialogVisible: false,
@@ -198,10 +202,9 @@ export default {
 			if (params.type == "affirm") {
 				console.log(params);
 				this.addMsg = params.value;
-				if (this.addMsg.password === "" || this.addMsg.password == null
-				) {
-				  this.$message.warning("添加管理员时密码不能为空!")
-				  return
+				if (this.addMsg.password === "" || this.addMsg.password == null) {
+					this.$message.warning("添加管理员时密码不能为空!");
+					return;
 				}
 				console.log(this.addMsg);
 				// this.addService();

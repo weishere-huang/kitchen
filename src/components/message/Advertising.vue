@@ -145,7 +145,7 @@ export default {
 				{
 					params: {},
 					option: {
-						successMsg: "广告加载完成~"
+						enableMsg: false
 					},
 					type: "get",
 					url: "/api-platform/Advertisement/list"
@@ -279,6 +279,15 @@ export default {
 	},
 	components: {
 		addAdvertising
+	},
+	watch: {
+		dialogEdit() {
+			if (this.dialogEdit == false) {
+				// this.getAdvertisingList();
+				// console.log("OK");
+				// this.reload();
+			}
+		}
 	}
 };
 </script>
