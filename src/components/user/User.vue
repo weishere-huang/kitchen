@@ -197,7 +197,7 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						states: this.states,
+						state: this.states,
 						keyWord: this.keyWord
 					},
 					option: {

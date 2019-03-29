@@ -364,7 +364,11 @@ export default {
 				this.$refs.tree2.getCheckedKeys(),
 				this.$refs.tree3.getCheckedKeys()
 			);
+      if(arr.length===0) {
+        this.$message.error("请选择销售区域")
+      }
 			this.supplierMsg.areaCode = arr;
+
 		},
 		encryptByDES(message, key) {
 			const keyHex = CryptoJS.enc.Utf8.parse(key);
