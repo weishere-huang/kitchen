@@ -63,6 +63,7 @@
 						:detalisShow="true"
 						:handleShow="true"
 						:cellStyle="cellStyle"
+						:permissionDetails="permissionDetails"
 					></table-list>
 					<div style="margin-top:20px;float:left;padding-left:10px;padding-bottom:10px;">
 						<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
@@ -109,6 +110,7 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionDetails: "manu_list_lookup.menu_list_update",
 			dialogSend: false,
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			currentPage: 3,
@@ -199,7 +201,7 @@ export default {
 				},
 				{
 					label: "供应商名称",
-					prop: "payType",
+					prop: "supplierName",
 					width: 100
 				}
 			],

@@ -141,9 +141,15 @@
 				</el-col>
 			</div>
 			<div class="top_list" style="padding:10px 200px">
-				<el-button size="small" type="primary" @click="submitForm('supplierMsg')">
+				<permission-button
+					permCode="supplier_add_lookup.supplier_add_save"
+					banType="disable"
+					size="small"
+					type="primary"
+					@click="submitForm('supplierMsg')"
+				>
 					<i class="iconfont">&#xe62d;</i> 保存
-				</el-button>
+				</permission-button>
 			</div>
 		</div>
 	</div>
@@ -206,7 +212,21 @@ export default {
 					{ required: true, message: "请填写详细地址", trigger: "blur" }
 				],
 				supplierPassword: [
-					{ required: true, message: "请填写密码", trigger: "blur" }
+					{ required: true, message: "请填写密码", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\w{6,20}$/.test(value) === false) {
+                callback(new Error("请输入6到20位的密码"));
+              } else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+                callback(new Error("你的密码过于简单，请重新输入"));
+              } else if(/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value)===true){
+                callback(new Error("密码中不能含有空格与汉字"));
+              }else {
+                callback();
+              }
+            },
+            trigger: "change"
+          }
 				],
 				password: [
 					{ required: true, message: "请确认输入密码", trigger: "blur" },
@@ -226,7 +246,12 @@ export default {
 				],
 				supplierAccount: [
 					{ required: true, message: "请填写账号", trigger: "blur" },
-					{ max: 10, min: 8, message: "请输入格式为：agent加3~5个数字组成", trigger: "blur" },
+					{
+						max: 10,
+						min: 8,
+						message: "请输入格式为：agent加3~5个数字组成",
+						trigger: "blur"
+					},
 					{
 						validator: (rule, value, callback) => {
 							if (/^(?:agent\d+|\d{3,5})$/.test(value) === false) {
@@ -350,7 +375,12 @@ export default {
 				this.$refs.tree2.getCheckedKeys(),
 				this.$refs.tree3.getCheckedKeys()
 			);
+      if(arr.length===0) {
+        this.$message.error("请选择销售区域");
+        return
+      }
 			this.supplierMsg.areaCode = arr;
+
 		},
 		encryptByDES(message, key) {
 			const keyHex = CryptoJS.enc.Utf8.parse(key);

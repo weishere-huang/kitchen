@@ -488,6 +488,7 @@ export default {
 		&:hover {
 			color: #e7d31f;
 			font-weight: bold;
+			opacity: 0.75;
 		}
 	}
 	// border: 1px solid @Info;

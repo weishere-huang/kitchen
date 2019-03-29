@@ -63,10 +63,17 @@
 						:detalisShow="true"
 						:handleShow="true"
 						:cellStyle="cellStyle"
+						:permissionDetails="permissionDetails"
 					></table-list>
 					<div style="margin-top:20px;float:left;padding-left:10px;padding-bottom:10px;">
 						<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
-						<el-button size="small" type="primary" @click="shipments">发货</el-button>
+						<permission-button
+							permCode="supplierOrder_list_lookup.supplierOrder_list_out"
+							banType="disable"
+							size="small"
+							type="primary"
+							@click="shipments"
+						>发货</permission-button>
 					</div>
 					<div class="block" style="margin-top:20px;float:right;padding-bottom:10px;">
 						<el-pagination
@@ -109,6 +116,7 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionDetails: "supplierOrder_list_lookup.supplierOrder_list_detail",
 			dialogSend: false,
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			currentPage: 3,
@@ -170,7 +178,7 @@ export default {
 					prop: "orderMoney",
 					width: 70,
 					formatter: function(row, column) {
-						return "￥" + row.orderMoney/100;
+						return "￥" + row.orderMoney / 100;
 					}
 				},
 				{

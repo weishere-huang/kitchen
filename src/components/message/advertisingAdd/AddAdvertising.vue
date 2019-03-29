@@ -17,15 +17,16 @@
 					:on-preview="handlePictureCardPreview"
 					:on-remove="handleRemove"
 					:on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload1"
-          class="upload_show"
+					:before-upload="beforeAvatarUpload1"
+					:class="{disable:uploadShow1==2}"
+					class="upload_style"
 					v-model="addMsg.mainPic"
 					:file-list="mainPic"
 					:limit="1"
 				>
 					<i class="el-icon-plus"></i>
 				</el-upload>
-        <div  class="el-upload__tip tip_style">宽高750 × 290像素，＜500KB的jpg图片</div>
+				<div class="el-upload__tip tip_style">宽高750 × 290像素，＜500KB的jpg图片</div>
 				<el-dialog :visible.sync="dialogVisible" append-to-body>
 					<img width="100%" :src="dialogImageUrl" alt class="showPic">
 				</el-dialog>
@@ -38,18 +39,19 @@
 					:on-preview="handlePictureCardPreview1"
 					:on-remove="handleRemove1"
 					:on-success="handleAvatarSuccess1"
-          :before-upload="beforeAvatarUpload2"
-          class="upload_show"
+					:before-upload="beforeAvatarUpload2"
+					:class="{disable:uploadShow2==2}"
+					class="upload_style"
 					v-model="addMsg.content"
 					:file-list="content"
 					:limit="1"
 				>
 					<i class="el-icon-plus"></i>
 				</el-upload>
-        <div class="el-upload__tip tip_style">宽高1000 × 不限，＜2MB的jpg图片</div>
-				<el-dialog :visible.sync="dialogVisible" append-to-body class="showPic">
+				<div class="el-upload__tip tip_style">宽高1000 × 不限，＜2MB的jpg图片</div>
+				<!-- <el-dialog :visible.sync="dialogVisible" append-to-body class="showPic">
 					<img width="100%" :src="dialogImageUrl1" alt>
-				</el-dialog>
+				</el-dialog>-->
 			</el-form-item>
 			<el-form-item label="广告链接地址：" prop="linkUrl">
 				<el-input
@@ -99,6 +101,8 @@
 export default {
 	data() {
 		return {
+			uploadShow1: 0,
+			uploadShow2: 0,
 			dialogImageUrl: null,
 			dialogImageUrl1: null,
 			dialogVisible: false,
@@ -109,19 +113,21 @@ export default {
 			advertisingRules: {
 				title: [{ required: true, message: "请填写广告标题", trigger: "blur" }],
 				mainPic: [{ required: true, message: "请添加图片", trigger: "change" }],
-        content: [
-          {
-            validator: (rule, value, callback) => {
-              if ((this.addMsg.content==""||this.addMsg.content==null)&&
-                (this.addMsg.linkUrl==""||this.addMsg.linkUrl==null)) {
-                callback(new Error("内容图和跳转链接必须填写一项!"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "blur"
-          }
-        ],
+				content: [
+					{
+						validator: (rule, value, callback) => {
+							if (
+								(this.addMsg.content == "" || this.addMsg.content == null) &&
+								(this.addMsg.linkUrl == "" || this.addMsg.linkUrl == null)
+							) {
+								callback(new Error("内容图和跳转链接必须填写一项!"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
 				startTime: [
 					{
 						type: "string",
@@ -165,62 +171,62 @@ export default {
 		}
 	},
 	methods: {
-    beforeAvatarUpload1(file) {
-      const isPicSize = file.size / 1024 <= 500;
-      if (isPicSize == false) {
-        this.$message.error("上传图片不能大于80KB");
-        return false;
-      } else {
-        const isSize = new Promise(function(resolve, reject) {
-          let width = 750;
-          let height = 290;
-          let _URL = window.URL || window.webkitURL;
-          let img = new Image();
-          img.onload = function() {
-            let valid = img.width <= width && img.height <= height;
-            valid ? resolve() : reject();
-          };
-          img.src = _URL.createObjectURL(file);
-        }).then(
-          () => {
-            return file;
-          },
-          () => {
-            this.$message.error("上传的图片必须是等于或小于750*290!");
-            return Promise.reject();
-          }
-        );
-        return isSize;
-      }
-    },
-    beforeAvatarUpload2(file) {
-      const isPicSize = file.size / 1024/1024 <= 2;
-      if (isPicSize == false) {
-        this.$message.error("上传图片不能大于2MB");
-        return false;
-      } else {
-        const isSize = new Promise(function(resolve, reject) {
-          let width = 1000;
-          let height = 50000;
-          let _URL = window.URL || window.webkitURL;
-          let img = new Image();
-          img.onload = function() {
-            let valid = img.width <= width && img.height <= height;
-            valid ? resolve() : reject();
-          };
-          img.src = _URL.createObjectURL(file);
-        }).then(
-          () => {
-            return file;
-          },
-          () => {
-            this.$message.error("上传的图片宽必须是1000像素以内!");
-            return Promise.reject();
-          }
-        );
-        return isSize;
-      }
-    },
+		beforeAvatarUpload1(file) {
+			const isPicSize = file.size / 1024 <= 500;
+			if (isPicSize == false) {
+				this.$message.error("上传图片不能大于80KB");
+				return false;
+			} else {
+				const isSize = new Promise(function(resolve, reject) {
+					let width = 750;
+					let height = 290;
+					let _URL = window.URL || window.webkitURL;
+					let img = new Image();
+					img.onload = function() {
+						let valid = img.width <= width && img.height <= height;
+						valid ? resolve() : reject();
+					};
+					img.src = _URL.createObjectURL(file);
+				}).then(
+					() => {
+						return file;
+					},
+					() => {
+						this.$message.error("上传的图片必须是等于或小于750*290!");
+						return Promise.reject();
+					}
+				);
+				return isSize;
+			}
+		},
+		beforeAvatarUpload2(file) {
+			const isPicSize = file.size / 1024 / 1024 <= 2;
+			if (isPicSize == false) {
+				this.$message.error("上传图片不能大于2MB");
+				return false;
+			} else {
+				const isSize = new Promise(function(resolve, reject) {
+					let width = 1000;
+					let height = 50000;
+					let _URL = window.URL || window.webkitURL;
+					let img = new Image();
+					img.onload = function() {
+						let valid = img.width <= width && img.height <= height;
+						valid ? resolve() : reject();
+					};
+					img.src = _URL.createObjectURL(file);
+				}).then(
+					() => {
+						return file;
+					},
+					() => {
+						this.$message.error("上传的图片宽必须是1000像素以内!");
+						return Promise.reject();
+					}
+				);
+				return isSize;
+			}
+		},
 		handleCancel(value) {
 			let params = { type: "cancel", isHide: false };
 			this.$emit("beforeadd", params);
@@ -243,10 +249,12 @@ export default {
 		},
 		handleRemove(file, fileList) {
 			this.addMsg.mainPic = null;
+			this.uploadShow1 = 0;
 			console.log(file, fileList);
 		},
 		handleRemove1(file, fileList) {
 			this.addMsg.content = null;
+			this.uploadShow2 = 0;
 			console.log(file, fileList);
 		},
 		handlePictureCardPreview(file) {
@@ -263,6 +271,7 @@ export default {
 			if (res.code === 200) {
 				this.addMsg.mainPic =
 					this.global.imgPath + res.data.replace("img:", "");
+				this.uploadShow1 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");
 			}
@@ -273,6 +282,7 @@ export default {
 			if (res.code === 200) {
 				this.addMsg.content =
 					this.global.imgPath + res.data.replace("img:", "");
+				this.uploadShow2 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");
 			}
@@ -280,16 +290,20 @@ export default {
 			console.log(file);
 		}
 	},
+	mounted() {},
 	created() {
 		if (this.editMsg != null) {
 			console.log("111");
-			this.addMsg = this.editMsg;
-			this.mainPic = [
-				{
-					name: "mainpic.jpg",
-					url: this.editMsg.mainPic
-				}
-			];
+			Object.assign(this.addMsg, this.editMsg);
+			// this.addMsg = this.editMsg;
+			if (this.editMsg.mainPic !== null && this.editMsg.mainPic !== "") {
+				this.mainPic = [
+					{
+						name: "mainpic.jpg",
+						url: this.editMsg.mainPic
+					}
+				];
+			}
 			if (this.editMsg.content !== null && this.editMsg.content !== "") {
 				this.content = [
 					{
@@ -303,7 +317,8 @@ export default {
 	watch: {
 		editMsg() {
 			if (this.editMsg != null) {
-				this.addMsg = this.editMsg;
+				Object.assign(this.addMsg, this.editMsg);
+				// this.addMsg = this.editMsg;
 				console.log("111");
 				this.mainPic = [
 					{
@@ -319,6 +334,22 @@ export default {
 						}
 					];
 				}
+			}
+			if (this.editMsg.mainPic != "" && this.editMsg.mainPic != null) {
+				this.uploadShow1 = 2;
+			}
+			if (this.editMsg.content != "" && this.editMsg.content != null) {
+				this.uploadShow2 = 2;
+			}
+		},
+		mainPic() {
+			if (this.mainPic.url != "") {
+				this.uploadShow1 = 2;
+			}
+		},
+		content() {
+			if (this.content.url != "") {
+				this.uploadShow2 = 2;
 			}
 		}
 	}
@@ -346,6 +377,14 @@ export default {
 		vertical-align: bottom;
 		padding-left: 8px;
 		line-height: 40px;
+	}
+	.disable {
+		.el-upload--picture-card {
+			display: none;
+		}
+	}
+	.upload_style {
+		display: inline-block;
 	}
 }
 </style>

@@ -1,7 +1,14 @@
 <template>
 	<div class="problems_list">
 		<div class="top_list">
-			<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加信息</el-button>
+			<permission-button
+				permCode="message_faq_lookup.message_faq_add"
+				banType="disable"
+				size="small"
+				type="primary"
+				class="el-icon-circle-plus-outline"
+				@click="toadd"
+			>添加信息</permission-button>
 			<el-button size="small" type="primary" @click="reload()">立即刷新</el-button>
 			<el-dialog :close-on-click-modal="false" title="添加信息" :visible.sync="dialogAdd" width="800px">
 				<add-problem :addMsg="addMsg"></add-problem>
@@ -45,6 +52,8 @@
 					:editShow="true"
 					:deleteShow="true"
 					:handleShow="true"
+					:permissionuUpdate="permissionuUpdate"
+					:permissionDetele="permissionDetele"
 				></table-list>
 			</div>
 			<div class="block" style="margin-top:10px;float:right">
@@ -77,6 +86,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionuUpdate: "message_faq_lookup.message_faq_update",
+			permissionDetele: "message_faq_lookup.message_faq_delete",
 			addMsg: {
 				title: "",
 				faqType: "",

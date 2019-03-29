@@ -219,7 +219,13 @@
 						</div>
 					</el-form-item>
 					<el-form-item>
-						<el-button size="small" type="primary" @click="submitForm('cookbook')">添加</el-button>
+						<permission-button
+							permCode="menu_add_lookup.menu_add_save"
+							banType="disable"
+							size="small"
+							type="primary"
+							@click="submitForm('cookbook')"
+						>添加</permission-button>
 					</el-form-item>
 				</el-form>
 			</div>

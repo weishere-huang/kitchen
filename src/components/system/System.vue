@@ -169,8 +169,8 @@
 							</el-tooltip>
 						</span>
 					</el-form-item>
-					<el-form-item label="配送时段1：" prop="timeFrame1">
-						<el-time-picker
+					<el-form-item label="配送时段1：" prop="timeFrame1.startTime">
+						<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame1"
 							range-separator="至"
@@ -181,10 +181,25 @@
 							format="HH:mm"
 							size="small"
 							style="width:300px;"
+							@focus="defaultValue(1)"
+						></el-time-picker>-->
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame1.startTime"
+							placeholder="起始时间"
+							style="width:143px"
+						></el-time-picker>&nbsp;-
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame1.endTime"
+							placeholder="结束时间"
+							style="width:143px"
 						></el-time-picker>
 					</el-form-item>
-					<el-form-item label="配送时段2：" prop="timeFrame2">
-						<el-time-picker
+					<el-form-item label="配送时段2：" prop="timeFrame2.startTime">
+						<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame2"
 							range-separator="至"
@@ -195,10 +210,25 @@
 							format="HH:mm"
 							size="small"
 							style="width:300px;"
+							@focus="defaultValue(2)"
+						></el-time-picker>-->
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame2.startTime"
+							placeholder="起始时间"
+							style="width:143px"
+						></el-time-picker>&nbsp;-
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame2.endTime"
+							placeholder="结束时间"
+							style="width:143px"
 						></el-time-picker>
 					</el-form-item>
-					<el-form-item label="配送时段3：" prop="timeFrame3">
-						<el-time-picker
+					<el-form-item label="配送时段3：" prop="timeFrame3.startTime">
+						<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame3"
 							range-separator="至"
@@ -209,10 +239,25 @@
 							format="HH:mm"
 							size="small"
 							style="width:300px;"
+							@focus="defaultValue(3)"
+						></el-time-picker>-->
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame3.startTime"
+							placeholder="起始时间"
+							style="width:143px"
+						></el-time-picker>&nbsp;-
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame3.endTime"
+							placeholder="结束时间"
+							style="width:143px"
 						></el-time-picker>
 					</el-form-item>
-					<el-form-item label="配送时段4：" prop="timeFrame4">
-						<el-time-picker
+					<el-form-item label="配送时段4：" prop="timeFrame4.startTime">
+						<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame4"
 							range-separator="至"
@@ -223,6 +268,21 @@
 							format="HH:mm"
 							size="small"
 							style="width:300px;"
+							@focus="defaultValue(4)"
+						></el-time-picker>-->
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame4.startTime"
+							placeholder="起始时间"
+							style="width:143px"
+						></el-time-picker>&nbsp;-
+						<el-time-picker
+							value-format="HH-mm"
+							format="HH:mm"
+							v-model="systemMsg.timeFrame4.endTime"
+							placeholder="结束时间"
+							style="width:143px"
 						></el-time-picker>
 					</el-form-item>
 					<el-form-item>
@@ -252,10 +312,22 @@ export default {
 					alipay: true
 				},
 				sendTime: "1",
-				timeFrame1: ["09-00", "18-00"],
-				timeFrame2: null,
-				timeFrame3: null,
-				timeFrame4: null,
+				timeFrame1: {
+					startTime: "",
+					endTime: ""
+				},
+				timeFrame2: {
+					startTime: "",
+					endTime: ""
+				},
+				timeFrame3: {
+					startTime: "",
+					endTime: ""
+				},
+				timeFrame4: {
+					startTime: "",
+					endTime: ""
+				},
 				retentionTime: "",
 				allMoney: ""
 			},
@@ -353,7 +425,8 @@ export default {
 							}
 						},
 						trigger: "blur"
-					}
+					},
+
 				],
 				sendMoney: [
 					{ required: true, message: "请设置起送金额", trigger: "blur" },
@@ -371,15 +444,175 @@ export default {
 				sendTime: [
 					{ required: true, message: "请设置配送日期", trigger: "blur" }
 				],
-				timeFrame1: [
-					{ required: true, message: "请设置配送时段", trigger: "blur" }
+				"timeFrame1.startTime": [
+					{ required: true, message: "请设置配送时段", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (
+								(this.systemMsg.timeFrame1.startTime == "" &&
+									this.systemMsg.timeFrame1.startTime == null) ||
+								(this.systemMsg.timeFrame1.endTime == "" &&
+									this.systemMsg.timeFrame1.endTime == null)
+							) {
+								callback(new Error("请设置配送时段"));
+							} else if (
+								(this.systemMsg.timeFrame1.startTime == "" ||
+									this.systemMsg.timeFrame1.startTime == null) &&
+								(this.systemMsg.timeFrame1.endTime != "" ||
+									this.systemMsg.timeFrame1.endTime != null)
+							) {
+								callback(new Error("请填写起始时间！"));
+							} else if (
+								(this.systemMsg.timeFrame1.startTime != "" ||
+									this.systemMsg.timeFrame1.startTime != null) &&
+								(this.systemMsg.timeFrame1.endTime == "" ||
+									this.systemMsg.timeFrame1.endTime == null)
+							) {
+								callback(new Error("请填写结束时间！"));
+							} else if (
+								this.systemMsg.timeFrame1.startTime.replace(/-/g, "") >=
+								this.systemMsg.timeFrame1.endTime.replace(/-/g, "")
+							) {
+								callback(new Error("结束时间要大于起始时间！"));
+							} else {
+								callback();
+							}
+						},
+						trigger: ["change", "blur"]
+					}
+				],
+				"timeFrame2.startTime": [
+					{
+						validator: (rule, value, callback) => {
+							if (
+								(this.systemMsg.timeFrame2.startTime == "" ||
+									this.systemMsg.timeFrame2.startTime == null) &&
+								(this.systemMsg.timeFrame2.endTime == "" ||
+									this.systemMsg.timeFrame2.endTime == null)
+							) {
+								callback();
+							} else {
+								if (
+									(this.systemMsg.timeFrame2.startTime == "" ||
+										this.systemMsg.timeFrame2.startTime == null) &&
+									(this.systemMsg.timeFrame2.endTime != "" ||
+										this.systemMsg.timeFrame2.endTime != null)
+								) {
+									callback(new Error("请填写起始时间！"));
+								} else if (
+									(this.systemMsg.timeFrame2.startTime != "" ||
+										this.systemMsg.timeFrame2.startTime != null) &&
+									(this.systemMsg.timeFrame2.endTime == "" ||
+										this.systemMsg.timeFrame2.endTime == null)
+								) {
+									callback(new Error("请填写结束时间！"));
+								} else if (
+									this.systemMsg.timeFrame2.startTime.replace(/-/g, "") >=
+									this.systemMsg.timeFrame2.endTime.replace(/-/g, "")
+								) {
+									callback(new Error("结束时间要大于起始时间！"));
+								} else {
+									callback();
+								}
+							}
+						},
+						trigger: ["change", "blur"]
+					}
+				],
+				"timeFrame3.startTime": [
+					{
+						validator: (rule, value, callback) => {
+							if (
+								(this.systemMsg.timeFrame3.startTime == "" ||
+									this.systemMsg.timeFrame3.startTime == null) &&
+								(this.systemMsg.timeFrame3.endTime == "" ||
+									this.systemMsg.timeFrame3.endTime == null)
+							) {
+								callback();
+							} else {
+								if (
+									(this.systemMsg.timeFrame3.startTime == "" ||
+										this.systemMsg.timeFrame3.startTime == null) &&
+									(this.systemMsg.timeFrame3.endTime != "" ||
+										this.systemMsg.timeFrame3.endTime != null)
+								) {
+									callback(new Error("请填写起始时间！"));
+								} else if (
+									(this.systemMsg.timeFrame3.startTime != "" ||
+										this.systemMsg.timeFrame3.startTime != null) &&
+									(this.systemMsg.timeFrame3.endTime == "" ||
+										this.systemMsg.timeFrame3.endTime == null)
+								) {
+									callback(new Error("请填写结束时间！"));
+								} else if (
+									this.systemMsg.timeFrame3.startTime.replace(/-/g, "") >=
+									this.systemMsg.timeFrame3.endTime.replace(/-/g, "")
+								) {
+									callback(new Error("结束时间要大于起始时间！"));
+								} else {
+									callback();
+								}
+							}
+						},
+						trigger: ["change", "blur"]
+					}
+				],
+				"timeFrame4.startTime": [
+					{
+						validator: (rule, value, callback) => {
+							if (
+								(this.systemMsg.timeFrame4.startTime == "" ||
+									this.systemMsg.timeFrame4.startTime == null) &&
+								(this.systemMsg.timeFrame4.endTime == "" ||
+									this.systemMsg.timeFrame4.endTime == null)
+							) {
+								callback();
+							} else {
+								if (
+									(this.systemMsg.timeFrame4.startTime == "" ||
+										this.systemMsg.timeFrame4.startTime == null) &&
+									(this.systemMsg.timeFrame4.endTime != "" ||
+										this.systemMsg.timeFrame4.endTime != null)
+								) {
+									callback(new Error("请填写起始时间！"));
+								} else if (
+									(this.systemMsg.timeFrame4.startTime != "" ||
+										this.systemMsg.timeFrame4.startTime != null) &&
+									(this.systemMsg.timeFrame4.endTime == "" ||
+										this.systemMsg.timeFrame4.endTime == null)
+								) {
+									callback(new Error("请填写结束时间！"));
+								} else if (
+									this.systemMsg.timeFrame4.startTime.replace(/-/g, "") >=
+									this.systemMsg.timeFrame4.endTime.replace(/-/g, "")
+								) {
+									callback(new Error("结束时间要大于起始时间！"));
+								} else {
+									callback();
+								}
+							}
+						},
+						trigger: ["change", "blur"]
+					}
 				]
 			}
 		};
 	},
 	methods: {
+		checkTime(date1, date2) {
+			date1 = date1.replace(/-/g, "/");
+			date2 = date2.replace(/-/g, "/");
+			var time1 = new Date(date1).getTime();
+			var time2 = new Date(date2).getTime();
+			if (time1 > time2) {
+				return 1;
+			} else if (time1 == time2) {
+				return 2;
+			} else {
+				return 3;
+			}
+		},
 		submitForm(formName) {
-			console.log("OK");
 			this.$refs[formName].validate(valid => {
 				if (valid) {
 					if (this.systemMsg.sendTime == 2) {
@@ -448,7 +681,12 @@ export default {
 						this.systemMsg.sendMoney = result.data.data.sendMoney / 100;
 						this.systemMsg.payType = JSON.parse(result.data.data.payType);
 						this.systemMsg.sendTime = result.data.data.sendTime;
-						this.systemMsg.timeFrame1 = JSON.parse(result.data.data.timeFrame1);
+						this.systemMsg.timeFrame1.startTime = JSON.parse(
+							result.data.data.timeFrame1
+						).startTime;
+						this.systemMsg.timeFrame1.endTime = JSON.parse(
+							result.data.data.timeFrame1
+						).endTime;
 						this.systemMsg.timeFrame2 = JSON.parse(result.data.data.timeFrame2);
 						this.systemMsg.timeFrame3 = JSON.parse(result.data.data.timeFrame3);
 						this.systemMsg.timeFrame4 = JSON.parse(result.data.data.timeFrame4);

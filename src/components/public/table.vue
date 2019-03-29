@@ -23,18 +23,22 @@
 			></el-table-column>
 			<el-table-column label="操作" :width="handle" v-if="handleShow">
 				<template slot-scope="scope" @click.stop>
-					<el-button
+					<permission-button
+						:permCode="permissionDetails"
+						banType="disable"
 						v-if="detalisShow"
 						size="small"
 						type="text"
 						@click.stop.prevent="handleDetails(scope.$index, scope.row)"
-					>查看</el-button>
-					<el-button
+					>查看</permission-button>
+					<permission-button
+						:permCode="permissionuUpdate"
+						banType="disable"
 						v-if="editShow"
 						size="small"
 						type="text"
 						@click.stop.prevent="handleEdit(scope.$index, scope.row)"
-					>修改</el-button>
+					>修改</permission-button>
 					<el-popover placement="top" width="180" v-model="scope.row.visible">
 						<p style="line-height:40px;text-align:center;">
 							<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -43,7 +47,13 @@
 							<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
 							<el-button type="primary" size="mini" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
 						</div>
-						<el-button slot="reference" type="text" v-if="deleteShow">删除</el-button>
+						<permission-button
+							:permCode="permissionDetele"
+							banType="disable"
+							slot="reference"
+							type="text"
+							v-if="deleteShow"
+						>删除</permission-button>
 					</el-popover>
 					<!-- <el-button
             v-if="deleteShow"
@@ -64,6 +74,9 @@ export default {
 		};
 	},
 	props: {
+		permissionDetails: {},
+		permissionuUpdate: {},
+		permissionDetele: {},
 		handleShow: {},
 		detalisShow: {},
 		editShow: {},

@@ -40,37 +40,26 @@
 						<span>{{ scope.row.order }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="状态" min-width="100" show-overflow-tooltip>
-					<template slot-scope="scope">
-						<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
-							<el-switch
-								v-model="scope.row.state"
-								active-color="#13ce66"
-								inactive-color="#ff4949"
-								@change="changeState(scope.row,scope.$index)"
-							></el-switch>
-						</el-tooltip>
-						<!-- <span class="state_change" @click="changeState(scope.row,scope.$index)">
-							<span v-if="scope.row.state==0">
-								<el-tooltip class="item" effect="light" content="正常" placement="right">
-									<i class="iconfont" style="color:#1cc09f">&#xe78a;</i>
-								</el-tooltip>
-							</span>
-							<span v-if="scope.row.state==1" style="color:red">
-								<el-tooltip class="item" effect="light" content="禁用" placement="right">
-									<i class="iconfont" style="color:#999999">&#xe63a;</i>
-								</el-tooltip>
-							</span>
-						</span>-->
-					</template>
-				</el-table-column>
 				<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>
 					<template slot-scope="scope">
 						<span>{{scope.row.gmtCreate}}</span>
 					</template>
 				</el-table-column>
-
-				<el-table-column label="操作" width="140">
+				<el-table-column label="状态" width="100" show-overflow-tooltip>
+					<template slot-scope="scope">
+						<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
+							<permission-switch
+								permCode="user_manager_list_lookup.user_manager_list_resetpsd"
+								banType="disable"
+								v-model="scope.row.state"
+								active-color="#13ce66"
+								inactive-color="#ff4949"
+								@change="changeState(scope.row,scope.$index)"
+							></permission-switch>
+						</el-tooltip>
+					</template>
+				</el-table-column>
+				<!-- <el-table-column label="操作" width="140">
 					<template slot-scope="scope">
 						<el-popover placement="top" width="180" v-model="scope.row.resetvisible">
 							<p style="line-height:32px;text-align:center;">
@@ -93,7 +82,7 @@
 							<el-button slot="reference" type="text">删除</el-button>
 						</el-popover>
 					</template>
-				</el-table-column>
+				</el-table-column>-->
 			</el-table>
 		</div>
 		<div class="block" style="margin-top:10px;float:right">
@@ -197,7 +186,7 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						states: this.states,
+						state: this.states,
 						keyWord: this.keyWord
 					},
 					option: {

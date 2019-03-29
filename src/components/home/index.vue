@@ -80,7 +80,7 @@
 			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
 					<h4>销售额</h4>
-					<el-date-picker
+					<!-- <el-date-picker
 						class="data_style"
 						v-model="searchValue"
 						size="small"
@@ -92,7 +92,12 @@
 						end-placeholder="结束日期"
 						:picker-options="pickerOptions2"
 						value-format="yyyy/MM/dd"
-					></el-date-picker>
+					></el-date-picker>-->
+					<el-button-group class="data_style">
+						<el-button plain size="small">最近一周</el-button>
+						<el-button plain size="small">最近一月</el-button>
+						<el-button plain size="small">最近一年</el-button>
+					</el-button-group>
 				</div>
 				<div class="histogram_style">
 					<h4 style="text-align: center;line-height:52px;">销售额趋势</h4>
@@ -258,7 +263,9 @@ export default {
 			title: {
 				text: ""
 			},
-			tooltip: {},
+			tooltip: {
+				
+			},
 			legend: {
 				data: []
 			},
@@ -270,39 +277,55 @@ export default {
 				{
 					name: "销量",
 					type: "bar",
-					data: [5, 20, 36, 10, 10, 20]
+					data: [5, 20, 36, 10, 10, 20],
+					itemStyle: {
+						normal: {
+							color: "#1cc09f"
+						}
+					}
 				}
 			]
 		};
-		echarts.init(document.getElementById("order_pie")).setOption({
-			series: {
-				type: "pie",
-				data: [
-					{
-						name: "待收货",
-						value: 1212,
-						itemStyle: {
-							color: "#72D273"
+		let mychart1 = echarts
+			.init(document.getElementById("order_pie"))
+			.setOption({
+				tooltip: {
+					trigger: "item",
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				series: {
+					name: "订单状态",
+					type: "pie",
+					data: [
+						{
+							name: "待收货",
+							value: 1212,
+							itemStyle: {
+								color: "#72D273"
+							}
+						},
+						{
+							name: "待付款",
+							value: 2323,
+							itemStyle: {
+								color: "#00A4DB"
+							}
+						},
+						{
+							name: "待发货",
+							value: 1919,
+							itemStyle: {
+								color: "#FFDA5B"
+							}
 						}
-					},
-					{
-						name: "待付款",
-						value: 2323,
-						itemStyle: {
-							color: "#00A4DB"
-						}
-					},
-					{
-						name: "待发货",
-						value: 1919,
-						itemStyle: {
-							color: "#FFDA5B"
-						}
-					}
-				]
-			}
-		});
+					]
+				}
+			});
 		myChart.setOption(option);
+		window.onresize = function() {
+			myChart.resize();
+			myChart1.resize();
+		};
 	},
 	methods: {
 		showTop5() {
@@ -411,6 +434,11 @@ export default {
 			.data_style {
 				margin-top: 15px;
 				float: right;
+				.el-button.is-plain:focus,
+				.el-button.is-plain:hover {
+					background-color: @main-color;
+					color: white;
+				}
 			}
 		}
 

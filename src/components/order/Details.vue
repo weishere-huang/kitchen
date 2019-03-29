@@ -3,24 +3,30 @@
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
 			<div style="float:right;">
-				<el-button
+				<permission-button
+					permCode="supplierOrder_detail_lookup.supplierOrder_detai_send"
+					banType="disable"
 					size="small"
 					type="primary"
 					@click="dialogSend=true"
 					v-if="orderDetails.platformState==2"
-				>发货</el-button>
-				<el-button
+				>发货</permission-button>
+				<permission-button
+					permCode="supplierOrder_detail_lookup.supplierOrder_detai_pay"
+					banType="disable"
 					size="small"
 					type="primary"
 					@click="dialogPay=true"
 					v-if="orderDetails.platformState==0"
-				>付款</el-button>
-				<el-button
+				>付款</permission-button>
+				<permission-button
+					permCode="supplierOrder_detail_lookup.supplierOrder_detai_schedule"
+					banType="disable"
 					size="small"
 					type="primary"
 					@click="dialogClose=true"
 					v-if="orderDetails.platformState!=3&&orderDetails.platformState!=9"
-				>关闭</el-button>
+				>关闭</permission-button>
 				<el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button>
 				<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
 			</div>
@@ -289,7 +295,7 @@ export default {
 					prop: "itemPrice",
 					width: 90,
 					formatter: function(row, column) {
-						return "￥" + row.itemPrice/100;
+						return "￥" + row.itemPrice / 100;
 					}
 				},
 				{
@@ -302,7 +308,7 @@ export default {
 					prop: "subtotal",
 					width: 120,
 					formatter: function(row, column) {
-						return (row.subtotal = row.itemPrice/100 * row.number);
+						return (row.subtotal = (row.itemPrice / 100) * row.number);
 					}
 				}
 			],
