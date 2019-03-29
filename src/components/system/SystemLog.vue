@@ -157,6 +157,9 @@ export default {
 	},
 	components: {
 		tableList
+	},
+	created() {
+		console.log(returnCitySN["cip"] + "," + returnCitySN["cname"]);
 	}
 };
 </script>
