@@ -215,7 +215,7 @@ export default {
 					{ required: true, message: "请填写密码", trigger: "blur" },
           {
             validator: (rule, value, callback) => {
-              if (/^\w{7,20}$/.test(value) === false) {
+              if (/^\w{6,20}$/.test(value) === false) {
                 callback(new Error("请输入6到20位的密码"));
               } else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
                 callback(new Error("你的密码过于简单，请重新输入"));
@@ -376,7 +376,8 @@ export default {
 				this.$refs.tree3.getCheckedKeys()
 			);
       if(arr.length===0) {
-        this.$message.error("请选择销售区域")
+        this.$message.error("请选择销售区域");
+        return
       }
 			this.supplierMsg.areaCode = arr;
 
