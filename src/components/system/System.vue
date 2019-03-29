@@ -437,7 +437,8 @@ export default {
 							}
 						},
 						trigger: "blur"
-					}
+					},
+
 				],
 				sendMoney: [
 					{ required: true, message: "请设置起送金额", trigger: "blur" },

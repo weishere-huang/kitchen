@@ -119,7 +119,7 @@ export default {
 		reply(index, rowData) {
 			let params = { type: "edit", index: index, rowData: rowData };
 			console.log(params);
-			this.replayContent = params.rowData;
+			Object.assign(this.replayContent,params.rowData)
 			this.dialogReplay = true;
 		},
 		handleDelete(index, rowData) {

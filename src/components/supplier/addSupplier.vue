@@ -212,7 +212,21 @@ export default {
 					{ required: true, message: "请填写详细地址", trigger: "blur" }
 				],
 				supplierPassword: [
-					{ required: true, message: "请填写密码", trigger: "blur" }
+					{ required: true, message: "请填写密码", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (/^\w{6,20}$/.test(value) === false) {
+                callback(new Error("请输入6到20位的密码"));
+              } else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+                callback(new Error("你的密码过于简单，请重新输入"));
+              } else if(/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value)===true){
+                callback(new Error("密码中不能含有空格与汉字"));
+              }else {
+                callback();
+              }
+            },
+            trigger: "change"
+          }
 				],
 				password: [
 					{ required: true, message: "请确认输入密码", trigger: "blur" },
@@ -361,7 +375,12 @@ export default {
 				this.$refs.tree2.getCheckedKeys(),
 				this.$refs.tree3.getCheckedKeys()
 			);
+      if(arr.length===0) {
+        this.$message.error("请选择销售区域");
+        return
+      }
 			this.supplierMsg.areaCode = arr;
+
 		},
 		encryptByDES(message, key) {
 			const keyHex = CryptoJS.enc.Utf8.parse(key);

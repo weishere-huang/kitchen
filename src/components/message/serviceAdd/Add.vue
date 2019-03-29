@@ -218,13 +218,13 @@ export default {
 		}
 	},
 	watch: {
-		editMsg() {
-			if (this.editMsg != null) {
-				Object.assign(this.addMsg, this.editMsg);
-				this.startedit();
-			}
-		}
-	}
+    editMsg() {
+      if (this.editMsg != null) {
+        Object.assign(this.addMsg, this.editMsg);
+        this.startedit();
+      }
+    }
+  }
 };
 </script>
 <style lang="less">
