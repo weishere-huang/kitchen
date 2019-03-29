@@ -192,14 +192,14 @@
 							<span>{{orderDetails.phone}}</span>
 						</el-form-item>
 						<el-form-item label="商品总金额：">
-							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100+orderDetails.postFee}}</span>
-							<span>（含配送费 {{orderDetails.postFee}}元）</span>
+							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span>
+							<span>（含配送费 {{orderDetails.postFee/100}}元）</span>
 						</el-form-item>
 						<el-form-item label="- 优惠：">
 							<span>¥ 0.00</span>
 						</el-form-item>
 						<el-form-item label="实付：">
-							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100+orderDetails.postFee}}</span>
+							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -216,13 +216,13 @@
 							<span>{{orderDetails.payType}}</span>
 						</el-form-item>
 						<el-form-item label="下单时间：">
-							<span>{{orderDetails.gmtCreate}}</span>
+							<span>{{orderDetails.gmtCreate==null||""?'--':orderDetails.gmtCreate}}</span>
 						</el-form-item>
 						<el-form-item label="付款时间：">
-							<span>{{orderDetails.payTime}}</span>
+							<span>{{orderDetails.payTime==null||""?"--":orderDetails.payTime}}</span>
 						</el-form-item>
 						<el-form-item label="发货时间：">
-							<span>{{orderDetails.sendGoodTime}}</span>
+							<span>{{orderDetails.sendGoodTime==null||""?"--":orderDetails.sendGoodTime}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -242,10 +242,10 @@
 				></table-list>
 				<div class="total">
 					<span style=" font-weight: 700;font-size:16px;">
-						合计：￥{{orderDetails.orderMoney/100+orderDetails.postFee}}
+						合计：￥{{orderDetails.orderMoney/100}}
 						<span
 							style=" font-weight:0;font-size:14px;"
-						>（含运费{{orderDetails.postFee}}元）</span>
+						>（含运费{{orderDetails.postFee/100}}元）</span>
 					</span>
 				</div>
 			</div>
