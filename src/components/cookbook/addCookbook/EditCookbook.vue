@@ -665,14 +665,21 @@ export default {
 						result.data.data.state = JSON.stringify(result.data.data.state);
 						this.cookbook = result.data.data;
 						for (let i = 0; i < this.cookbook.step.length; i++) {
-							this.cookbook.step[i].filelist = [
-								{
-									name: this.cookbook.step[i].path.substring(
-										this.cookbook.step[i].path.lastIndexOf("/") + 1
-									),
-									url: this.cookbook.step[i].path
-								}
-							];
+							if (
+								this.cookbook.step[i].path == "" ||
+								this.cookbook.step[i].path == null
+							) {
+								this.cookbook.step[i].filelist = [];
+							} else {
+								this.cookbook.step[i].filelist = [
+									{
+										name: this.cookbook.step[i].path.substring(
+											this.cookbook.step[i].path.lastIndexOf("/") + 1
+										),
+										url: this.cookbook.step[i].path
+									}
+								];
+							}
 						}
 						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
 						console.log(this.cookbook);
