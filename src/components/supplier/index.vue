@@ -2,7 +2,14 @@
 	<div class="supplier_list">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加供应商</el-button>
+				<permission-button
+					permCode="supplier_list_lookup.supplier_list_add"
+					banType="disable"
+					size="small"
+					type="primary"
+					class="el-icon-circle-plus-outline"
+					@click="toadd"
+				>添加供应商</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -28,6 +35,8 @@
 						:editShow="true"
 						:deleteShow="true"
 						:handleShow="true"
+						:permissionuUpdate="permissionuUpdate"
+						:permissionDetele="permissionDetele"
 					></table-list>
 				</div>
 				<div class="block" style="margin-top:10px;float:right">
@@ -53,6 +62,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionuUpdate: "supplier_list_lookup.supplier_list_update",
+			permissionDetele: "supplier_list_lookup.supplier_list_delete",
 			currentPage: 1,
 			items: [
 				{

@@ -2,45 +2,6 @@
 	<div class="guest_book">
 		<div class="top_title">
 			<h4>用户留言</h4>
-			<!--<div class="top_search">-->
-			<!--<el-col-->
-			<!--:span="9"-->
-			<!--style="padding:0 5px;"-->
-			<!--&gt;-->
-			<!--<el-select-->
-			<!--v-model="value"-->
-			<!--placeholder="请选择"-->
-			<!--size="small"-->
-			<!--&gt;-->
-			<!--<el-option-->
-			<!--v-for="item in options"-->
-			<!--:key="item.value"-->
-			<!--:label="item.label"-->
-			<!--:value="item.value"-->
-			<!--&gt;-->
-			<!--</el-option>-->
-			<!--</el-select>-->
-			<!--</el-col>-->
-			<!--<el-col-->
-			<!--:span="11"-->
-			<!--style="padding:0 5px;"-->
-			<!--&gt;-->
-			<!--<el-input-->
-			<!--size="small"-->
-			<!--style="width:100%;"-->
-			<!--placeholder=""-->
-			<!--&gt;</el-input>-->
-			<!--</el-col>-->
-			<!--<el-col-->
-			<!--:span="4"-->
-			<!--style="padding:0 5px;"-->
-			<!--&gt;-->
-			<!--<el-button-->
-			<!--size="small"-->
-			<!--plain-->
-			<!-- &gt;搜索</el-button> -->
-			<!-- </el-col> -->
-			<!-- </div> -->
 		</div>
 		<div class="table_list">
 			<el-table
@@ -79,7 +40,13 @@
 				</el-table-column>
 				<el-table-column label="操作" width="100">
 					<template slot-scope="scope">
-						<el-button type="text" size="mini" @click.stop.prevent="reply(scope.$index, scope.row)">回复</el-button>
+						<permission-button
+							permCode="user_faq_list_lookup.user_faq_list_reply"
+							banType="disable"
+							type="text"
+							size="mini"
+							@click.stop.prevent="reply(scope.$index, scope.row)"
+						>回复</permission-button>
 						<el-popover placement="top" width="180" v-model="scope.row.visible">
 							<p style="line-height:32px;text-align:center;">
 								<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -88,7 +55,12 @@
 								<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
 								<el-button type="primary" size="mini" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
 							</div>
-							<el-button slot="reference" type="text">删除</el-button>
+							<permission-button
+								permCode="user_faq_list_lookup.user_faq_list_delete"
+								banType="disable"
+								slot="reference"
+								type="text"
+							>删除</permission-button>
 						</el-popover>
 					</template>
 				</el-table-column>

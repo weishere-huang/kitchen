@@ -1,7 +1,14 @@
 <template>
 	<div class="advertising_list">
 		<div class="top_list">
-			<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加广告</el-button>
+			<permission-button
+				permCode="message_advertisement_lookup.message_advertising_add"
+				banType="disable"
+				size="small"
+				type="primary"
+				class="el-icon-circle-plus-outline"
+				@click="toadd"
+			>添加广告</permission-button>
 			<el-dialog :close-on-click-modal="false" title="添加广告" :visible.sync="dialogAdd" width="600px">
 				<add-advertising v-on:beforeadd="beforeadd"></add-advertising>
 				<!-- <span slot="footer" class="dialog-footer">
@@ -62,11 +69,13 @@
 					</el-table-column>
 					<el-table-column label="操作" min-width="100">
 						<template slot-scope="scope">
-							<el-button
+							<permission-button
+								permCode="message_advertisement_lookup.message_advertising_update"
+								banType="disable"
 								type="text"
 								size="mini"
 								@click.stop.prevent="handleEdit(scope.$index, scope.row)"
-							>修改</el-button>
+							>修改</permission-button>
 							<el-popover placement="top" width="180" v-model="scope.row.visible">
 								<p style="line-height:32px;text-align:center;">
 									<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -75,7 +84,12 @@
 									<el-button size="small" plain @click="scope.row.visible = false">取消</el-button>
 									<el-button type="primary" size="small" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
 								</div>
-								<el-button slot="reference" type="text">删除</el-button>
+								<permission-button
+									permCode="message_advertisement_lookup.message_advertising_delete"
+									banType="disable"
+									slot="reference"
+									type="text"
+								>删除</permission-button>
 							</el-popover>
 						</template>
 					</el-table-column>

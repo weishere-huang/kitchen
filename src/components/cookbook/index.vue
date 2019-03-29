@@ -43,13 +43,25 @@
 						</el-table-column>
 						<el-table-column label="*上/下架" min-width="80">
 							<template slot-scope="scope">
-								<span @click.stop.prevent="changeUp(scope.$index, scope.row)">
-									<i
-										class="iconfont"
+								<span>
+									<permission-button
+										permCode="manu_list_lookup.menu_list_add"
+										banType="disable"
+										type="text"
 										v-if="scope.row.state=='0'"
-										style="color:green;cursor: pointer;"
-									>&#xe659;</i>
-									<i class="iconfont" v-if="scope.row.state=='1'" style="color:red;cursor: pointer;">&#xe658;</i>
+										@click.stop.prevent="changeUp(scope.$index, scope.row)"
+									>
+										<i class="iconfont" style="color:green;">&#xe659;</i>
+									</permission-button>
+									<permission-button
+										permCode="manu_list_lookup.menu_list_add"
+										banType="disable"
+										type="text"
+										v-if="scope.row.state=='1'"
+										@click.stop.prevent="changeUp(scope.$index, scope.row)"
+									>
+										<i class="iconfont" style="color:red;">&#xe658;</i>
+									</permission-button>
 								</span>
 							</template>
 						</el-table-column>

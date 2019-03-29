@@ -201,7 +201,7 @@ export default {
 				},
 				{
 					label: "供应商名称",
-					prop: "payType",
+					prop: "supplierName",
 					width: 100
 				}
 			],
