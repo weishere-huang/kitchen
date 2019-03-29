@@ -418,8 +418,20 @@ export default {
 					{ required: true, message: "请设置配送费", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
-								callback(new Error("只能大于或等于0，且只能保留两位小数"));
+							if (this.systemMsg.moneyOff == false) {
+								if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+									callback(new Error("只能大于或等于0，且只能保留两位小数"));
+								} else {
+									callback();
+								}
+							} else if (this.systemMsg.moneyOff == true) {
+								if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+									callback(new Error("只能大于或等于0，且只能保留两位小数"));
+								} else if (this.systemMsg.allMoney <= 0) {
+									callback(new Error("满减金额必须大于0！"));
+								} else {
+									callback();
+								}
 							} else {
 								callback();
 							}
@@ -697,7 +709,7 @@ export default {
 		},
 		save() {
 			if (this.systemMsg.moneyOff == false) {
-				this.systemMsg.allMoney = "";
+				this.systemMsg.allMoney = null;
 			}
 			let qs = require("qs");
 			let data = qs.stringify({
@@ -743,6 +755,9 @@ export default {
 			handler(newValue, oldValue) {
 				if (newValue.sendTime == 1) {
 					this.systemMsg.retentionTime = "";
+				}
+				if (this.systemMsg.moneyOff == false) {
+					this.systemMsg.allMoney = null;
 				}
 			},
 			deep: true
