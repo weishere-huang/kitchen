@@ -141,9 +141,15 @@
 				</el-col>
 			</div>
 			<div class="top_list" style="padding:10px 200px">
-				<el-button size="small" type="primary" @click="submitForm('supplierMsg')">
+				<permission-button
+					permCode="supplier_add_lookup.supplier_add_save"
+					banType="disable"
+					size="small"
+					type="primary"
+					@click="submitForm('supplierMsg')"
+				>
 					<i class="iconfont">&#xe62d;</i> 保存
-				</el-button>
+				</permission-button>
 			</div>
 		</div>
 	</div>
@@ -226,7 +232,12 @@ export default {
 				],
 				supplierAccount: [
 					{ required: true, message: "请填写账号", trigger: "blur" },
-					{ max: 10, min: 8, message: "请输入格式为：agent加3~5个数字组成", trigger: "blur" },
+					{
+						max: 10,
+						min: 8,
+						message: "请输入格式为：agent加3~5个数字组成",
+						trigger: "blur"
+					},
 					{
 						validator: (rule, value, callback) => {
 							if (/^(?:agent\d+|\d{3,5})$/.test(value) === false) {

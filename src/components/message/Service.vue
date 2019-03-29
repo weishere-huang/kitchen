@@ -1,7 +1,14 @@
 <template>
 	<div class="server_list">
 		<div class="top_list">
-			<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toadd">添加网点</el-button>
+			<permission-button
+				permCode="message_service_lookup.message_service_add"
+				banType="disable"
+				size="small"
+				type="primary"
+				class="el-icon-circle-plus-outline"
+				@click="toadd"
+			>添加网点</permission-button>
 			<el-dialog :close-on-click-modal="false" title="添加网点" :visible.sync="dialogAdd" width="500px">
 				<add-servive v-on:beforeadd="beforeadd"></add-servive>
 				<!-- <span slot="footer" class="dialog-footer">
@@ -63,6 +70,8 @@
 					:editShow="true"
 					:deleteShow="true"
 					:handleShow="true"
+					:permissionuUpdate="permissionuUpdate"
+					:permissionDetele="permissionDetele"
 				></table-list>
 			</div>
 			<div class="block" style="margin-top:10px;float:right">
@@ -94,6 +103,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionuUpdate: "message_service_lookup.message_service_update",
+			permissionDetele: "message_service_lookup.message_service_delete",
 			addMsg: {
 				province: "",
 				city: "",
