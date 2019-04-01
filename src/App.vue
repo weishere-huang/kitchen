@@ -429,7 +429,16 @@ export default {
 	components: {
 		breadCrumb
 	},
-	mounted() {}
+	mounted() {},
+	watch: {
+		dialogFormVisible() {
+			if (this.dialogFormVisible == false) {
+				this.editPassword.newPassword = "";
+				this.editPassword.oldPassword = "";
+				this.editPassword.repetitionPassword = "";
+			}
+		}
+	}
 };
 </script>
 
