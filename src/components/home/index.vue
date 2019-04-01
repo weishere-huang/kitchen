@@ -284,45 +284,45 @@ export default {
 				}
 			]
 		};
-		let mychart1 = echarts.init(document.getElementById("order_pie"));
-		let option1 = {
-			tooltip: {
-				trigger: "item",
-				formatter: "{a} <br/>{b} : {c} ({d}%)"
-			},
-			series: {
-				name: "订单状态",
-				type: "pie",
-				data: [
-					{
-						name: "待收货",
-						value: 1212,
-						itemStyle: {
-							color: "#72D273"
+		let pieEcharts = echarts
+			.init(document.getElementById("order_pie"))
+			.setOption({
+				tooltip: {
+					trigger: "item",
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				series: {
+					name: "订单状态",
+					type: "pie",
+					data: [
+						{
+							name: "待收货",
+							value: 1212,
+							itemStyle: {
+								color: "#72D273"
+							}
+						},
+						{
+							name: "待付款",
+							value: 2323,
+							itemStyle: {
+								color: "#00A4DB"
+							}
+						},
+						{
+							name: "待发货",
+							value: 1919,
+							itemStyle: {
+								color: "#FFDA5B"
+							}
 						}
-					},
-					{
-						name: "待付款",
-						value: 2323,
-						itemStyle: {
-							color: "#00A4DB"
-						}
-					},
-					{
-						name: "待发货",
-						value: 1919,
-						itemStyle: {
-							color: "#FFDA5B"
-						}
-					}
-				]
-			}
-		};
+					]
+				}
+			});
 		myChart.setOption(option);
-		myChart1.setOption(option1);
 		window.onresize = function() {
 			myChart.resize();
-			myChart1.resize();
+			// pieEcharts.resize();
 		};
 	},
 	methods: {

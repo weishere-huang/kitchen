@@ -38,8 +38,8 @@
 							@change="handleChange"
 							style="width:400px;"
 							:show-all-levels="false"
-							change-on-select
 							ref="recipeCate"
+							filterable
 						></el-cascader>
 					</el-form-item>
 					<el-form-item label="菜谱名称：" prop="recipeName">
