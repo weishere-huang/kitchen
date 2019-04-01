@@ -25,7 +25,7 @@
 					size="small"
 					type="primary"
 					@click="dialogClose=true"
-					v-if="orderDetails.platformState!=3&&orderDetails.platformState!=9"
+					v-if="orderDetails.platformState==0"
 				>关闭</permission-button>
 				<el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button>
 				<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
@@ -371,7 +371,10 @@ export default {
 						successMsg: "发货成功"
 					},
 					type: "post",
-					url: "/api-order/order/sendGood"
+					url: "/api-order/order/sendGood",
+					loadingConfig: {
+						target: document.querySelector(".details")
+					}
 				},
 				this
 			).then(
@@ -400,7 +403,10 @@ export default {
 							successMsg: "付款成功"
 						},
 						type: "post",
-						url: "/api-order/order/payOrder"
+						url: "/api-order/order/payOrder",
+						loadingConfig: {
+							target: document.querySelector(".details")
+						}
 					},
 					this
 				).then(
@@ -430,7 +436,10 @@ export default {
 							successMsg: "订单已关闭"
 						},
 						type: "post",
-						url: "/api-order/order/closeOrder"
+						url: "/api-order/order/closeOrder",
+						loadingConfig: {
+							target: document.querySelector(".details")
+						}
 					},
 					this
 				).then(
@@ -464,7 +473,10 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/getOneOrder"
+					url: "/api-order/order/getOneOrder",
+					loadingConfig: {
+						target: document.querySelector(".details")
+					}
 				},
 				this
 			).then(
