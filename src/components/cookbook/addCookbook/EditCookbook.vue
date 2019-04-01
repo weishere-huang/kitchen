@@ -83,7 +83,8 @@
 							size="small"
 							style="width:400px;"
 							placeholder="单位：元"
-							v-model="cookbook.recipePrice"
+							v-model.number="cookbook.recipePrice"
+							oninput="if(value.length>10)value=value.slice(0,10)"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="净含量：" prop="weight">
@@ -95,6 +96,7 @@
 							placeholder="单位：克"
 							step="1"
 							maxlength="20"
+							oninput="if(value.length>10)value=value.slice(0,10)"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="食材搭配：" prop="spec">

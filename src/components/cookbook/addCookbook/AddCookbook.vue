@@ -53,6 +53,7 @@
 							placeholder="单位：分钟"
 							v-model="cookbook.cookingTime"
 							maxlength="20"
+							oninput="if(value.length>10)value=value.slice(0,10)"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
@@ -82,8 +83,10 @@
 							maxlength="20"
 							size="small"
 							style="width:400px;"
+							type="number"
 							placeholder="单位：元"
-							v-model="cookbook.recipePrice"
+							v-model.number="cookbook.recipePrice"
+							oninput="if(value.length>10)value=value.slice(0,10)"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="净含量：" prop="weight">
@@ -94,6 +97,8 @@
 							style="width:400px;"
 							placeholder="单位：克"
 							maxlength="10"
+							max="9999999999"
+							oninput="if(value.length>10)value=value.slice(0,10)"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="食材搭配：" prop="spec">
@@ -363,12 +368,6 @@ export default {
 					{
 						required: true,
 						message: "请输入净含量",
-						trigger: "blur"
-					},
-					{
-						type: "number",
-						max: 10,
-						message: "请输入小于10位",
 						trigger: "blur"
 					},
 					{
