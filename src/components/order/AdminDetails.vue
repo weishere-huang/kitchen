@@ -273,7 +273,9 @@ export default {
 			sendTime: "",
 			payOI: "",
 			closeOI: "",
-			orderDetails: "",
+			orderDetails: {
+				address: {}
+			},
 			state: 1,
 			dialogSend: false,
 			dialogPay: false,

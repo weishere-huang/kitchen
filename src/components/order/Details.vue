@@ -279,7 +279,9 @@ export default {
 			sendTime: "",
 			payOI: "",
 			closeOI: "",
-			orderDetails: "",
+			orderDetails: {
+				address: {}
+			},
 			state: 1,
 			dialogSend: false,
 			dialogPay: false,
@@ -493,7 +495,7 @@ export default {
 							) +
 							"-" +
 							this.orderDetails.endTime
-								.substring(this.orderDetails.endTime.lastIndexOf(" ")+1)
+								.substring(this.orderDetails.endTime.lastIndexOf(" ") + 1)
 								.substring(0, 5);
 					}
 
