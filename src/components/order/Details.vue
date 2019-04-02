@@ -172,7 +172,7 @@
 							<span>{{orderDetails.address.address}}</span>
 						</el-form-item>
 						<el-form-item label="配送时间：">
-							<span style="color:#1cc09f">立即送出</span>
+							<span style="color:#1cc09f">{{sendTime}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -276,6 +276,7 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			sendTime: "",
 			payOI: "",
 			closeOI: "",
 			orderDetails: "",
@@ -481,10 +482,22 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result.data);
-					result.data.data.address = JSON.parse(result.data.data.address);
-					this.orderDetails = result.data.data;
-					console.log(this.orderDetails);
+					console.log(result.data);
+					if (result.data.code === 200) {
+						result.data.data.address = JSON.parse(result.data.data.address);
+						this.orderDetails = result.data.data;
+						this.sendTime =
+							this.orderDetails.startTime.substring(
+								0,
+								this.orderDetails.startTime.lastIndexOf(":")
+							) +
+							"-" +
+							this.orderDetails.endTime
+								.substring(this.orderDetails.endTime.lastIndexOf(" ")+1)
+								.substring(0, 5);
+					}
+
+					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);

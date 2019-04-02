@@ -25,7 +25,7 @@
 						<span>支付方式：{{item.payType}}</span>
 					</el-col>
 					<el-col :span="24">
-						<span>配送时间：</span>
+						<span>配送时间：{{item.sendTime}}</span>
 					</el-col>
 				</el-col>
 				<el-col :span="6">
@@ -154,6 +154,15 @@ export default {
 					let ordersMsg = result.data.data;
 					for (let i = 0; i < ordersMsg.length; i++) {
 						ordersMsg[i].address = JSON.parse(ordersMsg[i].address);
+						ordersMsg[i].sendTime =
+							ordersMsg[i].startTime.substring(
+								0,
+								ordersMsg[i].startTime.lastIndexOf(":")
+							) +
+							"-" +
+							ordersMsg[i].endTime
+								.substring(ordersMsg[i].endTime.lastIndexOf(" ") + 1)
+								.substring(0, 5);
 					}
 					this.printData = Object.assign([], ordersMsg);
 					console.log(this.printData);
