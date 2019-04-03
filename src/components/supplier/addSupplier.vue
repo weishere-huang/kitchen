@@ -297,7 +297,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-mall/area/list"
+					url: "/api-mall/salesTerritoryArea/findAreaOnAdd"
 				},
 				this
 			).then(
@@ -311,28 +311,28 @@ export default {
 						if (data[item].adCode.match(/100000$/)) {
 							that.country.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName,
+								areaName: data[item].name,
 								children: []
 							});
 						} else if (data[item].adCode.match(/0000$/)) {
 							//省
 							that.province.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName,
+								areaName: data[item].name,
 								children: []
 							});
 						} else if (data[item].adCode.match(/00$/)) {
 							//市
 							that.city.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName,
+								areaName: data[item].name,
 								children: []
 							});
 						} else {
 							//区
 							that.block.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName
+								areaName: data[item].name
 							});
 						}
 					}
