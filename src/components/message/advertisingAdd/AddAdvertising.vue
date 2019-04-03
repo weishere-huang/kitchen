@@ -287,8 +287,7 @@ export default {
 		},
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
-				this.addMsg.mainPic =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.addMsg.mainPic =res.data;
 				this.uploadShow1 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");
@@ -298,8 +297,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addMsg.content =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.addMsg.content =res.data;
 				this.uploadShow2 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");
