@@ -145,7 +145,25 @@ export default {
 						required: true,
 						message: "请填写结束日期",
 						trigger: "change"
-					}
+					},
+          {
+            validator: (rule, value, callback) => {
+              if((this.startTime==null||this.startTime==="")||
+                (this.endTime==null||this.endTime==="")){
+                callback();
+              }else{
+                if(
+                  new Date(this.startTime) >= new Date(this.endTime)
+
+                ){
+                  callback(new Error("结束时间必须大于开始时间"));
+                }else{
+                  callback();
+                }
+              }
+            },
+            trigger: "change"
+          }
 				]
 			},
 			addMsg: {

@@ -85,8 +85,8 @@ export default {
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				if (params.rowData.id === 1) {
-					this.$message.warning("超级管理员禁止修改权限!");
+				if (params.rowData.id === 1 || params.rowData.id === 2) {
+					this.$message.warning("特殊角色禁止修改权限!");
 					return;
 				} else {
 					this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
