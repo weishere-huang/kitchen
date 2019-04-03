@@ -485,8 +485,7 @@ export default {
 		},
 		handleAvatarSuccess(res, file, index) {
 			if (res.code === 200) {
-				this.cookbook.step[index].path =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.cookbook.step[index].path = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -549,8 +548,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.cookbook.recipeImg =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.cookbook.recipeImg = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"

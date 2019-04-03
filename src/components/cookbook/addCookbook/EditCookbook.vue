@@ -289,42 +289,7 @@ export default {
 						trigger: "change"
 					}
 				],
-				cateId: [
-					{ required: true, message: "请选择分类", trigger: "change" },
-					{
-						validator: (rule, value, callback) => {
-							if (value.length == 1) {
-								if (
-									this.classify
-										.find(item => {
-											return item.id === value[0];
-										})
-										.hasOwnProperty("children")
-								) {
-									callback(new Error("不能选择含有子项的分类"));
-								} else {
-									callback();
-								}
-							} else if (value.length > 1) {
-								if (
-									this.classify
-										.find(item => {
-											return item.id === value[0];
-										})
-										.children.find(i => {
-											return i.id === value[value.length - 1];
-										})
-										.hasOwnProperty("children")
-								) {
-									callback(new Error("不能选择含有子项的分类"));
-								} else {
-									callback();
-								}
-							}
-						},
-						trigger: ["change", "blur"]
-					}
-				],
+				cateId: [{ required: true, message: "请选择分类", trigger: "change" }],
 				recipeName: [
 					{ required: true, message: "请输入菜谱名称", trigger: "blur" }
 				],
@@ -518,8 +483,7 @@ export default {
 		//流程图片上传
 		handleAvatarSuccess(res, file, index) {
 			if (res.code === 200) {
-				this.cookbook.step[index].path =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.cookbook.step[index].path = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -584,8 +548,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.cookbook.recipeImg =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.cookbook.recipeImg = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -660,8 +623,11 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result.data.data);
+					console.log(result.data.data);
 					if (result.data.code === 200) {
+						// result.data.data.recipeImg =
+						// 	this.global.imgPath +
+						// 	result.data.data.recipeImg.replace("img:", "");
 						result.data.data.cateId = JSON.parse(result.data.data.cateId);
 						result.data.data.step = JSON.parse(result.data.data.step);
 						result.data.data.state = JSON.stringify(result.data.data.state);
@@ -678,13 +644,15 @@ export default {
 										name: this.cookbook.step[i].path.substring(
 											this.cookbook.step[i].path.lastIndexOf("/") + 1
 										),
-										url: this.cookbook.step[i].path
+										url:
+											this.global.imgPath +
+											this.cookbook.step[i].path.replace("img:", "")
 									}
 								];
 							}
 						}
 						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
-						console.log(this.cookbook);
+						// console.log(this.cookbook);
 					}
 				},
 				({ type, info }) => {}
@@ -706,7 +674,8 @@ export default {
 						name: this.cookbook.recipeImg.substring(
 							this.cookbook.recipeImg.lastIndexOf("/") + 1
 						),
-						url: this.cookbook.recipeImg
+						url:
+							this.global.imgPath + this.cookbook.recipeImg.replace("img:", "")
 					}
 				];
 			}
