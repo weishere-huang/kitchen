@@ -32,7 +32,7 @@
 							<i class="iconfont" style="color:white;">&#xe63b;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.orderDaySum.orderSum>0?allMsg.orderDaySum.orderSum:'0'}}</p>
 							<p>今日订单</p>
 						</span>
 					</li>
@@ -41,7 +41,7 @@
 							<i class="iconfont" style="color:white;">&#xe666;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.orderDaySum.orderMoney>0?allMsg.orderDaySum.orderMoney:'0'}}</p>
 							<p>今日销售额</p>
 						</span>
 					</li>
@@ -50,8 +50,9 @@
 							<i class="iconfont" style="color:white;">&#xe653;</i>
 						</span>
 						<span>
-							<p>17
-								<!-- <i style="color:#999999;font-style:normal;">3</i> -->
+							<p>
+								17/
+								<i style="color:#999999;font-style:normal;">3</i>
 							</p>
 							<p>今日注册用户</p>
 						</span>
@@ -61,7 +62,7 @@
 							<i class="iconfont" style="color:white;">&#xe8d7;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.orderSum.orderSum>0?allMsg.orderSum.orderSum:'0'}}</p>
 							<p>订单总数</p>
 						</span>
 					</li>
@@ -70,7 +71,7 @@
 							<i class="iconfont" style="color:white;">&#xe69f;</i>
 						</span>
 						<span>
-							<p>￥36</p>
+							<p>￥{{allMsg.orderSum.orderMoney>0?allMsg.orderSum.orderMoney:'0'}}</p>
 							<p>销售总额</p>
 						</span>
 					</li>
@@ -88,27 +89,17 @@
 			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
 					<h4>销售额</h4>
-					<!-- <el-date-picker
-						class="data_style"
-						v-model="searchValue"
-						size="small"
-						type="daterange"
-						align="right"
-						unlink-panels
-						range-separator="~"
-						start-placeholder="开始日期"
-						end-placeholder="结束日期"
-						:picker-options="pickerOptions2"
-						value-format="yyyy/MM/dd"
-					></el-date-picker>-->
 					<el-button-group class="data_style">
-						<el-button plain size="small">最近一周</el-button>
-						<el-button plain size="small">最近一月</el-button>
-						<el-button plain size="small">最近一年</el-button>
+						<el-button plain size="small" @click="getSaleMoney(0)">最近一周</el-button>
+						<el-button plain size="small" @click="getSaleMoney(1)">最近一月</el-button>
+						<el-button plain size="small" @click="getSaleMoney(2)">最近一年</el-button>
 					</el-button-group>
 				</div>
 				<div class="histogram_style">
-					<h4 style="text-align: center;line-height:52px;">销售额趋势</h4>
+					<h4 style="text-align: center;line-height:52px;">
+						销售额趋势
+						<span style="font-size:12px;color:#999999;" v-if="searchValue!=''">（{{searchValue}}）</span>
+					</h4>
 					<div id="sale_money" style="width:100%;height:284px;"></div>
 				</div>
 			</el-col>
@@ -168,18 +159,18 @@
 				<el-col :span="24" class="table_case">
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
-						<el-col :span="12">商品</el-col>
+						<el-col :span="12">供应商</el-col>
 						<el-col :span="7">销售额</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
-						<el-col :span="24" v-for="(item, index) in items" :key="index" v-show="top5">
+						<el-col :span="24" v-for="(item, index) in saleTOP5" :key="index" v-show="top5">
 							<el-col :span="5" style="text-align:center;">
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col :span="12">{{item.supplierName}}</el-col>
+							<el-col :span="7">{{item.orderMoney}}</el-col>
 						</el-col>
-						<el-col :span="24" v-for="(item, index) in item1" :key="item.index" v-show="top10">
+						<el-col :span="24" v-for="(item, index) in saleTOP10" :key="item.index" v-show="top10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
@@ -261,6 +252,14 @@ var echarts = require("echarts");
 export default {
 	data() {
 		return {
+			saleTOP5: [],
+			saleTOP10: [],
+			allMsg: {
+				itemSellNum: [],
+				orderDaySum: {},
+				orderSum: {},
+				supperSaleSum: []
+			},
 			activeStyle: 0,
 			top5: true,
 			top10: false,
@@ -344,45 +343,139 @@ export default {
 					}
 				]
 			},
-			searchValue: []
+			searchValue: ""
 		};
 	},
-	mounted() {
-		let myChart = echarts.init(document.getElementById("sale_money"));
-		let option = {
-			title: {
-				text: ""
-			},
-			tooltip: {
-				trigger: "axis",
-				formatter: ""
-			},
-			legend: {
-				data: []
-			},
-			xAxis: {
-				data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-			},
-			yAxis: {},
-			series: [
-				{
-					name: "销量",
-					type: "bar",
-					data: [5, 20, 36, 10, 10, 20],
-					itemStyle: {
-						normal: {
-							color: "#1cc09f"
-						}
-					}
-				}
-			]
-		};
-		myChart.setOption(option);
-		window.onresize = function() {
-			myChart.resize();
-		};
-	},
+	mounted() {},
 	methods: {
+		getLeaveMessage() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-user/userInfo/adviseIfUserInfo",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data.data);
+					if (result.data.code === 200) {
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
+		},
+		getMsg() {
+			// let me = this;
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-order/order/getOrderMoneyAndSum",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data.data);
+					if (result.data.code === 200) {
+						this.allMsg = JSON.parse(JSON.stringify(result.data.data));
+						this.saleTOP5 = this.allMsg.supperSaleSum.slice(0, 4);
+						this.saleTOP10 = this.allMsg.supperSaleSum.slice(5);
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
+		},
+		getSaleMoney(i) {
+			this.Axios(
+				{
+					params: {
+						state: i
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-order/order/getOrderPrice",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.searchValue =
+							JSON.parse(JSON.stringify(result.data.data[0])).gmtCreate +
+							"至" +
+							JSON.parse(
+								JSON.stringify(result.data.data[result.data.data.length - 1])
+							).gmtCreate;
+						let time = result.data.data.map(item => {
+							return item.gmtCreate;
+						});
+						let value = result.data.data.map(item => {
+							return item.orderMoney;
+						});
+						let myChart = echarts.init(document.getElementById("sale_money"));
+						let option = {
+							title: {
+								text: ""
+							},
+							tooltip: {
+								trigger: "axis",
+								formatter: ""
+							},
+							legend: {
+								data: []
+							},
+							xAxis: {
+								data: time.map(item => {
+									return item.slice(item.lastIndexOf("-") + 1);
+								})
+							},
+							yAxis: {},
+							series: [
+								{
+									name: "销量",
+									type: "bar",
+									data: value,
+									barMaxWidth: 50,
+									itemStyle: {
+										normal: {
+											color: "#1cc09f"
+										}
+									}
+								}
+							]
+						};
+						myChart.setOption(option);
+						window.onresize = function() {
+							myChart.resize();
+						};
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
+		},
 		handleStyle(index) {
 			this.activeStyle = index;
 		},
@@ -414,6 +507,11 @@ export default {
 				this.cookbooktop10 = true;
 			}
 		}
+	},
+	created() {
+		this.getMsg();
+		this.getSaleMoney(0);
+		this.getLeaveMessage()
 	}
 };
 </script>
@@ -495,7 +593,7 @@ export default {
 			span:nth-child(2) {
 				float: right;
 				line-height: 20px;
-				padding: 0 20px;
+				padding: 0 16px;
 				p:nth-child(1) {
 					margin-top: 28px;
 					font-size: 20px;
@@ -503,6 +601,7 @@ export default {
 				}
 				p:nth-child(2) {
 					color: #999999;
+					text-align: right;
 				}
 			}
 		}

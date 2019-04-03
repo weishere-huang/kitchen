@@ -251,7 +251,10 @@ export default {
 						successMsg: "发货成功"
 					},
 					type: "post",
-					url: "/api-order/order/sendGood"
+					url: "/api-order/order/sendGood",
+					loadingConfig: {
+						target: document.querySelector(".order_list")
+					}
 				},
 				this
 			).then(
@@ -344,7 +347,10 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/allOrder"
+					url: "/api-order/order/allOrder",
+					loadingConfig: {
+						target: document.querySelector(".order_list")
+					}
 				},
 				this
 			).then(

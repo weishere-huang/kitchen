@@ -38,8 +38,8 @@
 							@change="handleChange"
 							style="width:400px;"
 							:show-all-levels="false"
-							change-on-select
 							ref="recipeCate"
+							filterable
 						></el-cascader>
 					</el-form-item>
 					<el-form-item label="菜谱名称：" prop="recipeName">
@@ -83,7 +83,8 @@
 							size="small"
 							style="width:400px;"
 							placeholder="单位：元"
-							v-model="cookbook.recipePrice"
+							v-model.number="cookbook.recipePrice"
+							oninput="if(value.length>10)value=value.slice(0,10)"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="净含量：" prop="weight">
@@ -95,6 +96,7 @@
 							placeholder="单位：克"
 							step="1"
 							maxlength="20"
+							oninput="if(value.length>10)value=value.slice(0,10)"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="食材搭配：" prop="spec">
@@ -665,14 +667,21 @@ export default {
 						result.data.data.state = JSON.stringify(result.data.data.state);
 						this.cookbook = result.data.data;
 						for (let i = 0; i < this.cookbook.step.length; i++) {
-							this.cookbook.step[i].filelist = [
-								{
-									name: this.cookbook.step[i].path.substring(
-										this.cookbook.step[i].path.lastIndexOf("/") + 1
-									),
-									url: this.cookbook.step[i].path
-								}
-							];
+							if (
+								this.cookbook.step[i].path == "" ||
+								this.cookbook.step[i].path == null
+							) {
+								this.cookbook.step[i].filelist = [];
+							} else {
+								this.cookbook.step[i].filelist = [
+									{
+										name: this.cookbook.step[i].path.substring(
+											this.cookbook.step[i].path.lastIndexOf("/") + 1
+										),
+										url: this.cookbook.step[i].path
+									}
+								];
+							}
 						}
 						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
 						console.log(this.cookbook);

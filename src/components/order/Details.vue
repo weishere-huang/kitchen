@@ -25,7 +25,7 @@
 					size="small"
 					type="primary"
 					@click="dialogClose=true"
-					v-if="orderDetails.platformState!=3&&orderDetails.platformState!=9"
+					v-if="orderDetails.platformState==0"
 				>关闭</permission-button>
 				<el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button>
 				<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
@@ -172,7 +172,7 @@
 							<span>{{orderDetails.address.address}}</span>
 						</el-form-item>
 						<el-form-item label="配送时间：">
-							<span style="color:#1cc09f">立即送出</span>
+							<span style="color:#1cc09f">{{sendTime}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -276,9 +276,12 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			sendTime: "",
 			payOI: "",
 			closeOI: "",
-			orderDetails: "",
+			orderDetails: {
+				address: {}
+			},
 			state: 1,
 			dialogSend: false,
 			dialogPay: false,
@@ -371,7 +374,10 @@ export default {
 						successMsg: "发货成功"
 					},
 					type: "post",
-					url: "/api-order/order/sendGood"
+					url: "/api-order/order/sendGood",
+					loadingConfig: {
+						target: document.querySelector(".details")
+					}
 				},
 				this
 			).then(
@@ -400,7 +406,10 @@ export default {
 							successMsg: "付款成功"
 						},
 						type: "post",
-						url: "/api-order/order/payOrder"
+						url: "/api-order/order/payOrder",
+						loadingConfig: {
+							target: document.querySelector(".details")
+						}
 					},
 					this
 				).then(
@@ -430,7 +439,10 @@ export default {
 							successMsg: "订单已关闭"
 						},
 						type: "post",
-						url: "/api-order/order/closeOrder"
+						url: "/api-order/order/closeOrder",
+						loadingConfig: {
+							target: document.querySelector(".details")
+						}
 					},
 					this
 				).then(
@@ -464,15 +476,30 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/getOneOrder"
+					url: "/api-order/order/getOneOrder",
+					loadingConfig: {
+						target: document.querySelector(".details")
+					}
 				},
 				this
 			).then(
 				result => {
-					// console.log(result.data);
-					result.data.data.address = JSON.parse(result.data.data.address);
-					this.orderDetails = result.data.data;
-					console.log(this.orderDetails);
+					console.log(result.data);
+					if (result.data.code === 200) {
+						result.data.data.address = JSON.parse(result.data.data.address);
+						this.orderDetails = result.data.data;
+						this.sendTime =
+							this.orderDetails.startTime.substring(
+								0,
+								this.orderDetails.startTime.lastIndexOf(":")
+							) +
+							"-" +
+							this.orderDetails.endTime
+								.substring(this.orderDetails.endTime.lastIndexOf(" ") + 1)
+								.substring(0, 5);
+					}
+
+					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);

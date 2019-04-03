@@ -167,6 +167,7 @@ export default {
 		addClassify() {
 			if (this.addClassifyName.classifyName == "") {
 				this.$message.error("名称不能为空！");
+			} else if (this.addClassifyName.classifyName.length > 8) {
 			} else {
 				let qs = require("qs");
 				let datas = qs.stringify({
@@ -200,6 +201,7 @@ export default {
 		saveEdit() {
 			if (this.editMsg.cateName == "") {
 				this.$message.error("名称不能为空！");
+			} else if (this.editMsg.cateName.length > 8) {
 			} else {
 				let qs = require("qs");
 				let datas = qs.stringify({
