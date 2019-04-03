@@ -13,12 +13,12 @@
 					<div class="recommend">
 						<span style="margin-right:8px;" class="case">
 							<p>发布菜谱</p>
-							<p>73</p>
+							<p>{{allMsg.recipeCountAndSellSum.recipeSum}}</p>
 						</span>
 						<span style class="case">
 							<p>累计销售菜谱</p>
 							<p>
-								1233
+								{{allMsg.recipeCountAndSellSum.sellNum}}
 								<span style="font-size:14px;color:#999999;">次</span>
 							</p>
 						</span>
@@ -50,10 +50,7 @@
 							<i class="iconfont" style="color:white;">&#xe653;</i>
 						</span>
 						<span>
-							<p>
-								17/
-								<i style="color:#999999;font-style:normal;">3</i>
-							</p>
+							<p>{{allMsg.userNum.sumDay>0?allMsg.userNum.sumDay:'0'}}</p>
 							<p>今日注册用户</p>
 						</span>
 					</li>
@@ -80,7 +77,7 @@
 							<i class="iconfont" style="color:white;">&#xe684;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.userNum.countUser>0?allMsg.userNum.countUser:'0'}}</p>
 							<p>用户总数</p>
 						</span>
 					</li>
@@ -88,7 +85,7 @@
 			</el-col>
 			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
-					<h4>销售额</h4>
+					<h4>销售额趋势</h4>
 					<el-button-group class="data_style">
 						<el-button plain size="small" @click="getSaleMoney(0)">最近一周</el-button>
 						<el-button plain size="small" @click="getSaleMoney(1)">最近一月</el-button>
@@ -97,7 +94,6 @@
 				</div>
 				<div class="histogram_style">
 					<h4 style="text-align: center;line-height:52px;">
-						销售额趋势
 						<span style="font-size:12px;color:#999999;" v-if="searchValue!=''">（{{searchValue}}）</span>
 					</h4>
 					<div id="sale_money" style="width:100%;height:284px;"></div>
@@ -113,35 +109,47 @@
 							:span="24"
 							class="item_case"
 							:class="index==activeStyle?'is_active':''"
-							v-for="(item, index) in 8"
+							v-for="(item, index) in userLeaveMessage"
 							:key="index"
-							@click.native="handleStyle(index)"
+							@click.native="handleStyle(index,item)"
 						>
 							<el-col :span="1" class="style_case">&nbsp;</el-col>
 							<el-col :span="4" class="img_case">
-								<img width="100%" src="../../assets/image/3DFP}_WV6YO1WREA42ZKC7M.png" alt>
+								<img :src="item.img" alt>
 							</el-col>
 							<el-col :span="18" class="msg_case">
-								<el-col :span="24">会飞的蜗牛</el-col>
-								<el-col :span="24" style="color:#999999;font-size:12px;margin-top:4px;">12-08 13:00:24</el-col>
+								<el-col :span="24">{{item.userName}}</el-col>
+								<el-col :span="24" style="color:#999999;font-size:12px;margin-top:4px;">{{item.gmtCreate}}</el-col>
 							</el-col>
 						</el-col>
 					</el-col>
 					<el-col :span="18" class="right_case">
 						<el-col
 							:span="24"
-							style="line-height:100px;height:100px;width:95%;border-bottom: 1px solid #dde2eb;"
+							style="line-height:100px;height:100px;width:95%;border-bottom: 1px solid #dde2eb;overflow: scroll;"
 						>
-							<span class="head_portrait">
-								<img width="100%" src="../../assets/image/3DFP}_WV6YO1WREA42ZKC7M.png" alt>
+							<span class="head_portrait" v-if="messageReply!=''">
+								<img width="100%" :src="messageReply.img" alt>
 							</span>
-							<div class="answer">你好</div>
+							<div class="answer" v-if="messageReply!=''">{{messageReply.opinion}}</div>
 						</el-col>
 						<el-col :span="24" style="width:95%;padding:8px 0;">
-							<textarea class="border_style" maxlength="200" cols="81" rows="3" placeholder="请输入回复内容..."></textarea>
+							<textarea
+								v-model="reply"
+								class="border_style"
+								maxlength="200"
+								cols="81"
+								rows="3"
+								placeholder="请输入回复内容..."
+							></textarea>
 						</el-col>
 						<el-col :span="24" style="width:95%;text-align: right;">
-							<el-button size="small" type="primary">快速回复</el-button>
+							<el-button
+								size="small"
+								type="primary"
+								@click="replyMessage"
+								:disabled="reply!=''?false:true"
+							>快速回复</el-button>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -195,19 +203,19 @@
 						<el-col :span="7">销量</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
-						<el-col :span="24" v-for="(item, index) in items" :key="index" v-show="hotMenutop5">
+						<el-col :span="24" v-for="(item, index) in menuTop5" :key="index" v-show="hotMenutop5">
 							<el-col :span="5" style="text-align:center;">
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col :span="12">{{item.itemName}}</el-col>
+							<el-col :span="7">{{item.sellNum}}</el-col>
 						</el-col>
-						<el-col :span="24" v-for="(item, index) in item1" :key="item.index" v-show="hotMenutop10">
+						<el-col :span="24" v-for="(item, index) in menuTop10" :key="item.index" v-show="hotMenutop10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col :span="12">{{item.itemName}}</el-col>
+							<el-col :span="7">{{item.sellNum}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -223,23 +231,33 @@
 				<el-col :span="24" class="table_case">
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
-						<el-col :span="12">商品</el-col>
+						<el-col :span="12">菜谱</el-col>
 						<el-col :span="7">销量</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
-						<el-col :span="24" v-for="(item, index) in items" :key="index" v-show="cookbooktop5">
+						<el-col
+							:span="24"
+							v-for="(item, index) in saleCookbooktop5"
+							:key="index"
+							v-show="cookbookTop5"
+						>
 							<el-col :span="5" style="text-align:center;">
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col :span="12">{{item.recipeName}}</el-col>
+							<el-col :span="7">{{item.recipeSum}}</el-col>
 						</el-col>
-						<el-col :span="24" v-for="(item, index) in item1" :key="item.index" v-show="cookbooktop10">
+						<el-col
+							:span="24"
+							v-for="(item, index) in saleCookbooktop10"
+							:key="item.index"
+							v-show="cookbookTop10"
+						>
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col :span="12">{{item.recipeName}}</el-col>
+							<el-col :span="7">{{item.recipeSum}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -254,19 +272,27 @@ export default {
 		return {
 			saleTOP5: [],
 			saleTOP10: [],
+			menuTop5: [],
+			menuTop10: [],
+			saleCookbooktop5: [],
+			saleCookbooktop10: [],
 			allMsg: {
 				itemSellNum: [],
 				orderDaySum: {},
 				orderSum: {},
-				supperSaleSum: []
+				supperSaleSum: [],
+				userNum: {},
+				itemSellNum: [],
+				recipeMonthSell: [],
+				recipeCountAndSellSum: {}
 			},
 			activeStyle: 0,
 			top5: true,
 			top10: false,
 			hotMenutop5: true,
 			hotMenutop10: false,
-			cookbooktop5: true,
-			cookbooktop10: false,
+			cookbookTop5: true,
+			cookbookTop10: false,
 			test: 4,
 			items: [
 				{
@@ -343,7 +369,10 @@ export default {
 					}
 				]
 			},
-			searchValue: ""
+			searchValue: "",
+			userLeaveMessage: [],
+			messageReply: "",
+			reply: ""
 		};
 	},
 	mounted() {},
@@ -364,8 +393,15 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					if (result.data.code === 200) {
+						this.userLeaveMessage = JSON.parse(
+							JSON.stringify(result.data.data)
+						);
+						for (let i = 0; i < this.userLeaveMessage.length; i++) {
+							this.userLeaveMessage[i].img =
+								this.global.imgPath +
+								this.userLeaveMessage[i].img.replace("img:", "");
+						}
 					}
 
 					// console.log(this.orderDetails);
@@ -393,8 +429,12 @@ export default {
 					console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.allMsg = JSON.parse(JSON.stringify(result.data.data));
-						this.saleTOP5 = this.allMsg.supperSaleSum.slice(0, 4);
-						this.saleTOP10 = this.allMsg.supperSaleSum.slice(5);
+						this.saleTOP5 = this.allMsg.supperSellSum.slice(0, 5);
+						this.saleTOP10 = this.allMsg.supperSellSum.slice(5);
+						this.menuTop5 = this.allMsg.itemSellNum.slice(0, 5);
+						this.menuTop10 = this.allMsg.itemSellNum.slice(5);
+						this.saleCookbooktop5 = this.allMsg.recipeMonthSell.slice(0, 5);
+						this.saleCookbooktop10 = this.allMsg.recipeMonthSell.slice(5);
 					}
 
 					// console.log(this.orderDetails);
@@ -434,6 +474,12 @@ export default {
 							return item.orderMoney;
 						});
 						let myChart = echarts.init(document.getElementById("sale_money"));
+						let a;
+						if (i == 0 || i == 1) {
+							a = "日";
+						} else {
+							a = "月";
+						}
 						let option = {
 							title: {
 								text: ""
@@ -447,13 +493,13 @@ export default {
 							},
 							xAxis: {
 								data: time.map(item => {
-									return item.slice(item.lastIndexOf("-") + 1);
+									return item.slice(item.lastIndexOf("-") + 1) + a;
 								})
 							},
 							yAxis: {},
 							series: [
 								{
-									name: "销量",
+									name: "销售额",
 									type: "bar",
 									data: value,
 									barMaxWidth: 50,
@@ -476,8 +522,10 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		handleStyle(index) {
+		handleStyle(index, item) {
 			this.activeStyle = index;
+			this.messageReply = item;
+			console.log(this.messageReply);
 		},
 		showTop5(index) {
 			if (index == 1) {
@@ -489,8 +537,8 @@ export default {
 				this.hotMenutop10 = false;
 			}
 			if (index == 3) {
-				this.cookbooktop5 = true;
-				this.cookbooktop10 = false;
+				this.cookbookTop5 = true;
+				this.cookbookTop10 = false;
 			}
 		},
 		showTop10(index) {
@@ -503,16 +551,51 @@ export default {
 				this.hotMenutop10 = true;
 			}
 			if (index == 3) {
-				this.cookbooktop5 = false;
-				this.cookbooktop10 = true;
+				this.cookbookTop5 = false;
+				this.cookbookTop10 = true;
 			}
+		},
+		replyMessage() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				id: this.messageReply.id,
+				reply: this.reply
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						enableMsg: false
+					},
+					type: "post",
+					url: "/api-platform/advise/reply",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+						this.reply = "";
+						this.messageReply = "";
+						this.$message.success("回复成功！");
+						this.getLeaveMessage();
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 	created() {
 		this.getMsg();
 		this.getSaleMoney(0);
-		this.getLeaveMessage()
-	}
+		this.getLeaveMessage();
+	},
+	mounted() {}
 };
 </script>
 
@@ -653,6 +736,10 @@ export default {
 						border-radius: 50%;
 						font-size: 0;
 						overflow: hidden;
+						img {
+							height: 33px;
+							width: 33px;
+						}
 					}
 					.msg_case {
 						margin-top: 8px;
@@ -684,23 +771,29 @@ export default {
 					line-height: 40px;
 					top: 13px;
 					left: 18px;
+					img {
+						height: 40px;
+					}
 				}
 				.answer {
 					position: relative;
 					display: inline-block;
-					height: 40px;
+					// min-height: px;
 					border: 1px solid #dde2eb;
 					background: #f1f1f1;
-					line-height: 40px;
+					line-height: 28px;
 					padding: 0 12px;
 					left: 30px;
 					border-radius: 5px;
+					max-width: 80%;
+					word-wrap: break-word;
+					// vertical-align: top;
 				}
 				.answer::after {
 					position: absolute;
-					bottom: 12px;
-					left: -7px;
-					padding: 6px;
+					bottom: 9px;
+					left: -6px;
+					padding: 4px;
 					border: inherit;
 					border-right: none;
 					border-top: none;
