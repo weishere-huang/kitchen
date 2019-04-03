@@ -287,7 +287,7 @@ export default {
 		},
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
-				this.addMsg.mainPic =res.data;
+				this.addMsg.mainPic = res.data;
 				this.uploadShow1 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");
@@ -309,7 +309,6 @@ export default {
 	mounted() {},
 	created() {
 		if (this.editMsg != null) {
-			console.log("111");
 			Object.assign(this.addMsg, this.editMsg);
 			// this.addMsg = this.editMsg;
 			if (this.editMsg.mainPic !== null && this.editMsg.mainPic !== "") {
@@ -335,7 +334,6 @@ export default {
 			if (this.editMsg != null) {
 				Object.assign(this.addMsg, this.editMsg);
 				// this.addMsg = this.editMsg;
-				console.log("111");
 				this.mainPic = [
 					{
 						name: "mainpic.jpg",
