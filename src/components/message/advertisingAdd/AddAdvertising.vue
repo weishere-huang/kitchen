@@ -145,7 +145,25 @@ export default {
 						required: true,
 						message: "请填写结束日期",
 						trigger: "change"
-					}
+					},
+          {
+            validator: (rule, value, callback) => {
+              if((this.startTime==null||this.startTime==="")||
+                (this.endTime==null||this.endTime==="")){
+                callback();
+              }else{
+                if(
+                  new Date(this.startTime) >= new Date(this.endTime)
+
+                ){
+                  callback(new Error("结束时间必须大于开始时间"));
+                }else{
+                  callback();
+                }
+              }
+            },
+            trigger: "change"
+          }
 				]
 			},
 			addMsg: {
@@ -279,8 +297,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addMsg.content =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.addMsg.content =res.data;
 				this.uploadShow2 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");
@@ -292,7 +309,6 @@ export default {
 	mounted() {},
 	created() {
 		if (this.editMsg != null) {
-			console.log("111");
 			Object.assign(this.addMsg, this.editMsg);
 			// this.addMsg = this.editMsg;
 			if (this.editMsg.mainPic !== null && this.editMsg.mainPic !== "") {
@@ -318,7 +334,6 @@ export default {
 			if (this.editMsg != null) {
 				Object.assign(this.addMsg, this.editMsg);
 				// this.addMsg = this.editMsg;
-				console.log("111");
 				this.mainPic = [
 					{
 						name: "mainpic.jpg",
