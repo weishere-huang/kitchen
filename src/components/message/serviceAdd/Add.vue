@@ -8,6 +8,7 @@
 					style="width:49%"
 					size="small"
 					@change="beforeCity"
+					filterable
 				>
 					<el-option
 						v-for="item in province"
@@ -22,6 +23,7 @@
 					style="width:49%"
 					size="small"
 					@change="getcitycode"
+					filterable
 				>
 					<el-option
 						v-for="item in cities"
@@ -218,13 +220,13 @@ export default {
 		}
 	},
 	watch: {
-    editMsg() {
-      if (this.editMsg != null) {
-        Object.assign(this.addMsg, this.editMsg);
-        this.startedit();
-      }
-    }
-  }
+		editMsg() {
+			if (this.editMsg != null) {
+				Object.assign(this.addMsg, this.editMsg);
+				this.startedit();
+			}
+		}
+	}
 };
 </script>
 <style lang="less">

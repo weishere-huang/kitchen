@@ -255,3 +255,6 @@ input[type="number"] {
 .el-input-group__prepend {
   padding: 0 8px;
 }
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: #1cc09f;
+}

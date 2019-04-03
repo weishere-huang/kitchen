@@ -41,6 +41,7 @@
 								size="small"
 								maxlength="20"
 								v-model.number="systemMsg.itemLimit"
+								oninput="if(value.length>10)value=value.slice(0,10)"
 								style="width:300px;"
 								placeholder="如20"
 							></el-input>
@@ -53,6 +54,7 @@
 								size="small"
 								maxlength="20"
 								v-model.number="systemMsg.carLimit"
+								oninput="if(value.length>10)value=value.slice(0,10)"
 								style="width:300px;"
 								placeholder="如99"
 							></el-input>
@@ -72,6 +74,7 @@
 								style="width:300px;"
 								maxlength="20"
 								placeholder="分钟"
+								oninput="if(value.length>10)value=value.slice(0,10)"
 							>
 								<template slot="append">分钟</template>
 							</el-input>
@@ -91,6 +94,7 @@
 								v-model.number="systemMsg.receiveTimeout"
 								style="width:300px;"
 								placeholder="小时"
+								oninput="if(value.length>10)value=value.slice(0,10)"
 							>
 								<template slot="append">小时</template>
 							</el-input>
@@ -106,6 +110,7 @@
 								style="width:100px;"
 								placeholder="元"
 								step="0.01"
+								oninput="if(value.length>10)value=value.slice(0,10)"
 							>
 								<template slot="append">元</template>
 							</el-input>
@@ -121,6 +126,7 @@
 							style="width:112px;"
 							v-model.number="systemMsg.allMoney"
 							v-if="systemMsg.moneyOff===true"
+							oninput="if(value.length>5)value=value.slice(0,5)"
 						>
 							<template slot="append">元</template>
 						</el-input>
@@ -140,6 +146,7 @@
 								style="width:300px;"
 								placeholder="元"
 								step="0.01"
+								oninput="if(value.length>10)value=value.slice(0,10)"
 							>
 								<template slot="append">元</template>
 							</el-input>
@@ -156,6 +163,7 @@
 								v-model.number="systemMsg.retentionTime"
 								placeholder="保留时间：小时"
 								style="width:116px;"
+								oninput="if(value.length>5)value=value.slice(0,5)"
 							>
 								<template slot="append">小时</template>
 							</el-input>
@@ -418,15 +426,26 @@ export default {
 					{ required: true, message: "请设置配送费", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
-								callback(new Error("只能大于或等于0，且只能保留两位小数"));
+							if (this.systemMsg.moneyOff == false) {
+								if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+									callback(new Error("只能大于或等于0，且只能保留两位小数"));
+								} else {
+									callback();
+								}
+							} else if (this.systemMsg.moneyOff == true) {
+								if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+									callback(new Error("只能大于或等于0，且只能保留两位小数"));
+								} else if (this.systemMsg.allMoney <= 0) {
+									callback(new Error("满减金额必须大于0！"));
+								} else {
+									callback();
+								}
 							} else {
 								callback();
 							}
 						},
 						trigger: "blur"
-					},
-
+					}
 				],
 				sendMoney: [
 					{ required: true, message: "请设置起送金额", trigger: "blur" },
@@ -698,7 +717,7 @@ export default {
 		},
 		save() {
 			if (this.systemMsg.moneyOff == false) {
-				this.systemMsg.allMoney = "";
+				this.systemMsg.allMoney = null;
 			}
 			let qs = require("qs");
 			let data = qs.stringify({
@@ -744,6 +763,9 @@ export default {
 			handler(newValue, oldValue) {
 				if (newValue.sendTime == 1) {
 					this.systemMsg.retentionTime = "";
+				}
+				if (this.systemMsg.moneyOff == false) {
+					this.systemMsg.allMoney = null;
 				}
 			},
 			deep: true

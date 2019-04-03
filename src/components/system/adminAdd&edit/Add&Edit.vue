@@ -50,6 +50,10 @@
 					<el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.id"></el-option>
 				</el-select>
 			</el-form-item>
+			<span
+				style="color:#999999;padding-left:100px"
+				v-if="addInfo.id!==''&&null&&undefined"
+			>密码为空，表示不修改密码！</span>
 		</el-form>
 		<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
 			<el-button @click="handleCancel" size="small" plain>取 消</el-button>
@@ -84,9 +88,11 @@ export default {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));
-							} else if(/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value)===true){
-                callback(new Error("密码中不能含有空格与汉字"));
-              }else {
+							} else if (
+								/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value) === true
+							) {
+								callback(new Error("密码中不能含有空格与汉字"));
+							} else {
 								callback();
 							}
 						},
@@ -220,8 +226,13 @@ export default {
 	},
 	watch: {
 		editInfo() {
-			if (this.editInfo != null) {
-				this.addInfo = this.editInfo;
+			if (
+				this.editInfo != null &&
+				this.editInfo != undefined &&
+				this.editInfo != ""
+			) {
+				// this.addInfo = this.editInfo;
+				Object.assign(this.addInfo, this.editInfo);
 			}
 			if (this.editInfo == null) {
 				this.rulesAddInfo.password.push({
@@ -250,5 +261,10 @@ export default {
 .admin_add {
 	font-size: 14px;
 	color: @font-normal;
+	.tip_style1 {
+		.el-form-item__content {
+			line-height: 16px !important;
+		}
+	}
 }
 </style>

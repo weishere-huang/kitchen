@@ -28,6 +28,7 @@
 							size="small"
 							@change="getCity()"
 							:clearable="true"
+							filterable
 						>
 							<el-option
 								v-for="item in province"
@@ -44,6 +45,7 @@
 							size="small"
 							@change="getcitycode"
 							:clearable="true"
+							filterable
 						>
 							<el-option
 								v-for="item in cities"

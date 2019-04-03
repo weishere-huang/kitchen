@@ -163,7 +163,7 @@
 							<el-col :span="24">17</el-col>
 						</el-col>
 						<el-col :span="24" style>
-							<el-col :span="24" class="echarts_case" id="order_pie"></el-col>
+							<el-col :span="24" class="echarts_case" id="order_pie" ref="pie"></el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -258,14 +258,15 @@ export default {
 		};
 	},
 	mounted() {
+		// let width = document.getElementById("order_pie").offsetWidth;
+		// console.log(width);
+		// document.getElementById("order_pie").style.height = width + "px";
 		let myChart = echarts.init(document.getElementById("main"));
 		let option = {
 			title: {
 				text: ""
 			},
-			tooltip: {
-				
-			},
+			tooltip: {},
 			legend: {
 				data: []
 			},
@@ -286,7 +287,7 @@ export default {
 				}
 			]
 		};
-		let mychart1 = echarts
+		let pieEcharts = echarts
 			.init(document.getElementById("order_pie"))
 			.setOption({
 				tooltip: {
@@ -324,7 +325,7 @@ export default {
 		myChart.setOption(option);
 		window.onresize = function() {
 			myChart.resize();
-			myChart1.resize();
+			// pieEcharts.resize();
 		};
 	},
 	methods: {
