@@ -415,12 +415,12 @@ export default {
 						// 	return item.orderMoney;
 						// });
 						let myChart = echarts.init(document.getElementById("sale_money"));
-						let a;
-						if (i == 0 || i == 1) {
-							a = "日";
-						} else {
-							a = "月";
-						}
+						let a = "";
+						// if (i == 0 || i == 1) {
+						// 	a = "日";
+						// } else {
+						// 	a = "月";
+						// }
 						let option = {
 							title: {
 								text: ""

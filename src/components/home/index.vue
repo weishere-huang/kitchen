@@ -198,7 +198,14 @@ export default {
 			storeName: JSON.parse(sessionStorage.getItem("user")).account
 		};
 	},
-	mounted() {},
+	mounted() {
+		let me = this;
+		echarts
+			.init(document.getElementById("order_pie"))
+			.on("click", function(params) {
+				me.$router.push({ path: "/Order" });
+			});
+	},
 	methods: {
 		showTop5() {
 			this.top5 = true;
@@ -309,12 +316,12 @@ export default {
 						});
 						let data = result.data.data;
 						let myChart = echarts.init(document.getElementById("main"));
-						let a;
-						if (i == 0 || i == 1) {
-							a = "日";
-						} else {
-							a = "月";
-						}
+						let a = "";
+						// if (i == 0 || i == 1) {
+						// 	a = "日";
+						// } else {
+						// 	a = "月";
+						// }
 						let option = {
 							title: {
 								text: ""
