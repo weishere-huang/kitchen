@@ -160,40 +160,40 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-mall/area/findBySupplierId"
+					url: "/api-mall/salesTerritoryArea/findAreaOnUpdate"
 				},
 				this
 			).then(
 				result => {
-					console.log(result.data);
+					// console.log(result.data);
 					let that = this;
 					let data = JSON.parse(JSON.stringify(result.data.data));
 					for (var item in data) {
 						if (data[item].adCode.match(/100000$/)) {
 							that.country.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName,
+								areaName: data[item].name,
 								children: []
 							});
 						} else if (data[item].adCode.match(/0000$/)) {
 							//省
 							that.province.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName,
+								areaName: data[item].name,
 								children: []
 							});
 						} else if (data[item].adCode.match(/00$/)) {
 							//市
 							that.city.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName,
+								areaName: data[item].name,
 								children: []
 							});
 						} else {
 							//区
 							that.block.push({
 								adCode: data[item].adCode,
-								areaName: data[item].areaName
+								areaName: data[item].name
 							});
 						}
 					}
@@ -245,13 +245,13 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
+					console.log(result);
 					console.log("getOneSupplier");
 					this.supplierMsg = result.data.data.supplierDO;
 					result.data.data.area.map(item =>
-						this.selectarea.push(item.areaCode)
+						this.selectarea.push(item)
 					);
-					console.log(this.selectarea);
+					// console.log(this.selectarea);
 					this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
 				},
 				({ type, info }) => {}

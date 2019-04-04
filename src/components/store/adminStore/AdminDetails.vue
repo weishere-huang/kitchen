@@ -7,14 +7,7 @@
 			<div class="top_title">
 				<h4>商品详情</h4>
 			</div>
-			<el-form
-				label-width="200px"
-				size="mini"
-				:inline-message="true"
-				
-				:model="editmenu"
-				ref="editmenu"
-			>
+			<el-form label-width="200px" size="mini" :inline-message="true" :model="editmenu" ref="editmenu">
 				<el-form-item label="菜谱选择：" prop="recipeName">
 					<el-input
 						size="small"
@@ -377,8 +370,7 @@ export default {
 		},
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
-				this.editmenu.itemImg =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.editmenu.itemImg = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -479,6 +471,8 @@ export default {
 						this.cookbook = result.data.data;
 						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
 						console.log(this.cookbook);
+						this.cookbook.recipeImg =
+							this.global.imgPath + this.cookbook.recipeImg.replace("img:", "");
 						this.editmenu.recipeName = this.cookbook.recipeName;
 					}
 				},

@@ -334,6 +334,8 @@ export default {
 			console.log(params);
 			this.dialogCoobook = params.ishide;
 			this.cookbook = params.value;
+			this.cookbook.recipeImg =
+				this.global.imgPath + this.cookbook.recipeImg.replace("img:", "");
 			this.addMenu.recipeName = this.cookbook.recipeName;
 		},
 		getUEContent() {
@@ -351,8 +353,7 @@ export default {
 		},
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
-				this.addMenu.itemImg =
-					this.global.imgPath + res.data.replace("img:", "");
+				this.addMenu.itemImg = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"

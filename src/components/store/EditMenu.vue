@@ -331,6 +331,8 @@ export default {
 			console.log(params);
 			this.dialogCookbook = params.ishide;
 			this.cookbook = params.value;
+			this.cookbook.recipeImg =
+				this.global.imgPath + this.cookbook.recipeImg.replace("img:", "");
 			this.editmenu.recipeName = this.cookbook.recipeName;
 			// this.editmenu.script = params.value;
 		},
@@ -475,6 +477,8 @@ export default {
 						this.cookbook = result.data.data;
 						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
 						console.log(this.cookbook);
+						this.cookbook.recipeImg =
+							this.global.imgPath + this.cookbook.recipeImg.replace("img:", "");
 						this.editmenu.recipeName = this.cookbook.recipeName;
 					}
 				},
