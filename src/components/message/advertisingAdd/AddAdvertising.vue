@@ -148,12 +148,14 @@ export default {
 					},
           {
             validator: (rule, value, callback) => {
-              if((this.startTime==null||this.startTime==="")||
-                (this.endTime==null||this.endTime==="")){
+              if((this.addMsg.startTime==null||this.addMsg.startTime==="")||
+                (this.addMsg.endTime==null||this.addMsg.endTime==="")){
                 callback();
               }else{
+                let st = this.addMsg.startTime.split(" ")[0];
+                let et = this.addMsg.endTime.split(" ")[0];
                 if(
-                  new Date(this.startTime) >= new Date(this.endTime)
+                  new Date(st) >= new Date(et)
 
                 ){
                   callback(new Error("结束时间必须大于开始时间"));
