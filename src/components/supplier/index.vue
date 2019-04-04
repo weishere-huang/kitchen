@@ -124,15 +124,17 @@ export default {
 			}
 		},
 		deleteSupplier(id) {
+      let qs = require("qs");
+      let data = qs.stringify({
+        supplierId: id
+      })
 			this.Axios(
 				{
-					params: {
-						supplierId: id
-					},
+					params: data,
 					option: {
 						successMsg: "删除成功！"
 					},
-					type: "get",
+					type: "post",
 					url: "/api-platform/supplier/delSupplier"
 				},
 				this
