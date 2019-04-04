@@ -37,7 +37,7 @@
 							<el-input clearable size="small" style="width:100%;" placeholder="商品名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="3" style="padding:0 5px;">
-							<el-button size="small" plain @click="foodlist">搜索</el-button>
+							<el-button size="small" plain @click="search">搜索</el-button>
 						</el-col>
 					</div>
 				</div>
@@ -248,6 +248,10 @@ export default {
 		};
 	},
 	methods: {
+	  search(){
+	    this.pageIndex=1;
+	    this.foodlist();
+    },
 		editfood(data) {
 			let qs = require("qs");
 			let datas = qs.stringify({
