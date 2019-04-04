@@ -245,11 +245,11 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result);
-					// console.log("getOneSupplier");
+					console.log(result);
+					console.log("getOneSupplier");
 					this.supplierMsg = result.data.data.supplierDO;
 					result.data.data.area.map(item =>
-						this.selectarea.push(item.areaCode)
+						this.selectarea.push(item)
 					);
 					// console.log(this.selectarea);
 					this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
