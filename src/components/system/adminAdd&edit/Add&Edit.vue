@@ -50,11 +50,11 @@
 					<el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.id"></el-option>
 				</el-select>
 			</el-form-item>
-			<span
-				style="color:#999999;padding-left:100px"
-				v-if="addInfo.id!==''&&null&&undefined"
-			>密码为空，表示不修改密码！</span>
 		</el-form>
+		<span
+			style="color:#999999;padding-left:100px;padding-top:12px;"
+			v-if="addInfo.id!==''&&addInfo.id!==null&&addInfo.id!==undefined"
+		>密码为空，表示不修改密码！</span>
 		<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
 			<el-button @click="handleCancel" size="small" plain>取 消</el-button>
 			<el-button type="primary" @click="handleAffirm('ruleForm')" size="small">确 定</el-button>
@@ -84,19 +84,20 @@ export default {
 				password: [
 					{
 						validator: (rule, value, callback) => {
-							if (/^\w{7,20}$/.test(value) === false) {
+							if (/^\w{6,20}$/.test(value) === false && value != "") {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));
 							} else if (
-								/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value) === true
+								/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value) === true &&
+								value != ""
 							) {
 								callback(new Error("密码中不能含有空格与汉字"));
 							} else {
 								callback();
 							}
 						},
-						trigger: "change"
+						trigger: "blur"
 					}
 				],
 				confirmPassword: [
@@ -209,7 +210,8 @@ export default {
 		console.log("this.addInfo");
 		console.log(this.addInfo);
 		if (this.editInfo != null) {
-			this.addInfo = this.editInfo;
+			// this.addInfo = this.editInfo;
+			Object.assign(this.addInfo, this.editInfo);
 		}
 		if (this.editInfo == null) {
 			this.rulesAddInfo.password.push({
