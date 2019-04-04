@@ -400,18 +400,20 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+						console.log(result.data);
 						this.searchValue =
 							JSON.parse(JSON.stringify(result.data.data[0])).gmtCreate +
 							"至" +
 							JSON.parse(
 								JSON.stringify(result.data.data[result.data.data.length - 1])
 							).gmtCreate;
-						let time = result.data.data.map(item => {
-							return item.gmtCreate;
-						});
-						let value = result.data.data.map(item => {
-							return item.orderMoney;
-						});
+						let data = result.data.data;
+						// let time = result.data.data.map(item => {
+						// 	return item.gmtCreate;
+						// });
+						// let value = result.data.data.map(item => {
+						// 	return item.orderMoney;
+						// });
 						let myChart = echarts.init(document.getElementById("sale_money"));
 						let a;
 						if (i == 0 || i == 1) {
@@ -425,22 +427,54 @@ export default {
 							},
 							tooltip: {
 								trigger: "axis",
-								formatter: ""
+								formatter: function(params) {
+									let name = params[0].name.replace("日", "");
+									let item = data
+										.map(i => {
+											return i.gmtCreate;
+										})
+										.map(j => {
+											return j.slice(j.lastIndexOf("-") + 1);
+										});
+									let index;
+									for (let i = 0; i < item.length; i++) {
+										if (item[i] == name) {
+											index = i;
+										}
+									}
+									let topTip =
+										"<div style='padding:0 8px;'>" +
+										data[index].gmtCreate +
+										"<br/>" +
+										"订单数量：" +
+										data[index].sellSum +
+										"<br/>" +
+										"销售额：" +
+										data[index].orderMoney +
+										"</div>";
+									return topTip;
+								}
 							},
 							legend: {
 								data: []
 							},
 							xAxis: {
-								data: time.map(item => {
-									return item.slice(item.lastIndexOf("-") + 1) + a;
-								})
+								data: data
+									.map(item => {
+										return item.gmtCreate;
+									})
+									.map(item => {
+										return item.slice(item.lastIndexOf("-") + 1) + a;
+									})
 							},
 							yAxis: {},
 							series: [
 								{
 									name: "销售额",
 									type: "bar",
-									data: value,
+									data: data.map(item => {
+										return item.orderMoney;
+									}),
 									barMaxWidth: 50,
 									itemStyle: {
 										normal: {

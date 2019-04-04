@@ -4,17 +4,17 @@
 export default [{
     menu: '平台主页',
     permissionCode: 'home',
-    defaultDock: true,
+    defaultDock: false,
     icon: '&#xe626;',
     subMenu: [{
         menu: '首页',
         route: '/Home',
-        permissionCode: ''
+        permissionCode: 'home_supplier_lookup'
       },
       {
         menu: '首页',
         route: '/AdminHome',
-        permissionCode: ''
+        permissionCode: 'home_employee_lookup'
       }
     ]
   },
