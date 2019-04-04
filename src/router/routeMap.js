@@ -192,7 +192,7 @@ export default [{
     subMenu: [{
         menu: '消息通知',
         route: '/Information',
-        permissionCode: 'user_manager_list_lookup'
+        permissionCode: 'messagepush_lookup'
       },
       {
         menu: '发送消息',
