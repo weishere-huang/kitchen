@@ -6,13 +6,17 @@
 					<img src="../../assets/image/user.png" alt>
 				</el-col>
 				<el-col :span="16">
-					<p class="content_style">Hi,agent0816,祝你开心每一天！</p>
-					<p style="color:#999999">绵阳永辉超市（涪城店）</p>
+					<p class="content_style">Hi,{{supplierName}},祝你开心每一天！</p>
+					<p style="color:#999999">{{storeName}}</p>
 				</el-col>
 				<el-col :span="5">
 					<div class="recommend">
-						<span style="background-color:#FF0000;margin-right:8px;">热销6</span>
-						<span style="background-color:#00CF47">新品4</span>
+						<span
+							style="background-color:#FF0000;margin-right:8px;"
+						>热销{{allMsg.upperLowerShelfAndTotal.hotMenuTotal!=""?allMsg.upperLowerShelfAndTotal.hotMenuTotal:"0"}}</span>
+						<span
+							style="background-color:#00CF47"
+						>新品{{allMsg.upperLowerShelfAndTotal.newMenuTotal!=""?allMsg.upperLowerShelfAndTotal.newMenuTotal:0}}</span>
 					</div>
 				</el-col>
 			</el-col>
@@ -23,7 +27,7 @@
 							<i class="iconfont" style="color:white;">&#xe63b;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.supplierSellSum.todayOrderTotal!=""?allMsg.supplierSellSum.todayOrderTotal:0}}</p>
 							<p>今日订单</p>
 						</span>
 					</li>
@@ -32,7 +36,7 @@
 							<i class="iconfont" style="color:white;">&#xe666;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.supplierSellSum.todayOrderSellSum!=""?allMsg.supplierSellSum.todayOrderSellSum:0}}</p>
 							<p>今日销售额</p>
 						</span>
 					</li>
@@ -42,8 +46,10 @@
 						</span>
 						<span>
 							<p>
-								17/
-								<i style="color:#999999;font-style:normal;">3</i>
+								{{allMsg.upperLowerShelfAndTotal.upperTotal!=""?allMsg.upperLowerShelfAndTotal.upperTotal:0}}/
+								<i
+									style="color:#999999;font-style:normal;"
+								>{{allMsg.upperLowerShelfAndTotal.lowerTotal!=""?allMsg.upperLowerShelfAndTotal.lowerTotal:0}}</i>
 							</p>
 							<p>上/下架商品数</p>
 						</span>
@@ -53,7 +59,7 @@
 							<i class="iconfont" style="color:white;">&#xe8d7;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.supplierSellSum.orderTotal!=""?allMsg.supplierSellSum.orderTotal:0}}</p>
 							<p>订单总数</p>
 						</span>
 					</li>
@@ -62,7 +68,7 @@
 							<i class="iconfont" style="color:white;">&#xe69f;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>￥{{allMsg.supplierSellSum.orderSellTotalSum!=""?allMsg.supplierSellSum.orderSellTotalSum:0}}</p>
 							<p>销售总额</p>
 						</span>
 					</li>
@@ -71,7 +77,7 @@
 							<i class="iconfont" style="color:white;">&#xe696;</i>
 						</span>
 						<span>
-							<p>36</p>
+							<p>{{allMsg.upperLowerShelfAndTotal.total!=""?allMsg.upperLowerShelfAndTotal.total:0}}</p>
 							<p>商品总数</p>
 						</span>
 					</li>
@@ -79,28 +85,27 @@
 			</el-col>
 			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
-					<h4>销售额</h4>
-					<!-- <el-date-picker
-						class="data_style"
-						v-model="searchValue"
-						size="small"
-						type="daterange"
-						align="right"
-						unlink-panels
-						range-separator="~"
-						start-placeholder="开始日期"
-						end-placeholder="结束日期"
-						:picker-options="pickerOptions2"
-						value-format="yyyy/MM/dd"
-					></el-date-picker>-->
+					<h4>销售额趋势</h4>
 					<el-button-group class="data_style">
-						<el-button plain size="small">最近一周</el-button>
-						<el-button plain size="small">最近一月</el-button>
-						<el-button plain size="small">最近一年</el-button>
+						<el-button
+							plain
+							size="small"
+							@click="getSaleMoney(0)"
+							:class="btnStyleShow==0?'btn_style':''"
+						>最近7天</el-button>
+						<el-button
+							plain
+							size="small"
+							@click="getSaleMoney(1)"
+							:class="btnStyleShow==1?'btn_style':''"
+						>最近30天</el-button>
+						<!-- <el-button plain size="small">最近一年</el-button> -->
 					</el-button-group>
 				</div>
 				<div class="histogram_style">
-					<h4 style="text-align: center;line-height:52px;">销售额趋势</h4>
+					<h4 style="text-align: center;line-height:52px;">
+						<span style="font-size:12px;color:#999999;" v-if="searchValue!=''">（{{searchValue}}）</span>
+					</h4>
 					<div id="main" style="width:100%;height:240px;"></div>
 				</div>
 			</el-col>
@@ -121,19 +126,19 @@
 						<el-col :span="7">销售额</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
-						<el-col :span="24" v-for="(item, index) in items" :key="index" v-show="top5">
+						<el-col :span="24" v-for="(item, index) in item1" :key="index" v-show="top5">
 							<el-col :span="5" style="text-align:center;">
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col :span="12">{{item.itemName}}</el-col>
+							<el-col :span="7">{{item.orderMoney}}</el-col>
 						</el-col>
-						<el-col :span="24" v-for="(item, index) in item1" :key="item.index" v-show="top10">
+						<el-col :span="24" v-for="(item, index) in item2" :key="item.index" v-show="top10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col :span="12">{{item.itemName}}</el-col>
+							<el-col :span="7">{{item.orderMoney}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -148,19 +153,19 @@
 							<el-col :span="24">
 								<i class="iconfont" style="color:#00A4DB;">&#xec1e;</i>待付款
 							</el-col>
-							<el-col :span="24">17</el-col>
+							<el-col :span="24">{{allMsg.supplierOrderInfo.unpaid}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
 								<i class="iconfont" style="color:#FFDA5B;">&#xec1e;</i>待发货
 							</el-col>
-							<el-col :span="24">17</el-col>
+							<el-col :span="24">{{allMsg.supplierOrderInfo.delivered}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
 								<i class="iconfont" style="color:#72D273;">&#xec1e;</i>待收货
 							</el-col>
-							<el-col :span="24">17</el-col>
+							<el-col :span="24">{{allMsg.supplierOrderInfo.waitGood}}</el-col>
 						</el-col>
 						<el-col :span="24" style>
 							<el-col :span="24" class="echarts_case" id="order_pie" ref="pie"></el-col>
@@ -176,158 +181,24 @@ var echarts = require("echarts");
 export default {
 	data() {
 		return {
+			btnStyleShow: 0,
 			top5: true,
 			top10: false,
 			test: 4,
-			items: [
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				}
-			],
-			item1: [
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				}
-			],
-			pickerOptions2: {
-				shortcuts: [
-					{
-						text: "最近一周",
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-							picker.$emit("pick", [start, end]);
-						}
-					},
-					{
-						text: "最近一个月",
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-							picker.$emit("pick", [start, end]);
-						}
-					},
-					{
-						text: "最近三个月",
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-							picker.$emit("pick", [start, end]);
-						}
-					}
-				]
+			item1: [],
+			item2: [],
+			allMsg: {
+				supplierSellSum: {},
+				upperLowerShelfAndTotal: {},
+				supplierOrderSell: [],
+				supplierOrderInfo: {}
 			},
-			searchValue: []
+			searchValue: "",
+			supplierName: JSON.parse(sessionStorage.getItem("user")).account,
+			storeName: JSON.parse(sessionStorage.getItem("user")).account
 		};
 	},
-	mounted() {
-		// let width = document.getElementById("order_pie").offsetWidth;
-		// console.log(width);
-		// document.getElementById("order_pie").style.height = width + "px";
-		let myChart = echarts.init(document.getElementById("main"));
-		let option = {
-			title: {
-				text: ""
-			},
-			tooltip: {},
-			legend: {
-				data: []
-			},
-			xAxis: {
-				data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-			},
-			yAxis: {},
-			series: [
-				{
-					name: "销量",
-					type: "bar",
-					data: [5, 20, 36, 10, 10, 20],
-					itemStyle: {
-						normal: {
-							color: "#1cc09f"
-						}
-					}
-				}
-			]
-		};
-		let pieEcharts = echarts
-			.init(document.getElementById("order_pie"))
-			.setOption({
-				tooltip: {
-					trigger: "item",
-					formatter: "{a} <br/>{b} : {c} ({d}%)"
-				},
-				series: {
-					name: "订单状态",
-					type: "pie",
-					data: [
-						{
-							name: "待收货",
-							value: 1212,
-							itemStyle: {
-								color: "#72D273"
-							}
-						},
-						{
-							name: "待付款",
-							value: 2323,
-							itemStyle: {
-								color: "#00A4DB"
-							}
-						},
-						{
-							name: "待发货",
-							value: 1919,
-							itemStyle: {
-								color: "#FFDA5B"
-							}
-						}
-					]
-				}
-			});
-		myChart.setOption(option);
-		window.onresize = function() {
-			myChart.resize();
-			// pieEcharts.resize();
-		};
-	},
+	mounted() {},
 	methods: {
 		showTop5() {
 			this.top5 = true;
@@ -336,7 +207,159 @@ export default {
 		showTop10() {
 			this.top5 = false;
 			this.top10 = true;
+		},
+		getMsg() {
+			this.Axios(
+				{
+					params: {
+						state: "0,1,2",
+						supplierId: JSON.parse(sessionStorage.getItem("user"))
+							.salesTerritoryId
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-order/order/getSupplierOrderInfo",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+						this.allMsg = JSON.parse(JSON.stringify(result.data.data));
+						this.item1 = this.allMsg.supplierOrderSell.slice(0, 5);
+						this.item2 = this.allMsg.supplierOrderSell.slice(5);
+						echarts.init(document.getElementById("order_pie")).setOption({
+							tooltip: {
+								trigger: "item",
+								formatter: "{a} <br/>{b} : {c} ({d}%)"
+							},
+							series: {
+								name: "订单状态",
+								type: "pie",
+								data: [
+									{
+										name: "待收货",
+										value: this.allMsg.supplierOrderInfo.waitGood,
+										itemStyle: {
+											color: "#72D273"
+										}
+									},
+									{
+										name: "待付款",
+										value: this.allMsg.supplierOrderInfo.unpaid,
+										itemStyle: {
+											color: "#00A4DB"
+										}
+									},
+									{
+										name: "待发货",
+										value: this.allMsg.supplierOrderInfo.delivered,
+										itemStyle: {
+											color: "#FFDA5B"
+										}
+									}
+								]
+							}
+						});
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
+		},
+		getSaleMoney(i) {
+			this.btnStyleShow = i;
+			this.Axios(
+				{
+					params: {
+						state: i,
+						supplierId: JSON.parse(sessionStorage.getItem("user"))
+							.salesTerritoryId
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-order/order/getSupplierOrderPrice",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.searchValue =
+							JSON.parse(JSON.stringify(result.data.data[0])).gmtCreate +
+							"至" +
+							JSON.parse(
+								JSON.stringify(result.data.data[result.data.data.length - 1])
+							).gmtCreate;
+						let time = result.data.data.map(item => {
+							return item.gmtCreate;
+						});
+						let value = result.data.data.map(item => {
+							return item.orderMoney;
+						});
+						let myChart = echarts.init(document.getElementById("main"));
+						let a;
+						if (i == 0 || i == 1) {
+							a = "日";
+						} else {
+							a = "月";
+						}
+						let option = {
+							title: {
+								text: ""
+							},
+							tooltip: {
+								trigger: "axis",
+								formatter: ""
+							},
+							legend: {
+								data: []
+							},
+							xAxis: {
+								data: time.map(item => {
+									return item.slice(item.lastIndexOf("-") + 1) + a;
+								})
+							},
+							yAxis: {},
+							series: [
+								{
+									name: "销售额",
+									type: "bar",
+									data: value,
+									barMaxWidth: 50,
+									itemStyle: {
+										normal: {
+											color: "#1cc09f"
+										}
+									}
+								}
+							]
+						};
+						myChart.setOption(option);
+						window.onresize = function() {
+							myChart.resize();
+						};
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
 		}
+	},
+	created() {
+		this.getMsg();
+		this.getSaleMoney(0);
 	}
 };
 </script>
@@ -519,6 +542,10 @@ export default {
 		.echarts_case {
 			height: 232px;
 		}
+	}
+	.btn_style {
+		background-color: #1cc09f;
+		color: white;
 	}
 }
 </style>

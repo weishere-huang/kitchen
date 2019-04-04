@@ -6,8 +6,8 @@
 					<img src="../../assets/image/user.png" alt>
 				</el-col>
 				<el-col :span="14">
-					<p class="content_style">Hi,Roulen,祝你开心每一天！</p>
-					<p style="color:#999999">超级管理员</p>
+					<p class="content_style">Hi,{{supplierName}},祝你开心每一天！</p>
+					<p style="color:#999999">{{roleName}}</p>
 				</el-col>
 				<el-col :span="7">
 					<div class="recommend">
@@ -87,9 +87,19 @@
 				<div class="top_style">
 					<h4>销售额趋势</h4>
 					<el-button-group class="data_style">
-						<el-button plain size="small" @click="getSaleMoney(0)">最近一周</el-button>
-						<el-button plain size="small" @click="getSaleMoney(1)">最近一月</el-button>
-						<el-button plain size="small" @click="getSaleMoney(2)">最近一年</el-button>
+						<el-button
+							plain
+							size="small"
+							:class="btnStyleShow==0?'btn_style':''"
+							@click="getSaleMoney(0)"
+						>最近7天</el-button>
+						<el-button
+							plain
+							size="small"
+							:class="btnStyleShow==1?'btn_style':''"
+							@click="getSaleMoney(1)"
+						>最近30天</el-button>
+						<!-- <el-button plain size="small" @click="getSaleMoney(2)">最近一年</el-button> -->
 					</el-button-group>
 				</div>
 				<div class="histogram_style">
@@ -270,6 +280,9 @@ var echarts = require("echarts");
 export default {
 	data() {
 		return {
+			supplierName: JSON.parse(sessionStorage.getItem("user")).account,
+			roleName: JSON.parse(sessionStorage.getItem("user")).roleName,
+			btnStyleShow: 0,
 			saleTOP5: [],
 			saleTOP10: [],
 			menuTop5: [],
@@ -294,81 +307,6 @@ export default {
 			cookbookTop5: true,
 			cookbookTop10: false,
 			test: 4,
-			items: [
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				}
-			],
-			item1: [
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				},
-				{
-					name: "回锅肉",
-					money: "44444"
-				}
-			],
-			pickerOptions2: {
-				shortcuts: [
-					{
-						text: "最近一周",
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-							picker.$emit("pick", [start, end]);
-						}
-					},
-					{
-						text: "最近一个月",
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-							picker.$emit("pick", [start, end]);
-						}
-					},
-					{
-						text: "最近三个月",
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-							picker.$emit("pick", [start, end]);
-						}
-					}
-				]
-			},
 			searchValue: "",
 			userLeaveMessage: [],
 			messageReply: "",
@@ -443,6 +381,7 @@ export default {
 			);
 		},
 		getSaleMoney(i) {
+			this.btnStyleShow = i;
 			this.Axios(
 				{
 					params: {
@@ -893,6 +832,10 @@ export default {
 		resize: none;
 		padding: 4px;
 		outline: none;
+	}
+	.btn_style {
+		background-color: #1cc09f;
+		color: white;
 	}
 }
 </style>
