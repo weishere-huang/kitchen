@@ -60,7 +60,13 @@
 						</el-dialog>
 					</el-form-item>
 					<el-form-item>
-						<el-button size="small" type="primary" @click="submitForm('cookbook')">立即发送</el-button>
+						<permission-button
+							permCode="messagepush_lookup.messagepush_list_add"
+							banType="disable"
+							size="small"
+							type="primary"
+							@click="submitForm('cookbook')"
+						>立即发送</permission-button>
 						<!--<el-button size="small" type="primary" @click="saveim">立即发送</el-button>-->
 					</el-form-item>
 				</el-form>

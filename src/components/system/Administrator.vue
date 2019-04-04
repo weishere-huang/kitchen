@@ -121,8 +121,8 @@ export default {
 		handlechange(params) {
 			if (params.type === "edit") {
 				console.log(params);
-				(this.userMsg = {}),
-					(this.editUserMsg = {}),
+				// (this.userMsg = {}),
+				// 	(this.editUserMsg = {}),
 					// Object.assign(this.editUserMsg,params.rowData);
 					// this.editUserMsg.confirmPassword=this.editUserMsg.password;
 					this.findOne(params.rowData.id);

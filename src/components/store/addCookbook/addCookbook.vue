@@ -36,18 +36,8 @@
 export default {
 	data() {
 		return {
-			currentPage:1,
-			scriptData: [
-				"红烧肉",
-				"鱼香肉丝",
-				"酸菜鱼",
-				"鸡公煲",
-				"酸辣土豆丝",
-				"糖醋里脊",
-				"锅包肉",
-				"老鸭汤",
-				"鱼香茄子"
-			],
+			currentPage: 1,
+			scriptData: [],
 			recentSearch: 1,
 			pageIndex: 1,
 			pageSize: 30,
@@ -87,7 +77,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-recipe/recipe/list",
+					url: "/api-recipe/recipe/findRecipes",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}

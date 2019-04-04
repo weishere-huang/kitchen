@@ -2,12 +2,14 @@
 	<div class="information_list">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<el-button
+				<permission-button
+					permCode="messagepush_lookup.messagepush_list_add"
+					banType="disable"
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/Information/NewInformation'})"
-				>&nbsp;新建消息</el-button>
+				>&nbsp;新建消息</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -26,6 +28,7 @@
 						:handleShow="true"
 						:editShow="false"
 						:detalisShow="true"
+						:permissionDetails="permissionDetails"
 					></table-list>
 				</div>
 				<div class="block" style="margin-top:10px;float:right">
@@ -51,6 +54,7 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			permissionDetails: "messagepush_lookup.messagepush_list_detail",
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			items: [
 				{
@@ -94,7 +98,7 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-      this.list();
+			this.list();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
@@ -113,33 +117,31 @@ export default {
 		getRow(row, event) {
 			console.log(row);
 		},
-    list(){
-      this.Axios(
-        {
-          params: {
-            page:this.pageIndex,
-            size:this.pageSize
-          },
-          option: {
-            successMsg:"推送消息加载完成"
-          },
-          type: "get",
-          url: "/api-message/message/findList"
-
-        },
-        this
-      ).then(
-        result => {
-          console.log(result.data);
-          this.tableData = result.data.data.content;
-        },
-        ({type, info}) => {
-        }
-      );
-    },
+		list() {
+			this.Axios(
+				{
+					params: {
+						page: this.pageIndex,
+						size: this.pageSize
+					},
+					option: {
+						successMsg: "推送消息加载完成"
+					},
+					type: "get",
+					url: "/api-message/message/findList"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					this.tableData = result.data.data.content;
+				},
+				({ type, info }) => {}
+			);
+		}
 	},
 	created() {
-    this.list();
+		this.list();
 		let a = this.$route.matched.find(item => item.name === "NewInformation")
 			? true
 			: false;

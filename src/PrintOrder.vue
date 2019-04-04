@@ -172,7 +172,7 @@ export default {
 		);
 	},
 	updated() {
-		// this.preview(1);
+		this.preview(1);
 	}
 };
 </script>
