@@ -5,7 +5,7 @@
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>修改供应商</h4>
+				<h4>修改代理商</h4>
 			</div>
 			<div class="supplier_form">
 				<el-form
@@ -15,7 +15,7 @@
 					:rules="supplierMsgRules"
 					ref="supplierMsg"
 				>
-					<el-form-item label="供应商名称：" prop="supplierName">
+					<el-form-item label="代理商名称：" prop="supplierName">
 						<el-input type="text" v-model="supplierMsg.supplierName" size="small" style="width:350px;"></el-input>
 					</el-form-item>
 					<el-form-item label="联系人：" prop="contacts">
@@ -27,7 +27,7 @@
 					<el-form-item label="详细地址：" prop="address">
 						<el-input type="text" v-model="supplierMsg.address" size="small" style="width:350px;"></el-input>
 					</el-form-item>
-					<el-form-item label="供应商账号：" prop>
+					<el-form-item label="代理商账号：" prop>
 						<span>{{supplierMsg.account}}</span>
 					</el-form-item>
 				</el-form>
@@ -125,7 +125,7 @@ export default {
 			},
 			supplierMsgRules: {
 				supplierName: [
-					{ required: true, message: "请填写供应商名称", trigger: "blur" }
+					{ required: true, message: "请填写代理商名称", trigger: "blur" }
 				],
 				contacts: [
 					{ required: true, message: "请填写联系人", trigger: "blur" }

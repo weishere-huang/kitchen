@@ -9,14 +9,14 @@
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="toadd"
-				>添加供应商</permission-button>
+				>添加代理商</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
-					<h4>供应商列表</h4>
+					<h4>代理商列表</h4>
 					<div class="top_search">
 						<el-col :span="19" style="padding:0 5px;">
-							<el-input size="small" placeholder="供应商名称" v-model="keyword"></el-input>
+							<el-input size="small" placeholder="代理商名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="5" style="padding:0 5px;">
 							<el-button size="small" plain @click="beforeSearch">搜索</el-button>

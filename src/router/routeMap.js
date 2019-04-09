@@ -139,21 +139,21 @@ export default [{
     ]
   },
   {
-    menu: '供应商',
+    menu: '代理商',
     permissionCode: 'area',
     defaultDock: false,
     icon: '&#xe605;',
     subMenu: [{
-      menu: '供应商列表',
+      menu: '代理商列表',
       route: '/Supplier',
       permissionCode: 'supplier_list_lookup'
     }, {
-      menu: '添加供应商',
+      menu: '添加代理商',
       route: '/Supplier/AddSupplier',
       visible: true,
       permissionCode: 'supplier_add_lookup'
     }, {
-      menu: '修改供应商',
+      menu: '修改代理商',
       // route: '/Supplier/EditSupplier',
       routeReg: /^\/Supplier\/EditSupplier\/\d{1,}$/i,
       visible: true,

@@ -177,7 +177,7 @@
 				<el-col :span="24" class="table_case">
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
-						<el-col :span="12">供应商</el-col>
+						<el-col :span="12">代理商</el-col>
 						<el-col :span="7">销售额</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">

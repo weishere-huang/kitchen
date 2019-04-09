@@ -38,7 +38,7 @@
 								clearable
 								size="small"
 								style="width:100%;"
-								placeholder="商品名称/供应商"
+								placeholder="商品名称/代理商"
 								v-model="keyword"
 							></el-input>
 						</el-col>
@@ -157,7 +157,7 @@
 								<!-- </div> -->
 							</template>
 						</el-table-column>
-						<el-table-column label="供应商" min-width="150" show-overflow-tooltip>
+						<el-table-column label="代理商" min-width="150" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<!-- <el-popover
 									popper-class="color_text"
