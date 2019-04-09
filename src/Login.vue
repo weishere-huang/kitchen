@@ -13,12 +13,12 @@
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
-				<el-form-item prop="verifyCode">
+				<!-- <el-form-item prop="verifyCode">
 					<el-input type="number" placeholder="验证码" maxlength="20" style="width:60%;">
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe636;</i>
 					</el-input>
 					<span style="width:37%;display:inline-block;height:90%;border:1px solid red;">验证码</span>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item style="margin-bottom:5px;">
 					<el-button type="primary" round style="width:100%;" @click="login('userMsg')">登录</el-button>
 				</el-form-item>
@@ -166,7 +166,7 @@ export default {
 	height: 100vh;
 	.login_case {
 		width: 600px;
-		height: 400px;
+		// height: 400px;
 		background-color: white;
 		// margin: auto;
 		position: absolute;

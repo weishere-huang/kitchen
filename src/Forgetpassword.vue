@@ -66,7 +66,12 @@
 					prop="newPassword"
 					:rules="[{ required: true, message: '密码不能为空', trigger: 'blur'},{validator:validator1,trigger:'blur'}]"
 				>
-					<el-input type="password" maxlength="20" placeholder="输入新密码" v-model="newPasswordMsg.newPassword">
+					<el-input
+						type="password"
+						maxlength="20"
+						placeholder="输入新密码"
+						v-model="newPasswordMsg.newPassword"
+					>
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
@@ -74,7 +79,12 @@
 					prop="repetitionPassword"
 					:rules="[{ required: true, message: '确认密码不能为空', trigger: 'blur'},{validator:validator,trigger:'blur'}]"
 				>
-					<el-input type="password" maxlength="20" placeholder="确认新密码" v-model="newPasswordMsg.repetitionPassword">
+					<el-input
+						type="password"
+						maxlength="20"
+						placeholder="确认新密码"
+						v-model="newPasswordMsg.repetitionPassword"
+					>
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
@@ -132,7 +142,11 @@ export default {
 			}
 		},
 		validator1(rule, value, callback) {
-			if (/^\w{6,20}$/.test(value) === false) {
+			if (
+				/^((?=.*[a-z])|(?=.*\d)|(?=.*[#@!~%^&*]))[a-z\d#@!$~%^&*]{6,20}$/i.test(
+					value
+				) === false
+			) {
 				callback(new Error("请输入6到20位的密码"));
 			} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 				callback(new Error("不能是6位全部一样"));
