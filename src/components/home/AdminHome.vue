@@ -13,12 +13,12 @@
 					<div class="recommend">
 						<span style="margin-right:8px;" class="case">
 							<p>发布菜谱</p>
-							<p>{{allMsg.recipeCountAndSellSum.recipeSum}}</p>
+							<p>{{allMsg.recipeCountAndSellSum.recipeSum>0?allMsg.recipeCountAndSellSum.recipeSum:'0'}}</p>
 						</span>
 						<span style class="case">
 							<p>累计销售菜谱</p>
 							<p>
-								{{allMsg.recipeCountAndSellSum.sellNum}}
+								{{allMsg.recipeCountAndSellSum.sellNum>0?allMsg.recipeCountAndSellSum.sellNum:'0'}}
 								<span style="font-size:14px;color:#999999;">次</span>
 							</p>
 						</span>

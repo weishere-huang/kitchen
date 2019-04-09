@@ -3,7 +3,7 @@
 		<el-breadcrumb
 			class="breadcrumb-container"
 			separator-class="el-icon-arrow-right"
-			style="color:white"
+			style="color:white;line-height:25px;"
 		>
 			<el-breadcrumb-item
 				v-for="item in levelList"
