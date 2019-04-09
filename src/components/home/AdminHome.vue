@@ -19,7 +19,9 @@
 							<p>累计销售菜谱</p>
 							<p>
 								{{allMsg.recipeCountAndSellSum.sellNum>0?allMsg.recipeCountAndSellSum.sellNum:'0'}}
-								<span style="font-size:14px;color:#999999;">次</span>
+								<span
+									style="font-size:14px;color:#999999;"
+								>次</span>
 							</p>
 						</span>
 					</div>
@@ -158,7 +160,7 @@
 								size="small"
 								type="primary"
 								@click="replyMessage"
-								:disabled="reply!=''?false:true"
+								:disabled="reply!=''&&messageReply!=''?false:true"
 							>快速回复</el-button>
 						</el-col>
 					</el-col>
