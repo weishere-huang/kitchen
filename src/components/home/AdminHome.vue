@@ -13,11 +13,13 @@
 					<div class="recommend">
 						<span style="margin-right:8px;" class="case">
 							<p>发布菜谱</p>
-							<p>{{allMsg.recipeCountAndSellSum.recipeSum>0?allMsg.recipeCountAndSellSum.recipeSum:'0'}}</p>
+							<p
+								style="font-family: Roboto;"
+							>{{allMsg.recipeCountAndSellSum.recipeSum>0?allMsg.recipeCountAndSellSum.recipeSum:'0'}}</p>
 						</span>
 						<span style class="case">
 							<p>累计销售菜谱</p>
-							<p>
+							<p style="font-family: Roboto;">
 								{{allMsg.recipeCountAndSellSum.sellNum>0?allMsg.recipeCountAndSellSum.sellNum:'0'}}
 								<span
 									style="font-size:14px;color:#999999;"
@@ -130,7 +132,11 @@
 								<img :src="item.img" alt>
 							</el-col>
 							<el-col :span="18" class="msg_case">
-								<el-col :span="24">{{item.userName}}</el-col>
+								<el-col
+									:span="24"
+									style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
+									:title="item.userName"
+								>{{item.userName}}</el-col>
 								<el-col :span="24" style="color:#999999;font-size:12px;margin-top:4px;">{{item.gmtCreate}}</el-col>
 							</el-col>
 						</el-col>
@@ -180,22 +186,30 @@
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
 						<el-col :span="12">代理商</el-col>
-						<el-col :span="7">销售额</el-col>
+						<el-col :span="7">销售额(元)</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
 						<el-col :span="24" v-for="(item, index) in saleTOP5" :key="index" v-show="top5">
 							<el-col :span="5" style="text-align:center;">
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
-							<el-col :span="12">{{item.supplierName}}</el-col>
-							<el-col :span="7">{{item.orderMoney}}</el-col>
+							<el-col
+								:span="12"
+								style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
+								:title="item.supplierName"
+							>{{item.supplierName}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.orderMoney}}</el-col>
 						</el-col>
 						<el-col :span="24" v-for="(item, index) in saleTOP10" :key="item.index" v-show="top10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
-							<el-col :span="12">{{item.name}}</el-col>
-							<el-col :span="7">{{item.money}}</el-col>
+							<el-col
+								:span="12"
+								style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
+								:title="item.supplierName"
+							>{{item.name}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.money}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -220,14 +234,14 @@
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
 							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7">{{item.sellNum}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.sellNum}}</el-col>
 						</el-col>
 						<el-col :span="24" v-for="(item, index) in menuTop10" :key="item.index" v-show="hotMenutop10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
 							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7">{{item.sellNum}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.sellNum}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -257,7 +271,7 @@
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
 							<el-col :span="12">{{item.recipeName}}</el-col>
-							<el-col :span="7">{{item.recipeSum}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.recipeSum}}</el-col>
 						</el-col>
 						<el-col
 							:span="24"
@@ -269,7 +283,7 @@
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
 							<el-col :span="12">{{item.recipeName}}</el-col>
-							<el-col :span="7">{{item.recipeSum}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.recipeSum}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -606,7 +620,7 @@ export default {
 				display: inline-block;
 				width: 40%;
 				height: 100%;
-				text-align: center;
+				text-align: right;
 				margin-top: 40px;
 				// background: #1cc09f;
 				// line-height: 30px;
@@ -656,6 +670,7 @@ export default {
 					margin-top: 28px;
 					font-size: 20px;
 					text-align: right;
+					font-family: Roboto;
 				}
 				p:nth-child(2) {
 					color: #999999;
