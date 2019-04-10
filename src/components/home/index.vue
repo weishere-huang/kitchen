@@ -14,13 +14,13 @@
 						<span style="background-color:#FF0000;margin-right:8px;padding:0 8px;">
 							热销&nbsp;
 							<span
-								style="background-color:#FF0000;font-size:20px;"
+								style="background-color:#FF0000;font-size:20px;font-family: Roboto;"
 							>{{allMsg.upperLowerShelfAndTotal.hotMenuTotal>0?allMsg.upperLowerShelfAndTotal.hotMenuTotal:"0"}}</span>
 						</span>
 						<span style="background-color:#00CF47;padding:0 8px;">
 							新品&nbsp;
 							<span
-								style="background-color:#00CF47;font-size:20px;"
+								style="background-color:#00CF47;font-size:20px;font-family: Roboto;"
 							>{{allMsg.upperLowerShelfAndTotal.newMenuTotal>0?allMsg.upperLowerShelfAndTotal.newMenuTotal:0}}</span>
 						</span>
 					</div>
@@ -129,7 +129,7 @@
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
 						<el-col :span="12">商品</el-col>
-						<el-col :span="7">销售额</el-col>
+						<el-col :span="7">销售额(元)</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
 						<el-col :span="24" v-for="(item, index) in item1" :key="index" v-show="top5">
@@ -137,14 +137,14 @@
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
 							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7">{{item.orderMoney}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.orderMoney}}</el-col>
 						</el-col>
 						<el-col :span="24" v-for="(item, index) in item2" :key="item.index" v-show="top10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
 							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7">{{item.orderMoney}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.orderMoney}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -159,7 +159,10 @@
 							<el-col :span="24">
 								<i class="iconfont" style="color:#00A4DB;">&#xec1e;</i>待付款
 							</el-col>
-							<el-col :span="24">{{allMsg.supplierOrderInfo.unpaid>0?allMsg.supplierOrderInfo.unpaid:0}}</el-col>
+							<el-col
+								:span="24"
+								style="font-family: Roboto;"
+							>{{allMsg.supplierOrderInfo.unpaid>0?allMsg.supplierOrderInfo.unpaid:0}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
@@ -167,6 +170,7 @@
 							</el-col>
 							<el-col
 								:span="24"
+								style="font-family: Roboto;"
 							>{{allMsg.supplierOrderInfo.delivered>0?allMsg.supplierOrderInfo.delivered:0}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
@@ -175,6 +179,7 @@
 							</el-col>
 							<el-col
 								:span="24"
+								style="font-family: Roboto;"
 							>{{allMsg.supplierOrderInfo.waitGood>0?allMsg.supplierOrderInfo.waitGood:0}}</el-col>
 						</el-col>
 						<el-col :span="24" style>
