@@ -33,6 +33,7 @@ import GuestBook from '@/components/user/GuestBook'
 import Information from '@/components/information/index'
 import NewInformation from '@/components/information/NewInformation'
 import DetailsInformation from '@/components/information/DetailsInformation'
+import AddCookingProcesses from '@/components/cookingProcesses/add&&edit/AddCookingProcesses'
 
 
 Vue.use(Router)
@@ -41,6 +42,17 @@ const router = new Router({
   routes: [{
       path: '/',
       redirect: '/Home',
+    },
+    {
+      path: '/AddCookingProcesses',
+      name: 'AddCookingProcesses',
+      component: AddCookingProcesses,
+      props: {
+        pageName: '添加烹饪流程'
+      },
+      meta: {
+        requireAuth: true,
+      },
     },
     {
       path: '/Home',

@@ -169,7 +169,7 @@
 				<el-col :span="16" class="form_case">
 					<el-form label-width="30%">
 						<el-form-item label="收货地址：">
-							<span>{{orderDetails.address.address}}</span>
+							<span>{{orderDetails.address.area+orderDetails.address.address}}</span>
 						</el-form-item>
 						<el-form-item label="配送时间：">
 							<span style="color:#1cc09f">{{sendTime}}</span>

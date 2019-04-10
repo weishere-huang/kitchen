@@ -117,6 +117,31 @@ export default [{
     ]
   },
   {
+    menu: '菜谱流程',
+    permissionCode: 'cookingProcesses',
+    defaultDock: false,
+    icon: '&#xe640;',
+    subMenu: [
+      {
+        menu: '添加烹饪流程',
+        route: '/AddCookingProcesses',
+        visible: false,
+        permissionCode: 'menu_add_lookup'
+      }
+      // {
+      //   menu: '修改菜谱',
+      //   routeReg: /^\/Cookbook\/EditCookbook\/\d{1,}$/i,
+      //   visible: true,
+      //   permissionCode: 'menu_update_lookup'
+      // },
+      // {
+      //   menu: '菜谱分类',
+      //   route: '/CookbookClassify',
+      //   permissionCode: 'menu_cate_lookup'
+      // },
+    ]
+  },
+  {
     menu: '信息管理',
     permissionCode: 'msg',
     defaultDock: false,

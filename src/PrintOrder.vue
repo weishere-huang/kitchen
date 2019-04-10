@@ -37,7 +37,7 @@
 					</el-col>
 				</el-col>
 				<el-col :span="24" class="consignee_case">
-					<span>收货地址：{{item.address.address}}</span>
+					<span>收货地址：{{item.address.area+item.address.address}}</span>
 					<span>收货人：{{item.address.consignee}}</span>
 					<span>电话：{{item.address.phone}}</span>
 				</el-col>
