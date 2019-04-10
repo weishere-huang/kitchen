@@ -315,14 +315,7 @@ export default {
 					}
 				}
 			],
-			tableData: [
-				{
-					name: "素炒花菜",
-					price: "¥ 8.80元 ",
-					number: "1",
-					subtotal: "¥8.8元 "
-				}
-			],
+			tableData: [],
 			column: [
 				{
 					label: "操作时间",
@@ -365,7 +358,8 @@ export default {
 		shipments() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				orderId: this.$route.params.id
+				orderId: this.$route.params.id,
+				operateReason: "订单发货"
 			});
 			this.Axios(
 				{
@@ -397,7 +391,8 @@ export default {
 			} else {
 				let qs = require("qs");
 				let data = qs.stringify({
-					orderId: this.$route.params.id
+					orderId: this.$route.params.id,
+					operateReason: this.payOI
 				});
 				this.Axios(
 					{
@@ -430,7 +425,8 @@ export default {
 			} else {
 				let qs = require("qs");
 				let data = qs.stringify({
-					orderId: this.$route.params.id
+					orderId: this.$route.params.id,
+					operateReason: this.closeOI
 				});
 				this.Axios(
 					{
