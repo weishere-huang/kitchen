@@ -481,6 +481,7 @@ export default {
 					margin-top: 28px;
 					font-size: 20px;
 					text-align: right;
+					font-family: Roboto;
 				}
 				p:nth-child(2) {
 					color: #999999;

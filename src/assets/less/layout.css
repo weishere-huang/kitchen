@@ -258,3 +258,18 @@ input[type="number"] {
 .el-pagination.is-background .el-pager li:not(.disabled):hover {
   color: #1cc09f;
 }
+.el-badge__content.is-fixed.is-dot {
+  right: 9px;
+  top: 6px;
+}
+.el-badge__content {
+  border: none;
+}
+.el-button--primary.is-disabled,
+.el-button--primary.is-disabled:active,
+.el-button--primary.is-disabled:focus,
+.el-button--primary.is-disabled:hover {
+  background-color: #f1f1f1;
+  color: #999999;
+  border-color: #f1f1f1;
+}
