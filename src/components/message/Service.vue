@@ -234,7 +234,7 @@ export default {
 						areaName: this.areaName
 					},
 					option: {
-						successMsg: "服务网点加载完成~"
+            enableMsg: false
 					},
 					type: "get",
 					url: "/api-platform/network/list"
