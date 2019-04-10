@@ -216,7 +216,7 @@ export default {
 		},
 		beforeSearch() {
 			if (this.cname != null) {
-				this.areaName = this.pname + " " + this.cname;
+				this.areaName = this.pname + this.cname;
 			} else {
 				this.areaName = this.pname;
 			}
@@ -308,6 +308,7 @@ export default {
 			let data = qs.stringify({
 				address: this.addMsg.address,
 				areaCode: this.addMsg.areaCode,
+        code: this.addMsg.code,
 				phone: this.addMsg.phone,
 				title: this.addMsg.title,
 				workingHours: this.addMsg.workingHours,
@@ -351,6 +352,7 @@ export default {
 				id: this.editMsg.id,
 				address: this.editMsg.address,
 				areaCode: this.editMsg.areaCode,
+				code: this.editMsg.code,
 				phone: this.editMsg.phone,
 				title: this.editMsg.title,
 				workingHours: this.editMsg.workingHours,

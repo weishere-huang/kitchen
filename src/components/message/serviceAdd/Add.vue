@@ -113,7 +113,8 @@ export default {
 				phone: "",
 				workingHours: "",
 				serviceMode: [],
-				areaCode: ""
+				areaCode: "",
+        code:""
 			}
 		};
 	},
@@ -124,7 +125,8 @@ export default {
 			phone: {},
 			workingHours: {},
 			serviceMode: {},
-			areaCode: {}
+			areaCode: {},
+      code:{}
 		}
 	},
 	methods: {
@@ -162,8 +164,12 @@ export default {
 			} else {
 				this.pname = null;
 			}
-			// todo 默认为第一个市
-			this.addMsg.areaCode = this.pname;
+			//默认为第一个地区
+      this.citycode = this.cities[0].adcode;
+      this.cname = this.cities[0].areaName;
+
+			this.addMsg.areaCode = this.pname+this.cname
+      this.addMsg.code = this.citycode;
 		},
 
 		getcitycode() {
@@ -178,34 +184,26 @@ export default {
 			});
 			if (c != null) {
 				this.cname = c.areaName;
-				this.addMsg.areaCode = this.pname + " " + this.cname;
+				this.addMsg.areaCode = this.pname+ this.cname;
+        this.addMsg.code=this.citycode;
 			} else {
 				this.cname = null;
 				this.addMsg.areaCode = this.pname;
-			}
+      }
 		},
 		//编辑赋值方法 , 服务范围可以
 		startedit() {
-			//截取地区
-			let arr = this.editMsg.areaCode.split(" ");
-			//赋值省
-			let p = this.province.find(item => {
-				return arr[0] === item.areaName;
-			});
-			if (p != null) {
-				this.provinceCode = p.adcode;
-			}
-			//获取市
-			this.cities = p.children;
-			//赋值市区
-			if (arr.length > 1) {
-				let c = this.cities.find(item => {
-					return arr[1] === item.areaName;
-				});
-				if (c != null) {
-					this.citycode = c.adcode;
-				}
-			}
+      this.provinceCode=this.editMsg.code.substring(0,2)+"0000";
+      let p = this.province.find(item => {
+        return this.provinceCode === item.adcode;
+      });
+      if (p != null) {
+        this.pname = p.areaName;
+        this.cities = p.children;
+        this.citycode = this.editMsg.code;
+      } else {
+        this.pname = null;
+      }
 			// 服务范围
 			this.addMsg.serviceMode = this.addMsg.serviceMode.split(",");
 			this.serviceMode = this.addMsg.serviceMode;
