@@ -233,18 +233,19 @@ export default {
 				if (new Date(this.searchDate1) > new Date(this.searchDate2)) {
 					this.$message.error("结束日期必须大于起始日期，请重新选择");
 				} else {
-				  this.pageIndex=1;
+					this.pageIndex = 1;
 					this.listOrder();
 				}
 			} else {
-        this.pageIndex=1;
+				this.pageIndex = 1;
 				this.listOrder();
 			}
 		},
 		sendOrder() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				orderId: this.orderIds.join(",")
+				orderId: this.orderIds.join(","),
+				operateReason: "订单发货"
 			});
 			this.Axios(
 				{
