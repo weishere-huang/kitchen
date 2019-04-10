@@ -275,13 +275,18 @@ export default {
 					}
 				},
 				this
-			).then(result => {
-				if (result.data.code === 200) {
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.foodlist();
+					} else {
+						this.$message.error("编辑失败,请重新尝试");
+					}
+				},
+				({ type, info }) => {
 					this.foodlist();
-				} else {
-					this.$message.error("编辑失败,请重新尝试");
 				}
-			});
+			);
 		},
 		handleInput(row, index) {
 			console.log(row);

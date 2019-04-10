@@ -111,7 +111,7 @@ export default {
 					logType: "操作",
 					logContent: "订单发货，订单编号10429340238",
 					userName: "zhangjie",
-					management: "供应商管理员",
+					management: "代理商管理员",
 					ip: "127.0.0.1 "
 				}
 			],

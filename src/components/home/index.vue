@@ -5,18 +5,24 @@
 				<el-col :span="3" style="line-height: 114px;padding:23px 0">
 					<img src="../../assets/image/user.png" alt>
 				</el-col>
-				<el-col :span="16">
+				<el-col :span="12">
 					<p class="content_style">Hi,{{supplierName}},祝你开心每一天！</p>
 					<p style="color:#999999">{{storeName}}</p>
 				</el-col>
-				<el-col :span="5">
+				<el-col :span="9">
 					<div class="recommend">
-						<span
-							style="background-color:#FF0000;margin-right:8px;"
-						>热销{{allMsg.upperLowerShelfAndTotal.hotMenuTotal!=""?allMsg.upperLowerShelfAndTotal.hotMenuTotal:"0"}}</span>
-						<span
-							style="background-color:#00CF47"
-						>新品{{allMsg.upperLowerShelfAndTotal.newMenuTotal!=""?allMsg.upperLowerShelfAndTotal.newMenuTotal:0}}</span>
+						<span style="background-color:#FF0000;margin-right:8px;padding:0 8px;">
+							热销&nbsp;
+							<span
+								style="background-color:#FF0000;font-size:20px;"
+							>{{allMsg.upperLowerShelfAndTotal.hotMenuTotal>0?allMsg.upperLowerShelfAndTotal.hotMenuTotal:"0"}}</span>
+						</span>
+						<span style="background-color:#00CF47;padding:0 8px;">
+							新品&nbsp;
+							<span
+								style="background-color:#00CF47;font-size:20px;"
+							>{{allMsg.upperLowerShelfAndTotal.newMenuTotal>0?allMsg.upperLowerShelfAndTotal.newMenuTotal:0}}</span>
+						</span>
 					</div>
 				</el-col>
 			</el-col>
@@ -27,7 +33,7 @@
 							<i class="iconfont" style="color:white;">&#xe63b;</i>
 						</span>
 						<span>
-							<p>{{allMsg.supplierSellSum.todayOrderTotal!=""?allMsg.supplierSellSum.todayOrderTotal:0}}</p>
+							<p>{{allMsg.supplierSellSum.todayOrderTotal>0?allMsg.supplierSellSum.todayOrderTotal:0}}</p>
 							<p>今日订单</p>
 						</span>
 					</li>
@@ -36,7 +42,7 @@
 							<i class="iconfont" style="color:white;">&#xe666;</i>
 						</span>
 						<span>
-							<p>{{allMsg.supplierSellSum.todayOrderSellSum!=""?allMsg.supplierSellSum.todayOrderSellSum:0}}</p>
+							<p>{{allMsg.supplierSellSum.todayOrderSellSum>0?allMsg.supplierSellSum.todayOrderSellSum:0}}</p>
 							<p>今日销售额</p>
 						</span>
 					</li>
@@ -46,10 +52,10 @@
 						</span>
 						<span>
 							<p>
-								{{allMsg.upperLowerShelfAndTotal.upperTotal!=""?allMsg.upperLowerShelfAndTotal.upperTotal:0}}/
+								{{allMsg.upperLowerShelfAndTotal.upperTotal>0?allMsg.upperLowerShelfAndTotal.upperTotal:0}}/
 								<i
 									style="color:#999999;font-style:normal;"
-								>{{allMsg.upperLowerShelfAndTotal.lowerTotal!=""?allMsg.upperLowerShelfAndTotal.lowerTotal:0}}</i>
+								>{{allMsg.upperLowerShelfAndTotal.lowerTotal>0?allMsg.upperLowerShelfAndTotal.lowerTotal:0}}</i>
 							</p>
 							<p>上/下架商品数</p>
 						</span>
@@ -59,7 +65,7 @@
 							<i class="iconfont" style="color:white;">&#xe8d7;</i>
 						</span>
 						<span>
-							<p>{{allMsg.supplierSellSum.orderTotal!=""?allMsg.supplierSellSum.orderTotal:0}}</p>
+							<p>{{allMsg.supplierSellSum.orderTotal>0?allMsg.supplierSellSum.orderTotal:0}}</p>
 							<p>订单总数</p>
 						</span>
 					</li>
@@ -68,7 +74,7 @@
 							<i class="iconfont" style="color:white;">&#xe69f;</i>
 						</span>
 						<span>
-							<p>￥{{allMsg.supplierSellSum.orderSellTotalSum!=""?allMsg.supplierSellSum.orderSellTotalSum:0}}</p>
+							<p>￥{{allMsg.supplierSellSum.orderSellTotalSum>0?allMsg.supplierSellSum.orderSellTotalSum:0}}</p>
 							<p>销售总额</p>
 						</span>
 					</li>
@@ -77,7 +83,7 @@
 							<i class="iconfont" style="color:white;">&#xe696;</i>
 						</span>
 						<span>
-							<p>{{allMsg.upperLowerShelfAndTotal.total!=""?allMsg.upperLowerShelfAndTotal.total:0}}</p>
+							<p>{{allMsg.upperLowerShelfAndTotal.total>0?allMsg.upperLowerShelfAndTotal.total:0}}</p>
 							<p>商品总数</p>
 						</span>
 					</li>
@@ -153,19 +159,23 @@
 							<el-col :span="24">
 								<i class="iconfont" style="color:#00A4DB;">&#xec1e;</i>待付款
 							</el-col>
-							<el-col :span="24">{{allMsg.supplierOrderInfo.unpaid}}</el-col>
+							<el-col :span="24">{{allMsg.supplierOrderInfo.unpaid>0?allMsg.supplierOrderInfo.unpaid:0}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
 								<i class="iconfont" style="color:#FFDA5B;">&#xec1e;</i>待发货
 							</el-col>
-							<el-col :span="24">{{allMsg.supplierOrderInfo.delivered}}</el-col>
+							<el-col
+								:span="24"
+							>{{allMsg.supplierOrderInfo.delivered>0?allMsg.supplierOrderInfo.delivered:0}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
 								<i class="iconfont" style="color:#72D273;">&#xec1e;</i>待收货
 							</el-col>
-							<el-col :span="24">{{allMsg.supplierOrderInfo.waitGood}}</el-col>
+							<el-col
+								:span="24"
+							>{{allMsg.supplierOrderInfo.waitGood>0?allMsg.supplierOrderInfo.waitGood:0}}</el-col>
 						</el-col>
 						<el-col :span="24" style>
 							<el-col :span="24" class="echarts_case" id="order_pie" ref="pie"></el-col>
@@ -198,7 +208,14 @@ export default {
 			storeName: JSON.parse(sessionStorage.getItem("user")).account
 		};
 	},
-	mounted() {},
+	mounted() {
+		let me = this;
+		echarts
+			.init(document.getElementById("order_pie"))
+			.on("click", function(params) {
+				me.$router.push({ path: "/Order" });
+			});
+	},
 	methods: {
 		showTop5() {
 			this.top5 = true;
@@ -307,20 +324,47 @@ export default {
 						let value = result.data.data.map(item => {
 							return item.orderMoney;
 						});
+						let data = result.data.data;
 						let myChart = echarts.init(document.getElementById("main"));
-						let a;
-						if (i == 0 || i == 1) {
-							a = "日";
-						} else {
-							a = "月";
-						}
+						let a = "";
+						// if (i == 0 || i == 1) {
+						// 	a = "日";
+						// } else {
+						// 	a = "月";
+						// }
 						let option = {
 							title: {
 								text: ""
 							},
 							tooltip: {
 								trigger: "axis",
-								formatter: ""
+								formatter: function(params) {
+									let name = params[0].name.replace("日", "");
+									let item = data
+										.map(i => {
+											return i.gmtCreate;
+										})
+										.map(j => {
+											return j.slice(j.lastIndexOf("-") + 1);
+										});
+									let index;
+									for (let i = 0; i < item.length; i++) {
+										if (item[i] == name) {
+											index = i;
+										}
+									}
+									let topTip =
+										"<div style='padding:0 8px;'>" +
+										data[index].gmtCreate +
+										"<br/>" +
+										"订单数量：" +
+										data[index].sellSum +
+										"<br/>" +
+										"销售额：" +
+										data[index].orderMoney +
+										"</div>";
+									return topTip;
+								}
 							},
 							legend: {
 								data: []
@@ -393,7 +437,7 @@ export default {
 			text-align: center;
 			span {
 				display: inline-block;
-				width: 40%;
+				// width: 40%;
 				height: 30px;
 				text-align: center;
 				background: #1cc09f;

@@ -52,19 +52,23 @@
 							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
 							<li>
 								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">
-									<i class="iconfont" @click="pathto(0)">&#xe63b;</i>
+									<el-badge is-dot class="item">
+										<i class="iconfont" @click="pathto(0)">&#xe63b;</i>
+									</el-badge>
 								</el-tooltip>
 							</li>
-							<li>
+							<!-- <li>
 								<el-tooltip class="item" effect="light" content="商品" placement="bottom-end">
 									<el-badge :value="msgcount===0?'':msgcount" :max="99" class="item">
 										<i class="iconfont" @click="pathto(1)">&#xe637;</i>
 									</el-badge>
 								</el-tooltip>
-							</li>
+							</li>-->
 							<li>
 								<el-tooltip class="item" effect="light" content="留言反馈" placement="bottom-end">
-									<i class="iconfont" @click="pathto(2)">&#xe69e;</i>
+									<el-badge is-dot class="item">
+										<i class="iconfont" @click="pathto(2)">&#xe69e;</i>
+									</el-badge>
 								</el-tooltip>
 							</li>
 							<li>
@@ -157,7 +161,11 @@ export default {
 					{ required: true, message: "请输入新密码", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^\w{6,20}$/.test(value) === false) {
+							if (
+								/^((?=.*[a-z])|(?=.*\d)|(?=.*[#@!~%^&*]))[a-z\d#@!$~%^&*]{6,20}$/i.test(
+									value
+								) === false
+							) {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));

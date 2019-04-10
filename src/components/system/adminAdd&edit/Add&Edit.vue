@@ -84,7 +84,12 @@ export default {
 				password: [
 					{
 						validator: (rule, value, callback) => {
-							if (/^\w{6,20}$/.test(value) === false && value != "") {
+							if (
+								/^((?=.*[a-z])|(?=.*\d)|(?=.*[#@!~%^&*]))[a-z\d#@!$~%^&*]{6,20}$/i.test(
+									value
+								) === false &&
+								value != ""
+							) {
 								callback(new Error("请输入6到20位的密码"));
 							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
 								callback(new Error("你的密码过于简单，请重新输入"));

@@ -191,7 +191,7 @@ const router = new Router({
       name: 'Supplier',
       component: Supplier,
       props: {
-        pageName: '供应商'
+        pageName: '代理商'
       },
       meta: {
         requireAuth: true,
@@ -201,7 +201,7 @@ const router = new Router({
           name: 'AddSupplier',
           component: AddSupplier,
           props: {
-            pageName: '添加供应商'
+            pageName: '添加代理商'
           },
           meta: {
             requireAuth: true,
@@ -212,7 +212,7 @@ const router = new Router({
           name: 'EditSupplier',
           component: EditSupplier,
           props: {
-            pageName: '修改供应商'
+            pageName: '修改代理商'
           },
           meta: {
             requireAuth: true,

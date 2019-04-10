@@ -13,13 +13,15 @@
 					<div class="recommend">
 						<span style="margin-right:8px;" class="case">
 							<p>发布菜谱</p>
-							<p>{{allMsg.recipeCountAndSellSum.recipeSum}}</p>
+							<p>{{allMsg.recipeCountAndSellSum.recipeSum>0?allMsg.recipeCountAndSellSum.recipeSum:'0'}}</p>
 						</span>
 						<span style class="case">
 							<p>累计销售菜谱</p>
 							<p>
-								{{allMsg.recipeCountAndSellSum.sellNum}}
-								<span style="font-size:14px;color:#999999;">次</span>
+								{{allMsg.recipeCountAndSellSum.sellNum>0?allMsg.recipeCountAndSellSum.sellNum:'0'}}
+								<span
+									style="font-size:14px;color:#999999;"
+								>次</span>
 							</p>
 						</span>
 					</div>
@@ -158,7 +160,7 @@
 								size="small"
 								type="primary"
 								@click="replyMessage"
-								:disabled="reply!=''?false:true"
+								:disabled="reply!=''&&messageReply!=''?false:true"
 							>快速回复</el-button>
 						</el-col>
 					</el-col>
@@ -177,7 +179,7 @@
 				<el-col :span="24" class="table_case">
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
-						<el-col :span="12">供应商</el-col>
+						<el-col :span="12">代理商</el-col>
 						<el-col :span="7">销售额</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
@@ -400,47 +402,81 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+						console.log(result.data);
 						this.searchValue =
 							JSON.parse(JSON.stringify(result.data.data[0])).gmtCreate +
 							"至" +
 							JSON.parse(
 								JSON.stringify(result.data.data[result.data.data.length - 1])
 							).gmtCreate;
-						let time = result.data.data.map(item => {
-							return item.gmtCreate;
-						});
-						let value = result.data.data.map(item => {
-							return item.orderMoney;
-						});
+						let data = result.data.data;
+						// let time = result.data.data.map(item => {
+						// 	return item.gmtCreate;
+						// });
+						// let value = result.data.data.map(item => {
+						// 	return item.orderMoney;
+						// });
 						let myChart = echarts.init(document.getElementById("sale_money"));
-						let a;
-						if (i == 0 || i == 1) {
-							a = "日";
-						} else {
-							a = "月";
-						}
+						let a = "";
+						// if (i == 0 || i == 1) {
+						// 	a = "日";
+						// } else {
+						// 	a = "月";
+						// }
 						let option = {
 							title: {
 								text: ""
 							},
 							tooltip: {
 								trigger: "axis",
-								formatter: ""
+								formatter: function(params) {
+									let name = params[0].name.replace("日", "");
+									let item = data
+										.map(i => {
+											return i.gmtCreate;
+										})
+										.map(j => {
+											return j.slice(j.lastIndexOf("-") + 1);
+										});
+									let index;
+									for (let i = 0; i < item.length; i++) {
+										if (item[i] == name) {
+											index = i;
+										}
+									}
+									let topTip =
+										"<div style='padding:0 8px;'>" +
+										data[index].gmtCreate +
+										"<br/>" +
+										"订单数量：" +
+										data[index].sellSum +
+										"<br/>" +
+										"销售额：" +
+										data[index].orderMoney +
+										"</div>";
+									return topTip;
+								}
 							},
 							legend: {
 								data: []
 							},
 							xAxis: {
-								data: time.map(item => {
-									return item.slice(item.lastIndexOf("-") + 1) + a;
-								})
+								data: data
+									.map(item => {
+										return item.gmtCreate;
+									})
+									.map(item => {
+										return item.slice(item.lastIndexOf("-") + 1) + a;
+									})
 							},
 							yAxis: {},
 							series: [
 								{
 									name: "销售额",
 									type: "bar",
-									data: value,
+									data: data.map(item => {
+										return item.orderMoney;
+									}),
 									barMaxWidth: 50,
 									itemStyle: {
 										normal: {

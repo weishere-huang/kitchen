@@ -5,7 +5,7 @@
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>添加供应商</h4>
+				<h4>添加代理商</h4>
 			</div>
 			<div class="supplier_form">
 				<el-form
@@ -15,7 +15,7 @@
 					:rules="supplierMsgRules"
 					ref="supplierMsg"
 				>
-					<el-form-item label="供应商名称：" prop="supplierName">
+					<el-form-item label="代理商名称：" prop="supplierName">
 						<el-input
 							type="text"
 							size="small"
@@ -61,7 +61,7 @@
 							<el-option v-for="item in ruleOptions" :key="item.value" :label="item.name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>-->
-					<el-form-item label="供应商账号：" prop="supplierAccount">
+					<el-form-item label="代理商账号：" prop="supplierAccount">
 						<el-input
 							type="text"
 							maxlength="20"
@@ -190,7 +190,7 @@ export default {
 			},
 			supplierMsgRules: {
 				supplierName: [
-					{ required: true, message: "请填写供应商名称", trigger: "blur" }
+					{ required: true, message: "请填写代理商名称", trigger: "blur" }
 				],
 				contacts: [
 					{ required: true, message: "请填写联系人", trigger: "blur" }
@@ -213,23 +213,29 @@ export default {
 				],
 				supplierPassword: [
 					{ required: true, message: "请填写密码", trigger: "blur" },
-          {
-            validator: (rule, value, callback) => {
-              if (/^\w{6,20}$/.test(value) === false) {
-                callback(new Error("请输入6到20位的密码"));
-              } else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
-                callback(new Error("你的密码过于简单，请重新输入"));
-              } else if(/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value)===true){
-                callback(new Error("密码中不能含有空格与汉字"));
-              }else {
-                callback();
-              }
-            },
-            trigger: "change"
-          }
+					{
+						validator: (rule, value, callback) => {
+							if (
+								/^((?=.*[a-z])|(?=.*\d)|(?=.*[#@!~%^&*]))[a-z\d#@!$~%^&*]{6,20}$/i.test(
+									value
+								) === false
+							) {
+								callback(new Error("请输入6到20位的密码"));
+							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+								callback(new Error("你的密码过于简单，请重新输入"));
+							} else if (
+								/^[\u4E00-\u9FA5\uF900-\uFA2D\u0020]*$/.test(value) === true
+							) {
+								callback(new Error("密码中不能含有空格与汉字"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
 				],
 				password: [
-					{ required: true, message: "请确认输入密码", trigger: "blur" },
+					{ required: true, message: "请再次输入密码", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
 							if (value != this.supplierMsg.supplierPassword) {
@@ -375,12 +381,11 @@ export default {
 				this.$refs.tree2.getCheckedKeys(),
 				this.$refs.tree3.getCheckedKeys()
 			);
-      if(arr.length===0) {
-        this.$message.error("请选择销售区域");
-        return
-      }
+			if (arr.length === 0) {
+				this.$message.error("请选择销售区域");
+				return;
+			}
 			this.supplierMsg.areaCode = arr;
-
 		},
 		encryptByDES(message, key) {
 			const keyHex = CryptoJS.enc.Utf8.parse(key);
