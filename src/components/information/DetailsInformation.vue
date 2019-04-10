@@ -151,6 +151,9 @@ export default {
 				result => {
 					console.log(result.data);
 					this.addInfo = result.data.data;
+					if(this.addInfo.img !==""||this.addInfo!=null){
+					  this.addInfo.img = this.global.imgPath + this.addInfo.img.replace("img:", "");
+          }
 					console.log(this.addInfo);
 				},
 				({ type, info }) => {}

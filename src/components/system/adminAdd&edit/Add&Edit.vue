@@ -175,18 +175,6 @@ export default {
 				}
 			});
 		},
-		// submitForm(formName) {
-		// 	this.$refs[formName].validate(valid => {
-		// 		if (valid) {
-		// 		} else {
-		// 			console.log("信息有误");
-		// 			return false;
-		// 		}
-		// 	});
-		// },
-		// getroleId() {
-		// 	this.addInfo.roleId = this.roleId;
-		// },
 		getRoleList() {
 			this.Axios(
 				{

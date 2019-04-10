@@ -185,7 +185,7 @@ export default {
 						keyword: this.keyword
 					},
 					option: {
-						successMsg: "常见问题加载完成~"
+            enableMsg: false
 					},
 					type: "get",
 					url: "/api-platform/faq/faqlist"

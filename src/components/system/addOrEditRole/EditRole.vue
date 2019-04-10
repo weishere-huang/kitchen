@@ -107,7 +107,7 @@ export default {
 					params: {
 						roleId: id
 					},
-					option: {},
+					option: {enableMsg: false},
 					type: "get",
 					url: "/api-platform/role/get"
 				},
@@ -130,7 +130,7 @@ export default {
 			this.Axios(
 				{
 					params: {},
-					option: {},
+					option: {enableMsg: false},
 					type: "get",
 					url: "/api-platform/permission/listAllPermission"
 				},

@@ -87,8 +87,8 @@ export default {
 				img: null
 			},
 			rulesAddInfo: {
-				title: [{ required: true, message: "请输入账号", trigger: "blur" }],
-				content: [{ required: true, message: "请输入账号", trigger: "blur" }]
+				title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+				content: [{ required: true, message: "请输入内容", trigger: "blur" }]
 			}
 		};
 	},
@@ -145,7 +145,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addInfo.img = this.global.imgPath + res.data.replace("img:", "");
+				this.addInfo.img = res.data
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"

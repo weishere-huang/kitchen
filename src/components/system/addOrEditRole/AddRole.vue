@@ -103,7 +103,7 @@ export default {
 			this.Axios(
 				{
 					params: {},
-					option: {},
+					option: {enableMsg: false},
 					type: "get",
 					url: "/api-platform/permission/listAllPermission"
 				},
