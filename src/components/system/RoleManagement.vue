@@ -125,7 +125,9 @@ export default {
 						page: this.pageIndex,
 						size: this.pageSize
 					},
-					option: {},
+					option: {
+					  enableMsg: false
+          },
 					type: "get",
 					url: "/api-platform/role/listAllRole"
 				},

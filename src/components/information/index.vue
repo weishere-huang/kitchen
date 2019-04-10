@@ -125,7 +125,7 @@ export default {
 						size: this.pageSize
 					},
 					option: {
-						successMsg: "推送消息加载完成"
+            enableMsg: false
 					},
 					type: "get",
 					url: "/api-message/message/findList"

@@ -158,7 +158,10 @@ export default {
 						size: this.pageSize
 					},
 					type: "get",
-					url: "/api-platform/employee/findAll"
+					url: "/api-platform/employee/findAll",
+          option:{
+					  enableMsg: false
+					}
 				},
 				this
 			).then(
