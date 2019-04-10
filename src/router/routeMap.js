@@ -120,9 +120,8 @@ export default [{
     menu: '菜谱流程',
     permissionCode: 'cookingProcesses',
     defaultDock: false,
-    icon: '&#xe640;',
-    subMenu: [
-      {
+    icon: '&#xe632;',
+    subMenu: [{
         menu: '添加烹饪流程',
         route: '/AddCookingProcesses',
         visible: false,
@@ -218,7 +217,7 @@ export default [{
     menu: '消息通知',
     permissionCode: 'information',
     defaultDock: false,
-    icon: '&#xe69e;',
+    icon: '&#xe617;',
     subMenu: [{
         menu: '消息通知',
         route: '/Information',
@@ -242,7 +241,7 @@ export default [{
     menu: '系统管理',
     permissionCode: 'system',
     defaultDock: false,
-    icon: '&#xe633;',
+    icon: '&#xe628;',
     subMenu: [{
         menu: '系统设置',
         route: '/System',

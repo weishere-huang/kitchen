@@ -23,7 +23,7 @@
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page.sync="currentPage"
-					:page-sizes="[15, 30, 100]"
+					:page-sizes="[30, 60]"
 					:page-size="15"
 					layout="sizes, prev, pager, next"
 					:total="total"
@@ -50,8 +50,8 @@ export default {
 			recentSearch: 1,
 			pageIndex: 1,
 			pageSize: 15,
-			total: 15,
-			currentPage: 1,
+			total: null,
+			currentPage: 1
 		};
 	},
 	methods: {
@@ -60,8 +60,8 @@ export default {
 				{
 					params: {
 						keyword: "",
-						size:this.pageSize,
-						page:this.pageIndex
+						size: this.pageSize,
+						page: this.pageIndex
 					},
 					option: {
 						enableMsg: false
@@ -72,8 +72,8 @@ export default {
 				this
 			).then(
 				result => {
-					this.scriptData=result.data.data.content
-					this.total=result.data.data.totalElement
+					this.scriptData = result.data.data.content;
+					this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
 			);
@@ -94,7 +94,7 @@ export default {
 		}
 	},
 	created() {
-		this.getScript()
+		this.getScript();
 		// this.scriptData = this.recentSearch;
 	}
 };
