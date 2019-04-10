@@ -72,7 +72,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					this.scriptData=result.data.data.content
 					this.total=result.data.data.totalElement
 				},
@@ -80,12 +79,10 @@ export default {
 			);
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 		},
 		getValue(val) {

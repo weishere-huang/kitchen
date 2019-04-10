@@ -291,7 +291,6 @@ export default {
 					{ required: true, message: "请选择分类", trigger: "change" },
 					{
 						validator: (rule, value, callback) => {
-							console.log();
 							if (value.length == 1) {
 								if (
 									this.classify
@@ -497,21 +496,16 @@ export default {
 				});
 			}
 
-			console.log(file);
 		},
 		dialogScriptHide(params) {
-			console.log(params);
 			this.dialogScript = params.isHide;
 			this.cookbook.processName = params.value.name;
 			this.cookbook.processId = params.value.id;
 		},
 		handleRemove(file, fileList, index) {
-			console.log(file, fileList);
 			this.cookbook.step[index].path = "";
-			console.log(index);
 		},
 		handleRemove1(file, fileList) {
-			console.log(file, fileList);
 			this.cookbook.recipeImg = null;
 		},
 		handlePictureCardPreview1(file) {
@@ -553,7 +547,6 @@ export default {
 					message: "图片上传成功！",
 					type: "success"
 				});
-				// console.log(this.cookbook.recipeImg);
 			} else {
 				this.$message({
 					message: "图片上传不成功！",
@@ -574,7 +567,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					for (let i = 0; i < result.data.data.length; i++) {
 						result.data.data[i].visible = false;
 					}
@@ -594,7 +586,6 @@ export default {
 		handleChange(value) {
 			let labels = this.$refs["recipeCate"].currentLabels;
 			this.cookbook.cateName = labels[labels.length - 1];
-			// console.log(this.cookbook.cateName);
 		},
 		filterArray(data, parent) {
 			let vm = this;
@@ -643,7 +634,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
 					this.reload();

@@ -428,7 +428,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					for (let i = 0; i < result.data.data.length; i++) {
 						result.data.data[i].visible = false;
 					}
@@ -478,7 +477,6 @@ export default {
 		handleChange(value) {
 			let labels = this.$refs["recipeCate"].currentLabels;
 			this.cookbook.cateName = labels[labels.length - 1];
-			// console.log(this.cookbook.cateName);
 		},
 		//流程图片上传
 		handleAvatarSuccess(res, file, index) {
@@ -495,23 +493,18 @@ export default {
 				});
 			}
 
-			console.log(file);
 		},
 		dialogScriptHide(params) {
-			console.log(params);
 			this.dialogScript = params.isHide;
 			this.cookbook.processName = params.value.name;
 			this.cookbook.processId = params.value.id;
 		},
 		handleRemove(file, fileList, index) {
-			console.log(file, fileList);
 			this.cookbook.step[index].path = "";
-			console.log(index);
 		},
 
 		//菜谱图片上传开始
 		handleRemove1(file, fileList) {
-			console.log(file, fileList);
 			this.cookbook.recipeImg = null;
 		},
 		handlePictureCardPreview1(file) {
@@ -553,15 +546,12 @@ export default {
 					message: "图片上传成功！",
 					type: "success"
 				});
-				console.log(this.cookbook.recipeImg);
 			} else {
 				this.$message({
 					message: "图片上传不成功！",
 					type: "error"
 				});
 			}
-			console.log(res);
-			console.log(file);
 		},
 		//菜谱图片上传结束
 		editRecipe() {
@@ -599,7 +589,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
 					this.reload();
@@ -623,7 +612,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					if (result.data.code === 200) {
 						// result.data.data.recipeImg =
 						// 	this.global.imgPath +
@@ -652,7 +640,6 @@ export default {
 							}
 						}
 						this.cookbook.recipePrice = this.cookbook.recipePrice / 100;
-						// console.log(this.cookbook);
 					}
 				},
 				({ type, info }) => {}

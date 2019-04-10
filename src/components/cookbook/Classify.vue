@@ -202,18 +202,15 @@ export default {
 			this.selectShow = false;
 		},
 		changeSort(data) {
-			console.log(data);
 		},
 		handleClick(tba, event) {
 			this.btnShow = tba.name;
 		},
 		append(data) {
-			console.log(data);
 			this.dialogEdit = true;
 			Object.assign(this.editClassify, data);
 		},
 		remove(node, val) {
-			console.log(val);
 			let qs = require("qs");
 			let data = qs.stringify({
 				cateId: val.id
@@ -238,7 +235,6 @@ export default {
 			this.selectShow = false;
 			// this.classify.label = params.cateName;
 			// this.classify.parentNo = params.cateNo;
-			console.log(params);
 			this.classify.parentNo = params;
 		},
 		getClassifyList() {
