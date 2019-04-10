@@ -173,22 +173,27 @@ export default [{
     defaultDock: false,
     icon: '&#xe646;',
     subMenu: [{
-        menu: '用户列表',
-        route: '/User',
-        permissionCode: 'user_manager_list_lookup'
-      },
-      {
-        menu: '留言与反馈',
-        route: '/GuestBook',
-        permissionCode: 'user_faq_list_lookup'
-      }
-    ]
+      menu: '用户列表',
+      route: '/User',
+      permissionCode: 'user_manager_list_lookup'
+    }]
+  },
+  {
+    menu: '留言与反馈',
+    permissionCode: 'GuestBook',
+    defaultDock: false,
+    icon: '&#xe738;',
+    subMenu: [{
+      menu: '留言与反馈',
+      route: '/GuestBook',
+      permissionCode: 'user_faq_list_lookup'
+    }]
   },
   {
     menu: '消息通知',
     permissionCode: 'information',
     defaultDock: false,
-    icon: '&#xe646;',
+    icon: '&#xe69e;',
     subMenu: [{
         menu: '消息通知',
         route: '/Information',
