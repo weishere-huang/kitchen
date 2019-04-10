@@ -64,7 +64,7 @@
 									</el-badge>
 								</el-tooltip>
 							</li>-->
-							<li>
+							<li v-if="employeeType==0">
 								<el-tooltip class="item" effect="light" content="留言反馈" placement="bottom-end">
 									<el-badge is-dot class="item">
 										<i class="iconfont" @click="pathto(2)">&#xe69e;</i>
@@ -147,6 +147,7 @@ export default {
 	name: "App",
 	data() {
 		return {
+			employeeType: JSON.parse(sessionStorage.getItem("user")).employeeType,
 			editPassword: {
 				oldPassword: "",
 				newPassword: "",
@@ -424,10 +425,34 @@ export default {
 				}
 			});
 			this.menuSource = _menuSource;
+		},
+		getImgPath() {
+			this.Axios(
+				{
+					params: {
+						config: "imgPath"
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/systemconfig/list"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					if (result.data.code === 200) {
+						sessionStorage.imgPath = result.data.data.imgPath;
+					}
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 	computed: {},
 	created() {
+		this.getImgPath();
 		this.initPermission();
 		this.getArea();
 		this.editPassword.account = JSON.parse(
