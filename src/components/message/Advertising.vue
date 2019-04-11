@@ -171,7 +171,7 @@ export default {
           this.tableData = result.data.data;
 
           for (let i = 0; i < this.tableData.length; i++) {
-            this.tableData[i].mainPic = this.global.imgPath + this.tableData[i].content.replace("img:", "");
+            this.tableData[i].mainPic = this.global.imgPath + this.tableData[i].mainPic.replace("img:", "");
             this.tableData[i].content = this.global.imgPath + this.tableData[i].content.replace("img:", "");
           }
 				},

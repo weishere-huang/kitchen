@@ -425,34 +425,33 @@ export default {
 				}
 			});
 			this.menuSource = _menuSource;
-		},
-		getImgPath() {
-			this.Axios(
-				{
-					params: {
-						config: "imgPath"
-					},
-					option: {
-						enableMsg: false
-					},
-					type: "get",
-					url: "/api-platform/systemconfig/list"
-				},
-				this
-			).then(
-				result => {
-					console.log(result.data);
-					if (result.data.code === 200) {
-						sessionStorage.imgPath = result.data.data.imgPath;
-					}
-				},
-				({ type, info }) => {}
-			);
 		}
+		// getImgPath() {
+			// 	this.Axios(
+			// 		{
+			// 			params: {
+			// 				config: "imgPath"
+			// 			},
+			// 			option: {
+			// 				enableMsg: false
+			// 			},
+			// 			type: "get",
+			// 			url: "/api-platform/systemconfig/list"
+			// 		},
+			// 		this
+			// 	).then(
+			// 		result => {
+			// 			console.log(result.data);
+			// 			if (result.data.code === 200) {
+			// 				sessionStorage.imgPath = result.data.data.imgPath;
+			// 			}
+			// 		},
+			// 		({ type, info }) => {}
+			// 	);
+		// }
 	},
 	computed: {},
 	created() {
-		this.getImgPath();
 		this.initPermission();
 		this.getArea();
 		this.editPassword.account = JSON.parse(

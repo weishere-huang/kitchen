@@ -141,8 +141,9 @@
 							type="textarea"
 							rows="6"
 							class="textarea_style"
-							placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。"
+							placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。（100个字以内）"
 							v-model="cookbook.ingredient"
+							maxlength="100"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="辅料：" prop="accessories">
@@ -152,8 +153,9 @@
 							type="textarea"
 							rows="6"
 							class="textarea_style"
-							placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。"
+							placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。（100个字以内）"
 							v-model="cookbook.accessories"
+							maxlength="100"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱介绍：" prop="introduce">
@@ -163,7 +165,8 @@
 							style="width:600px;"
 							type="textarea"
 							rows="6"
-							placeholder="（选填）"
+							placeholder="选填（200个字以内）"
+							maxlength="200"
 							v-model="cookbook.introduce"
 						></el-input>
 					</el-form-item>
@@ -202,7 +205,8 @@
 										type="textarea"
 										class="textarea_style"
 										rows="3"
-										placeholder="（说明）"
+										placeholder="说明（在200个字以内）"
+										maxlength="200"
 										v-model="item.explain"
 									></el-input>
 								</el-col>
@@ -495,7 +499,6 @@ export default {
 					type: "error"
 				});
 			}
-
 		},
 		dialogScriptHide(params) {
 			this.dialogScript = params.isHide;
@@ -513,7 +516,7 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 <= 800;
+			const isPicSize = file.size / 1024 <= 80;
 			if (isPicSize == false) {
 				this.$message.error("上传图片不能大于80KB");
 				return false;

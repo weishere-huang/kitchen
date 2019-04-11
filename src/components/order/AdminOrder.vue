@@ -40,7 +40,7 @@
 								size="small"
 								style="width:100%;"
 								clearable
-								placeholder="订单编号/用户/收货人/代理商"
+								placeholder="订单编号/用户/代理商"
 								v-model="keyWord"
 							></el-input>
 						</el-col>

@@ -79,63 +79,9 @@
 					<ul class="plan_case">
 						<li>
 							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
+								<i class="iconfont">&#xe758;</i>订单创建成功
 							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">{{orderDetails.gmtCreate}}</span>
 						</li>
 					</ul>
 				</div>

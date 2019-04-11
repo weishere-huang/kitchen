@@ -18,7 +18,7 @@
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe636;</i>
 					</el-input>
 					<span style="width:37%;display:inline-block;height:90%;border:1px solid red;">验证码</span>
-				</el-form-item> -->
+				</el-form-item>-->
 				<el-form-item style="margin-bottom:5px;">
 					<el-button type="primary" round style="width:100%;" @click="login('userMsg')">登录</el-button>
 				</el-form-item>
@@ -136,9 +136,33 @@ export default {
 					return false;
 				}
 			});
+		},
+		getImgPath() {
+			this.Axios(
+				{
+					params: {
+						config: "imgPath"
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/systemconfig/list"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					if (result.data.code === 200) {
+						sessionStorage.imgPath = result.data.data.imgPath;
+					}
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 	created() {
+		this.getImgPath();
 		this.userMsg.password = this.decryptByDES(
 			localStorage.getItem("loginPassword"),
 			"*chang_hong_device_cloud"

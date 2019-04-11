@@ -61,7 +61,7 @@
 			<el-form-item label="服务范围：" style="margin-bottom: 0px;" prop="serviceMode">
 				<el-checkbox-group v-model="addMsg.serviceMode" @change="changeMode">
 					<el-checkbox label="送修" name="serviceMode"></el-checkbox>
-					<el-checkbox label="检修" name="serviceMode"></el-checkbox>
+					<el-checkbox label="寄修" name="serviceMode"></el-checkbox>
 				</el-checkbox-group>
 			</el-form-item>
 		</el-form>

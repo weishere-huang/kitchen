@@ -36,13 +36,7 @@
 							</el-select>
 						</el-col>
 						<el-col :span="7" style="padding:0 4px;">
-							<el-input
-								size="small"
-								style="width:100%;"
-								clearable
-								placeholder="订单编号/用户/收货人"
-								v-model="keyWord"
-							></el-input>
+							<el-input size="small" style="width:100%;" clearable placeholder="订单编号/用户" v-model="keyWord"></el-input>
 						</el-col>
 						<el-col :span="2" style="padding:0 5px;">
 							<el-button size="small" style="width:100%" @click="compareDate" plain>搜索</el-button>

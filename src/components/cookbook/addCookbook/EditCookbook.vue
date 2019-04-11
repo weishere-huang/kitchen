@@ -512,7 +512,7 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 <= 800;
+			const isPicSize = file.size / 1024 <= 80;
 			if (isPicSize == false) {
 				this.$message.error("上传图片不能大于80KB");
 				return false;
