@@ -33,7 +33,7 @@
 						<el-input size="small" style="width:100%;" clearable placeholder="账号/关键词" v-model="keyWord"></el-input>
 					</el-col>
 					<el-col :span="4" style="padding:0 5px;">
-						<el-button size="small" @click plain>搜索</el-button>
+						<el-button size="small" @click="getSystemLogList()" plain>搜索</el-button>
 						<el-button size="small" @click="reload()" plain>重置</el-button>
 					</el-col>
 				</div>
@@ -76,27 +76,36 @@ export default {
 			items: [
 				{
 					label: "操作时间",
-					prop: "time",
+					prop: "gmtCreate",
 					width: 100
 				},
 				{
 					label: "日志类型",
-					prop: "logType",
-					width: 60
+					prop: "operateType",
+					width: 60,
+					formatter: function(row, column) {
+						return row.operateType == 0
+							? "跟新"
+							: row.operateType == 1
+							? "删除"
+							: row.operateType == 2
+							? "新增"
+							: "";
+					}
 				},
 				{
 					label: "日志内容",
-					prop: "logContent",
+					prop: "operateDesc",
 					width: 180
 				},
 				{
 					label: "账号",
-					prop: "userName",
+					prop: "operatorName",
 					width: 90
 				},
 				{
 					label: "角色",
-					prop: "management",
+					prop: "roleName",
 					width: 80
 				},
 				{
@@ -105,16 +114,7 @@ export default {
 					width: 80
 				}
 			],
-			tableData: [
-				{
-					time: "2019-03-15 11:44:01",
-					logType: "操作",
-					logContent: "订单发货，订单编号10429340238",
-					userName: "zhangjie",
-					management: "代理商管理员",
-					ip: "127.0.0.1 "
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
 			currentPage: 1,
@@ -127,12 +127,16 @@ export default {
 					value: -2
 				},
 				{
-					label: "登录日志",
+					label: "跟新",
 					value: 0
 				},
 				{
-					label: "操作日志",
+					label: "删除",
 					value: 1
+				},
+				{
+					label: "新增",
+					value: 2
 				}
 			],
 			logValue: -2,
@@ -144,21 +148,56 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
+			this.getSystemLogList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
+			this.getSystemLogList();
 		},
 		handleSelectionChange() {},
 		handlechange(params) {},
 		getRow(row, event) {
 			console.log(row);
+		},
+		getSystemLogList() {
+			this.Axios(
+				{
+					params: {
+						operaType: this.logValue,
+						keyWord: this.keyWord,
+						startTime: this.searchDate1,
+						endTime: this.searchDate2,
+						page: this.pageIndex,
+						size: this.pageSize
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/systemLog/systemLogList"
+				},
+				this
+			).then(
+				result => {
+					// result.data.data.allMoney = JSON.parse(result.data.data.allMoney);
+					console.log(result.data.data);
+					if (result.data.code === 200) {
+						this.tableData = JSON.parse(
+							JSON.stringify(result.data.data.content)
+						);
+						this.total = result.data.data.totalElement;
+					}
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 	components: {
 		tableList
 	},
 	created() {
+		this.getSystemLogList();
 		console.log(returnCitySN["cip"] + "," + returnCitySN["cname"]);
 	}
 };
@@ -208,6 +247,10 @@ export default {
 				&:focus {
 					border: 1px solid #1cc09f;
 				}
+			}
+			.el-table--mini td,
+			.el-table--mini th {
+				padding: 12px 0;
 			}
 		}
 	}
