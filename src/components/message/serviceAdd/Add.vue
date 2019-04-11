@@ -45,7 +45,7 @@
 					size="small"
 					style="width:200px"
 					placeholder="如：028-12345678"
-					type="number"
+					type="text"
 					maxlength="20"
 				></el-input>
 			</el-form-item>
@@ -83,7 +83,26 @@ export default {
 				address: [],
 				phone: [
 					{ required: true, message: "请输入电话", trigger: "blur" },
-					{ min: 8, max: 15, message: "长度在 8 到 15 个数字", trigger: "blur" }
+					// {
+					// 	min: 8,
+					// 	max: 15,
+					// 	message: "长度在 8 到 15 个数字",
+					// 	trigger: "blur"
+					// },
+					{
+						validator: (rule, value, callback) => {
+							if (
+								/^(^(0\d{2})-(\d{8})$)|(^(0\d{3})-(\d{7})$)|(^(0\d{2})-(\d{8})-(\d+)$)|(^(0\d{3})-(\d{7})-(\d+)$)$/.test(
+									value
+								) === false
+							) {
+								callback(new Error("电话格式有误！"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
 				],
 				workingHours: [
 					{ required: true, message: "请输入服务时间", trigger: "blur" }
@@ -114,7 +133,7 @@ export default {
 				workingHours: "",
 				serviceMode: [],
 				areaCode: "",
-        code:""
+				code: ""
 			}
 		};
 	},
@@ -126,7 +145,7 @@ export default {
 			workingHours: {},
 			serviceMode: {},
 			areaCode: {},
-      code:{}
+			code: {}
 		}
 	},
 	methods: {
@@ -165,11 +184,11 @@ export default {
 				this.pname = null;
 			}
 			//默认为第一个地区
-      this.citycode = this.cities[0].adcode;
-      this.cname = this.cities[0].areaName;
+			this.citycode = this.cities[0].adcode;
+			this.cname = this.cities[0].areaName;
 
-			this.addMsg.areaCode = this.pname+this.cname
-      this.addMsg.code = this.citycode;
+			this.addMsg.areaCode = this.pname + this.cname;
+			this.addMsg.code = this.citycode;
 		},
 
 		getcitycode() {
@@ -184,26 +203,26 @@ export default {
 			});
 			if (c != null) {
 				this.cname = c.areaName;
-				this.addMsg.areaCode = this.pname+ this.cname;
-        this.addMsg.code=this.citycode;
+				this.addMsg.areaCode = this.pname + this.cname;
+				this.addMsg.code = this.citycode;
 			} else {
 				this.cname = null;
 				this.addMsg.areaCode = this.pname;
-      }
+			}
 		},
 		//编辑赋值方法 , 服务范围可以
 		startedit() {
-      this.provinceCode=this.editMsg.code.substring(0,2)+"0000";
-      let p = this.province.find(item => {
-        return this.provinceCode === item.adcode;
-      });
-      if (p != null) {
-        this.pname = p.areaName;
-        this.cities = p.children;
-        this.citycode = this.editMsg.code;
-      } else {
-        this.pname = null;
-      }
+			this.provinceCode = this.editMsg.code.substring(0, 2) + "0000";
+			let p = this.province.find(item => {
+				return this.provinceCode === item.adcode;
+			});
+			if (p != null) {
+				this.pname = p.areaName;
+				this.cities = p.children;
+				this.citycode = this.editMsg.code;
+			} else {
+				this.pname = null;
+			}
 			// 服务范围
 			this.addMsg.serviceMode = this.addMsg.serviceMode.split(",");
 			this.serviceMode = this.addMsg.serviceMode;
