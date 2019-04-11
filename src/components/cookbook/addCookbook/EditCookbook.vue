@@ -129,7 +129,7 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">600 × 600像素，≤80 KB的jpg图片</div>
+						<div class="el-upload__tip tip_style">建议图片比例1:1，小于1MB的jpg或png图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
@@ -492,7 +492,6 @@ export default {
 					type: "error"
 				});
 			}
-
 		},
 		dialogScriptHide(params) {
 			this.dialogScript = params.isHide;
@@ -512,14 +511,14 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 <= 80;
+			const isPicSize = file.size / 1024 / 1024 <= 1;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于80KB");
+				this.$message.error("上传图片不能大于1M");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
-					let width = 600;
-					let height = 600;
+					let width = 600000;
+					let height = 600000;
 					let _URL = window.URL || window.webkitURL;
 					let img = new Image();
 					img.onload = function() {

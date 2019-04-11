@@ -146,26 +146,26 @@ export default {
 						message: "请填写结束日期",
 						trigger: "change"
 					},
-          {
-            validator: (rule, value, callback) => {
-              if((this.addMsg.startTime==null||this.addMsg.startTime==="")||
-                (this.addMsg.endTime==null||this.addMsg.endTime==="")){
-                callback();
-              }else{
-                let st = this.addMsg.startTime.split(" ")[0];
-                let et = this.addMsg.endTime.split(" ")[0];
-                if(
-                  new Date(st) >= new Date(et)
-
-                ){
-                  callback(new Error("结束时间必须大于开始时间"));
-                }else{
-                  callback();
-                }
-              }
-            },
-            trigger: "change"
-          }
+					{
+						validator: (rule, value, callback) => {
+							if (
+								this.addMsg.startTime == null ||
+								this.addMsg.startTime === "" ||
+								(this.addMsg.endTime == null || this.addMsg.endTime === "")
+							) {
+								callback();
+							} else {
+								let st = this.addMsg.startTime.split(" ")[0];
+								let et = this.addMsg.endTime.split(" ")[0];
+								if (new Date(st) >= new Date(et)) {
+									callback(new Error("结束时间必须大于开始时间"));
+								} else {
+									callback();
+								}
+							}
+						},
+						trigger: "change"
+					}
 				]
 			},
 			addMsg: {
@@ -192,14 +192,14 @@ export default {
 	},
 	methods: {
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 <= 500;
+			const isPicSize = file.size / 1024 / 1024 <= 2;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于80KB");
+				this.$message.error("上传图片不能大于2M");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
-					let width = 750;
-					let height = 290;
+					let width = 7500000;
+					let height = 2900000;
 					let _URL = window.URL || window.webkitURL;
 					let img = new Image();
 					img.onload = function() {
@@ -226,8 +226,8 @@ export default {
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
-					let width = 1000;
-					let height = 50000;
+					let width = 1000000;
+					let height = 50000000;
 					let _URL = window.URL || window.webkitURL;
 					let img = new Image();
 					img.onload = function() {
@@ -299,7 +299,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addMsg.content =res.data;
+				this.addMsg.content = res.data;
 				this.uploadShow2 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");

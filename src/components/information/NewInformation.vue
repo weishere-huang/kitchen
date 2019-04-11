@@ -118,11 +118,11 @@ export default {
 		beforeAvatarUpload1(file) {
 			const isPicSize = file.size / 1024 / 1024 <= 2;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于80KB");
+				this.$message.error("上传图片不能大于2M");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
-					let width = 1000;
+					let width = 10000000;
 					let height = 100000000000;
 					let _URL = window.URL || window.webkitURL;
 					let img = new Image();
@@ -145,7 +145,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addInfo.img = res.data
+				this.addInfo.img = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
