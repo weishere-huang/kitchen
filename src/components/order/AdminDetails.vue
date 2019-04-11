@@ -153,7 +153,7 @@
 				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="收货人：">
-							<span>{{orderDetails.address.consignee}}</span>
+							<span>{{orderDetails.address.consignee+(orderDetails.address.gender==1?"先生":"女士")}}</span>
 						</el-form-item>
 						<el-form-item label="手机号：">
 							<span>{{orderDetails.address.phone}}</span>
