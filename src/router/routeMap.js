@@ -117,6 +117,30 @@ export default [{
     ]
   },
   {
+    menu: '菜谱流程',
+    permissionCode: 'cookingProcesses',
+    defaultDock: false,
+    icon: '&#xe632;',
+    subMenu: [{
+        menu: '添加烹饪流程',
+        route: '/AddCookingProcesses',
+        visible: false,
+        permissionCode: 'menu_add_lookup'
+      }
+      // {
+      //   menu: '修改菜谱',
+      //   routeReg: /^\/Cookbook\/EditCookbook\/\d{1,}$/i,
+      //   visible: true,
+      //   permissionCode: 'menu_update_lookup'
+      // },
+      // {
+      //   menu: '菜谱分类',
+      //   route: '/CookbookClassify',
+      //   permissionCode: 'menu_cate_lookup'
+      // },
+    ]
+  },
+  {
     menu: '信息管理',
     permissionCode: 'msg',
     defaultDock: false,
@@ -173,22 +197,27 @@ export default [{
     defaultDock: false,
     icon: '&#xe646;',
     subMenu: [{
-        menu: '用户列表',
-        route: '/User',
-        permissionCode: 'user_manager_list_lookup'
-      },
-      {
-        menu: '留言与反馈',
-        route: '/GuestBook',
-        permissionCode: 'user_faq_list_lookup'
-      }
-    ]
+      menu: '用户列表',
+      route: '/User',
+      permissionCode: 'user_manager_list_lookup'
+    }]
+  },
+  {
+    menu: '留言与反馈',
+    permissionCode: 'GuestBook',
+    defaultDock: false,
+    icon: '&#xe738;',
+    subMenu: [{
+      menu: '留言与反馈',
+      route: '/GuestBook',
+      permissionCode: 'user_faq_list_lookup'
+    }]
   },
   {
     menu: '消息通知',
     permissionCode: 'information',
     defaultDock: false,
-    icon: '&#xe646;',
+    icon: '&#xe617;',
     subMenu: [{
         menu: '消息通知',
         route: '/Information',
@@ -212,7 +241,7 @@ export default [{
     menu: '系统管理',
     permissionCode: 'system',
     defaultDock: false,
-    icon: '&#xe633;',
+    icon: '&#xe628;',
     subMenu: [{
         menu: '系统设置',
         route: '/System',

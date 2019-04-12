@@ -4,31 +4,10 @@
 		<div class="print_content" v-for="(item, index) in printData" :key="index">
 			<h2>订单信息</h2>
 			<el-col :span="24">
-				<el-col :span="7">
+				<el-col :span="8">
 					<el-col :span="24">
 						<span>购买用户：{{item.phone}}</span>
 					</el-col>
-					<el-col :span="24">
-						<span>付款时间：{{item.payTime}}</span>
-					</el-col>
-				</el-col>
-				<el-col :span="7">
-					<el-col :span="24">
-						<span>下单时间：{{item.gmtCreate}}</span>
-					</el-col>
-					<el-col :span="24">
-						<span>发货时间：{{item.sendGoodTime}}</span>
-					</el-col>
-				</el-col>
-				<el-col :span="4">
-					<el-col :span="24">
-						<span>支付方式：{{item.payType}}</span>
-					</el-col>
-					<el-col :span="24">
-						<span>配送时间：{{item.sendTime}}</span>
-					</el-col>
-				</el-col>
-				<el-col :span="6">
 					<el-col :span="24">
 						<span>订单编号：{{item.orderNo}}</span>
 					</el-col>
@@ -36,9 +15,29 @@
 						<span>发货单号：</span>
 					</el-col>
 				</el-col>
+				<el-col :span="8">
+					<el-col :span="24">
+						<span>下单时间：{{item.gmtCreate}}</span>
+					</el-col>
+					<el-col :span="24">
+						<span>付款时间：{{item.payTime}}</span>
+					</el-col>
+					<el-col :span="24">
+						<span>发货时间：{{item.sendGoodTime}}</span>
+					</el-col>
+				</el-col>
+				<el-col :span="8">
+					<el-col :span="24">
+						<span>支付方式：{{item.payType}}</span>
+					</el-col>
+					<el-col :span="24">
+						<span>配送时间：{{item.sendTime}}</span>
+					</el-col>
+				</el-col>
+				<!-- <el-col :span="6"></el-col> -->
 				<el-col :span="24" class="consignee_case">
-					<span>收货地址：{{item.address.address}}</span>
-					<span>收货人：{{item.address.consignee}}</span>
+					<span>收货地址：{{item.address.area+item.address.address}}</span>
+					<span>收货人：{{item.address.consignee+(item.address.gender==1?"先生":"女士")}}</span>
 					<span>电话：{{item.address.phone}}</span>
 				</el-col>
 			</el-col>

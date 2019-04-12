@@ -147,7 +147,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.getCookbookList();
 					}
@@ -172,28 +171,21 @@ export default {
 			}
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getCookbookList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getCookbookList();
 		},
 		handleEdit(index, row) {
-			console.log(row);
 			this.$router.push({
 				path: "/Cookbook/EditCookbook/" + row.id
 			});
 		},
-		handleSelectionChange(selection) {
-			console.log(selection);
-		},
-		getRow(row, event) {
-			console.log(row);
-		},
+		handleSelectionChange(selection) {},
+		getRow(row, event) {},
 		getCookbookList() {
 			let data = {
 				page: this.pageIndex,
@@ -215,7 +207,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.total = result.data.data.totalElement;
 						this.tableData = result.data.data.content;

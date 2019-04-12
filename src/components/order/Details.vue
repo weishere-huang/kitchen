@@ -85,63 +85,9 @@
 					<ul class="plan_case">
 						<li>
 							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
+								<i class="iconfont">&#xe758;</i>订单创建成功
 							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
-						</li>
-						<li>
-							<span>
-								<i class="iconfont">&#xe758;</i>订单已完成
-							</span>
-							<span style="float:right;padding-right:12px; ">1月10日 11:33</span>
+							<span style="float:right;padding-right:12px; ">{{orderDetails.gmtCreate}}</span>
 						</li>
 					</ul>
 				</div>
@@ -159,7 +105,7 @@
 				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="收货人：">
-							<span>{{orderDetails.address.consignee}}</span>
+							<span>{{orderDetails.address.consignee+(orderDetails.address.gender==1?"先生":"女士")}}</span>
 						</el-form-item>
 						<el-form-item label="手机号：">
 							<span>{{orderDetails.address.phone}}</span>
@@ -169,7 +115,7 @@
 				<el-col :span="16" class="form_case">
 					<el-form label-width="30%">
 						<el-form-item label="收货地址：">
-							<span>{{orderDetails.address.address}}</span>
+							<span>{{orderDetails.address.area+orderDetails.address.address}}</span>
 						</el-form-item>
 						<el-form-item label="配送时间：">
 							<span style="color:#1cc09f">{{sendTime}}</span>

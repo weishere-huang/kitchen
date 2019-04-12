@@ -38,14 +38,14 @@
 					<el-table-column label="缩略图" min-width="200" show-overflow-tooltip>
 						<template slot-scope="scope">
 							<span @click="getPic(scope.row.mainPic)">
-								<img :src="scope.row.mainPic" alt style="width:180px;height:60px;">
+								<img :src="global.imgPath+scope.row.mainPic.replace('img:','')" alt style="width:180px;height:60px;">
 							</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="内容图" min-width="200">
 						<template slot-scope="scope">
 							<span @click="getPic(scope.row.content)">
-								<img :src="scope.row.content" alt style="width:180px;height:60px;">
+								<img :src="global.imgPath+scope.row.content.replace('img:','')" alt style="width:180px;height:60px;">
 							</span>
 							<!-- <el-dialog :visible.sync="contentShow" append-to-body class="showPic">
 								<img width="100%" :src="scope.row.content" alt>
@@ -169,11 +169,6 @@ export default {
 				result => {
 					console.log(result.data);
           this.tableData = result.data.data;
-
-          for (let i = 0; i < this.tableData.length; i++) {
-            this.tableData[i].mainPic = this.global.imgPath + this.tableData[i].content.replace("img:", "");
-            this.tableData[i].content = this.global.imgPath + this.tableData[i].content.replace("img:", "");
-          }
 				},
 				({ type, info }) => {}
 			);

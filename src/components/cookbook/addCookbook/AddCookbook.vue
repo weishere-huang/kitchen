@@ -129,7 +129,7 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">600 × 600像素，≤80 KB的jpg图片</div>
+						<div class="el-upload__tip tip_style">建议图片比例1:1，小于1MB的jpg或png图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
@@ -141,8 +141,9 @@
 							type="textarea"
 							rows="6"
 							class="textarea_style"
-							placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。"
+							placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。（100个字以内）"
 							v-model="cookbook.ingredient"
+							maxlength="100"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="辅料：" prop="accessories">
@@ -152,8 +153,9 @@
 							type="textarea"
 							rows="6"
 							class="textarea_style"
-							placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。"
+							placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。（100个字以内）"
 							v-model="cookbook.accessories"
+							maxlength="100"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱介绍：" prop="introduce">
@@ -163,7 +165,8 @@
 							style="width:600px;"
 							type="textarea"
 							rows="6"
-							placeholder="（选填）"
+							placeholder="选填（200个字以内）"
+							maxlength="200"
 							v-model="cookbook.introduce"
 						></el-input>
 					</el-form-item>
@@ -202,7 +205,8 @@
 										type="textarea"
 										class="textarea_style"
 										rows="3"
-										placeholder="（说明）"
+										placeholder="说明（在200个字以内）"
+										maxlength="200"
 										v-model="item.explain"
 									></el-input>
 								</el-col>
@@ -291,7 +295,6 @@ export default {
 					{ required: true, message: "请选择分类", trigger: "change" },
 					{
 						validator: (rule, value, callback) => {
-							console.log();
 							if (value.length == 1) {
 								if (
 									this.classify
@@ -496,22 +499,16 @@ export default {
 					type: "error"
 				});
 			}
-
-			console.log(file);
 		},
 		dialogScriptHide(params) {
-			console.log(params);
 			this.dialogScript = params.isHide;
 			this.cookbook.processName = params.value.name;
 			this.cookbook.processId = params.value.id;
 		},
 		handleRemove(file, fileList, index) {
-			console.log(file, fileList);
 			this.cookbook.step[index].path = "";
-			console.log(index);
 		},
 		handleRemove1(file, fileList) {
-			console.log(file, fileList);
 			this.cookbook.recipeImg = null;
 		},
 		handlePictureCardPreview1(file) {
@@ -519,14 +516,14 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 <= 80;
+			const isPicSize = file.size / 1024 / 1024 <= 1;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于80KB");
+				this.$message.error("上传图片不能大于1M");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
-					let width = 600;
-					let height = 600;
+					let width = 600000;
+					let height = 600000;
 					let _URL = window.URL || window.webkitURL;
 					let img = new Image();
 					img.onload = function() {
@@ -553,7 +550,6 @@ export default {
 					message: "图片上传成功！",
 					type: "success"
 				});
-				// console.log(this.cookbook.recipeImg);
 			} else {
 				this.$message({
 					message: "图片上传不成功！",
@@ -574,7 +570,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					for (let i = 0; i < result.data.data.length; i++) {
 						result.data.data[i].visible = false;
 					}
@@ -594,7 +589,6 @@ export default {
 		handleChange(value) {
 			let labels = this.$refs["recipeCate"].currentLabels;
 			this.cookbook.cateName = labels[labels.length - 1];
-			// console.log(this.cookbook.cateName);
 		},
 		filterArray(data, parent) {
 			let vm = this;
@@ -643,7 +637,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
 					this.reload();

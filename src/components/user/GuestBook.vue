@@ -119,7 +119,7 @@ export default {
 		reply(index, rowData) {
 			let params = { type: "edit", index: index, rowData: rowData };
 			console.log(params);
-			Object.assign(this.replayContent,params.rowData)
+			Object.assign(this.replayContent, params.rowData);
 			this.dialogReplay = true;
 		},
 		handleDelete(index, rowData) {
@@ -145,7 +145,9 @@ export default {
 						page: this.pageIndex,
 						size: this.pageSize
 					},
-					option: {},
+					option: {
+						enableMsg: false
+					},
 					type: "get",
 					url: "/api-platform/advise/list"
 				},
