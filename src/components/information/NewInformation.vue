@@ -164,8 +164,8 @@ export default {
 				userId: JSON.parse(sessionStorage.getItem("user")).employeeId,
 				title: this.addInfo.title,
 				content: this.addInfo.content,
-				messageCate: 0,
-				messageType: 0,
+				messageCate: -1,
+				messageType: -1,
 				messagePushType: -1,
 				img: this.addInfo.img
 			});
