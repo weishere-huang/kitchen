@@ -85,7 +85,7 @@ export default {
 					width: 60,
 					formatter: function(row, column) {
 						return row.operateType == 0
-							? "跟新"
+							? "更新"
 							: row.operateType == 1
 							? "删除"
 							: row.operateType == 2
@@ -127,7 +127,7 @@ export default {
 					value: -2
 				},
 				{
-					label: "跟新",
+					label: "更新",
 					value: 0
 				},
 				{
