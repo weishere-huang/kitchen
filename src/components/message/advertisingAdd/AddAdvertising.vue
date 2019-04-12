@@ -12,7 +12,7 @@
 			</el-form-item>
 			<el-form-item label="广告缩略图：" prop="mainPic">
 				<el-upload
-					action="http://192.168.1.104:8861/api-upload/upload"
+					:action="imgApi()"
 					list-type="picture-card"
 					:on-preview="handlePictureCardPreview"
 					:on-remove="handleRemove"
@@ -321,7 +321,7 @@ export default {
 				this.mainPic = [
 					{
 						name: "mainpic.jpg",
-						url: this.editMsg.mainPic
+						url: this.global.imgPath+this.editMsg.mainPic.replace('img:','')
 					}
 				];
 			}
@@ -329,7 +329,7 @@ export default {
 				this.content = [
 					{
 						name: "content.jpg",
-						url: this.editMsg.content
+						url: this.global.imgPath+this.editMsg.content.replace('img:','')
 					}
 				];
 			}
