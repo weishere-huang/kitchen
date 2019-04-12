@@ -343,14 +343,14 @@ export default {
 				this.mainPic = [
 					{
 						name: "mainpic.jpg",
-						url: this.editMsg.mainPic
+            url: this.global.imgPath+this.editMsg.mainPic.replace('img:','')
 					}
 				];
 				if (this.editMsg.content !== null && this.editMsg.content !== "") {
 					this.content = [
 						{
 							name: "content.jpg",
-							url: this.editMsg.content
+              url: this.global.imgPath+this.editMsg.content.replace('img:','')
 						}
 					];
 				}
