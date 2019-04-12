@@ -321,7 +321,7 @@ export default {
 				this.mainPic = [
 					{
 						name: "mainpic.jpg",
-						url: this.editMsg.mainPic
+            url: this.global.imgPath + this.editMsg.mainPic.replace("img:", "")
 					}
 				];
 			}
@@ -329,40 +329,43 @@ export default {
 				this.content = [
 					{
 						name: "content.jpg",
-						url: this.editMsg.content
+						url:
+            this.global.imgPath + this.editMsg.content.replace("img:", "")
 					}
 				];
 			}
 		}
 	},
 	watch: {
-		editMsg() {
-			if (this.editMsg != null) {
-				Object.assign(this.addMsg, this.editMsg);
-				// this.addMsg = this.editMsg;
-				this.mainPic = [
-					{
-						name: "mainpic.jpg",
-						url: this.editMsg.mainPic
-					}
-				];
-				if (this.editMsg.content !== null && this.editMsg.content !== "") {
-					this.content = [
-						{
-							name: "content.jpg",
-							url: this.editMsg.content
-						}
-					];
-				}
-			}
-			if (this.editMsg.mainPic != "" && this.editMsg.mainPic != null) {
-				this.uploadShow1 = 2;
-			}
-			if (this.editMsg.content != "" && this.editMsg.content != null) {
-				this.uploadShow2 = 2;
-			}
-		},
-		mainPic() {
+    editMsg() {
+      if (this.editMsg != null) {
+        Object.assign(this.addMsg, this.editMsg);
+        // this.addMsg = this.editMsg;
+        this.mainPic = [
+          {
+            name: "mainpic.jpg",
+            url: this.global.imgPath + this.editMsg.mainPic.replace("img:", "")
+          }
+        ];
+        if (this.editMsg.content !== null && this.editMsg.content !== "") {
+          this.content = [
+            {
+              name: "content.jpg",
+              url:
+              this.global.imgPath + this.editMsg.content.replace("img:", "")
+            }
+          ];
+        }
+      }
+      if (this.editMsg.mainPic != "" && this.editMsg.mainPic != null) {
+        this.uploadShow1 = 2;
+      }
+      if (this.editMsg.content != "" && this.editMsg.content != null) {
+        this.uploadShow2 = 2;
+      }
+    },
+
+    mainPic() {
 			if (this.mainPic.url != "") {
 				this.uploadShow1 = 2;
 			}
