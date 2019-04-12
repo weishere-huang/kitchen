@@ -439,7 +439,8 @@ export default {
 		}
 		.recommend {
 			line-height: 114px;
-			text-align: center;
+			text-align: right;
+			padding-right: 20px;
 			span {
 				display: inline-block;
 				// width: 40%;
