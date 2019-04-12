@@ -271,7 +271,8 @@ export default {
 				advertType: 0,
 				advertContentType: 0,
 				startTime: this.editMsg.startTime.replace(/-/g, "/"),
-				endTime: this.editMsg.endTime.replace(/-/g, "/")
+				endTime: this.editMsg.endTime.replace(/-/g, "/"),
+        state: this.editMsg.state
 			});
 			this.Axios(
 				{
