@@ -37,15 +37,15 @@
 					</el-table-column>
 					<el-table-column label="缩略图" min-width="200" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span @click="getPic(scope.row.mainPic)">
-								<img :src="global.imgPath+scope.row.mainPic.replace('img:','')" alt style="width:180px;height:60px;">
+							<span @click="getPic(replacePic(scope.row.mainPic))">
+								<img :src="replacePic(scope.row.mainPic)" alt style="width:180px;height:60px;">
 							</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="内容图" min-width="200">
 						<template slot-scope="scope">
-							<span @click="getPic(scope.row.content)">
-								<img :src="global.imgPath+scope.row.content.replace('img:','')" alt style="width:180px;height:60px;">
+							<span @click="getPic(replacePic(scope.row.content))">
+								<img :src="replacePic(scope.row.content)" alt style="width:180px;height:60px;">
 							</span>
 							<!-- <el-dialog :visible.sync="contentShow" append-to-body class="showPic">
 								<img width="100%" :src="scope.row.content" alt>
@@ -130,6 +130,9 @@ export default {
 		};
 	},
 	methods: {
+    replacePic(img){
+      return this.global.imgPath+img.replace('img:','')
+    },
 		getPic(value) {
 			this.mainPicShow = true;
 			this.dialogShowPic = value;
