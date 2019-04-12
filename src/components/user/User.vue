@@ -297,6 +297,10 @@ export default {
 	.table_list {
 		overflow: hidden;
 		padding: 10px;
+		.el-table--mini td,
+		.el-table--mini th {
+			padding: 12px 0;
+		}
 		.state_change {
 			cursor: pointer;
 			i {
