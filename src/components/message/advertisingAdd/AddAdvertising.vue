@@ -321,7 +321,7 @@ export default {
 				this.mainPic = [
 					{
 						name: "mainpic.jpg",
-						url: this.global.imgPath+this.editMsg.mainPic.replace('img:','')
+						url: this.global.imgPath + this.editMsg.mainPic.replace("img:", "")
 					}
 				];
 			}
@@ -329,7 +329,7 @@ export default {
 				this.content = [
 					{
 						name: "content.jpg",
-						url: this.global.imgPath+this.editMsg.content.replace('img:','')
+						url: this.global.imgPath + this.editMsg.content.replace("img:", "")
 					}
 				];
 			}
@@ -343,14 +343,15 @@ export default {
 				this.mainPic = [
 					{
 						name: "mainpic.jpg",
-            url: this.global.imgPath+this.editMsg.mainPic.replace('img:','')
+						url: this.global.imgPath + this.editMsg.mainPic.replace("img:", "")
 					}
 				];
 				if (this.editMsg.content !== null && this.editMsg.content !== "") {
 					this.content = [
 						{
 							name: "content.jpg",
-              url: this.global.imgPath+this.editMsg.content.replace('img:','')
+							url:
+								this.global.imgPath + this.editMsg.content.replace("img:", "")
 						}
 					];
 				}
