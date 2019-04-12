@@ -461,7 +461,19 @@ export default {
 					}
 				],
 				sendTime: [
-					{ required: true, message: "请设置配送日期", trigger: "blur" }
+					{ required: true, message: "请设置配送日期", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (
+								/^\d*(\.?\d{0,0})$/g.test(this.systemMsg.retentionTime) == false
+							) {
+								callback(new Error("只能是正整数"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
 				],
 				"timeFrame1.startTime": [
 					{ required: true, message: "请设置配送时段", trigger: "blur" },

@@ -34,7 +34,7 @@
 
 			<el-form-item label="广告内容图：" prop="content">
 				<el-upload
-					action="http://192.168.1.104:8861/api-upload/upload"
+					:action="imgApi()"
 					list-type="picture-card"
 					:on-preview="handlePictureCardPreview1"
 					:on-remove="handleRemove1"
@@ -191,6 +191,10 @@ export default {
 		}
 	},
 	methods: {
+		imgApi() {
+			let url = this.global.apiImg + "/api-upload/upload";
+			return url;
+		},
 		beforeAvatarUpload1(file) {
 			const isPicSize = file.size / 1024 / 1024 <= 2;
 			if (isPicSize == false) {
