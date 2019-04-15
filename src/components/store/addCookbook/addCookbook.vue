@@ -79,7 +79,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-recipe/recipe/findRecipes",
+					url: "/api-recipe/recipe/list",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}
