@@ -23,6 +23,7 @@
 					v-model="addMsg.mainPic"
 					:file-list="mainPic"
 					:limit="1"
+					accept="image/png, image/jpeg"
 				>
 					<i class="el-icon-plus"></i>
 				</el-upload>
@@ -45,6 +46,7 @@
 					v-model="addMsg.content"
 					:file-list="content"
 					:limit="1"
+					accept="image/png, image/jpeg"
 				>
 					<i class="el-icon-plus"></i>
 				</el-upload>
