@@ -32,58 +32,70 @@
 			<el-col :span="24">
 				<ul class="list_style">
 					<li>
-						<span style="background-color: #00BDF1;">
-							<i class="iconfont" style="color:white;">&#xe63b;</i>
-						</span>
-						<span>
-							<p>{{allMsg.orderDaySum.orderSum>0?allMsg.orderDaySum.orderSum:'0'}}</p>
-							<p>今日订单</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #00BDF1;">
+								<i class="iconfont" style="color:white;">&#xe63b;</i>
+							</span>
+							<span>
+								<p>{{allMsg.orderDaySum.orderSum>0?allMsg.orderDaySum.orderSum:'0'}}</p>
+								<p>今日订单</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #80D6AC;">
-							<i class="iconfont" style="color:white;">&#xe666;</i>
-						</span>
-						<span>
-							<p>{{allMsg.orderDaySum.orderMoney>0?allMsg.orderDaySum.orderMoney:'0'}}</p>
-							<p>今日销售额</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #80D6AC;">
+								<i class="iconfont" style="color:white;">&#xe666;</i>
+							</span>
+							<span>
+								<p>{{allMsg.orderDaySum.orderMoney>0?allMsg.orderDaySum.orderMoney:'0'}}</p>
+								<p>今日销售额</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #FF834D;">
-							<i class="iconfont" style="color:white;">&#xe653;</i>
-						</span>
-						<span>
-							<p>{{allMsg.userNum.sumDay>0?allMsg.userNum.sumDay:'0'}}</p>
-							<p>今日注册用户</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #FF834D;">
+								<i class="iconfont" style="color:white;">&#xe653;</i>
+							</span>
+							<span>
+								<p>{{allMsg.userNum.sumDay>0?allMsg.userNum.sumDay:'0'}}</p>
+								<p>今日注册用户</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #A72F95;">
-							<i class="iconfont" style="color:white;">&#xe8d7;</i>
-						</span>
-						<span>
-							<p>{{allMsg.orderSum.orderSum>0?allMsg.orderSum.orderSum:'0'}}</p>
-							<p>订单总数</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #A72F95;">
+								<i class="iconfont" style="color:white;">&#xe8d7;</i>
+							</span>
+							<span>
+								<p>{{allMsg.orderSum.orderSum>0?allMsg.orderSum.orderSum:'0'}}</p>
+								<p>订单总数</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #6366CB;">
-							<i class="iconfont" style="color:white;">&#xe69f;</i>
-						</span>
-						<span>
-							<p>￥{{allMsg.orderSum.orderMoney>0?allMsg.orderSum.orderMoney:'0'}}</p>
-							<p>销售总额</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #6366CB;">
+								<i class="iconfont" style="color:white;">&#xe69f;</i>
+							</span>
+							<span>
+								<p>￥{{allMsg.orderSum.orderMoney>0?allMsg.orderSum.orderMoney:'0'}}</p>
+								<p>销售总额</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #22CE9C;">
-							<i class="iconfont" style="color:white;">&#xe684;</i>
-						</span>
-						<span>
-							<p>{{allMsg.userNum.countUser>0?allMsg.userNum.countUser:'0'}}</p>
-							<p>用户总数</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #22CE9C;">
+								<i class="iconfont" style="color:white;">&#xe684;</i>
+							</span>
+							<span>
+								<p>{{allMsg.userNum.countUser>0?allMsg.userNum.countUser:'0'}}</p>
+								<p>用户总数</p>
+							</span>
+						</div>
 					</li>
 				</ul>
 			</el-col>
@@ -643,14 +655,17 @@ export default {
 		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: center;
-
 		li {
 			list-style-type: none;
 			display: inline-block;
-			width: 32.5%;
+			width: 33.33%;
 			height: 100px;
-			background-color: white;
 			line-height: 100px;
+			padding-right: 8px;
+			.list_box {
+				background-color: white;
+				overflow: hidden;
+			}
 			span {
 				display: inline-block;
 			}
@@ -677,6 +692,18 @@ export default {
 					text-align: right;
 				}
 			}
+		}
+		li:nth-child(3n) {
+			padding-right: 0px;
+			padding-left: 8px;
+		}
+		li:nth-child(2) {
+			padding-right: 4px;
+			padding-left: 4px;
+		}
+		li:nth-child(5) {
+			padding-right: 4px;
+			padding-left: 4px;
 		}
 	}
 	.sales_amount {
