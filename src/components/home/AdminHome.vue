@@ -680,7 +680,7 @@ export default {
 			span:nth-child(2) {
 				float: right;
 				line-height: 20px;
-				padding: 0 16px;
+				padding: 0 20px;
 				p:nth-child(1) {
 					margin-top: 28px;
 					font-size: 20px;
