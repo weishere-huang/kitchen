@@ -374,19 +374,7 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		savearea() {
-			let arr = [];
-			arr = arr.concat(
-				this.$refs.tree1.getCheckedKeys(),
-				this.$refs.tree2.getCheckedKeys(),
-				this.$refs.tree3.getCheckedKeys()
-			);
-			if (arr.length === 0) {
-				this.$message.error("请选择销售区域");
-				return;
-			}
-			this.supplierMsg.areaCode = arr;
-		},
+
 		encryptByDES(message, key) {
 			const keyHex = CryptoJS.enc.Utf8.parse(key);
 			const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
@@ -406,7 +394,18 @@ export default {
 			});
 		},
 		addSupplier() {
-			this.savearea();
+      let arr = [];
+      arr = arr.concat(
+        this.$refs.tree1.getCheckedKeys(),
+        this.$refs.tree2.getCheckedKeys(),
+        this.$refs.tree3.getCheckedKeys()
+      );
+      if (arr.length === 0) {
+        this.$message.error("请选择销售区域");
+        return
+      }
+      this.supplierMsg.areaCode = arr;
+
 			let pass = this.supplierMsg.supplierPassword;
 			pass = md5(pass);
 			let key = "*chang_hong_device_cloud";

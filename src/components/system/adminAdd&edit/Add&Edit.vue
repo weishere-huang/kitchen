@@ -72,8 +72,8 @@ export default {
 					{ required: true, message: "请输入账号", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^[a-zA-Z]([-_a-zA-Z0-9]{5,15})$/.test(value) == false) {
-								callback(new Error("必须为6~15位字符组成,以字母开头"));
+							if (/^[a-zA-Z]([-_a-zA-Z0-9]{5,19})$/.test(value) == false) {
+								callback(new Error("必须为6~20位字符组成,以字母开头"));
 							} else {
 								callback();
 							}
