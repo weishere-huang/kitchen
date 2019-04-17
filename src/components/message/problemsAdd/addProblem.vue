@@ -10,15 +10,26 @@
 					placeholder="请选择"
 					style="width:49%"
 					size="small"
-					@change="editchange"
+					@change="editchange()"
 				>
 					<el-option v-for="item in classify" :key="item.value" :label="item.label" :value="item.value"></el-option>
 				</el-select>
 			</el-form-item>
 
 			<el-form-item label="内容：">
-				<el-input v-model="addMsg.content" type="textarea" rows="6" size="small" style="width:99%" maxlength="200"></el-input>
+				<el-input
+					v-model="addMsg.content"
+					type="textarea"
+					rows="6"
+					size="small"
+					style="width:99%"
+					maxlength="200"
+				></el-input>
 			</el-form-item>
+			<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
+				<el-button @click="handleCancel" size="small" plain>取 消</el-button>
+				<el-button type="primary" @click="handleAffirm('addAdvertising')" size="small">确 定</el-button>
+			</div>
 		</el-form>
 	</div>
 </template>
@@ -31,19 +42,52 @@ export default {
 				{ label: "支付问题", value: 2 },
 				{ label: "其他问题", value: 3 }
 			],
-			sstype: this.addMsg.faqType
+			sstype: "",
+			addMsg: {
+				title: "",
+				faqType: "",
+				content: ""
+			}
 		};
 	},
 	props: {
-		addMsg: {
+		editMsg: {
 			title: {},
 			faqType: {},
 			content: {}
 		}
 	},
 	methods: {
-		editchange(data) {
+		editchange() {
 			this.addMsg.faqType = this.sstype;
+		},
+		handleCancel(value) {
+			let params = { type: "cancel", isHide: false };
+			this.$emit("beforeadd", params);
+		},
+		handleAffirm(formName) {
+			let params = { type: "affirm", value: this.addMsg, isHide: false };
+			// this.$refs[formName].validate(valid => {
+			// 	if (valid) {
+			this.$emit("beforeadd", params);
+			// } else {
+			// 	return false;
+			// }
+			// });
+		}
+	},
+	created() {
+		if (this.editMsg != null) {
+			Object.assign(this.addMsg, this.editMsg);
+			this.sstype = this.addMsg.faqType;
+		}
+	},
+	watch: {
+		editMsg() {
+			if (this.editMsg != null) {
+				Object.assign(this.addMsg, this.editMsg);
+				this.sstype = this.addMsg.faqType;
+			}
 		}
 	}
 };
