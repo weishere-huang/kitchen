@@ -1,101 +1,103 @@
 <template>
-  <div class="add_advertising">
-    <el-form
-      label-width="110px"
-      size="small"
-      :model="addMsg"
-      ref="addAdvertising"
-      :rules="advertisingRules"
-    >
-      <el-form-item label="广告名称：" prop="title">
-        <el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="50"></el-input>
-      </el-form-item>
-      <el-form-item label="广告缩略图：" prop="mainPic">
-        <el-upload
-          :action="imgApi()"
-          list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload1"
-          :class="{disable:uploadShow1==2}"
-          class="upload_style"
-          v-model="addMsg.mainPic"
-          :file-list="mainPic"
-          :limit="1"
-        >
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <div class="el-upload__tip tip_style">宽高750 × 290像素，＜500KB的jpg图片</div>
-        <el-dialog :visible.sync="dialogVisible" append-to-body>
-          <img width="100%" :src="dialogImageUrl" alt class="showPic">
-        </el-dialog>
-      </el-form-item>
+	<div class="add_advertising">
+		<el-form
+			label-width="110px"
+			size="small"
+			:model="addMsg"
+			ref="addAdvertising"
+			:rules="advertisingRules"
+		>
+			<el-form-item label="广告名称：" prop="title">
+				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="50"></el-input>
+			</el-form-item>
+			<el-form-item label="广告缩略图：" prop="mainPic">
+				<el-upload
+					:action="imgApi()"
+					list-type="picture-card"
+					:on-preview="handlePictureCardPreview"
+					:on-remove="handleRemove"
+					:on-success="handleAvatarSuccess"
+					:before-upload="beforeAvatarUpload1"
+					:class="{disable:uploadShow1==2}"
+					class="upload_style"
+					v-model="addMsg.mainPic"
+					:file-list="mainPic"
+					:limit="1"
+					accept="image/png, image/jpeg"
+				>
+					<i class="el-icon-plus"></i>
+				</el-upload>
+				<div class="el-upload__tip tip_style">宽高750 × 290像素，＜500KB的jpg图片</div>
+				<el-dialog :visible.sync="dialogVisible" append-to-body>
+					<img width="100%" :src="dialogImageUrl" alt class="showPic">
+				</el-dialog>
+			</el-form-item>
 
-      <el-form-item label="广告内容图：" prop="content">
-        <el-upload
-          :action="imgApi()"
-          list-type="picture-card"
-          :on-preview="handlePictureCardPreview1"
-          :on-remove="handleRemove1"
-          :on-success="handleAvatarSuccess1"
-          :before-upload="beforeAvatarUpload2"
-          :class="{disable:uploadShow2==2}"
-          class="upload_style"
-          v-model="addMsg.content"
-          :file-list="content"
-          :limit="1"
-        >
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <div class="el-upload__tip tip_style">宽高1000 × 不限，＜2MB的jpg图片</div>
-        <!-- <el-dialog :visible.sync="dialogVisible" append-to-body class="showPic">
-                    <img width="100%" :src="dialogImageUrl1" alt>
-                </el-dialog>-->
-      </el-form-item>
-      <el-form-item label="广告链接地址：" prop="linkUrl">
-        <el-input
-          size="small"
-          placeholder="http或https开头(内容图与链接2选1)"
-          style="width:99%"
-          v-model="addMsg.linkUrl"
-          maxlength="200"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="是否显示：" prop="state">
-        <el-radio-group v-model="addMsg.state">
-          <el-radio :label="0" name="state">是</el-radio>
-          <el-radio :label="1" name="state">否</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="开始时间：" prop="startTime">
-        <el-date-picker
-          v-model="addMsg.startTime"
-          type="datetime"
-          placeholder="选择日期"
-          size="small"
-          style="width:250px"
-          format="yyyy/MM/dd HH:mm:ss"
-          value-format="yyyy/MM/dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间：" prop="endTime">
-        <el-date-picker
-          v-model="addMsg.endTime"
-          type="datetime"
-          placeholder="选择日期"
-          size="small"
-          style="width:250px"
-          format="yyyy/MM/dd HH:mm:ss"
-          value-format="yyyy/MM/dd HH:mm:ss"
-        ></el-date-picker>
-      </el-form-item>
-    </el-form>
-    <div style="text-align: right;width:99%;padding:10px 0 20px 0;">
-      <el-button @click="handleCancel" size="small" plain>取 消</el-button>
-      <el-button type="primary" @click="handleAffirm('addAdvertising')" size="small">确 定</el-button>
-    </div>
-  </div>
+			<el-form-item label="广告内容图：" prop="content">
+				<el-upload
+					:action="imgApi()"
+					list-type="picture-card"
+					:on-preview="handlePictureCardPreview1"
+					:on-remove="handleRemove1"
+					:on-success="handleAvatarSuccess1"
+					:before-upload="beforeAvatarUpload2"
+					:class="{disable:uploadShow2==2}"
+					class="upload_style"
+					v-model="addMsg.content"
+					:file-list="content"
+					:limit="1"
+					accept="image/png, image/jpeg"
+				>
+					<i class="el-icon-plus"></i>
+				</el-upload>
+				<div class="el-upload__tip tip_style">宽高1000 × 不限，＜2MB的jpg图片</div>
+				<!-- <el-dialog :visible.sync="dialogVisible" append-to-body class="showPic">
+					<img width="100%" :src="dialogImageUrl1" alt>
+				</el-dialog>-->
+			</el-form-item>
+			<el-form-item label="广告链接地址：" prop="linkUrl">
+				<el-input
+					size="small"
+					placeholder="http或https开头(内容图与链接2选1)"
+					style="width:99%"
+					v-model="addMsg.linkUrl"
+					maxlength="200"
+				></el-input>
+			</el-form-item>
+			<el-form-item label="是否显示：" prop="state">
+				<el-radio-group v-model="addMsg.state">
+					<el-radio :label="0" name="state">是</el-radio>
+					<el-radio :label="1" name="state">否</el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item label="开始时间：" prop="startTime">
+				<el-date-picker
+					v-model="addMsg.startTime"
+					type="datetime"
+					placeholder="选择日期"
+					size="small"
+					style="width:250px"
+					format="yyyy/MM/dd HH:mm:ss"
+					value-format="yyyy/MM/dd HH:mm:ss"
+				></el-date-picker>
+			</el-form-item>
+			<el-form-item label="结束时间：" prop="endTime">
+				<el-date-picker
+					v-model="addMsg.endTime"
+					type="datetime"
+					placeholder="选择日期"
+					size="small"
+					style="width:250px"
+					format="yyyy/MM/dd HH:mm:ss"
+					value-format="yyyy/MM/dd HH:mm:ss"
+				></el-date-picker>
+			</el-form-item>
+		</el-form>
+		<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
+			<el-button @click="handleCancel" size="small" plain>取 消</el-button>
+			<el-button type="primary" @click="handleAffirm('addAdvertising')" size="small">确 定</el-button>
+		</div>
+	</div>
 </template>
 <script>
   export default {

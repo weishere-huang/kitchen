@@ -29,63 +29,75 @@
 			<el-col :span="24">
 				<ul class="list_style">
 					<li>
-						<span style="background-color: #00BDF1;">
-							<i class="iconfont" style="color:white;">&#xe63b;</i>
-						</span>
-						<span>
-							<p>{{allMsg.supplierSellSum.todayOrderTotal>0?allMsg.supplierSellSum.todayOrderTotal:0}}</p>
-							<p>今日订单</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #00BDF1;">
+								<i class="iconfont" style="color:white;">&#xe63b;</i>
+							</span>
+							<span>
+								<p>{{allMsg.supplierSellSum.todayOrderTotal>0?allMsg.supplierSellSum.todayOrderTotal:0}}</p>
+								<p>今日订单</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #80D6AC;">
-							<i class="iconfont" style="color:white;">&#xe666;</i>
-						</span>
-						<span>
-							<p>{{allMsg.supplierSellSum.todayOrderSellSum>0?allMsg.supplierSellSum.todayOrderSellSum:0}}</p>
-							<p>今日销售额</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #80D6AC;">
+								<i class="iconfont" style="color:white;">&#xe666;</i>
+							</span>
+							<span>
+								<p>{{allMsg.supplierSellSum.todayOrderSellSum>0?allMsg.supplierSellSum.todayOrderSellSum:0}}</p>
+								<p>今日销售额</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #FF834D;">
-							<i class="iconfont" style="color:white;">&#xe66a;</i>
-						</span>
-						<span>
-							<p>
-								{{allMsg.upperLowerShelfAndTotal.upperTotal>0?allMsg.upperLowerShelfAndTotal.upperTotal:0}}/
-								<i
-									style="color:#999999;font-style:normal;"
-								>{{allMsg.upperLowerShelfAndTotal.lowerTotal>0?allMsg.upperLowerShelfAndTotal.lowerTotal:0}}</i>
-							</p>
-							<p>上/下架商品数</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #FF834D;">
+								<i class="iconfont" style="color:white;">&#xe66a;</i>
+							</span>
+							<span>
+								<p>
+									{{allMsg.upperLowerShelfAndTotal.upperTotal>0?allMsg.upperLowerShelfAndTotal.upperTotal:0}}/
+									<i
+										style="color:#999999;font-style:normal;"
+									>{{allMsg.upperLowerShelfAndTotal.lowerTotal>0?allMsg.upperLowerShelfAndTotal.lowerTotal:0}}</i>
+								</p>
+								<p>上/下架商品数</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #A72F95;">
-							<i class="iconfont" style="color:white;">&#xe8d7;</i>
-						</span>
-						<span>
-							<p>{{allMsg.supplierSellSum.orderTotal>0?allMsg.supplierSellSum.orderTotal:0}}</p>
-							<p>订单总数</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #A72F95;">
+								<i class="iconfont" style="color:white;">&#xe8d7;</i>
+							</span>
+							<span>
+								<p>{{allMsg.supplierSellSum.orderTotal>0?allMsg.supplierSellSum.orderTotal:0}}</p>
+								<p>订单总数</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #6366CB;">
-							<i class="iconfont" style="color:white;">&#xe69f;</i>
-						</span>
-						<span>
-							<p>￥{{allMsg.supplierSellSum.orderSellTotalSum>0?allMsg.supplierSellSum.orderSellTotalSum:0}}</p>
-							<p>销售总额</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #6366CB;">
+								<i class="iconfont" style="color:white;">&#xe69f;</i>
+							</span>
+							<span>
+								<p>￥{{allMsg.supplierSellSum.orderSellTotalSum>0?allMsg.supplierSellSum.orderSellTotalSum:0}}</p>
+								<p>销售总额</p>
+							</span>
+						</div>
 					</li>
 					<li>
-						<span style="background-color: #22CE9C;">
-							<i class="iconfont" style="color:white;">&#xe696;</i>
-						</span>
-						<span>
-							<p>{{allMsg.upperLowerShelfAndTotal.total>0?allMsg.upperLowerShelfAndTotal.total:0}}</p>
-							<p>商品总数</p>
-						</span>
+						<div class="list_box">
+							<span style="background-color: #22CE9C;">
+								<i class="iconfont" style="color:white;">&#xe696;</i>
+							</span>
+							<span>
+								<p>{{allMsg.upperLowerShelfAndTotal.total>0?allMsg.upperLowerShelfAndTotal.total:0}}</p>
+								<p>商品总数</p>
+							</span>
+						</div>
 					</li>
 				</ul>
 			</el-col>
@@ -464,10 +476,14 @@ export default {
 		li {
 			list-style-type: none;
 			display: inline-block;
-			width: 32.5%;
+			width: 33.33%;
 			height: 100px;
-			background-color: white;
 			line-height: 100px;
+			padding-right: 8px;
+			.list_box {
+				background-color: white;
+				overflow: hidden;
+			}
 			span {
 				display: inline-block;
 			}
@@ -493,6 +509,18 @@ export default {
 					color: #999999;
 				}
 			}
+		}
+		li:nth-child(3n) {
+			padding-right: 0px;
+			padding-left: 8px;
+		}
+		li:nth-child(2) {
+			padding-right: 4px;
+			padding-left: 4px;
+		}
+		li:nth-child(5) {
+			padding-right: 4px;
+			padding-left: 4px;
 		}
 	}
 	.sales_amount {
