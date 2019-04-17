@@ -201,8 +201,7 @@ export default {
 		handleClose() {
 			this.selectShow = false;
 		},
-		changeSort(data) {
-		},
+		changeSort(data) {},
 		handleClick(tba, event) {
 			this.btnShow = tba.name;
 		},
@@ -211,6 +210,11 @@ export default {
 			Object.assign(this.editClassify, data);
 		},
 		remove(node, val) {
+			if (val.children) {
+				this.$message.error("不能删除含有子类的分类");
+				val.visible = false;
+				return;
+			}
 			let qs = require("qs");
 			let data = qs.stringify({
 				cateId: val.id
