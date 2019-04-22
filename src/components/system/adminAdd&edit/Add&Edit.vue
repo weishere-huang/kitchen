@@ -245,7 +245,6 @@ export default {
 	}
 };
 </script>
-
 <style lang="less">
 @main-color: #1cc09f;
 @bgColor: #f0f2f5;
