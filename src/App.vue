@@ -365,6 +365,8 @@ export default {
 				sessionStorage.removeItem("token");
 				sessionStorage.removeItem("user");
 				sessionStorage.removeItem("permissionUrl");
+				sessionStorage.removeItem("imgPath");
+				sessionStorage.removeItem("area");
 				window.location.href = "/login.html";
 			});
 			// },({type,info})=>{})

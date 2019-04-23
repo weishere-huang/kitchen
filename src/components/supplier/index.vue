@@ -90,7 +90,7 @@ export default {
 			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
-			total: 10,
+			total: null,
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			keyword: null
 		};
@@ -124,10 +124,10 @@ export default {
 			}
 		},
 		deleteSupplier(id) {
-      let qs = require("qs");
-      let data = qs.stringify({
-        supplierId: id
-      })
+			let qs = require("qs");
+			let data = qs.stringify({
+				supplierId: id
+			});
 			this.Axios(
 				{
 					params: data,
@@ -178,9 +178,10 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data.content);
+					console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
+						this.total = result.data.data.totalElement;
 					}
 					// this.tableData = result.data.data.content;
 					// this.total = result.data.data.totalElement;
