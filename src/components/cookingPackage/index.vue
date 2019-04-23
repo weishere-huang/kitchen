@@ -8,15 +8,15 @@
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
-					@click="$router.push({path:'/Cookbook/AddCookbook'})"
-				>添加菜谱</permission-button>
+					@click="$router.push({path:'/cookingPackage/AddCookingPackage'})"
+				>添加菜谱包</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
-					<h4>菜谱列表</h4>
+					<h4>菜谱包列表</h4>
 					<div class="top_search">
 						<el-col :span="20" style="padding:0 5px;">
-							<el-input size="small" clearable placeholder="菜谱名称" v-model="keyword"></el-input>
+							<el-input size="small" clearable placeholder="菜谱包名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
 							<el-button size="small" plain @click="getCookbookList">搜索</el-button>
@@ -31,12 +31,12 @@
 						tooltip-effect="light"
 						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
 					>
-						<el-table-column label="菜谱名称" min-width="100" show-overflow-tooltip>
+						<el-table-column label="菜谱包名称" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.recipeName }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="分类" min-width="80" show-overflow-tooltip>
+						<el-table-column label="包含菜谱" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.cateName }}</span>
 							</template>
@@ -170,7 +170,7 @@ export default {
 		},
 		handleEdit(index, row) {
 			this.$router.push({
-				path: "/Cookbook/EditCookbook/" + row.id
+				path: "/cookingPackage/EditCookingPackage/" + row.id
 			});
 		},
 		handleSelectionChange(selection) {},
@@ -208,7 +208,7 @@ export default {
 	},
 	created() {
 		this.getCookbookList();
-		let a = this.$route.matched.find(item => item.name === "AddCookbook")
+		let a = this.$route.matched.find(item => item.name === "AddCookingPackage")
 			? true
 			: false;
 		let b = this.$route.params.id !== undefined ? true : false;
@@ -219,7 +219,9 @@ export default {
 	},
 	watch: {
 		$route() {
-			let a = this.$route.matched.find(item => item.name === "AddCookbook")
+			let a = this.$route.matched.find(
+				item => item.name === "AddCookingPackage"
+			)
 				? true
 				: false;
 			let b = this.$route.params.id !== undefined ? true : false;
