@@ -33,6 +33,19 @@
 							filterable
 						></el-cascader>
 					</el-form-item>
+					<el-form-item label="菜谱价格：" prop="recipePrice">
+						<el-input
+							maxlength="20"
+							size="small"
+							style="width:400px;"
+							type="number"
+							placeholder="单位：元"
+							v-model.number="cookbook.recipePrice"
+							oninput="if(value.length>10)value=value.slice(0,10)"
+						>
+							<template slot="append">元</template>
+						</el-input>
+					</el-form-item>
 					<el-form-item label="烹饪时长：" prop="cookingTime">
 						<el-input
 							size="small"
@@ -70,19 +83,7 @@
 							<span v-if="cookbook.spicy==3">特辣</span>
 						</span>
 					</el-form-item>
-					<el-form-item label="菜谱价格：" prop="recipePrice">
-						<el-input
-							maxlength="20"
-							size="small"
-							style="width:400px;"
-							type="number"
-							placeholder="单位：元"
-							v-model.number="cookbook.recipePrice"
-							oninput="if(value.length>10)value=value.slice(0,10)"
-						>
-							<template slot="append">元</template>
-						</el-input>
-					</el-form-item>
+					
 					<el-form-item label="上/下架：" prop="state">
 						<el-radio v-model="cookbook.state" label="0">是</el-radio>
 						<el-radio v-model="cookbook.state" label="1">否</el-radio>

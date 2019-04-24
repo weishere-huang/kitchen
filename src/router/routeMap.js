@@ -121,7 +121,7 @@ export default [
     menu: '菜谱包管理',
     permissionCode: 'cookingProcesses',
     defaultDock: false,
-    icon: '&#xe632;',
+    icon: '&#xe696;',
     subMenu: [{
         menu: '菜谱包列表',
         route: '/cookingPackage',
@@ -244,13 +244,13 @@ export default [
     permissionCode: 'system',
     defaultDock: false,
     icon: '&#xe628;',
-    subMenu: [{
-        menu: '系统设置',
-        route: '/System',
-        defaultDock: true,
-        permissionCode: 'system_employee_lookup'
-      },
-
+    subMenu: [
+      // {
+      //   menu: '系统设置',
+      //   route: '/System',
+      //   defaultDock: true,
+      //   permissionCode: 'system_employee_lookup'
+      // },
       {
         menu: '管理员列表',
         route: '/Administrator',
