@@ -33,17 +33,17 @@
 					>
 						<el-table-column label="菜谱包名称" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.recipeName }}</span>
+								<span>{{ scope.row.packageName }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="包含菜谱" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.cateName }}</span>
+								<span>{{ scope.row.number }}道</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="售价（元）" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>￥18</span>
+								<span>¥{{ scope.row.price/100 }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="*上/下架" min-width="80">
@@ -111,15 +111,16 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			total: 10,
-			keyword: "",
+			keyword: null,
 			isHideList: this.$route.params.id !== undefined ? true : false
 		};
 	},
 	methods: {
-		changeState(val) {
+		changeState(val,state) {
 			let qs = require("qs");
 			let data = qs.stringify({
-				id: val.id
+				id: val.id,
+        state:state
 			});
 			this.Axios(
 				{
@@ -128,7 +129,7 @@ export default {
 						successMsg: "修改成功"
 					},
 					type: "post",
-					url: "/api-recipe/recipe/updatestate",
+					url: "/api-recipe/recipePackage/updatestate",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}
@@ -137,6 +138,7 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+					  console.log(result.data);
 						this.getCookbookList();
 					}
 				},
@@ -144,19 +146,13 @@ export default {
 			);
 		},
 		changeUp(index, val) {
+		  let state;
 			if (val.state == 1) {
-				this.changeState(val);
+        state = 0
+        this.changeState(val,state);
 			} else {
-				this.$confirm("菜谱下架，绑定的商品也同样会下架, 是否继续?", "提示", {
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					type: "warning",
-					cancelButtonClass: "is-plain"
-				})
-					.then(() => {
-						this.changeState(val);
-					})
-					.catch(() => {});
+        state = 1
+        this.changeState(val,state);
 			}
 		},
 		handleSizeChange(val) {
@@ -188,7 +184,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-recipe/recipe/list",
+					url: "/api-recipe/recipePackage/list",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}
@@ -196,10 +192,10 @@ export default {
 				this
 			).then(
 				result => {
+				  console.log(result.data);
 					if (result.data.code === 200) {
 						this.total = result.data.data.totalElement;
 						this.tableData = result.data.data.content;
-						this.total = result.data.data.totalElement;
 					}
 				},
 				({ type, info }) => {}

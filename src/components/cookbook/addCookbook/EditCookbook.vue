@@ -498,15 +498,13 @@ export default {
 			let qs = require("qs");
 			let data = qs.stringify({
 				id: this.cookbook.id,
-				processName: this.cookbook.processName,
-				processId: this.cookbook.processId,
+        cookScript:"",
 				recipeName: this.cookbook.recipeName,
 				cateName: this.cookbook.cateName,
 				cateId: JSON.stringify(this.cookbook.cateId),
 				cookingTime: this.cookbook.cookingTime,
 				spicy: this.cookbook.spicy,
 				recipePrice: this.cookbook.recipePrice,
-				weight: this.cookbook.weight,
 				spec: this.cookbook.spec,
 				state: this.cookbook.state,
 				recipeImg: this.cookbook.recipeImg,

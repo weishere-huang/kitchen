@@ -83,7 +83,7 @@
 							<span v-if="cookbook.spicy==3">特辣</span>
 						</span>
 					</el-form-item>
-					
+
 					<el-form-item label="上/下架：" prop="state">
 						<el-radio v-model="cookbook.state" label="0">是</el-radio>
 						<el-radio v-model="cookbook.state" label="1">否</el-radio>
@@ -244,7 +244,6 @@ export default {
 				cookingTime: "",
 				spicy: "0",
 				recipePrice: "",
-				weight: "",
 				spec: "",
 				state: "1",
 				recipeImg: "",
@@ -528,15 +527,14 @@ export default {
 		addRecipe() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				processName: this.cookbook.processName,
-				processId: this.cookbook.processId,
+        //todo
+        cookScript:"",
 				recipeName: this.cookbook.recipeName,
 				cateName: this.cookbook.cateName,
 				cateId: JSON.stringify(this.cookbook.cateId),
 				cookingTime: this.cookbook.cookingTime,
 				spicy: this.cookbook.spicy,
 				recipePrice: this.cookbook.recipePrice,
-				weight: this.cookbook.weight,
 				spec: this.cookbook.spec,
 				state: this.cookbook.state,
 				recipeImg: this.cookbook.recipeImg,

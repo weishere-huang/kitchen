@@ -60,7 +60,7 @@
 						></el-transfer>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" size="small">添加</el-button>
+						<el-button type="primary" size="small" @click="addpackage">添加</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -171,8 +171,62 @@ export default {
 					type: "error"
 				});
 			}
-		}
-	}
+		},
+    addpackage(){
+      let qs = require("qs");
+      let data = qs.stringify({
+        //包名
+        packageName:"",
+        //介绍
+        introduce:"",
+        //图片
+        img:"",
+        //价格 , 获取要/100
+        price:"",
+        //0正常 , 1下架
+        state:"",
+        //菜谱ID集合,用,隔开
+        recipeIds:"",
+      });
+      this.Axios({
+        params:data,
+        url:"/api-recipe/recipePackage/add",
+        type:"post",
+        option:{
+        }
+      },this).then(result=>{
+        console.log(result.data);
+      })
+    },
+    recipeList(){
+      //获取未下架的所有菜谱, 支持搜索  page 传-1
+      this.Axios(
+        {
+          params: {
+            page:-1,
+            keyword:"",
+          },
+          option: {
+            enableMsg:false
+          },
+          type: "get",
+          url: "/api-recipe/recipe/list"
+
+        },
+        this
+      ).then(
+        result => {
+          console.log("未下架所有菜谱")
+          console.log(result.data)
+        },
+        ({type, info}) => {
+        }
+      );
+    }
+	},
+	created(){
+	  this.recipeList()
+  }
 };
 </script>
 
