@@ -27,8 +27,46 @@
 					<el-form-item label="详细地址：" prop="address">
 						<el-input type="text" v-model="supplierMsg.address" size="small" style="width:350px;"></el-input>
 					</el-form-item>
-					<el-form-item label="代理商账号：" prop>
-						<span>{{supplierMsg.account}}</span>
+					<el-form-item label="移动端购买地址：" prop="supplierAccount">
+						<el-input
+							type="text"
+							maxlength="20"
+							size="small"
+							style="width:350px;"
+							placeholder="以http://或https://开头，一般为H5地址"
+						></el-input>
+						<!-- <el-tooltip class="item" effect="light" content="账号格式：agent加3~5数字组成" placement="top">
+							<i class="el-icon-warning" style="color:#1cc09f"></i>
+						</el-tooltip>-->
+					</el-form-item>
+					<el-form-item label="LOGO：" prop="supplierPassword">
+						<el-upload
+							:action="imgApi()"
+							list-type="picture-card"
+							:on-preview="handlePictureCardPreview1"
+							:on-remove="handleRemove1"
+							:on-success="handleAvatarSuccess1"
+							:before-upload="beforeAvatarUpload1"
+							:limit="1"
+							class="upload_show"
+							accept="image/png, image/jpeg"
+						>
+							<i class="el-icon-plus"></i>
+						</el-upload>
+						<div class="el-upload__tip tip_style">尺寸：80x80像素的jpg或png图片</div>
+						<el-dialog :visible.sync="dialogVisible" class="showPic">
+							<img width="100%" :src="dialogImageUrl" alt>
+						</el-dialog>
+					</el-form-item>
+					<el-form-item label="简介：" prop="password">
+						<el-input
+							type="textarea"
+							maxlength="200"
+							size="small"
+							style="width:500px;"
+							rows="4"
+							resize="none"
+						></el-input>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -150,85 +188,55 @@ export default {
 		};
 	},
 	methods: {
-		getSaleArea(id) {
-			this.Axios(
-				{
-					params: {
-						supplierId: id
+		imgApi() {
+			let url = this.global.apiImg + "/api-upload/upload";
+			return url;
+		},
+		handleRemove1(file, fileList) {},
+		handlePictureCardPreview1(file) {
+			this.dialogImageUrl = file.url;
+			this.dialogVisible = true;
+		},
+		beforeAvatarUpload1(file) {
+			const isPicSize = file.size / 1024 / 1024 <= 1;
+			if (isPicSize == false) {
+				this.$message.error("上传图片不能大于1M");
+				return false;
+			} else {
+				const isSize = new Promise(function(resolve, reject) {
+					let width = 600000;
+					let height = 600000;
+					let _URL = window.URL || window.webkitURL;
+					let img = new Image();
+					img.onload = function() {
+						let valid = img.width <= width && img.height <= height;
+						valid ? resolve() : reject();
+					};
+					img.src = _URL.createObjectURL(file);
+				}).then(
+					() => {
+						return file;
 					},
-					option: {
-						enableMsg: false
-					},
-					type: "get",
-					url: "/api-mall/salesTerritoryArea/findAreaOnUpdate"
-				},
-				this
-			).then(
-				result => {
-					// console.log(result.data);
-					let that = this;
-					let data = JSON.parse(JSON.stringify(result.data.data));
-					for (var item in data) {
-						if (data[item].adCode.match(/100000$/)) {
-							that.country.push({
-								adCode: data[item].adCode,
-								areaName: data[item].name,
-								children: []
-							});
-						} else if (data[item].adCode.match(/0000$/)) {
-							//省
-							that.province.push({
-								adCode: data[item].adCode,
-								areaName: data[item].name,
-								children: []
-							});
-						} else if (data[item].adCode.match(/00$/)) {
-							//市
-							that.city.push({
-								adCode: data[item].adCode,
-								areaName: data[item].name,
-								children: []
-							});
-						} else {
-							//区
-							that.block.push({
-								adCode: data[item].adCode,
-								areaName: data[item].name
-							});
-						}
+					() => {
+						this.$message.error("上传的图片必须是等于或小于600*600!");
+						return Promise.reject();
 					}
-					// 分类市级
-					for (var index in that.province) {
-						for (var index1 in that.city) {
-							if (
-								that.province[index].adCode.slice(0, 2) ===
-								that.city[index1].adCode.slice(0, 2)
-							) {
-								that.province[index].children.push(that.city[index1]);
-							}
-						}
-					}
-					//  分类区级
-					for (var item1 in that.city) {
-						for (var item2 in that.block) {
-							if (
-								that.block[item2].adCode.slice(0, 4) ===
-								that.city[item1].adCode.slice(0, 4)
-							) {
-								that.city[item1].children.push(that.block[item2]);
-							}
-						}
-					}
-					that.country[0].children.push(that.province);
-					// console.log(that.country);
-					this.data = that.country[0].children[0];
-					this.data1 = this.data.slice(0, 12);
-					this.data2 = this.data.slice(12, 24);
-					this.data3 = this.data.slice(24, 34);
-					this.getOneSupplier(id);
-				},
-				({ type, info }) => {}
-			);
+				);
+				return isSize;
+			}
+		},
+		handleAvatarSuccess1(res, file) {
+			if (res.code === 200) {
+				this.$message({
+					message: "图片上传成功！",
+					type: "success"
+				});
+			} else {
+				this.$message({
+					message: "图片上传不成功！",
+					type: "error"
+				});
+			}
 		},
 		getOneSupplier(id) {
 			this.Axios(
@@ -248,9 +256,7 @@ export default {
 					console.log(result);
 					console.log("getOneSupplier");
 					this.supplierMsg = result.data.data.supplierDO;
-					result.data.data.area.map(item =>
-						this.selectarea.push(item)
-					);
+					result.data.data.area.map(item => this.selectarea.push(item));
 					// console.log(this.selectarea);
 					this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
 				},
@@ -312,7 +318,11 @@ export default {
 		}
 	},
 	created() {
-		this.getSaleArea(this.$route.params.id);
+		this.getOneSupplier(this.$route.params.id);
+		this.data = JSON.parse(sessionStorage.getItem("area"))[0].children[0];
+		this.data1 = this.data.slice(0, 12);
+		this.data2 = this.data.slice(12, 24);
+		this.data3 = this.data.slice(24, 34);
 	},
 	components: {}
 };

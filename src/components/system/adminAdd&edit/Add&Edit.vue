@@ -13,7 +13,7 @@
 					size="small"
 					style="width:95%"
 					v-model="addInfo.account"
-					maxlength="15"
+					maxlength="20"
 				></el-input>
 			</el-form-item>
 			<el-form-item label="登录密码：" prop="password">
@@ -245,7 +245,6 @@ export default {
 	}
 };
 </script>
-
 <style lang="less">
 @main-color: #1cc09f;
 @bgColor: #f0f2f5;

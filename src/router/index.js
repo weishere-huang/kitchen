@@ -33,7 +33,9 @@ import GuestBook from '@/components/user/GuestBook'
 import Information from '@/components/information/index'
 import NewInformation from '@/components/information/NewInformation'
 import DetailsInformation from '@/components/information/DetailsInformation'
-import AddCookingProcesses from '@/components/cookingProcesses/add&&edit/AddCookingProcesses'
+import CookingPackage from '@/components/cookingPackage/index'
+import AddCookingPackage from '@/components/cookingPackage/add&&edit/AddCookingPackage'
+import EditCookingPackage from '@/components/cookingPackage/add&&edit/EditCookingPackage'
 
 
 Vue.use(Router)
@@ -44,15 +46,38 @@ const router = new Router({
       redirect: '/Home',
     },
     {
-      path: '/AddCookingProcesses',
-      name: 'AddCookingProcesses',
-      component: AddCookingProcesses,
+      path: '/CookingPackage',
+      name: 'CookingPackage',
+      component: CookingPackage,
       props: {
-        pageName: '添加烹饪流程'
+        pageName: '菜谱包列表'
       },
       meta: {
         requireAuth: true,
       },
+      children: [{
+          path: 'AddCookingPackage',
+          name: 'AddCookingPackage',
+          component: AddCookingPackage,
+          props: {
+            pageName: '添加菜谱包'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'EditCookingPackage/:id/',
+          name: 'EditCookingPackage',
+          component: EditCookingPackage,
+          props: {
+            pageName: '修改菜谱包'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        }
+      ]
     },
     {
       path: '/Home',

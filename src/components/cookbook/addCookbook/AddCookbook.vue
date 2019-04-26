@@ -17,17 +17,8 @@
 					:inline-message="true"
 					style="margin-top: 20px;"
 				>
-					<el-form-item label="烹饪流程：" prop="processName">
-						<el-input
-							size="small"
-							style="width:400px;"
-							v-model="cookbook.processName"
-							@focus="dialogScript=true"
-							placeholder="请选择"
-							suffix-icon="el-icon-arrow-down"
-							maxlength="20"
-							:readonly="true"
-						></el-input>
+					<el-form-item label="菜谱名称：" prop="recipeName">
+						<el-input maxlength="20" size="small" style="width:400px;" v-model="cookbook.recipeName"></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱分类：" prop="cateId">
 						<el-cascader
@@ -42,19 +33,33 @@
 							filterable
 						></el-cascader>
 					</el-form-item>
-					<el-form-item label="菜谱名称：" prop="recipeName">
-						<el-input maxlength="20" size="small" style="width:400px;" v-model="cookbook.recipeName"></el-input>
+					<el-form-item label="菜谱价格：" prop="recipePrice">
+						<el-input
+							maxlength="20"
+							size="small"
+							style="width:400px;"
+							type="number"
+							placeholder="单位：元"
+							v-model.number="cookbook.recipePrice"
+							oninput="if(value.length>10)value=value.slice(0,10)"
+						>
+							<template slot="append">元</template>
+						</el-input>
 					</el-form-item>
 					<el-form-item label="烹饪时长：" prop="cookingTime">
 						<el-input
 							size="small"
-							:disabled="true"
 							style="width:400px;"
-							placeholder="单位：分钟"
+							placeholder="请填写整数"
 							v-model="cookbook.cookingTime"
 							maxlength="20"
 							oninput="if(value.length>10)value=value.slice(0,10)"
-						></el-input>
+						>
+							<template slot="append">分</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item label="动作编码：">
+						<el-input maxlength="20" size="small" style="width:400px;" placeholder="请填写动作编码（重要）"></el-input>
 					</el-form-item>
 					<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
 						<el-radio-group v-model="cookbook.spicy" size="small" style="width:192px;">
@@ -78,44 +83,12 @@
 							<span v-if="cookbook.spicy==3">特辣</span>
 						</span>
 					</el-form-item>
-					<el-form-item label="菜谱价格：" prop="recipePrice">
-						<el-input
-							maxlength="20"
-							size="small"
-							style="width:400px;"
-							type="number"
-							placeholder="单位：元"
-							v-model.number="cookbook.recipePrice"
-							oninput="if(value.length>10)value=value.slice(0,10)"
-						></el-input>
-					</el-form-item>
-					<el-form-item label="净含量：" prop="weight">
-						<el-input
-							v-model.number="cookbook.weight"
-							type="number"
-							size="small"
-							style="width:400px;"
-							placeholder="单位：克"
-							maxlength="10"
-							max="9999999999"
-							oninput="if(value.length>10)value=value.slice(0,10)"
-						></el-input>
-					</el-form-item>
-					<el-form-item label="食材搭配：" prop="spec">
-						<el-input
-							v-model="cookbook.spec"
-							type="text"
-							size="small"
-							style="width:400px;"
-							placeholder=" 如：精选五花肉，青椒，蒜片，姜片"
-							maxlength="50"
-						></el-input>
-					</el-form-item>
+
 					<el-form-item label="上/下架：" prop="state">
 						<el-radio v-model="cookbook.state" label="0">是</el-radio>
 						<el-radio v-model="cookbook.state" label="1">否</el-radio>
 					</el-form-item>
-					<el-form-item label="菜谱配图：" prop="recipeImg">
+					<el-form-item label="菜谱封面图：" prop="recipeImg">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -144,6 +117,7 @@
 							placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。（100个字以内）"
 							v-model="cookbook.ingredient"
 							maxlength="100"
+							resize="none"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="辅料：" prop="accessories">
@@ -156,6 +130,7 @@
 							placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。（100个字以内）"
 							v-model="cookbook.accessories"
 							maxlength="100"
+							resize="none"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="菜谱介绍：" prop="introduce">
@@ -168,9 +143,10 @@
 							placeholder="选填（200个字以内）"
 							maxlength="200"
 							v-model="cookbook.introduce"
+							resize="none"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="步骤说明：" prop="step">
+					<el-form-item label="备料过程：" prop="step">
 						<div style="width:686px;">
 							<el-col
 								:span="24"
@@ -205,9 +181,10 @@
 										type="textarea"
 										class="textarea_style"
 										rows="3"
-										placeholder="说明（在200个字以内）"
+										placeholder=" 如：将300克五花肉切成2厘米*2厘米的正方形，放入1号料盒…"
 										maxlength="200"
 										v-model="item.explain"
+										resize="none"
 									></el-input>
 								</el-col>
 								<el-col :span="3" style="padding:0 8px;line-height:80px;">
@@ -264,10 +241,9 @@ export default {
 				recipeName: "",
 				cateName: "",
 				cateId: [],
-				cookingTime: "5",
+				cookingTime: "",
 				spicy: "0",
 				recipePrice: "",
-				weight: "",
 				spec: "",
 				state: "1",
 				recipeImg: "",
@@ -284,13 +260,6 @@ export default {
 				]
 			},
 			cookbookRules: {
-				processName: [
-					{
-						required: true,
-						message: "请选择烹饪流程",
-						trigger: "change"
-					}
-				],
 				cateId: [
 					{ required: true, message: "请选择分类", trigger: "change" },
 					{
@@ -323,23 +292,6 @@ export default {
 									callback();
 								}
 							}
-							// if (
-							// 	this.classify
-							// 		.find(item => {
-							// 			return item.id === value[0];
-							// 		})
-							// 		.hasOwnProperty("children") ||
-							// 	this.classify
-							// 		.find(item => {
-							// 			return item.id === value[0];
-							// 		})
-							// 		.children.find(i => {
-							// 			return i.id === value[value.length - 1];
-							// 		})
-							// 		.hasOwnProperty("children")
-							// ) {
-							// 	callback(new Error("不能选择含有子项的分类"));
-							// }
 						},
 						trigger: ["change", "blur"]
 					}
@@ -367,44 +319,10 @@ export default {
 						trigger: "blur"
 					}
 				],
-				weight: [
-					{
-						required: true,
-						message: "请输入净含量",
-						trigger: "blur"
-					},
-					{
-						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
-								callback(new Error("只能为正整数"));
-							} else {
-								callback();
-							}
-						},
-						trigger: "blur"
-					}
-				],
 				ingredient: [
 					{
 						required: true,
 						message: "请输入主料",
-						trigger: "blur"
-					}
-					// {
-					// 	validator: (rule, value, callback) => {
-					// 		if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
-					// 			callback(new Error("只能为正整数"));
-					// 		} else {
-					// 			callback();
-					// 		}
-					// 	},
-					// 	trigger: "blur"
-					// }
-				],
-				spec: [
-					{
-						required: true,
-						message: "请输入食材搭配",
 						trigger: "blur"
 					}
 				],
@@ -609,15 +527,14 @@ export default {
 		addRecipe() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				processName: this.cookbook.processName,
-				processId: this.cookbook.processId,
+        //todo
+        cookScript:"",
 				recipeName: this.cookbook.recipeName,
 				cateName: this.cookbook.cateName,
 				cateId: JSON.stringify(this.cookbook.cateId),
 				cookingTime: this.cookbook.cookingTime,
 				spicy: this.cookbook.spicy,
 				recipePrice: this.cookbook.recipePrice,
-				weight: this.cookbook.weight,
 				spec: this.cookbook.spec,
 				state: this.cookbook.state,
 				recipeImg: this.cookbook.recipeImg,

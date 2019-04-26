@@ -121,12 +121,13 @@ export default {
 									"loginPassword",
 									this.encryptByDES(this.userMsg.password, key)
 								);
-								if (result.data.data.employeeType == 0) {
-									window.location.href = "/AdminHome";
-								}
-								if (result.data.data.employeeType == 1) {
-									window.location.href = "/Home";
-								}
+								window.location.href = "/Cookbook";
+								// if (result.data.data.employeeType == 0) {
+								// 	window.location.href = "/AdminHome";
+								// }
+								// if (result.data.data.employeeType == 1) {
+								// 	window.location.href = "/Home";
+								// }
 							}
 						},
 						({ type, info }) => {}

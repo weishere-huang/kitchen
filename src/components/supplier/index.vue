@@ -24,7 +24,7 @@
 					</div>
 				</div>
 				<div class="table_list">
-					<table-list
+					<!-- <table-list
 						:selectShow="false"
 						:handleSelectionChange="handleSelectionChange"
 						:column="items"
@@ -37,7 +37,60 @@
 						:handleShow="true"
 						:permissionuUpdate="permissionuUpdate"
 						:permissionDetele="permissionDetele"
-					></table-list>
+					></table-list>-->
+					<el-table
+						:data="tableData"
+						style="width: 100%"
+						size="mini"
+						stripe
+						tooltip-effect="light"
+						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+					>
+						<el-table-column label="代理商名称" min-width="180" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.supplierName }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="联系人" min-width="90" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.contacts }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="联系电话" min-width="80">
+							<template slot-scope="scope">
+								<span>{{ scope.row.phone }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="状态" min-width="80" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
+									<permission-switch
+										permCode="user_manager_list_lookup.user_manager_list_resetpsd"
+										banType="disable"
+										v-model="scope.row.state"
+										active-color="#13ce66"
+										inactive-color="#ff4949"
+										@change="changeState(scope.row,scope.$index)"
+									></permission-switch>
+								</el-tooltip>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="140">
+							<template slot-scope="scope">
+								<el-button type="text" size="mini" @click="toEdit(scope.row)">修改</el-button>
+								<el-popover placement="top" width="180" v-model="scope.row.visible">
+									<p style="line-height:32px;text-align:center;">
+										<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
+									</p>
+									<div style="text-align: center; margin: 0">
+										<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
+										<el-button type="primary" size="mini" @click="deleteSupplier(scope.row,scope.$index)">确定</el-button>
+									</div>
+									<el-button slot="reference" type="text">删除</el-button>
+								</el-popover>
+							</template>
+						</el-table-column>
+					</el-table>
 				</div>
 				<div class="block" style="margin-top:10px;float:right">
 					<el-pagination
@@ -83,19 +136,30 @@ export default {
 				},
 				{
 					label: "账号",
-					prop: "supplierAccount",
+					prop: "account",
 					width: 140
 				}
 			],
-			tableData: [],
+			tableData: [
+				{
+					supplierName: "永辉超市",
+					contacts: "张三",
+					phone: "133100022013",
+					state: true,
+					id: 122
+				}
+			],
 			pageIndex: 1,
 			pageSize: 10,
-			total: 10,
+			total: null,
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			keyword: null
 		};
 	},
 	methods: {
+		toEdit(row) {
+			this.$router.push("/Supplier/EditSupplier/" + row.id);
+		},
 		toadd() {
 			this.$router.push({ path: "/Supplier/AddSupplier" });
 		},
@@ -123,11 +187,11 @@ export default {
 				console.log(params);
 			}
 		},
-		deleteSupplier(id) {
-      let qs = require("qs");
-      let data = qs.stringify({
-        supplierId: id
-      })
+		deleteSupplier(row, index) {
+			let qs = require("qs");
+			let data = qs.stringify({
+				supplierId: row.id
+			});
 			this.Axios(
 				{
 					params: data,
@@ -143,6 +207,9 @@ export default {
 					console.log(result);
 					if (result.data.code === 200) {
 						this.getSupplierList();
+						this.tableData[index].visible = false;
+					} else {
+						this.$message.error("未删除成功！");
 					}
 					// this.tableData = result.data.data.content;
 					// this.total = result.data.data.totalElement;
@@ -178,9 +245,10 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data.content);
+					console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
+						this.total = result.data.data.totalElement;
 					}
 					// this.tableData = result.data.data.content;
 					// this.total = result.data.data.totalElement;
@@ -212,7 +280,7 @@ export default {
 		}
 	},
 	created() {
-		this.getSupplierList();
+		// this.getSupplierList();
 		let a = this.$route.matched.find(item => item.name === "AddSupplier")
 			? true
 			: false;

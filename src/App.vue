@@ -50,13 +50,13 @@
 					<div class="stateList">
 						<ul>
 							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
-							<li>
+							<!-- <li>
 								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">
 									<el-badge is-dot class="item">
 										<i class="iconfont" @click="pathto(0)">&#xe63b;</i>
 									</el-badge>
 								</el-tooltip>
-							</li>
+							</li>-->
 							<!-- <li>
 								<el-tooltip class="item" effect="light" content="商品" placement="bottom-end">
 									<el-badge :value="msgcount===0?'':msgcount" :max="99" class="item">
@@ -74,6 +74,11 @@
 							<li>
 								<el-tooltip class="item" effect="light" content="修改密码" placement="bottom-end">
 									<i class="iconfont" @click="pathto(3)">&#xe62a;</i>
+								</el-tooltip>
+							</li>
+							<li>
+								<el-tooltip class="item" effect="light" content="服务热线" placement="bottom-end">
+									<i class="iconfont" @click="pathto(4)">&#xe608;</i>
 								</el-tooltip>
 							</li>
 							<li>
@@ -129,6 +134,22 @@
 				<el-button type="primary" @click="setEditPassword('editPassword')" size="small">确 定</el-button>
 			</span>
 		</el-dialog>
+		<el-dialog
+			:close-on-click-modal="false"
+			title="修改服务热线"
+			:visible.sync="dialogPhoneVisible"
+			width="500px"
+		>
+			<el-form label-width="100px" size="small" style="margin-top:20px;">
+				<el-form-item label="服务热线：" prop="oldPassword">
+					<el-input type="text" maxlength="25" style="width:99%;"></el-input>
+				</el-form-item>
+			</el-form>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogPhoneVisible = false" size="small" plain>取 消</el-button>
+				<el-button type="primary" size="small">确 定</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -147,6 +168,7 @@ export default {
 	name: "App",
 	data() {
 		return {
+			dialogPhoneVisible: false,
 			employeeType: JSON.parse(sessionStorage.getItem("user")).employeeType,
 			editPassword: {
 				oldPassword: "",
@@ -365,6 +387,8 @@ export default {
 				sessionStorage.removeItem("token");
 				sessionStorage.removeItem("user");
 				sessionStorage.removeItem("permissionUrl");
+				sessionStorage.removeItem("imgPath");
+				sessionStorage.removeItem("area");
 				window.location.href = "/login.html";
 			});
 			// },({type,info})=>{})
@@ -391,6 +415,8 @@ export default {
 				this.$router.push({ path: "/GuestBook" });
 			} else if (a === 3) {
 				this.dialogFormVisible = true;
+			} else if (a === 4) {
+				this.dialogPhoneVisible = true;
 			}
 		},
 		initPermission() {
@@ -427,27 +453,27 @@ export default {
 			this.menuSource = _menuSource;
 		}
 		// getImgPath() {
-			// 	this.Axios(
-			// 		{
-			// 			params: {
-			// 				config: "imgPath"
-			// 			},
-			// 			option: {
-			// 				enableMsg: false
-			// 			},
-			// 			type: "get",
-			// 			url: "/api-platform/systemconfig/list"
-			// 		},
-			// 		this
-			// 	).then(
-			// 		result => {
-			// 			console.log(result.data);
-			// 			if (result.data.code === 200) {
-			// 				sessionStorage.imgPath = result.data.data.imgPath;
-			// 			}
-			// 		},
-			// 		({ type, info }) => {}
-			// 	);
+		// 	this.Axios(
+		// 		{
+		// 			params: {
+		// 				config: "imgPath"
+		// 			},
+		// 			option: {
+		// 				enableMsg: false
+		// 			},
+		// 			type: "get",
+		// 			url: "/api-platform/systemconfig/list"
+		// 		},
+		// 		this
+		// 	).then(
+		// 		result => {
+		// 			console.log(result.data);
+		// 			if (result.data.code === 200) {
+		// 				sessionStorage.imgPath = result.data.data.imgPath;
+		// 			}
+		// 		},
+		// 		({ type, info }) => {}
+		// 	);
 		// }
 	},
 	computed: {},

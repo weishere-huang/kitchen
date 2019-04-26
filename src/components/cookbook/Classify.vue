@@ -1,6 +1,6 @@
 <template>
 	<div class="cookbook_classify">
-		<div class="top_list">
+		<!-- <div class="top_list">
 			<permission-button
 				permCode="menu_cate_lookup.menu_cate_add"
 				banType="disable"
@@ -8,8 +8,8 @@
 				type="primary"
 				class="el-icon-circle-plus-outline"
 				@click="dialogAdd=true"
-			>添加分类</permission-button>
-			<el-dialog title="添加分类" :visible.sync="dialogAdd" width="500px" :close-on-click-modal="false">
+			>添加分类</permission-button> -->
+			<!-- <el-dialog title="添加分类" :visible.sync="dialogAdd" width="500px" :close-on-click-modal="false">
 				<el-form
 					label-width="100px"
 					style="margin-top:16px;"
@@ -28,8 +28,8 @@
 					<el-button @click="dialogAdd = false" plain size="small">取 消</el-button>
 					<el-button type="primary" @click="addClassify('classify')" size="small">确 定</el-button>
 				</span>
-			</el-dialog>
-		</div>
+			</el-dialog> -->
+		<!-- </div> -->
 		<div class="bottom_list">
 			<div class="top_list">
 				<h2>菜谱分类</h2>
@@ -37,7 +37,7 @@
 			<div style="padding:10px;overflow:hidden">
 				<div class="tree_title">
 					<span style="padding-left:8px;">分类名称</span>
-					<span style="display:inline-block;width:190px;">操作</span>
+					<!-- <span style="display:inline-block;width:190px;">操作</span> -->
 				</div>
 				<el-tree
 					:data="classifyData"
@@ -48,7 +48,7 @@
 				>
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span>{{ node.label }}</span>
-						<span style="display:inline-block;width:190px;" @click.stop>
+						<!-- <span style="display:inline-block;width:190px;" @click.stop>
 							<permission-button
 								permCode="menu_cate_lookup.menu_cate_update"
 								banType="disable"
@@ -71,12 +71,12 @@
 									type="text"
 								>删除</permission-button>
 							</el-popover>
-						</span>
+						</span> -->
 					</span>
 				</el-tree>
 			</div>
 		</div>
-		<el-dialog title="修改分类" :visible.sync="dialogEdit" width="500px" :close-on-click-modal="false">
+		<!-- <el-dialog title="修改分类" :visible.sync="dialogEdit" width="500px" :close-on-click-modal="false">
 			<el-form
 				label-width="100px"
 				style="margin-top:16px;"
@@ -92,7 +92,7 @@
 				<el-button @click="dialogEdit = false" plain size="small">取 消</el-button>
 				<el-button type="primary" @click="handeditClassify('editClassify')" size="small">确 定</el-button>
 			</span>
-		</el-dialog>
+		</el-dialog> -->
 	</div>
 </template>
 <script>
@@ -201,8 +201,7 @@ export default {
 		handleClose() {
 			this.selectShow = false;
 		},
-		changeSort(data) {
-		},
+		changeSort(data) {},
 		handleClick(tba, event) {
 			this.btnShow = tba.name;
 		},
@@ -211,6 +210,11 @@ export default {
 			Object.assign(this.editClassify, data);
 		},
 		remove(node, val) {
+			if (val.children) {
+				this.$message.error("不能删除含有子类的分类");
+				val.visible = false;
+				return;
+			}
 			let qs = require("qs");
 			let data = qs.stringify({
 				cateId: val.id

@@ -11,11 +11,11 @@
 			>添加信息</permission-button>
 			<el-button size="small" type="primary" @click="reload()">立即刷新</el-button>
 			<el-dialog :close-on-click-modal="false" title="添加信息" :visible.sync="dialogAdd" width="800px">
-				<add-problem :addMsg="addMsg"></add-problem>
-				<span slot="footer" class="dialog-footer">
+				<add-problem v-on:beforeadd="beforeadd"></add-problem>
+				<!-- <span slot="footer" class="dialog-footer">
 					<el-button @click="dialogAdd = false" size="small" plain>取 消</el-button>
 					<el-button type="primary" @click="beforeadd" size="small">确 定</el-button>
-				</span>
+				</span>-->
 			</el-dialog>
 		</div>
 		<div class="bottom_list">
@@ -70,11 +70,11 @@
 			</div>
 		</div>
 		<el-dialog :close-on-click-modal="false" title="修改信息" :visible.sync="dialogEdit" width="800px">
-			<add-problem :addMsg="editMsg" v-on:handlechange="handlechange"></add-problem>
-			<span slot="footer" class="dialog-footer">
+			<add-problem :editMsg="editMsg" v-on:beforeadd="beforeupdate"></add-problem>
+			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="dialogEdit = false" size="small" plain>取 消</el-button>
 				<el-button type="primary" @click="beforeupdate" size="small">确 定</el-button>
-			</span>
+			</span>-->
 		</el-dialog>
 	</div>
 </template>
@@ -137,6 +137,32 @@ export default {
 		};
 	},
 	methods: {
+		beforeadd(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.dialogAdd = params.isHide;
+			}
+			if (params.type == "affirm") {
+				console.log(params);
+				this.addMsg = params.value;
+				console.log(this.addMsg);
+				this.beforeadd1();
+				this.dialogAdd = params.isHide;
+			}
+		},
+		beforeupdate(params) {
+			if (params.type == "cancel") {
+				console.log(params);
+				this.dialogEdit = params.isHide;
+			}
+			if (params.type == "affirm") {
+				console.log(params);
+				this.editMsg = params.value;
+				// console.log(this.addMsg);
+				this.beforeupdate1();
+				this.dialogEdit = params.isHide;
+			}
+		},
 		handlechange(data) {
 			console.log(data);
 		},
@@ -185,7 +211,7 @@ export default {
 						keyword: this.keyword
 					},
 					option: {
-            enableMsg: false
+						enableMsg: false
 					},
 					type: "get",
 					url: "/api-platform/faq/faqlist"
@@ -205,7 +231,7 @@ export default {
 			this.pageSize = 15;
 			this.getfaqList();
 		},
-		beforeadd() {
+		beforeadd1() {
 			let flag = true;
 			if (
 				this.addMsg.title === "" ||
@@ -264,7 +290,7 @@ export default {
 			).then(result => {}, ({ type, info }) => {});
 		},
 		//修改常见问题
-		beforeupdate() {
+		beforeupdate1() {
 			let flag = true;
 			if (
 				this.editMsg.title === "" ||

@@ -140,8 +140,10 @@
 							@click.native="handleStyle(index,item)"
 						>
 							<el-col :span="1" class="style_case">&nbsp;</el-col>
-							<el-col :span="4" class="img_case">
-								<img :src="item.img" alt>
+							<el-col :span="4">
+								<div class="img_case">
+									<img :src="item.img" alt>
+								</div>
 							</el-col>
 							<el-col :span="18" class="msg_case">
 								<el-col
@@ -753,6 +755,9 @@ export default {
 						border-radius: 50%;
 						font-size: 0;
 						overflow: hidden;
+						width: 33px;
+						margin: auto;
+						margin-top: 10px;
 						img {
 							height: 33px;
 							width: 33px;

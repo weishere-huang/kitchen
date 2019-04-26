@@ -8,15 +8,15 @@
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
-					@click="$router.push({path:'/Cookbook/AddCookbook'})"
-				>添加菜谱</permission-button>
+					@click="$router.push({path:'/cookingPackage/AddCookingPackage'})"
+				>添加菜谱包</permission-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
-					<h4>菜谱列表</h4>
+					<h4>菜谱包列表</h4>
 					<div class="top_search">
 						<el-col :span="20" style="padding:0 5px;">
-							<el-input size="small" clearable placeholder="菜谱名称" v-model="keyword"></el-input>
+							<el-input size="small" clearable placeholder="菜谱包名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
 							<el-button size="small" plain @click="getCookbookList">搜索</el-button>
@@ -31,19 +31,19 @@
 						tooltip-effect="light"
 						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
 					>
-						<el-table-column label="菜谱名称" min-width="100" show-overflow-tooltip>
+						<el-table-column label="菜谱包名称" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.recipeName }}</span>
+								<span>{{ scope.row.packageName }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="分类" min-width="80" show-overflow-tooltip>
+						<el-table-column label="包含菜谱" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.cateName }}</span>
+								<span>{{ scope.row.number }}道</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="售价（元）" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>￥18</span>
+								<span>¥{{ scope.row.price/100 }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="*上/下架" min-width="80">
@@ -111,15 +111,16 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			total: 10,
-			keyword: "",
+			keyword: null,
 			isHideList: this.$route.params.id !== undefined ? true : false
 		};
 	},
 	methods: {
-		changeState(val) {
+		changeState(val,state) {
 			let qs = require("qs");
 			let data = qs.stringify({
-				id: val.id
+				id: val.id,
+        state:state
 			});
 			this.Axios(
 				{
@@ -128,7 +129,7 @@ export default {
 						successMsg: "修改成功"
 					},
 					type: "post",
-					url: "/api-recipe/recipe/updatestate",
+					url: "/api-recipe/recipePackage/updatestate",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}
@@ -137,6 +138,7 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+					  console.log(result.data);
 						this.getCookbookList();
 					}
 				},
@@ -144,19 +146,13 @@ export default {
 			);
 		},
 		changeUp(index, val) {
+		  let state;
 			if (val.state == 1) {
-				this.changeState(val);
+        state = 0
+        this.changeState(val,state);
 			} else {
-				this.$confirm("菜谱下架，绑定的商品也同样会下架, 是否继续?", "提示", {
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					type: "warning",
-					cancelButtonClass: "is-plain"
-				})
-					.then(() => {
-						this.changeState(val);
-					})
-					.catch(() => {});
+        state = 1
+        this.changeState(val,state);
 			}
 		},
 		handleSizeChange(val) {
@@ -170,7 +166,7 @@ export default {
 		},
 		handleEdit(index, row) {
 			this.$router.push({
-				path: "/Cookbook/EditCookbook/" + row.id
+				path: "/cookingPackage/EditCookingPackage/" + row.id
 			});
 		},
 		handleSelectionChange(selection) {},
@@ -188,7 +184,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-recipe/recipe/list",
+					url: "/api-recipe/recipePackage/list",
 					loadingConfig: {
 						target: document.querySelector(".cookbook_list")
 					}
@@ -196,10 +192,10 @@ export default {
 				this
 			).then(
 				result => {
+				  console.log(result.data);
 					if (result.data.code === 200) {
 						this.total = result.data.data.totalElement;
 						this.tableData = result.data.data.content;
-						this.total = result.data.data.totalElement;
 					}
 				},
 				({ type, info }) => {}
@@ -208,7 +204,7 @@ export default {
 	},
 	created() {
 		this.getCookbookList();
-		let a = this.$route.matched.find(item => item.name === "AddCookbook")
+		let a = this.$route.matched.find(item => item.name === "AddCookingPackage")
 			? true
 			: false;
 		let b = this.$route.params.id !== undefined ? true : false;
@@ -219,7 +215,9 @@ export default {
 	},
 	watch: {
 		$route() {
-			let a = this.$route.matched.find(item => item.name === "AddCookbook")
+			let a = this.$route.matched.find(
+				item => item.name === "AddCookingPackage"
+			)
 				? true
 				: false;
 			let b = this.$route.params.id !== undefined ? true : false;
