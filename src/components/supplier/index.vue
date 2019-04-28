@@ -16,7 +16,7 @@
 					<h4>代理商列表</h4>
 					<div class="top_search">
 						<el-col :span="19" style="padding:0 5px;">
-							<el-input size="small" placeholder="代理商名称" v-model="keyword"></el-input>
+							<el-input size="small" clearable placeholder="代理商名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="5" style="padding:0 5px;">
 							<el-button size="small" plain @click="beforeSearch">搜索</el-button>
@@ -53,7 +53,7 @@
 						</el-table-column>
 						<el-table-column label="联系人" min-width="90" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.contacts }}</span>
+								<span>{{ scope.row.liaison }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="联系电话" min-width="80">
@@ -64,14 +64,12 @@
 						<el-table-column label="状态" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
-									<permission-switch
-										permCode="user_manager_list_lookup.user_manager_list_resetpsd"
-										banType="disable"
+									<el-switch
 										v-model="scope.row.state"
 										active-color="#13ce66"
 										inactive-color="#ff4949"
 										@change="changeState(scope.row,scope.$index)"
-									></permission-switch>
+									></el-switch>
 								</el-tooltip>
 							</template>
 						</el-table-column>
@@ -126,7 +124,7 @@ export default {
 				},
 				{
 					label: "联系人",
-					prop: "contacts",
+					prop: "liaison",
 					width: 140
 				},
 				{
@@ -157,6 +155,66 @@ export default {
 		};
 	},
 	methods: {
+		changeState(row, index) {
+			console.log(row.state);
+			if (row.state == true) {
+				let qs = require("qs");
+				let data = qs.stringify({
+					supplierId: row.id
+				});
+				this.Axios(
+					{
+						params: data,
+						option: {
+							successMsg: "启用成功"
+						},
+						type: "post",
+						url: "/api-platform/newSupplier/enable"
+					},
+					this
+				).then(
+					result => {
+						console.log(result);
+						if (result.data.code === 200) {
+							this.getSupplierList();
+						} else {
+							this.$message.error("未能启用成功！");
+						}
+						// this.tableData = result.data.data.content;
+						// this.total = result.data.data.totalElement;
+					},
+					({ type, info }) => {}
+				);
+			} else if (row.state == false) {
+				let qs = require("qs");
+				let data = qs.stringify({
+					supplierId: row.id
+				});
+				this.Axios(
+					{
+						params: data,
+						option: {
+							successMsg: "禁用成功"
+						},
+						type: "post",
+						url: "/api-platform/newSupplier/prohibit"
+					},
+					this
+				).then(
+					result => {
+						console.log(result);
+						if (result.data.code === 200) {
+							this.getSupplierList();
+						} else {
+							this.$message.error("未能禁用成功！");
+						}
+						// this.tableData = result.data.data.content;
+						// this.total = result.data.data.totalElement;
+					},
+					({ type, info }) => {}
+				);
+			}
+		},
 		toEdit(row) {
 			this.$router.push("/Supplier/EditSupplier/" + row.id);
 		},
@@ -199,7 +257,7 @@ export default {
 						successMsg: "删除成功！"
 					},
 					type: "post",
-					url: "/api-platform/supplier/delSupplier"
+					url: "/api-platform/newSupplier/delOne"
 				},
 				this
 			).then(
@@ -240,7 +298,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/supplier/findAllList"
+					url: "/api-platform/newSupplier/allSupplier"
 				},
 				this
 			).then(
@@ -249,6 +307,10 @@ export default {
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;
+						for (let i = 0; i < this.tableData.length; i++) {
+							this.tableData[i].state =
+								this.tableData[i].state == 0 ? false : true;
+						}
 					}
 					// this.tableData = result.data.data.content;
 					// this.total = result.data.data.totalElement;
@@ -280,7 +342,7 @@ export default {
 		}
 	},
 	created() {
-		// this.getSupplierList();
+		this.getSupplierList();
 		let a = this.$route.matched.find(item => item.name === "AddSupplier")
 			? true
 			: false;

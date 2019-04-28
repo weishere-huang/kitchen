@@ -14,6 +14,7 @@
 					:model="supplierMsg"
 					:rules="supplierMsgRules"
 					ref="supplierMsg"
+					:inline-message="true"
 				>
 					<el-form-item label="代理商名称：" prop="supplierName">
 						<el-input
@@ -24,13 +25,13 @@
 							v-model="supplierMsg.supplierName"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="联系人：" prop="contacts">
+					<el-form-item label="联系人：" prop="liaison">
 						<el-input
 							type="text"
 							size="small"
 							maxlength="20"
 							style="width:350px;"
-							v-model="supplierMsg.contacts"
+							v-model="supplierMsg.liaison"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="联系电话：" prop="phone">
@@ -51,11 +52,12 @@
 							v-model="supplierMsg.address"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="移动端购买地址：" prop="supplierAccount">
+					<el-form-item label="移动端购买地址：" prop="supplierMall">
 						<el-input
 							type="text"
-							maxlength="20"
+							maxlength="50"
 							size="small"
+							v-model="supplierMsg.supplierMall"
 							style="width:350px;"
 							placeholder="以http://或https://开头，一般为H5地址"
 						></el-input>
@@ -63,7 +65,7 @@
 							<i class="el-icon-warning" style="color:#1cc09f"></i>
 						</el-tooltip>-->
 					</el-form-item>
-					<el-form-item label="LOGO：" prop="supplierPassword">
+					<el-form-item label="LOGO：" prop="logo">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -82,13 +84,14 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="简介：" prop="password">
+					<el-form-item label="简介：" prop="supplierDesc">
 						<el-input
 							type="textarea"
 							maxlength="200"
 							size="small"
 							style="width:500px;"
 							rows="4"
+							v-model="supplierMsg.supplierDesc"
 							resize="none"
 						></el-input>
 					</el-form-item>
@@ -108,7 +111,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adCode"
+						node-key="adcode"
 						ref="tree1"
 					></el-tree>
 				</el-col>
@@ -122,7 +125,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adCode"
+						node-key="adcode"
 						ref="tree2"
 					></el-tree>
 				</el-col>
@@ -136,7 +139,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adCode"
+						node-key="adcode"
 						ref="tree3"
 					></el-tree>
 				</el-col>
@@ -162,6 +165,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			dialogImageUrl: "",
+			dialogVisible: false,
 			province: [],
 			city: [],
 			block: [],
@@ -173,29 +178,44 @@ export default {
 			data3: [],
 			defaultProps: {
 				children: "children",
-				label: "areaName",
-				value: "adCode"
+				label: "areaName"
 			},
-			// selectarea:["110000","120000","350000","530000","820000"],
 			selectarea: [],
 			supplierMsg: {
 				supplierName: "",
-				contacts: "",
+				liaison: "",
+				logo: "",
+				supplierDesc: "",
+				supplierMall: "",
 				phone: "",
 				address: "",
-				areaCode: [],
-				supplierPassword: "",
-				password: "",
-				supplierRoleId: "",
-				supplierAccount: "agent"
+				areaCodes: []
 			},
 			supplierMsgRules: {
+				supplierMall: [
+					{ required: true, message: "请填写移动端购买地址", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (
+								/^(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/.test(
+									value
+								) === false
+							) {
+								callback(new Error("以http://或https://开头，一般为H5地址"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				logo: [
+					{ required: true, message: "请上传LOGO", trigger: ["change", "blur"] }
+				],
 				supplierName: [
 					{ required: true, message: "请填写代理商名称", trigger: "blur" }
 				],
-				contacts: [
-					{ required: true, message: "请填写联系人", trigger: "blur" }
-				],
+				liaison: [{ required: true, message: "请填写联系人", trigger: "blur" }],
 				phone: [
 					{ required: true, message: "请填写电话", trigger: "blur" },
 					{
@@ -210,7 +230,7 @@ export default {
 					}
 				],
 				address: [
-					{ required: true, message: "请填写详细地址", trigger: "blur" }
+					{ required: false, message: "请填写详细地址", trigger: "blur" }
 				]
 			}
 		};
@@ -255,6 +275,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
+				this.supplierMsg.logo = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -317,24 +338,17 @@ export default {
 				this.$message.error("请选择销售区域");
 				return;
 			}
-			this.supplierMsg.areaCode = arr;
-
-			let pass = this.supplierMsg.supplierPassword;
-			pass = md5(pass);
-			let key = "*chang_hong_device_cloud";
-			let a = pass;
-			pass = this.encryptByDES(a, key);
+			this.supplierMsg.areaCodes = arr;
 			let qs = require("qs");
 			let data = qs.stringify({
 				supplierName: this.supplierMsg.supplierName,
-				contacts: this.supplierMsg.contacts,
+				liaison: this.supplierMsg.liaison,
+				logo: this.supplierMsg.logo,
+				supplierDesc: this.supplierMsg.supplierDesc,
+				supplierMall: this.supplierMsg.supplierMall,
 				phone: this.supplierMsg.phone,
 				address: this.supplierMsg.address,
-				areaCode: this.supplierMsg.areaCode.join(","),
-				supplierPassword: pass,
-				// supplierRoleId: this.supplierMsg.supplierRoleId,
-				supplierRoleId: 2,
-				supplierAccount: this.supplierMsg.supplierAccount
+				areaCodes: this.supplierMsg.areaCodes.join(",")
 			});
 			this.Axios(
 				{
@@ -343,7 +357,7 @@ export default {
 						successMsg: "保存成功"
 					},
 					type: "post",
-					url: "/api-platform/supplier/saveSupplier"
+					url: "/api-platform/newSupplier/addSupplier"
 				},
 				this
 			).then(
@@ -367,6 +381,7 @@ export default {
 		this.data1 = this.data.slice(0, 12);
 		this.data2 = this.data.slice(12, 24);
 		this.data3 = this.data.slice(24, 34);
+		console.log(this.data1);
 	},
 	components: {}
 };

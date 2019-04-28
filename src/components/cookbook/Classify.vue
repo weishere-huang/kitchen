@@ -8,8 +8,8 @@
 				type="primary"
 				class="el-icon-circle-plus-outline"
 				@click="dialogAdd=true"
-			>添加分类</permission-button> -->
-			<!-- <el-dialog title="添加分类" :visible.sync="dialogAdd" width="500px" :close-on-click-modal="false">
+		>添加分类</permission-button>-->
+		<!-- <el-dialog title="添加分类" :visible.sync="dialogAdd" width="500px" :close-on-click-modal="false">
 				<el-form
 					label-width="100px"
 					style="margin-top:16px;"
@@ -28,7 +28,7 @@
 					<el-button @click="dialogAdd = false" plain size="small">取 消</el-button>
 					<el-button type="primary" @click="addClassify('classify')" size="small">确 定</el-button>
 				</span>
-			</el-dialog> -->
+		</el-dialog>-->
 		<!-- </div> -->
 		<div class="bottom_list">
 			<div class="top_list">
@@ -71,7 +71,7 @@
 									type="text"
 								>删除</permission-button>
 							</el-popover>
-						</span> -->
+						</span>-->
 					</span>
 				</el-tree>
 			</div>
@@ -92,7 +92,7 @@
 				<el-button @click="dialogEdit = false" plain size="small">取 消</el-button>
 				<el-button type="primary" @click="handeditClassify('editClassify')" size="small">确 定</el-button>
 			</span>
-		</el-dialog> -->
+		</el-dialog>-->
 	</div>
 </template>
 <script>

@@ -43,7 +43,7 @@
 						</el-table-column>
 						<el-table-column label="售价（元）" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>￥18</span>
+								<span>￥{{scope.row.recipePrice/100}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="*上/下架" min-width="80">
@@ -197,6 +197,7 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+						console.log(result.data);
 						this.total = result.data.data.totalElement;
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;

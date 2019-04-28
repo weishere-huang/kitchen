@@ -14,24 +14,50 @@
 					:model="supplierMsg"
 					:rules="supplierMsgRules"
 					ref="supplierMsg"
+					:inline-message="true"
 				>
 					<el-form-item label="代理商名称：" prop="supplierName">
-						<el-input type="text" v-model="supplierMsg.supplierName" size="small" style="width:350px;"></el-input>
-					</el-form-item>
-					<el-form-item label="联系人：" prop="contacts">
-						<el-input type="text" v-model="supplierMsg.contacts" size="small" style="width:350px;"></el-input>
-					</el-form-item>
-					<el-form-item label="联系电话：" prop="phone">
-						<el-input type="text" v-model="supplierMsg.phone" size="small" style="width:350px;"></el-input>
-					</el-form-item>
-					<el-form-item label="详细地址：" prop="address">
-						<el-input type="text" v-model="supplierMsg.address" size="small" style="width:350px;"></el-input>
-					</el-form-item>
-					<el-form-item label="移动端购买地址：" prop="supplierAccount">
 						<el-input
 							type="text"
+							v-model="supplierMsg.supplierName"
 							maxlength="20"
 							size="small"
+							style="width:350px;"
+						></el-input>
+					</el-form-item>
+					<el-form-item label="联系人：" prop="liaison">
+						<el-input
+							type="text"
+							v-model="supplierMsg.liaison"
+							maxlength="20"
+							size="small"
+							style="width:350px;"
+						></el-input>
+					</el-form-item>
+					<el-form-item label="联系电话：" prop="phone">
+						<el-input
+							type="text"
+							v-model="supplierMsg.phone"
+							maxlength="11"
+							size="small"
+							style="width:350px;"
+						></el-input>
+					</el-form-item>
+					<el-form-item label="详细地址：" prop="address">
+						<el-input
+							type="text"
+							v-model="supplierMsg.address"
+							maxlength="30"
+							size="small"
+							style="width:350px;"
+						></el-input>
+					</el-form-item>
+					<el-form-item label="移动端购买地址：" prop="supplierMall">
+						<el-input
+							type="text"
+							maxlength="50"
+							size="small"
+							v-model="supplierMsg.supplierMall"
 							style="width:350px;"
 							placeholder="以http://或https://开头，一般为H5地址"
 						></el-input>
@@ -39,7 +65,7 @@
 							<i class="el-icon-warning" style="color:#1cc09f"></i>
 						</el-tooltip>-->
 					</el-form-item>
-					<el-form-item label="LOGO：" prop="supplierPassword">
+					<el-form-item label="LOGO：" prop="logo">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -48,6 +74,7 @@
 							:on-success="handleAvatarSuccess1"
 							:before-upload="beforeAvatarUpload1"
 							:limit="1"
+							:file-list="fileList"
 							class="upload_show"
 							accept="image/png, image/jpeg"
 						>
@@ -58,13 +85,14 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="简介：" prop="password">
+					<el-form-item label="简介：" prop="supplierDesc">
 						<el-input
 							type="textarea"
 							maxlength="200"
 							size="small"
 							style="width:500px;"
 							rows="4"
+							v-model="supplierMsg.supplierDesc"
 							resize="none"
 						></el-input>
 					</el-form-item>
@@ -84,7 +112,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adCode"
+						node-key="adcode"
 						ref="tree1"
 					></el-tree>
 				</el-col>
@@ -98,7 +126,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adCode"
+						node-key="adcode"
 						ref="tree2"
 					></el-tree>
 				</el-col>
@@ -112,7 +140,7 @@
 						show-checkbox
 						:check-strictly="false"
 						:default-checked-keys="selectarea"
-						node-key="adCode"
+						node-key="adcode"
 						ref="tree3"
 					></el-tree>
 				</el-col>
@@ -136,6 +164,9 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			fileList: [],
+			dialogImageUrl: "",
+			dialogVisible: false,
 			province: [],
 			city: [],
 			block: [],
@@ -154,20 +185,39 @@ export default {
 			selectarea: [],
 			supplierMsg: {
 				supplierName: "",
-				contacts: "",
+				liaison: "",
+				logo: "",
+				supplierDesc: "",
+				supplierMall: "",
 				phone: "",
 				address: "",
-				areaCode: [],
-				supplierRoleId: "",
-				supplierAccount: ""
+				areaCodes: []
 			},
 			supplierMsgRules: {
+				supplierMall: [
+					{ required: true, message: "请填写移动端购买地址", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (
+								/^(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/.test(
+									value
+								) === false
+							) {
+								callback(new Error("以http://或https://开头，一般为H5地址"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				logo: [
+					{ required: true, message: "请上传LOGO", trigger: ["change", "blur"] }
+				],
 				supplierName: [
 					{ required: true, message: "请填写代理商名称", trigger: "blur" }
 				],
-				contacts: [
-					{ required: true, message: "请填写联系人", trigger: "blur" }
-				],
+				liaison: [{ required: true, message: "请填写联系人", trigger: "blur" }],
 				phone: [
 					{ required: true, message: "请填写电话", trigger: "blur" },
 					{
@@ -182,7 +232,7 @@ export default {
 					}
 				],
 				address: [
-					{ required: true, message: "请填写详细地址", trigger: "blur" }
+					{ required: false, message: "请填写详细地址", trigger: "blur" }
 				]
 			}
 		};
@@ -227,6 +277,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
+				this.supplierMsg.logo = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -248,17 +299,37 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/supplier/findSupplier"
+					url: "/api-platform/newSupplier/findOne"
 				},
 				this
 			).then(
 				result => {
 					console.log(result);
-					console.log("getOneSupplier");
-					this.supplierMsg = result.data.data.supplierDO;
-					result.data.data.area.map(item => this.selectarea.push(item));
+					if (result.data.code === 200) {
+						this.supplierMsg = result.data.data;
+						this.selectarea = result.data.data.areaDOS.map(item => {
+							return item.areaCode;
+						});
+						console.log(
+							result.data.data.areaDOS.map(item => {
+								return item.areaCode;
+							})
+						);
+						this.fileList = [
+							{
+								name: this.supplierMsg.logo.substring(
+									this.supplierMsg.logo.lastIndexOf("/") + 1
+								),
+								url:
+									this.global.imgPath +
+									this.supplierMsg.logo.replace("img:", "")
+							}
+						];
+					}
+
+					// result.data.data.area.map(item => this.selectarea.push(item));
 					// console.log(this.selectarea);
-					this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
+					// this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
 				},
 				({ type, info }) => {}
 			);
@@ -286,15 +357,18 @@ export default {
 				this.$message.warning("请选择销售区域");
 				return;
 			}
+			this.supplierMsg.areaCodes = arr;
 			let qs = require("qs");
 			let data = qs.stringify({
+				id: this.$route.params.id,
 				supplierName: this.supplierMsg.supplierName,
-				contacts: this.supplierMsg.contacts,
+				liaison: this.supplierMsg.liaison,
+				logo: this.supplierMsg.logo,
+				supplierDesc: this.supplierMsg.supplierDesc,
+				supplierMall: this.supplierMsg.supplierMall,
 				phone: this.supplierMsg.phone,
 				address: this.supplierMsg.address,
-				supplierRoleId: 2,
-				id: this.$route.params.id,
-				areaCode: arr.toString()
+				areaCodes: this.supplierMsg.areaCodes.join(",")
 			});
 			this.Axios(
 				{
@@ -303,7 +377,7 @@ export default {
 						enableMsg: false
 					},
 					type: "post",
-					url: "/api-platform/supplier/updateSupplier"
+					url: "/api-platform/newSupplier/updateSupplier"
 				},
 				this
 			).then(

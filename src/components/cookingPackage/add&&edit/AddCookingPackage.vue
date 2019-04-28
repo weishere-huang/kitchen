@@ -11,26 +11,47 @@
 				<el-form
 					label-width="200px"
 					size="small"
-					ref="cookbook"
+					ref="cookingPackge"
 					:inline-message="true"
 					style="margin-top: 20px;"
+					:model="cookingPackge"
+					:rules="cookingPackgeRules"
 				>
-					<el-form-item label="菜谱包名称：">
-						<el-input type="text" size="small" maxlength="20" style="width:400px;"></el-input>
+					<el-form-item label="菜谱包名称：" prop="packageName">
+						<el-input
+							type="text"
+							size="small"
+							v-model="cookingPackge.packageName"
+							maxlength="30"
+							style="width:400px;"
+						></el-input>
 					</el-form-item>
-					<el-form-item label="售价：">
-						<el-input type="text" size="small" maxlength="20" style="width:400px;">
+					<el-form-item label="售价：" prop="price">
+						<el-input
+							type="number"
+							size="small"
+							v-model.number="cookingPackge.price"
+							maxlength="20"
+							style="width:400px;"
+						>
 							<template slot="append">元</template>
 						</el-input>
 					</el-form-item>
-					<el-form-item label="上架/下架：">
-						<el-radio label="0">是</el-radio>
-						<el-radio label="1">否</el-radio>
+					<el-form-item label="上架/下架：" prop="state">
+						<el-radio v-model="cookingPackge.state" label="0">是</el-radio>
+						<el-radio v-model="cookingPackge.state" label="1">否</el-radio>
 					</el-form-item>
-					<el-form-item label="介绍：">
-						<el-input type="textarea" rows="4" style="width:600px;" resize="none"></el-input>
+					<el-form-item label="介绍：" prop="introduce">
+						<el-input
+							type="textarea"
+							rows="4"
+							maxlength="150"
+							v-model="cookingPackge.introduce"
+							style="width:600px;"
+							resize="none"
+						></el-input>
 					</el-form-item>
-					<el-form-item label="封面图：">
+					<el-form-item label="封面图：" prop="img">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -49,18 +70,18 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="包含菜谱：">
+					<el-form-item label="包含菜谱：" prop="recipeIds">
 						<el-transfer
 							:titles="['所有菜谱', '选中菜谱']"
 							filterable
 							:filter-method="filterMethod"
 							filter-placeholder="请输入菜谱名称"
-							v-model="cookbookValue"
+							v-model="cookingPackge.recipeIds"
 							:data="cookbookData"
 						></el-transfer>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" size="small" @click="addpackage">添加</el-button>
+						<el-button type="primary" size="small" @click="submitForm('cookingPackge')">添加</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -69,59 +90,59 @@
 </template>
 <script>
 export default {
+	inject: ["reload"],
 	data() {
-		const generateData = _ => {
-			const data = [];
-			const cities = [
-				"上海",
-				"北京",
-				"广州",
-				"深圳",
-				"南京",
-				"西安",
-				"成都",
-				"遂宁",
-				"武汉",
-				"长沙",
-				"宁波",
-				"苏州",
-				"杭州"
-			];
-			const pinyin = [
-				"shanghai",
-				"beijing",
-				"guangzhou",
-				"shenzhen",
-				"nanjing",
-				"xian",
-				"chengdu",
-				"suining",
-				"wuhan",
-				"changsha",
-				"ningbo",
-				"suzhou",
-				"hangzhou"
-			];
-			cities.forEach((city, index) => {
-				data.push({
-					label: city,
-					key: index,
-					pinyin: pinyin[index]
-				});
-			});
-			return data;
-		};
 		return {
+			cookingPackgeRules: {
+				packageName: [
+					{ required: true, message: "请填写菜谱包名称", trigger: "blur" }
+				],
+				img: [{ required: true, message: "请上传封面图", trigger: "blur" }],
+				price: [
+					{ required: true, message: "请填写菜谱包价格", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+								callback(new Error("支持小数点后两位，且不能为负数"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				state: [{ required: true, message: "请选择上下架", trigger: "blur" }],
+				recipeIds: [
+					{ required: true, message: "请选择菜谱包含的菜谱", trigger: "blur" }
+				]
+			},
+			cookingPackge: {
+				packageName: "",
+				img: "",
+				price: "",
+				state: "1",
+				recipeIds: [],
+				introduce: ""
+			},
 			dialogImageUrl: "",
 			dialogVisible: false,
-			cookbookData: generateData(),
-			cookbookValue: [],
+			cookbookData: [],
 			filterMethod(query, item) {
-				return item.pinyin.indexOf(query) > -1;
+				return item.label.indexOf(query) > -1;
 			}
 		};
 	},
 	methods: {
+		submitForm(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.addpackage();
+				} else {
+					this.$message.warning("请填写完整信息！");
+					return false;
+				}
+			});
+		},
 		imgApi() {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
@@ -161,6 +182,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
+				this.cookingPackge.img = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -172,61 +194,75 @@ export default {
 				});
 			}
 		},
-    addpackage(){
-      let qs = require("qs");
-      let data = qs.stringify({
-        //包名
-        packageName:"",
-        //介绍
-        introduce:"",
-        //图片
-        img:"",
-        //价格 , 获取要/100
-        price:"",
-        //0正常 , 1下架
-        state:"",
-        //菜谱ID集合,用,隔开
-        recipeIds:"",
-      });
-      this.Axios({
-        params:data,
-        url:"/api-recipe/recipePackage/add",
-        type:"post",
-        option:{
-        }
-      },this).then(result=>{
-        console.log(result.data);
-      })
-    },
-    recipeList(){
-      //获取未下架的所有菜谱, 支持搜索  page 传-1
-      this.Axios(
-        {
-          params: {
-            page:-1,
-            keyword:"",
-          },
-          option: {
-            enableMsg:false
-          },
-          type: "get",
-          url: "/api-recipe/recipe/list"
-
-        },
-        this
-      ).then(
-        result => {
-          console.log("未下架所有菜谱")
-          console.log(result.data)
-        },
-        ({type, info}) => {
-        }
-      );
-    }
+		addpackage() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				//包名
+				packageName: this.cookingPackge.packageName,
+				//介绍
+				introduce: this.cookingPackge.introduce,
+				//图片
+				img: this.cookingPackge.img,
+				//价格 , 获取要/100
+				price: this.cookingPackge.price,
+				//0正常 , 1下架
+				state: this.cookingPackge.state,
+				//菜谱ID集合,用,隔开
+				recipeIds: this.cookingPackge.recipeIds.join(",")
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-recipe/recipePackage/add",
+					type: "post",
+					option: {}
+				},
+				this
+			).then(result => {
+				if (result.data.code === 200) {
+					this.$router.back(-1);
+					this.reload();
+				}
+			});
+		},
+		recipeList() {
+			//获取未下架的所有菜谱, 支持搜索  page 传-1
+			this.Axios(
+				{
+					params: {
+						page: -1,
+						keyword: ""
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/recipe/list"
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						console.log(result.data.data);
+						result.data.data.forEach((item, index) => {
+							this.cookbookData.push({
+								key: item.id,
+								label:
+									item.state == 1
+										? item.recipeName + "(已下架)"
+										: item.recipeName,
+								disabled: item.state == 1 ? true : false
+							});
+						});
+					}
+				},
+				({ type, info }) => {}
+			);
+		}
 	},
-	created(){
-	  this.recipeList()
-  }
+	created() {
+		this.recipeList();
+	}
 };
 </script>
 

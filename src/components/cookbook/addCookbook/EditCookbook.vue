@@ -56,8 +56,14 @@
 							<template slot="append">分</template>
 						</el-input>
 					</el-form-item>
-					<el-form-item label="动作编码：">
-						<el-input maxlength="20" size="small" style="width:400px;" placeholder="请填写动作编码（重要）"></el-input>
+					<el-form-item label="动作编码：" prop="cookScript">
+						<el-input
+							maxlength="20"
+							v-model="cookbook.cookScript"
+							size="small"
+							style="width:400px;"
+							placeholder="请填写动作编码（重要）"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
 						<el-radio-group v-model="cookbook.spicy" size="small" style="width:192px;">
@@ -259,6 +265,9 @@ export default {
 				value: "id"
 			},
 			editCookbookRules: {
+				cookScript: [
+					{ required: true, message: "请选择分类", trigger: "blur" }
+				],
 				cateId: [{ required: true, message: "请选择分类", trigger: "change" }],
 				recipeName: [
 					{ required: true, message: "请输入菜谱名称", trigger: "blur" }
@@ -291,7 +300,6 @@ export default {
 						trigger: "blur"
 					}
 				],
-
 				state: [
 					{
 						required: true,
@@ -301,14 +309,14 @@ export default {
 				],
 				cookingTime: [
 					{
-						required: false,
+						required: true,
 						message: "请输入烹饪时长",
 						trigger: "blur"
 					},
 					{
 						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
-								callback(new Error("请输入正整数"));
+							if (/(^[1-9]{1}[0-9]*$)/g.test(value) == false) {
+								callback(new Error("请输入正整数，且不能为0"));
 							} else {
 								callback();
 							}
@@ -498,14 +506,13 @@ export default {
 			let qs = require("qs");
 			let data = qs.stringify({
 				id: this.cookbook.id,
-        cookScript:"",
+				cookScript: this.cookbook.cookScript,
 				recipeName: this.cookbook.recipeName,
 				cateName: this.cookbook.cateName,
 				cateId: JSON.stringify(this.cookbook.cateId),
 				cookingTime: this.cookbook.cookingTime,
 				spicy: this.cookbook.spicy,
 				recipePrice: this.cookbook.recipePrice,
-				spec: this.cookbook.spec,
 				state: this.cookbook.state,
 				recipeImg: this.cookbook.recipeImg,
 				ingredient: this.cookbook.ingredient,
