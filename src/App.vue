@@ -140,14 +140,24 @@
 			:visible.sync="dialogPhoneVisible"
 			width="500px"
 		>
-			<el-form label-width="100px" size="small" style="margin-top:20px;">
-				<el-form-item label="服务热线：" prop="oldPassword">
-					<el-input type="text" maxlength="25" style="width:99%;"></el-input>
+			<el-form
+				:model="hotLine"
+				ref="hotline"
+				label-width="100px"
+				size="small"
+				style="margin-top:20px;"
+			>
+				<el-form-item
+					label="服务热线："
+					prop="hotLine"
+					:rules="[{ required: true, message: '请填写服务热线', trigger: 'blur'},{validator:validator1,trigger:'blur'}]"
+				>
+					<el-input type="text" maxlength="20" v-model="hotLine.hotLine" style="width:99%;"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="dialogPhoneVisible = false" size="small" plain>取 消</el-button>
-				<el-button type="primary" size="small">确 定</el-button>
+				<el-button type="primary" size="small" @click="saveHotLine('hotline')">确 定</el-button>
 			</span>
 		</el-dialog>
 	</div>
@@ -228,11 +238,75 @@ export default {
 			city: [],
 			block: [],
 			country: [],
-			versionNumber: this.global.versionNumber
+			versionNumber: this.global.versionNumber,
+			hotLine: {
+				hotLine: ""
+			}
 		};
 	},
 	computed: {},
 	methods: {
+		validator1(rule, value, callback) {
+			if (/^0\d{2,3}-\d{7,8}$/.test(value) == false) {
+				callback(new Error("电话格式不正确"));
+			} else {
+				callback();
+			}
+		},
+		saveHotLine(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						phone: this.hotLine.hotLine
+					});
+					this.Axios(
+						{
+							params: data,
+							option: {
+								successMsg: "保存成功！"
+							},
+							type: "post",
+							url: "/api-platform/systemconfig/savePhone",
+							loadingConfig: {
+								target: document.querySelector(".login")
+							}
+						},
+						this
+					).then(
+						result => {
+							if (result.data.code === 200) {
+								this.dialogPhoneVisible = false;
+							}
+						},
+						({ type, info }) => {}
+					);
+				} else {
+					return false;
+				}
+			});
+		},
+		getlist() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/systemconfig/list"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data.data);
+					if (result.data.code === 200) {
+						this.hotLine.hotLine=result.data.data.phone
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
 		setEditPassword(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
@@ -478,6 +552,7 @@ export default {
 	},
 	computed: {},
 	created() {
+		this.getlist();
 		this.initPermission();
 		this.getArea();
 		this.editPassword.account = JSON.parse(
