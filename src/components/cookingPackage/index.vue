@@ -14,14 +14,14 @@
 			<div class="bottom_list">
 				<div class="top_title">
 					<h4>菜谱包列表</h4>
-					<div class="top_search">
+					<!-- <div class="top_search">
 						<el-col :span="20" style="padding:0 5px;">
 							<el-input size="small" clearable placeholder="菜谱包名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
 							<el-button size="small" plain @click="getCookbookList">搜索</el-button>
 						</el-col>
-					</div>
+					</div> -->
 				</div>
 				<div class="table_list">
 					<el-table

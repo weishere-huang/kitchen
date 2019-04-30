@@ -147,7 +147,9 @@ export default {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
-		handleRemove1(file, fileList) {},
+		handleRemove1(file, fileList) {
+			this.cookingPackge.img = "";
+		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;

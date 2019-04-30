@@ -49,6 +49,9 @@
 					</div>
 					<div class="stateList">
 						<ul>
+							<li>
+								<a style="color:white;" @click="outOne">切换用户</a>
+							</li>
 							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
 							<!-- <li>
 								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">
@@ -301,7 +304,7 @@ export default {
 				result => {
 					console.log(result.data.data);
 					if (result.data.code === 200) {
-						this.hotLine.hotLine=result.data.data.phone
+						this.hotLine.hotLine = result.data.data.phone;
 					}
 				},
 				({ type, info }) => {}
@@ -467,7 +470,28 @@ export default {
 			});
 			// },({type,info})=>{})
 		},
-
+		outOne() {
+			self = this;
+			this.$confirm("您确定要切换用户吗？", "确认", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning",
+				cancelButtonClass: "is-plain"
+			}).then(() => {
+				this.$message({
+					message: "您已退出登录",
+					type: "success"
+				});
+				self.token = null;
+				sessionStorage.removeItem("token");
+				sessionStorage.removeItem("user");
+				sessionStorage.removeItem("permissionUrl");
+				sessionStorage.removeItem("imgPath");
+				sessionStorage.removeItem("area");
+				window.location.href = "/login.html";
+			});
+			// },({type,info})=>{})
+		},
 		pathto(a) {
 			if (a === 0) {
 				if (JSON.parse(sessionStorage.getItem("user")).employeeType == 0) {
@@ -526,29 +550,6 @@ export default {
 			});
 			this.menuSource = _menuSource;
 		}
-		// getImgPath() {
-		// 	this.Axios(
-		// 		{
-		// 			params: {
-		// 				config: "imgPath"
-		// 			},
-		// 			option: {
-		// 				enableMsg: false
-		// 			},
-		// 			type: "get",
-		// 			url: "/api-platform/systemconfig/list"
-		// 		},
-		// 		this
-		// 	).then(
-		// 		result => {
-		// 			console.log(result.data);
-		// 			if (result.data.code === 200) {
-		// 				sessionStorage.imgPath = result.data.data.imgPath;
-		// 			}
-		// 		},
-		// 		({ type, info }) => {}
-		// 	);
-		// }
 	},
 	computed: {},
 	created() {

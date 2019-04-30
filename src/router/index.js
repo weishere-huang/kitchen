@@ -36,6 +36,9 @@ import DetailsInformation from '@/components/information/DetailsInformation'
 import CookingPackage from '@/components/cookingPackage/index'
 import AddCookingPackage from '@/components/cookingPackage/add&&edit/AddCookingPackage'
 import EditCookingPackage from '@/components/cookingPackage/add&&edit/EditCookingPackage'
+import Distributor from '@/components/distributor/index'
+import AddDistributor from '@/components/distributor/AddSupplier'
+import EditDistributor from '@/components/distributor/EditSupplier'
 
 
 Vue.use(Router)
@@ -250,6 +253,40 @@ const router = new Router({
           component: EditSupplier,
           props: {
             pageName: '修改代理商'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        }
+      ]
+    },
+    {
+      path: '/Distributor',
+      name: 'Distributor',
+      component: Distributor,
+      props: {
+        pageName: '供应商'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+          path: 'AddDistributor',
+          name: 'AddDistributor',
+          component: AddDistributor,
+          props: {
+            pageName: '添加供应商'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'EditDistributor/:id',
+          name: 'EditDistributor',
+          component: EditDistributor,
+          props: {
+            pageName: '修改供应商'
           },
           meta: {
             requireAuth: true,

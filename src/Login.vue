@@ -38,7 +38,8 @@ export default {
 	data() {
 		return {
 			userMsg: {
-				name: localStorage.getItem("loginName"),
+				// name: localStorage.getItem("loginName"),
+				name: "",
 				password: "",
 				verifyCode: ""
 			},
@@ -164,10 +165,10 @@ export default {
 	},
 	created() {
 		this.getImgPath();
-		this.userMsg.password = this.decryptByDES(
-			localStorage.getItem("loginPassword"),
-			"*chang_hong_device_cloud"
-		);
+		// this.userMsg.password = this.decryptByDES(
+		// 	localStorage.getItem("loginPassword"),
+		// 	"*chang_hong_device_cloud"
+		// );
 	}
 };
 </script>

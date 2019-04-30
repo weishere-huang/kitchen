@@ -81,7 +81,7 @@
 						></el-transfer>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" size="small" @click="submitForm('cookingPackge')">添加</el-button>
+						<el-button type="primary" size="small" @click="submitForm('cookingPackge')">保存</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -149,7 +149,9 @@ export default {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
-		handleRemove1(file, fileList) {},
+		handleRemove1(file, fileList) {
+			this.cookingPackge.img = "";
+		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;

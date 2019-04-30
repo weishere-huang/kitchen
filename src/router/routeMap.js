@@ -1,93 +1,92 @@
 //主要为全部菜单结构和权限的配置，visible=true不在菜单显示，defaultDock=true会跳过lookUp权限默认在菜单显示
 //permissionCode为权限映射码，若permissionCode未对应到用户权限则不显示也无跳转访问权限
 //route和routeReg为匹配路由，二者必须有一个，若都有则为“或”逻辑
-export default [
-  // {
-  //   menu: '平台主页',
-  //   permissionCode: 'home',
-  //   defaultDock: false,
-  //   icon: '&#xe626;',
-  //   subMenu: [{
-  //       menu: '首页',
-  //       route: '/Home',
-  //       permissionCode: 'home_supplier_lookup'
-  //     },
-  //     {
-  //       menu: '首页',
-  //       route: '/AdminHome',
-  //       permissionCode: 'home_employee_lookup'
-  //     }
-  //   ]
-  // },
-  // {
-  //   menu: '订单管理',
-  //   permissionCode: 'order',
-  //   defaultDock: false,
-  //   icon: '&#xe60d;',
-  //   subMenu: [{
-  //       menu: '订单列表',
-  //       route: '/Order',
-  //       permissionCode: 'supplierOrder_list_lookup'
-  //     },
-  //     {
-  //       menu: '订单列表',
-  //       route: '/AdminOrder',
-  //       permissionCode: 'order_list_lookup'
-  //     },
-  //     {
-  //       menu: '订单详情',
-  //       routeReg: /^\/AdminOrder\/AdminDetails\/\d{1,}$/i,
-  //       visible: true,
-  //       permissionCode: 'order_detail_lookup'
-  //     },
-  //     {
-  //       menu: '订单详情',
-  //       routeReg: /^\/Order\/Details\/\d{1,}$/i,
-  //       visible: true,
-  //       permissionCode: 'supplierOrder_detail_lookup'
-  //     }
-  //   ]
-  // },
-  // {
-  //   menu: '商品管理',
-  //   permissionCode: 'store',
-  //   defaultDock: false,
-  //   icon: '&#xe634;',
-  //   subMenu: [{
-  //       menu: '商品列表',
-  //       route: '/Store',
-  //       permissionCode: 'supplierMall_list_lookup'
-  //     },
-  //     {
-  //       menu: '商品列表',
-  //       route: '/AdminStore',
-  //       permissionCode: 'mall_list_lookup'
-  //     },
-  //     {
-  //       menu: '商品分类',
-  //       route: '/Classify',
-  //       permissionCode: 'supplierMall_cate_lookup'
-  //     },
-  //     {
-  //       menu: '添加商品',
-  //       route: '/Store/AddMenu',
-  //       visible: true,
-  //       permissionCode: 'supplierMall_add_lookup'
-  //     },
-  //     {
-  //       menu: '修改商品',
-  //       routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
-  //       visible: true,
-  //       permissionCode: 'supplierMall_update_lookup'
-  //     },
-  //     {
-  //       menu: '修改商品',
-  //       routeReg: /^\/AdminStore\/AdminStoreDetails\/\d{1,}$/i,
-  //       visible: true,
-  //       permissionCode: 'mall_update_lookup'
-  //     }
-  //   ]
-  // },
+export default [{
+    menu: '平台主页',
+    permissionCode: 'home',
+    defaultDock: false,
+    icon: '&#xe626;',
+    subMenu: [{
+        menu: '首页',
+        route: '/Home',
+        permissionCode: 'home_supplier_lookup'
+      },
+      {
+        menu: '首页',
+        route: '/AdminHome',
+        permissionCode: 'home_employee_lookup'
+      }
+    ]
+  },
+  {
+    menu: '订单管理',
+    permissionCode: 'order',
+    defaultDock: false,
+    icon: '&#xe60d;',
+    subMenu: [{
+        menu: '订单列表',
+        route: '/Order',
+        permissionCode: 'supplierOrder_list_lookup'
+      },
+      {
+        menu: '订单列表',
+        route: '/AdminOrder',
+        permissionCode: 'order_list_lookup'
+      },
+      {
+        menu: '订单详情',
+        routeReg: /^\/AdminOrder\/AdminDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'order_detail_lookup'
+      },
+      {
+        menu: '订单详情',
+        routeReg: /^\/Order\/Details\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'supplierOrder_detail_lookup'
+      }
+    ]
+  },
+  {
+    menu: '商品管理',
+    permissionCode: 'store',
+    defaultDock: false,
+    icon: '&#xe634;',
+    subMenu: [{
+        menu: '商品列表',
+        route: '/Store',
+        permissionCode: 'supplierMall_list_lookup'
+      },
+      {
+        menu: '商品列表',
+        route: '/AdminStore',
+        permissionCode: 'mall_list_lookup'
+      },
+      {
+        menu: '商品分类',
+        route: '/Classify',
+        permissionCode: 'supplierMall_cate_lookup'
+      },
+      {
+        menu: '添加商品',
+        route: '/Store/AddMenu',
+        visible: true,
+        permissionCode: 'supplierMall_add_lookup'
+      },
+      {
+        menu: '修改商品',
+        routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'supplierMall_update_lookup'
+      },
+      {
+        menu: '查看商品',
+        routeReg: /^\/AdminStore\/AdminStoreDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'mall_update_lookup'
+      }
+    ]
+  },
   {
     menu: '菜谱管理',
     permissionCode: 'cookbook',
@@ -186,6 +185,28 @@ export default [
       permissionCode: 'supplier_update_lookup'
     }]
   },
+  {
+    menu: '供应商',
+    permissionCode: 'area',
+    defaultDock: false,
+    icon: '&#xe605;',
+    subMenu: [{
+      menu: '供应商列表',
+      route: '/Distributor',
+      permissionCode: 'supplier_list_lookup'
+    }, {
+      menu: '添加供应商',
+      route: '/Distributor/AddDistributor',
+      visible: true,
+      permissionCode: 'supplier_add_lookup'
+    }, {
+      menu: '修改供应商',
+      // route: '/Supplier/EditSupplier',
+      routeReg: /^\/Distributor\/EditDistributor\/\d{1,}$/i,
+      visible: true,
+      permissionCode: 'supplier_update_lookup'
+    }]
+  },
   // {
   //   menu: '文章管理',
   //   permissionCode: 'article',
@@ -244,13 +265,12 @@ export default [
     permissionCode: 'system',
     defaultDock: false,
     icon: '&#xe628;',
-    subMenu: [
-      // {
-      //   menu: '系统设置',
-      //   route: '/System',
-      //   defaultDock: true,
-      //   permissionCode: 'system_employee_lookup'
-      // },
+    subMenu: [{
+        menu: '系统设置',
+        route: '/System',
+        defaultDock: true,
+        permissionCode: 'system_employee_lookup'
+      },
       {
         menu: '管理员列表',
         route: '/Administrator',
