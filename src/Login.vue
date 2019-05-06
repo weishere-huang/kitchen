@@ -13,12 +13,22 @@
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
-				<!-- <el-form-item prop="verifyCode">
-					<el-input type="number" placeholder="验证码" maxlength="20" style="width:60%;">
+				<el-form-item prop="verifyCode">
+					<el-input
+						type="number"
+						v-model="userMsg.verifyCode"
+						placeholder="验证码"
+						maxlength="20"
+						style="width:60%;"
+					>
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe636;</i>
 					</el-input>
-					<span style="width:37%;display:inline-block;height:90%;border:1px solid red;">验证码</span>
-				</el-form-item>-->
+					<span @click="refreshCode" class="verifyCode_case">
+						<Identify :identifyCode="identifyCode" :contentWidth="160" class="identify"></Identify>
+						<span class="refresh">看不清，点击刷新</span>
+					</span>
+					<!-- <span style="width:37%;display:inline-block;height:90%;border:1px solid red;">验证码</span> -->
+				</el-form-item>
 				<el-form-item style="margin-bottom:5px;">
 					<el-button type="primary" round style="width:100%;" @click="login('userMsg')">登录</el-button>
 				</el-form-item>
@@ -32,11 +42,14 @@
 	</div>
 </template>
 <script>
+import Identify from "./components/public/Identify";
 import md5 from "js-md5/src/md5.js";
 import CryptoJS from "crypto-js/crypto-js.js";
 export default {
 	data() {
 		return {
+			identifyCodes: "1234567890",
+			identifyCode: "",
 			userMsg: {
 				// name: localStorage.getItem("loginName"),
 				name: "",
@@ -53,12 +66,51 @@ export default {
 					{ max: 20, message: "密码错误" }
 				],
 				verifyCode: [
-					{ required: false, message: "验证码不能为空", trigger: "blur" }
+					{ required: true, message: "验证码不能为空", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (value !== this.identifyCode) {
+								callback(new Error("验证码输入错误，请重新输入！"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
 				]
 			}
 		};
 	},
+	mounted() {
+		this.identifyCode = "";
+		this.makeCode(this.identifyCodes, 4);
+	},
 	methods: {
+		randomNum(min, max) {
+			return Math.floor(Math.random() * (max - min) + min);
+		},
+		// 切换验证码
+		refreshCode() {
+			this.identifyCode = "";
+			this.makeCode(this.identifyCodes, 4);
+		},
+		// 生成四位随机验证码
+		makeCode(o, l) {
+			for (let i = 0; i < l; i++) {
+				this.identifyCode += this.identifyCodes[
+					this.randomNum(0, this.identifyCodes.length)
+				];
+			}
+			console.log(this.identifyCode);
+		},
+		makeCode(o, l) {
+			for (let i = 0; i < l; i++) {
+				this.identifyCode += this.identifyCodes[
+					this.randomNum(0, this.identifyCodes.length)
+				];
+			}
+			console.log(this.identifyCode);
+		},
 		decryptByDES(ciphertext, key) {
 			let keyHex = CryptoJS.enc.Utf8.parse(key);
 			// direct decrypt ciphertext
@@ -163,6 +215,9 @@ export default {
 			);
 		}
 	},
+	components: {
+		Identify
+	},
 	created() {
 		this.getImgPath();
 		// this.userMsg.password = this.decryptByDES(
@@ -235,6 +290,34 @@ export default {
 					}
 				}
 			}
+		}
+		.verifyCode_case {
+			&:hover {
+				.refresh {
+					opacity: 1;
+				}
+			}
+		}
+		.identify {
+			width: 30;
+			height: 40px;
+			display: inline-block;
+			overflow: hidden;
+			line-height: 40px;
+			position: relative;
+			top: 14px;
+		}
+		.refresh {
+			position: absolute;
+			top: 14px;
+			right: 4px;
+			color: white;
+			width: 160px;
+			height: 40px;
+			background-color: rgba(0, 0, 0, 0.363);
+			text-align: center;
+			opacity: 0;
+			transition: all 0.5s;
 		}
 	}
 }
