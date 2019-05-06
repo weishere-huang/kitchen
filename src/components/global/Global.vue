@@ -2,7 +2,7 @@
 const apiSrc = "http://192.168.1.104:8861";
 const apiImg = "http://192.168.1.104:8861";
 const imgPath = sessionStorage.getItem("imgPath");
-const versionNumber = "3.0.0.190430_alpha";
+const versionNumber = "3.0.0.190506_alpha";
 //测试环境地址
 // const apiSrc = "http://192.168.1.106:8861";
 // const apiImg = "http://192.168.1.106:8861";

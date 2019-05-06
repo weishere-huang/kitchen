@@ -88,6 +88,17 @@ export default [{
     ]
   },
   {
+    menu: '营销活动',
+    permissionCode: 'store',
+    defaultDock: true,
+    icon: '&#xe634;',
+    subMenu: [{
+      menu: '优惠券',
+      route: '/DiscountCoupon',
+      permissionCode: 'supplierMall_list_lookup'
+    }]
+  },
+  {
     menu: '菜谱管理',
     permissionCode: 'cookbook',
     defaultDock: false,

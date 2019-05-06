@@ -39,6 +39,7 @@ import EditCookingPackage from '@/components/cookingPackage/add&&edit/EditCookin
 import Distributor from '@/components/distributor/index'
 import AddDistributor from '@/components/distributor/AddSupplier'
 import EditDistributor from '@/components/distributor/EditSupplier'
+import DiscountCoupon from '@/components/marketing/DiscountCoupon'
 
 
 Vue.use(Router)
@@ -88,6 +89,17 @@ const router = new Router({
       component: Home,
       props: {
         pageName: '主页'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/DiscountCoupon',
+      name: 'DiscountCoupon',
+      component: DiscountCoupon,
+      props: {
+        pageName: '优惠券'
       },
       meta: {
         requireAuth: true,
