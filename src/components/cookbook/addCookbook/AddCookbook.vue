@@ -58,6 +58,18 @@
 							<template slot="append">分</template>
 						</el-input>
 					</el-form-item>
+					<el-form-item label="净含量：" prop="weight">
+						<el-input
+							size="small"
+							style="width:400px;"
+							placeholder="请填写整数"
+							v-model="cookbook.weight"
+							maxlength="20"
+							oninput="if(value.length>10)value=value.slice(0,10)"
+						>
+							<template slot="append">克</template>
+						</el-input>
+					</el-form-item>
 					<el-form-item label="动作编码：" prop="cookScript">
 						<el-input
 							maxlength="20"
@@ -252,6 +264,7 @@ export default {
 				spicy: "0",
 				recipePrice: "",
 				spec: "",
+				weight:'',
 				state: "1",
 				recipeImg: "",
 				ingredient: "",
@@ -348,6 +361,23 @@ export default {
 					{
 						required: true,
 						message: "请选择是否上/下架",
+						trigger: "blur"
+					}
+				],
+				weight:[
+					{
+						required: true,
+						message: "请输入净含量",
+						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (/(^[1-9]{1}[0-9]*$)/g.test(value) == false) {
+								callback(new Error("请输入正整数,且不能为0"));
+							} else {
+								callback();
+							}
+						},
 						trigger: "blur"
 					}
 				],
@@ -557,6 +587,7 @@ export default {
 				ingredient: this.cookbook.ingredient,
 				accessories: this.cookbook.accessories,
 				introduce: this.cookbook.introduce,
+				weight:this.cookbook.weight,
 				step: JSON.stringify(this.cookbook.step)
 			});
 			this.Axios(
