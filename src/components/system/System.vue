@@ -34,6 +34,19 @@
 							<img src="../../assets/image/u77.png" alt style="width:60px;">
 						</el-checkbox>
 					</el-form-item>
+					<el-form-item label="积分换算比例：" prop>
+						<!-- <el-tooltip class="item" effect="light" content="作用于App端-意见反馈拨号" placement="right"> -->
+						<el-input
+							type="text"
+							size="small"
+							maxlength="20"
+							v-model="systemMsg.integral"
+							style="width:150px;"
+							placeholder
+						></el-input>
+						<!-- </el-tooltip> -->
+						&nbsp;元=1积分
+					</el-form-item>
 					<el-form-item label="单商品购买上限：" prop="itemLimit">
 						<el-tooltip class="item" effect="light" content="单个商品最多能购买多少份，0为不限制" placement="right">
 							<el-input
