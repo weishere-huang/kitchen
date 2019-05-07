@@ -51,8 +51,8 @@ export default {
 			identifyCodes: "1234567890",
 			identifyCode: "",
 			userMsg: {
-				// name: localStorage.getItem("loginName"),
-				name: "",
+				name: localStorage.getItem("loginName"),
+				// name: "",
 				password: "",
 				verifyCode: ""
 			},
@@ -174,13 +174,13 @@ export default {
 									"loginPassword",
 									this.encryptByDES(this.userMsg.password, key)
 								);
-								window.location.href = "/Cookbook";
-								// if (result.data.data.employeeType == 0) {
-								// 	window.location.href = "/AdminHome";
-								// }
-								// if (result.data.data.employeeType == 1) {
-								// 	window.location.href = "/Home";
-								// }
+								// window.location.href = "/Cookbook";
+								if (result.data.data.employeeType == 0) {
+									window.location.href = "/AdminHome";
+								}
+								if (result.data.data.employeeType == 1) {
+									window.location.href = "/Home";
+								}
 							}
 						},
 						({ type, info }) => {}
@@ -220,10 +220,10 @@ export default {
 	},
 	created() {
 		this.getImgPath();
-		// this.userMsg.password = this.decryptByDES(
-		// 	localStorage.getItem("loginPassword"),
-		// 	"*chang_hong_device_cloud"
-		// );
+		this.userMsg.password = this.decryptByDES(
+			localStorage.getItem("loginPassword"),
+			"*chang_hong_device_cloud"
+		);
 	}
 };
 </script>

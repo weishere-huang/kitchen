@@ -40,6 +40,7 @@ import Distributor from '@/components/distributor/index'
 import AddDistributor from '@/components/distributor/AddSupplier'
 import EditDistributor from '@/components/distributor/EditSupplier'
 import DiscountCoupon from '@/components/marketing/DiscountCoupon'
+import RedPacket from '@/components/redPacket/RedPacket'
 
 
 Vue.use(Router)
@@ -100,6 +101,17 @@ const router = new Router({
       component: DiscountCoupon,
       props: {
         pageName: '优惠券'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/RedPacket',
+      name: 'RedPacket',
+      component: RedPacket,
+      props: {
+        pageName: '红包'
       },
       meta: {
         requireAuth: true,

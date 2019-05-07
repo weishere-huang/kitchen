@@ -96,6 +96,10 @@ export default [{
       menu: '优惠券',
       route: '/DiscountCoupon',
       permissionCode: 'supplierMall_list_lookup'
+    }, {
+      menu: '红包',
+      route: '/RedPacket',
+      permissionCode: 'supplierMall_list_lookup'
     }]
   },
   {
