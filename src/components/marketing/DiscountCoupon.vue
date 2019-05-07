@@ -80,7 +80,7 @@
 						<el-col :span="24">
 							<el-radio v-model="addDiscountCoupon.condition" label="0">无限制</el-radio>
 						</el-col>
-						<el-radio v-model="addDiscountCoupon.condition" label="1">满减券</el-radio>
+						<el-radio v-model="addDiscountCoupon.condition" label="1">单笔金额满</el-radio>
 						<el-input
 							style="width:200px;"
 							type="number"
@@ -89,10 +89,16 @@
 							v-model.number="addDiscountCoupon.allMoney"
 							placeholder
 							step="0"
-							oninput="if(value.length>10)value=value.slice(0,5)"
+							oninput="if(value.length>5)value=value.slice(0,5)"
 						>
 							<template slot="append">元</template>
 						</el-input>（不含运费）
+					</el-form-item>
+					<el-form-item label="使用说明：" prop>
+						<span>
+							每个订单只能使用1张优惠券；
+							<br>优惠券与红包可以同时使用。
+						</span>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
