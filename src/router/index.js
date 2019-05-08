@@ -22,6 +22,7 @@ import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
 import SystemLog from '@/components/system/SystemLog'
 import System from '@/components/system/System'
+import Security from '@/components/system/Security'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
 import EditRole from '@/components/system/addOrEditRole/EditRole'
 import CookbookClassify from '@/components/cookbook/Classify'
@@ -29,6 +30,7 @@ import Cookbook from '@/components/cookbook/index'
 import AddCookbook from '@/components/cookbook/addCookbook/AddCookbook'
 import EditCookbook from '@/components/cookbook/addCookbook/EditCookbook'
 import User from '@/components/user/User'
+import Integral from '@/components/user/Integral'
 import GuestBook from '@/components/user/GuestBook'
 import Information from '@/components/information/index'
 import NewInformation from '@/components/information/NewInformation'
@@ -96,11 +98,33 @@ const router = new Router({
       },
     },
     {
+      path: '/Security',
+      name: 'Security',
+      component: Security,
+      props: {
+        pageName: '安全设置'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
       path: '/DiscountCoupon',
       name: 'DiscountCoupon',
       component: DiscountCoupon,
       props: {
         pageName: '优惠券'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/Integral',
+      name: 'Integral',
+      component: Integral,
+      props: {
+        pageName: '积分明细'
       },
       meta: {
         requireAuth: true,

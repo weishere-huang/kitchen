@@ -235,10 +235,16 @@ export default [{
     defaultDock: false,
     icon: '&#xe646;',
     subMenu: [{
-      menu: '用户列表',
-      route: '/User',
-      permissionCode: 'user_manager_list_lookup'
-    }]
+        menu: '用户列表',
+        route: '/User',
+        permissionCode: 'user_manager_list_lookup'
+      },
+      {
+        menu: '积分明细',
+        route: '/Integral',
+        permissionCode: 'user_manager_list_lookup'
+      }
+    ]
   },
   {
     menu: '留言与反馈',
@@ -284,6 +290,11 @@ export default [{
         menu: '系统设置',
         route: '/System',
         defaultDock: true,
+        permissionCode: 'system_employee_lookup'
+      },
+      {
+        menu: '安全设置',
+        route: '/Security',
         permissionCode: 'system_employee_lookup'
       },
       {
