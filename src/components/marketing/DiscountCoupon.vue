@@ -18,16 +18,17 @@
 				<el-form
 					:model="addDiscountCoupon"
 					size="small"
-					label-width="100px"
+					label-width="120px"
 					style="margin-top:20px;"
 					ref="addDiscountCoupon"
+					:rules="addDiscountCouponRules"
 				>
 					<el-form-item label="优惠券类型：" prop="type">
-						<el-radio v-model="addDiscountCoupon.type" label="0">满减券</el-radio>
+						<el-radio v-model="addDiscountCoupon.type" label="1">满减券</el-radio>
 					</el-form-item>
 					<el-form-item label="优惠券名称：" prop="name">
 						<el-input
-							style="width:460px;"
+							style="width:440px;"
 							type="text"
 							size="small"
 							maxlength="20"
@@ -39,12 +40,12 @@
 						<el-input
 							type="number"
 							size="small"
-							style="width:460px;"
+							style="width:440px;"
 							maxlength="20"
 							v-model.number="addDiscountCoupon.denomination"
 							placeholder="范围1~200"
 							step="0.01"
-							oninput="if(value.length>10)value=value.slice(0,5)"
+							oninput="if(value.length>3)value=value.slice(0,3)"
 						>
 							<template slot="append">元</template>
 						</el-input>
@@ -53,18 +54,18 @@
 						<el-input
 							type="number"
 							size="small"
-							style="width:460px;"
+							style="width:440px;"
 							maxlength="20"
 							v-model.number="addDiscountCoupon.sendSum"
 							placeholder="范围1~10000"
 							step="0"
-							oninput="if(value.length>10)value=value.slice(0,5)"
+							oninput="if(value.length>5)value=value.slice(0,5)"
 						>
 							<template slot="append">张</template>
 						</el-input>
 					</el-form-item>
 					<el-form-item label="每人限领：" prop="limitGet">
-						<el-select v-model="addDiscountCoupon.limitGet" placeholder="请选择" style="width:460px;">
+						<el-select v-model="addDiscountCoupon.limitGet" placeholder="请选择" style="width:440px;">
 							<el-option label="1张" value="1"></el-option>
 							<el-option label="2张" value="2"></el-option>
 							<el-option label="3张" value="3"></el-option>
@@ -79,8 +80,8 @@
 							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
-							style="width:460px;"
-							value-format="yyyy/MM/dd"
+							style="width:440px;"
+							value-format="yyyy/M/d"
 						></el-date-picker>
 					</el-form-item>
 					<el-form-item label="使用条件：" prop="condition1">
@@ -93,6 +94,7 @@
 							type="number"
 							size="small"
 							maxlength="20"
+							:disabled="addDiscountCoupon.condition1==0"
 							v-model.number="addDiscountCoupon.allMoney"
 							placeholder
 							step="0"
@@ -109,7 +111,7 @@
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible = false" size="small" plain>取 消</el-button>
+					<el-button @click="handleCancel('addDiscountCoupon')" size="small" plain>取 消</el-button>
 					<el-button type="primary" size="small" @click="addDiscountCouponMsg('addDiscountCoupon')">确 定</el-button>
 				</span>
 			</el-dialog>
@@ -129,14 +131,14 @@
 						<el-table-column label="优惠券名称" min-width="200" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>
-									<div class="pic_style">￥{{scope.row.denomination}}</div>
+									<div class="pic_style">￥{{scope.row.money/100}}</div>
 									{{ scope.row.name }}
 								</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="面额" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.money }}元</span>
+								<span>{{ scope.row.money/100 }}元</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="有效期" min-width="190">
@@ -171,7 +173,7 @@
 									style="width:50px;text-align:left;"
 									v-if="scope.row.state==0"
 									size="mini"
-									@click="sendDiscountCoupon(scope.row)"
+									@click="sendAffirm(scope.row)"
 								>发放</el-button>
 								<el-button
 									type="text"
@@ -219,17 +221,103 @@
 export default {
 	inject: ["reload"],
 	data() {
+		let dateTime = new Date().toLocaleDateString();
 		return {
 			addDiscountCoupon: {
-				type: "0",
+				type: "1",
 				name: "",
 				denomination: null,
 				sendSum: null,
 				limitGet: null,
 				validity: [],
-				condition1: "1",
+				condition1: "0",
 				allMoney: null,
 				condition: ""
+			},
+			addDiscountCouponRules: {
+				type: [
+					{ required: true, message: "请选择类型", trigger: ["blur", "change"] }
+				],
+				name: [
+					{ required: true, message: "请输入优惠券名称", trigger: "blur" }
+				],
+				denomination: [
+					{ required: true, message: "请输入面额", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/(^[1-9]{1}[0-9]*$)/g.test(value) == false) {
+								callback(new Error("请输入正整数,且不能为0"));
+							} else if (value > 200) {
+								callback(new Error("面额最大金额为200"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				sendSum: [
+					{ required: true, message: "请输入发放总量", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/(^[1-9]{1}[0-9]*$)/g.test(value) == false) {
+								callback(new Error("请输入正整数,且不能为0"));
+							} else if (value > 10000) {
+								callback(new Error("发放总量最大为10000张"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				limitGet: [
+					{
+						required: true,
+						message: "请选择每人限领",
+						trigger: ["blur", "change"]
+					}
+				],
+				validity: [
+					{
+						required: true,
+						message: "请选择有效期",
+						trigger: ["blur", "change"]
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (dateTime.replace(/\//g, "") >= value[0].replace(/\//g, "")) {
+								callback(new Error("开始时间不能小于或等于今天！"));
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur", "change"]
+					}
+				],
+				condition1: [
+					{ required: true, message: "请选择使用条件", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (value == 0) {
+								callback();
+							} else if (value == 1) {
+								if (
+									/(^[1-9]{1}[0-9]*$)/g.test(
+										this.addDiscountCoupon.condition
+									) == false
+								) {
+									callback(new Error("请输入正整数,且不能为0"));
+								} else {
+									callback();
+								}
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur", "change"]
+					}
+				]
 			},
 			dialogVisible: false,
 			currentPage: 1,
@@ -271,6 +359,22 @@ export default {
 		};
 	},
 	methods: {
+		sendAffirm(row) {
+			self = this;
+			this.$confirm("是否确认发放优惠券？", "确认", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning",
+				cancelButtonClass: "is-plain"
+			}).then(() => {
+				this.sendDiscountCoupon(row);
+			});
+			// },({type,info})=>{})
+		},
+		handleCancel(formName) {
+			this.$refs[formName].resetFields();
+			this.dialogVisible = false;
+		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
@@ -283,40 +387,47 @@ export default {
 			this.getDiscountCouponList();
 		},
 		addDiscountCouponMsg(formName) {
-			let qs = require("qs");
-			let data = qs.stringify({
-				name: this.addDiscountCoupon.name,
-				startTime: this.addDiscountCoupon.validity[0],
-				endTime: this.addDiscountCoupon.validity[1],
-				money: this.addDiscountCoupon.denomination,
-				type: this.addDiscountCoupon.type,
-				number: this.addDiscountCoupon.sendSum,
-				condition: this.addDiscountCoupon.condition
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						name: this.addDiscountCoupon.name,
+						startTime: this.addDiscountCoupon.validity[0],
+						endTime: this.addDiscountCoupon.validity[1],
+						money: this.addDiscountCoupon.denomination,
+						type: this.addDiscountCoupon.type,
+						enableReceiveNum: this.addDiscountCoupon.limitGet,
+						number: this.addDiscountCoupon.sendSum,
+						condition: this.addDiscountCoupon.condition
+					});
+					this.Axios(
+						{
+							params: data,
+							option: {
+								successMsg: "添加成功！"
+							},
+							type: "post",
+							url: "/api-platform/coupon/addCoupon"
+						},
+						this
+					).then(
+						result => {
+							console.log(result);
+							if (result.data.code === 200) {
+								this.dialogVisible = false;
+								this.getDiscountCouponList();
+								this.$refs[formName].resetFields();
+								this.addDiscountCoupon.allMoney = "";
+							}
+							// this.tableData = result.data.data.content;
+							// this.total = result.data.data.totalElement;
+						},
+						({ type, info }) => {}
+					);
+				} else {
+					return false;
+				}
 			});
-			this.Axios(
-				{
-					params: data,
-					option: {
-						successMsg: "添加成功！"
-					},
-					type: "post",
-					url: "/api-platform/CouponController/addCoupon"
-				},
-				this
-			).then(
-				result => {
-					console.log(result);
-					if (result.data.code === 200) {
-						this.dialogVisible = false;
-						this.getDiscountCouponList();
-						this.$refs[formName].resetFields();
-						this.addDiscountCoupon.allMoney = "";
-					}
-					// this.tableData = result.data.data.content;
-					// this.total = result.data.data.totalElement;
-				},
-				({ type, info }) => {}
-			);
 		},
 		deleteDiscountCoupon(row, index) {
 			let qs = require("qs");
@@ -380,7 +491,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/CouponController/listCoupon"
+					url: "/api-platform/coupon/listCoupon"
 				},
 				this
 			).then(
@@ -403,6 +514,8 @@ export default {
 	},
 	created() {
 		this.getDiscountCouponList();
+		let dateTime = new Date().toLocaleDateString();
+		console.log(dateTime);
 	},
 	watch: {
 		addDiscountCoupon: {
@@ -471,7 +584,7 @@ export default {
 			display: inline-block;
 			background-color: red;
 			color: white;
-			width: 50px;
+			width: 60px;
 			font-weight: 700;
 			padding: 0 4px;
 			text-align: center;
