@@ -37,7 +37,18 @@
 				</el-table-column>
 				<el-table-column label="订单" min-width="80">
 					<template slot-scope="scope">
-						<span>{{ scope.row.order }}</span>
+						<span
+							@click="$router.push({path:'/AdminOrder'})"
+							style="cursor: pointer;"
+						>{{ scope.row.order }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="积分" min-width="80">
+					<template slot-scope="scope">
+						<span
+							@click="$router.push({path:'/Integral'})"
+							style="cursor: pointer;"
+						>{{ scope.row.credits }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>
@@ -171,12 +182,12 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-      this.getlist();
+			this.getlist();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-      this.getlist();
+			this.getlist();
 		},
 		searchlist() {
 			this.pageIndex = 1;
@@ -200,7 +211,7 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result);
+					console.log(result);
 					this.tableData = result.data.data.content;
 					for (let i = 0; i < this.tableData.length; i++) {
 						if (this.tableData[i].state == 0) {
