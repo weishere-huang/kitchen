@@ -153,17 +153,17 @@
 						</el-table-column>
 						<el-table-column label="已领" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.get }}</span>
+								<span>{{ scope.row.receivedNum }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="剩余" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.surplus }}</span>
+								<span>{{ scope.row.notReceiveNum }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="使用条件" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.useCondition }}</span>
+								<span>{{ scope.row.useConditionStr }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">
@@ -441,7 +441,7 @@ export default {
 						successMsg: "删除成功！"
 					},
 					type: "post",
-					url: "/api-platform/CouponController/delCoupon"
+					url: "/api-platform/coupon/delCoupon"
 				},
 				this
 			).then(
@@ -468,7 +468,7 @@ export default {
 						successMsg: "发送成功！"
 					},
 					type: "post",
-					url: "/api-platform/CouponController/sendCoupon"
+					url: "/api-platform/coupon/sendCoupon"
 				},
 				this
 			).then(
