@@ -37,12 +37,12 @@
 				</el-table-column>
 				<el-table-column label="积分" min-width="80">
 					<template slot-scope="scope">
-						<span>{{ scope.row.credits }}</span>
+						<span>{{scope.row.state==0?"+":"-"}}{{ scope.row.score }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="类型" min-width="80">
 					<template slot-scope="scope">
-						<span>{{ scope.row.state }}</span>
+						<span>{{ scope.row.scoreType }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="记录时间" min-width="120" show-overflow-tooltip>
@@ -77,27 +77,27 @@ export default {
 			options: [
 				{
 					label: "全部",
-					value: -2
+					value: "全部"
 				},
 				{
 					label: "签到",
-					value: 0
+					value: "签到"
 				},
 				{
 					label: "购买商品",
-					value: 1
+					value: "购买商品"
 				},
 				{
 					label: "购买菜谱",
-					value: 2
+					value: "购买菜谱"
 				},
 				{
 					label: "兑换",
-					value: 3
+					value: "兑换"
 				}
 			],
 			tableData: [],
-			states: -2,
+			states: "全部",
 			keyWord: null
 		};
 	},
@@ -106,16 +106,16 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			// this.getlist();
+			this.getlist();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			// this.getlist();
+			this.getlist();
 		},
 		searchlist() {
 			this.pageIndex = 1;
-			// this.getlist();
+			this.getlist();
 		},
 		getlist() {
 			this.Axios(
@@ -123,36 +123,32 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						state: this.states,
-						keyWord: this.keyWord
+						scoreType: this.states,
+						keyword: this.keyWord
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-user/userInfo/listUserInfo"
+					url: "/api-user/userInfo/userScoreList"
 				},
 				this
 			).then(
 				result => {
 					console.log(result);
-					this.tableData = result.data.data.content;
-					for (let i = 0; i < this.tableData.length; i++) {
-						if (this.tableData[i].state == 0) {
-							this.tableData[i].state = true;
-						} else {
-							this.tableData[i].state = false;
-						}
+					if (result.data.code === 200) {
+						this.tableData = result.data.data.content;
+						this.total = result.data.data.totalElement;
 						// this.tableData[i].state = this.tableData[i].state.toString;
+						console.log(this.tableData);
 					}
-					this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
 			);
 		}
 	},
 	created() {
-		// this.getlist();
+		this.getlist();
 	}
 };
 </script>
