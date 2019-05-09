@@ -48,7 +48,8 @@
 						<span
 							@click="$router.push({path:'/Integral'})"
 							style="cursor: pointer;"
-						>{{ scope.row.credits }}</span>
+							class="score_style"
+						>{{ scope.row.userScoreDO.score }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>
@@ -268,7 +269,6 @@ export default {
 				if (result.data.code === 200) {
 					this.$message.success("修改成功~");
 				}
-				console.log(result.data);
 			});
 		}
 	},
@@ -317,6 +317,12 @@ export default {
 			i {
 				font-size: 20px;
 			}
+		}
+	}
+	.score_style {
+		&:hover {
+			color: #1cc09f;
+			text-decoration: underline;
 		}
 	}
 }

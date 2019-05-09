@@ -128,13 +128,10 @@ export default {
 				{
 					params: data,
 					option: {
-						successMsg: "修改成功，请重新登录！"
+						enableMsg: false
 					},
 					type: "post",
-					url: "/api-platform/employee/resetpsw",
-					loadingConfig: {
-						target: document.querySelector(".login")
-					}
+					url: "/api-platform/employee/resetpsw"
 				},
 				this
 			).then(
@@ -144,7 +141,10 @@ export default {
 						sessionStorage.removeItem("token");
 						sessionStorage.removeItem("user");
 						sessionStorage.removeItem("permissionUrl");
-						window.location.href = "/login.html";
+						this.$message.success("密码修改成功，即将跳转至登录页面！");
+						setTimeout(() => {
+							window.location.href = "/login.html";
+						}, 3000);
 					}
 				},
 				({ type, info }) => {}

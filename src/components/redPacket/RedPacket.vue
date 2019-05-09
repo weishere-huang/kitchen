@@ -15,41 +15,48 @@
 				:visible.sync="dialogVisible"
 				width="600px"
 			>
-				<el-form size="small" label-width="100px" style="margin-top:20px;">
+				<el-form
+					size="small"
+					:model="addRedPacket"
+					:rules="addRedPacketRules"
+					ref="addRedPacket"
+					label-width="120px"
+					style="margin-top:20px;"
+				>
 					<!-- <el-form-item label="优惠券类型：" prop>
-						<el-radio v-model="addDiscountCoupon.type" label="0">满减券</el-radio>
+						<el-radio v-model="addRedPacket.type" label="0">满减券</el-radio>
 					</el-form-item>-->
-					<el-form-item label="红包名称：" prop>
+					<el-form-item label="红包名称：" prop="name">
 						<el-input
-							style="width:460px;"
+							style="width:440px;"
 							type="text"
 							size="small"
 							maxlength="20"
-							v-model="addDiscountCoupon.name"
+							v-model="addRedPacket.name"
 							placeholder
 						></el-input>
 					</el-form-item>
-					<el-form-item label="面额：" prop>
+					<el-form-item label="面额：" prop="denomination">
 						<el-input
 							type="number"
 							size="small"
-							style="width:460px;"
+							style="width:440px;"
 							maxlength="20"
-							v-model.number="addDiscountCoupon.denomination"
+							v-model.number="addRedPacket.denomination"
 							placeholder="范围1~200"
 							step="0.01"
-							oninput="if(value.length>5)value=value.slice(0,5)"
+							oninput="if(value.length>3)value=value.slice(0,3)"
 						>
 							<template slot="append">元</template>
 						</el-input>
 					</el-form-item>
-					<el-form-item label="发放个数：" prop>
+					<el-form-item label="发放个数：" prop="sendSum">
 						<el-input
 							type="number"
 							size="small"
-							style="width:460px;"
+							style="width:440px;"
 							maxlength="20"
-							v-model.number="addDiscountCoupon.sendSum"
+							v-model.number="addRedPacket.sendSum"
 							placeholder="范围1~10000"
 							step="0"
 							oninput="if(value.length>5)value=value.slice(0,5)"
@@ -60,29 +67,31 @@
 					<el-form-item label="每人限领：" prop>
 						<span>1个</span>
 					</el-form-item>
-					<el-form-item label="有效期：" prop>
+					<el-form-item label="有效期：" prop="validity">
 						<el-date-picker
-							v-model="addDiscountCoupon.validity"
+							v-model="addRedPacket.validity"
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
-							style="width:460px;"
+							style="width:440px;"
+							value-format="yyyy/M/d"
 						></el-date-picker>
 					</el-form-item>
-					<el-form-item label="使用条件：" prop>
+					<el-form-item label="使用条件：" prop="condition1">
 						<el-col :span="24">
-							<el-radio v-model="addDiscountCoupon.condition" label="0">无限制</el-radio>
+							<el-radio v-model="addRedPacket.condition1" label="0">无限制</el-radio>
 						</el-col>
-						<el-radio v-model="addDiscountCoupon.condition" label="1">单笔金额满</el-radio>
+						<el-radio v-model="addRedPacket.condition1" label="1">单笔金额满</el-radio>
 						<el-input
 							style="width:200px;"
 							type="number"
 							size="small"
 							maxlength="20"
-							v-model.number="addDiscountCoupon.allMoney"
+							v-model.number="addRedPacket.allMoney"
 							placeholder
 							step="0"
+							:disabled="addRedPacket.condition1==0"
 							oninput="if(value.length>5)value=value.slice(0,5)"
 						>
 							<template slot="append">元</template>
@@ -97,7 +106,7 @@
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible = false" size="small" plain>取 消</el-button>
+					<el-button @click="handleCancel('addRedPacket')" size="small" plain>取 消</el-button>
 					<el-button type="primary" size="small" @click>确 定</el-button>
 				</span>
 			</el-dialog>
@@ -207,16 +216,95 @@
 export default {
 	inject: ["reload"],
 	data() {
+		let dateTime = new Date().toLocaleDateString();
 		return {
-			addDiscountCoupon: {
-				type: "0",
+			addRedPacket: {
 				name: "",
 				denomination: null,
 				sendSum: null,
 				limitGet: null,
 				validity: [],
-				condition: "1",
-				allMoney: null
+				condition1: "1",
+				allMoney: null,
+				condition: ""
+			},
+			addRedPacketRules: {
+				name: [
+					{ required: true, message: "请输入优惠券名称", trigger: "blur" }
+				],
+				denomination: [
+					{ required: true, message: "请输入面额", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/(^[1-9]{1}[0-9]*$)/g.test(value) == false) {
+								callback(new Error("请输入正整数,且不能为0"));
+							} else if (value > 200) {
+								callback(new Error("面额最大金额为200"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				sendSum: [
+					{ required: true, message: "请输入发放总量", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/(^[1-9]{1}[0-9]*$)/g.test(value) == false) {
+								callback(new Error("请输入正整数,且不能为0"));
+							} else if (value > 10000) {
+								callback(new Error("发放总量最大为10000张"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				validity: [
+					{
+						required: true,
+						message: "请选择有效期",
+						trigger: ["blur", "change"]
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (
+								dateTime.replace(/\//g, "") - value[0].replace(/\//g, "") >=
+								0
+							) {
+								callback(new Error("开始时间不能小于或等于今天！"));
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur", "change"]
+					}
+				],
+				condition1: [
+					{ required: true, message: "请选择使用条件", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (value == 0) {
+								callback();
+							} else if (value == 1) {
+								if (
+									/(^[1-9]{1}[0-9]*$)/g.test(
+										this.addDiscountCoupon.condition
+									) == false
+								) {
+									callback(new Error("请输入正整数,且不能为0"));
+								} else {
+									callback();
+								}
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur", "change"]
+					}
+				]
 			},
 			dialogVisible: false,
 			currentPage: 1,
@@ -258,6 +346,10 @@ export default {
 		};
 	},
 	methods: {
+		handleCancel(formName) {
+			this.$refs[formName].resetFields();
+			this.dialogVisible = false;
+		},
 		toSend(row) {
 			console.log(row);
 		},
@@ -328,7 +420,20 @@ export default {
 		}
 	},
 	created() {},
-	watch: {},
+	watch: {
+		addRedPacket: {
+			handler(newValue, oldValue) {
+				if (this.addRedPacket.condition1 == 0) {
+					this.addRedPacket.condition = 0;
+					this.addRedPacket.allMoney = "";
+				}
+				if (this.addRedPacket.condition1 == 1) {
+					this.addRedPacket.condition = this.addRedPacket.allMoney;
+				}
+			},
+			deep: true
+		}
+	},
 	components: {}
 };
 </script>

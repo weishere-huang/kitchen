@@ -43,6 +43,12 @@
 			</el-aside>
 			<el-container>
 				<el-header style="background-color:#1CC09F;">
+					<!-- <div>
+						<div v-for="(item, index) in menuSource" :key="index" style="display:inline-block">
+							<i class="iconfont" v-html="item.icon" style="display:block"></i>
+							<span slot="title">{{item.menu}}</span>
+						</div>
+					</div>-->
 					<div class="breadcrumbWrap">
 						<breadCrumb></breadCrumb>
 						<a href="login.html"></a>
