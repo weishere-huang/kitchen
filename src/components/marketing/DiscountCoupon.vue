@@ -485,8 +485,6 @@ export default {
 	},
 	created() {
 		this.getDiscountCouponList();
-		let dateTime = new Date().toLocaleDateString();
-		console.log(dateTime);
 	},
 	watch: {
 		addDiscountCoupon: {
