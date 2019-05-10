@@ -107,7 +107,7 @@
 				</el-form>
 				<span slot="footer" class="dialog-footer">
 					<el-button @click="handleCancel('addRedPacket')" size="small" plain>取 消</el-button>
-					<el-button type="primary" size="small" @click>确 定</el-button>
+					<el-button type="primary" size="small" @click="addRedPacketMsg('addRedPacket')">确 定</el-button>
 				</span>
 			</el-dialog>
 			<div class="bottom_list">
@@ -126,14 +126,14 @@
 						<el-table-column label="红包名称" min-width="200" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>
-									<div class="pic_style">￥{{scope.row.denomination}}</div>
+									<div class="pic_style">￥{{ scope.row.money/100 }}{{scope.row.denomination}}</div>
 									{{ scope.row.name }}
 								</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="面额" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.denomination }}元</span>
+								<span>{{ scope.row.money/100 }}元</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="有效期" min-width="190">
@@ -143,22 +143,22 @@
 						</el-table-column>
 						<el-table-column label="发放总量" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.sendSum }}</span>
+								<span>{{ scope.row.number }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="已领" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.get }}</span>
+								<span>{{ scope.row.receivedNum }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="剩余" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.surplus }}</span>
+								<span>{{ scope.row.notReceiveNum }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="使用条件" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.condition }}</span>
+								<span>{{ scope.row.useConditionStr }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">
@@ -168,7 +168,7 @@
 									style="width:50px;text-align:left;"
 									v-if="scope.row.state==0"
 									size="mini"
-									@click="toSend(scope.row)"
+									@click="sendAffirm(scope.row)"
 								>发放</el-button>
 								<el-button
 									type="text"
@@ -183,11 +183,7 @@
 									</p>
 									<div style="text-align: center; margin: 0">
 										<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
-										<el-button
-											type="primary"
-											size="mini"
-											@click="deleteDiscountCoupon(scope.row,scope.$index)"
-										>确定</el-button>
+										<el-button type="primary" size="mini" @click="deleteRedPacket(scope.row,scope.$index)">确定</el-button>
 									</div>
 									<el-button slot="reference" type="text">删除</el-button>
 								</el-popover>
@@ -230,7 +226,7 @@ export default {
 			},
 			addRedPacketRules: {
 				name: [
-					{ required: true, message: "请输入优惠券名称", trigger: "blur" }
+					{ required: true, message: "请输入红包名称", trigger: "blur" }
 				],
 				denomination: [
 					{ required: true, message: "请输入面额", trigger: "blur" },
@@ -290,9 +286,8 @@ export default {
 								callback();
 							} else if (value == 1) {
 								if (
-									/(^[1-9]{1}[0-9]*$)/g.test(
-										this.addDiscountCoupon.condition
-									) == false
+									/(^[1-9]{1}[0-9]*$)/g.test(this.addRedPacket.condition) ==
+									false
 								) {
 									callback(new Error("请输入正整数,且不能为0"));
 								} else {
@@ -350,24 +345,97 @@ export default {
 			this.$refs[formName].resetFields();
 			this.dialogVisible = false;
 		},
-		toSend(row) {
-			console.log(row);
-		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getDiscountCouponList();
+			this.getRedPacketList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getDiscountCouponList();
+			this.getRedPacketList();
 		},
-		deleteDiscountCoupon(row, index) {
+		addRedPacketMsg(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						name: this.addRedPacket.name,
+						startTime: this.addRedPacket.validity[0],
+						endTime: this.addRedPacket.validity[1],
+						money: this.addRedPacket.denomination,
+						number: this.addRedPacket.sendSum,
+						condition: this.addRedPacket.condition
+					});
+					this.Axios(
+						{
+							params: data,
+							option: {
+								successMsg: "添加成功！"
+							},
+							type: "post",
+							url: "/api-platform/redPackage/addRedPackage"
+						},
+						this
+					).then(
+						result => {
+							console.log(result);
+							if (result.data.code === 200) {
+								this.dialogVisible = false;
+								this.getRedPacketList();
+								this.$refs[formName].resetFields();
+								this.addRedPacket.allMoney = "";
+							}
+							// this.tableData = result.data.data.content;
+							// this.total = result.data.data.totalElement;
+						},
+						({ type, info }) => {}
+					);
+				} else {
+					return false;
+				}
+			});
+		},
+		sendAffirm(row) {
+			self = this;
+			this.$confirm("是否确认发放红包？", "确认", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning",
+				cancelButtonClass: "is-plain"
+			}).then(() => {
+				this.sendRedPacket(row);
+			});
+		},
+		sendRedPacket(row) {
 			let qs = require("qs");
 			let data = qs.stringify({
-				supplierId: row.id
+				redPackageId: row.id
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "发送成功！"
+					},
+					type: "post",
+					url: "/api-platform/redPackage/sendRedPackage"
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.getRedPacketList();
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		deleteRedPacket(row, index) {
+			let qs = require("qs");
+			let data = qs.stringify({
+				redPackageId: row.id
 			});
 			this.Axios(
 				{
@@ -376,7 +444,7 @@ export default {
 						successMsg: "删除成功！"
 					},
 					type: "post",
-					url: ""
+					url: "/api-platform/redPackage/delRedPackage"
 				},
 				this
 			).then(
@@ -384,6 +452,7 @@ export default {
 					console.log(result);
 					if (result.data.code === 200) {
 						this.tableData[index].visible = false;
+						this.getRedPacketList();
 					} else {
 						this.$message.error("未删除成功！");
 					}
@@ -393,7 +462,7 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		getDiscountCouponList() {
+		getRedPacketList() {
 			this.Axios(
 				{
 					params: {
@@ -404,22 +473,30 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: ""
+					url: "/api-platform/redPackage/listRedPackage"
 				},
 				this
 			).then(
 				result => {
 					console.log(result.data.data);
 					if (result.data.code === 200) {
+						this.tableData = result.data.data.content;
+						this.total = result.data.data.totalElement;
+						for (let i = 0; i < this.tableData.length; i++) {
+							this.tableData[i].validity =
+								this.tableData[i].startTime.split(" ")[0] +
+								" 至 " +
+								this.tableData[i].endTime.split(" ")[0];
+						}
 					}
-					// this.tableData = result.data.data.content;
-					// this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
 			);
 		}
 	},
-	created() {},
+	created() {
+		this.getRedPacketList();
+	},
 	watch: {
 		addRedPacket: {
 			handler(newValue, oldValue) {
@@ -484,10 +561,10 @@ export default {
 		}
 		.pic_style {
 			height: 23px;
+			width: 60px;
 			display: inline-block;
 			background-color: red;
 			color: white;
-			width: 50px;
 			font-weight: 700;
 			padding: 0 4px;
 			text-align: center;

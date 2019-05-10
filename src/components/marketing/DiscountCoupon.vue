@@ -24,7 +24,7 @@
 					:rules="addDiscountCouponRules"
 				>
 					<el-form-item label="优惠券类型：" prop="type">
-						<el-radio v-model="addDiscountCoupon.type" label="1">满减券</el-radio>
+						<el-radio v-model="addDiscountCoupon.type" label="1">抵扣券</el-radio>
 					</el-form-item>
 					<el-form-item label="优惠券名称：" prop="name">
 						<el-input
@@ -341,7 +341,6 @@ export default {
 			}).then(() => {
 				this.sendDiscountCoupon(row);
 			});
-			// },({type,info})=>{})
 		},
 		handleCancel(formName) {
 			this.$refs[formName].resetFields();

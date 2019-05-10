@@ -19,7 +19,7 @@
 					:collapse="isCollapse"
 					:unique-opened="true"
 				>
-					<el-submenu
+					<!-- <el-submenu
 						:index="item.permissionCode"
 						v-if="item.subMenu.length!==1"
 						:key="item.route"
@@ -38,21 +38,36 @@
 					<el-menu-item class="singleMenuItem" v-else :index="item.subMenu[0].route">
 						<i class="iconfont" v-html="item.icon"></i>
 						<span slot="title">{{item.menu}}</span>
-					</el-menu-item>
+					</el-menu-item>-->
+					<!-- <el-menu-item v-for="(item, index) in itemMenu" :key="index">
+						<i class="iconfont" v-html="item.icon"></i>
+						<span slot="title">{{item.menu}}</span>
+					</el-menu-item>-->
+					<el-menu-item
+						:index="subItem.route"
+						:key="subItem.route"
+						v-for="subItem in itemMenu"
+					>{{subItem.menu}}</el-menu-item>
 				</el-menu>
 			</el-aside>
 			<el-container>
-				<el-header style="background-color:#1CC09F;">
-					<!-- <div>
-						<div v-for="(item, index) in menuSource" :key="index" style="display:inline-block">
+				<el-header style="background-color:#1CC09F;height:72px;">
+					<ul class="top_nav_case">
+						<li
+							v-for="(item, index) in menuSource"
+							:key="index"
+							class="top_nav"
+							@click="getSubMenu(item,index)"
+							:class="activeIndex==index?'active_nav':''"
+						>
 							<i class="iconfont" v-html="item.icon" style="display:block"></i>
 							<span slot="title">{{item.menu}}</span>
-						</div>
-					</div>-->
-					<div class="breadcrumbWrap">
+						</li>
+					</ul>
+					<!-- <div class="breadcrumbWrap">
 						<breadCrumb></breadCrumb>
 						<a href="login.html"></a>
-					</div>
+					</div>-->
 					<div class="stateList">
 						<ul>
 							<li>
@@ -187,6 +202,7 @@ export default {
 	name: "App",
 	data() {
 		return {
+			itemMenu: [],
 			dialogPhoneVisible: false,
 			employeeType: JSON.parse(sessionStorage.getItem("user")).employeeType,
 			editPassword: {
@@ -250,11 +266,22 @@ export default {
 			versionNumber: this.global.versionNumber,
 			hotLine: {
 				hotLine: ""
-			}
+			},
+			activeIndex:
+				sessionStorage.getItem("activeIndex") != null
+					? sessionStorage.getItem("activeIndex")
+					: 0
 		};
 	},
 	computed: {},
 	methods: {
+		getSubMenu(item, index) {
+			this.activeIndex = index;
+			sessionStorage.activeIndex = index;
+			sessionStorage.itemMenu = JSON.stringify(item.subMenu);
+			this.itemMenu = item.subMenu;
+			this.$router.push({ path: this.itemMenu[0].route });
+		},
 		validator1(rule, value, callback) {
 			if (/^0\d{2,3}-\d{7,8}$/.test(value) == false) {
 				callback(new Error("电话格式不正确"));
@@ -565,6 +592,11 @@ export default {
 		this.editPassword.account = JSON.parse(
 			sessionStorage.getItem("user")
 		).account;
+		if (JSON.parse(sessionStorage.getItem("itemMenu")) != null) {
+			this.itemMenu = JSON.parse(sessionStorage.getItem("itemMenu"));
+		} else {
+			this.itemMenu = this.menuSource[0].subMenu;
+		}
 	},
 	components: {
 		breadCrumb
@@ -599,6 +631,33 @@ export default {
 @font-normal: #333333;
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
+.active_nav {
+	background-color: rgb(19, 134, 111);
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+	margin-top: 72px !important;
+}
+.top_nav_case {
+	height: 72px;
+	padding: 0 28px;
+	.top_nav {
+		width: 88px;
+		height: 72px;
+		padding: 12px 8px 0;
+		list-style-type: none;
+		float: left;
+		cursor: pointer;
+		color: white;
+		text-align: center;
+		margin-right: 8px;
+		&:hover {
+			background-color: rgb(19, 134, 111);
+		}
+		i {
+			font-size: 28px;
+		}
+	}
+}
 * {
 	margin: 0;
 	padding: 0;
