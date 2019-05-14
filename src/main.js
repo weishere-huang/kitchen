@@ -23,6 +23,10 @@ import './assets/less/layout.less'
 import '../static/UE/ueditor.config'
 import '../static/UE/ueditor.all'
 import '../static/UE/ueditor.parse'
+import '../static/kindeditor/themes/default/default.css'
+import '../static/kindeditor/themes/default/default.css'
+import '../static/kindeditor/kindeditor-all-min.js'
+import '../static/kindeditor/lang/zh-CN.js'
 // import '../static/UE/lang/zh-cn/zh-cn'
 Vue.prototype.global = global;
 import {

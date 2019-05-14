@@ -43,14 +43,60 @@ import AddDistributor from '@/components/distributor/AddSupplier'
 import EditDistributor from '@/components/distributor/EditSupplier'
 import DiscountCoupon from '@/components/marketing/DiscountCoupon'
 import RedPacket from '@/components/redPacket/RedPacket'
-
-
+import ProductOfThings from '@/components/Instrumentation/productOfThings/ProductOfThings'
+import DeviceOfThings from '@/components/Instrumentation/DeviceOfThings'
+import ProductOfThingsAdd from '@/components/Instrumentation/productOfThings/ProductOfThingsAdd'
+import ProductOfThingsDetails from '@/components/Instrumentation/productOfThings/Details'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
       path: '/',
       redirect: '/Home',
+    },
+    {
+      path: '/ProductOfThings',
+      name: 'ProductOfThings',
+      component: ProductOfThings,
+      props: {
+        pageName: '物联产品'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'ProductOfThingsAdd',
+        name: 'ProductOfThingsAdd',
+        component: ProductOfThingsAdd,
+        props: {
+          pageName: '产品添加'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, {
+        path: 'ProductOfThingsDetails/:id/',
+        name: 'ProductOfThingsDetails',
+        component: ProductOfThingsAdd,
+        props: {
+          pageName: '产品详情'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
+    },
+    {
+      path: '/DeviceOfThings',
+      name: 'DeviceOfThings',
+      component: DeviceOfThings,
+      props: {
+        pageName: '物联设备'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: []
     },
     {
       path: '/CookingPackage',
