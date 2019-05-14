@@ -27,6 +27,7 @@ import '../static/kindeditor/themes/default/default.css'
 import '../static/kindeditor/themes/default/default.css'
 import '../static/kindeditor/kindeditor-all-min.js'
 import '../static/kindeditor/lang/zh-CN.js'
+import "../static/china"
 // import '../static/UE/lang/zh-cn/zh-cn'
 Vue.prototype.global = global;
 import {

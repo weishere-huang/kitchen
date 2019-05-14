@@ -1,5 +1,5 @@
 <template>
-	<div class="product_things_details">
+	<div class="product_things_audit">
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
 		</div>
@@ -15,19 +15,7 @@
 					<el-form-item label="产品类型：" prop>
 						<span></span>
 					</el-form-item>
-					<el-form-item label="申请设备厂商：" prop>
-						<span></span>
-					</el-form-item>
-					<el-form-item label="审核状态：" prop>
-						<span></span>
-					</el-form-item>
-					<el-form-item label="审核时间：" prop>
-						<span></span>
-					</el-form-item>
 					<el-form-item label="连网类型：" prop>
-						<span></span>
-					</el-form-item>
-					<el-form-item label="接入设备数量：" prop>
 						<span></span>
 					</el-form-item>
 					<el-form-item label="产品描述：" prop>
@@ -45,8 +33,38 @@
 				</el-form>
 			</div>
 		</div>
+		<div class="bottom_list" style="margin-top:10px;">
+			<div class="top_title">
+				<h4>审核</h4>
+			</div>
+			<div class="table_list">
+				<el-form label-width="200px" size="small">
+					<el-form-item label="审核类型：" prop>
+						<el-radio v-model="radio" label="1">通过</el-radio>
+						<el-radio v-model="radio" label="2">驳回</el-radio>
+					</el-form-item>
+					<el-form-item label="审核说明：" prop>
+						<el-input type="textarea" rows="4" resize="none" style="width:400px;"></el-input>
+					</el-form-item>
+					<el-form-item label prop>
+						<el-button type="primary" size="small">提交审核</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+		</div>
 	</div>
 </template>
+<script>
+export default {
+	data() {
+		return {
+			radio: "1"
+		};
+	},
+	methods: {}
+};
+</script>
+
 <style lang="less">
 @main-color: #1cc09f;
 @bgColor: #f0f2f5;
@@ -54,7 +72,7 @@
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.product_things_details {
+.product_things_audit {
 	font-size: 14px;
 	color: @font-normal;
 	.top_list {

@@ -1,16 +1,6 @@
 <template>
-	<div class="product_things">
+	<div class="admin_product_things">
 		<div :class="[{hide:isHideList}]">
-			<div class="top_list">
-				<permission-button
-					permCode="manu_list_lookup.menu_list_add"
-					banType="disable"
-					size="small"
-					type="primary"
-					class="el-icon-circle-plus-outline"
-					@click="$router.push({path:'/ProductOfThings/ProductOfThingsAdd'})"
-				>创建产品</permission-button>
-			</div>
 			<div class="bottom_list">
 				<div class="top_title">
 					<h4>产品列表</h4>
@@ -85,8 +75,8 @@
 						</el-table-column>
 						<el-table-column label="操作" width="140">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="toDetails(scope.$index, scope.row)">查看</el-button>
-								<el-button type="text" size="mini" @click="toEdit(scope.$index, scope.row)">修改</el-button>
+								<el-button type="text" size="mini" @click="toAudit(scope.$index, scope.row)">审核</el-button>
+								<el-button type="text" size="mini" @click="toDetails(scope.$index, scope.row)">查看</el-button>&nbsp;&nbsp;
 								<el-popover placement="top" width="180" v-model="scope.row.visible">
 									<p style="line-height:32px;text-align:center;">
 										<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -165,12 +155,12 @@ export default {
 	methods: {
 		toDetails(index, row) {
 			this.$router.push({
-				path: "/ProductOfThings/ProductOfThingsDetails/" + row.id
+				path: "/AdminProductOfThings/AdminProductOfThingsDetails/" + row.id
 			});
 		},
-		toEdit(index, row) {
+		toAudit(index, row) {
 			this.$router.push({
-				path: "/ProductOfThings/ProductOfThingsEdit/" + row.id
+				path: "/AdminProductOfThings/AdminProductOfThingsAudit/" + row.id
 			});
 		},
 		changeState(row, index) {
@@ -335,7 +325,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.product_things {
+.admin_product_things {
 	font-size: 14px;
 	color: @font-normal;
 

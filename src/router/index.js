@@ -44,16 +44,78 @@ import EditDistributor from '@/components/distributor/EditSupplier'
 import DiscountCoupon from '@/components/marketing/DiscountCoupon'
 import RedPacket from '@/components/redPacket/RedPacket'
 import ProductOfThings from '@/components/Instrumentation/productOfThings/ProductOfThings'
-import DeviceOfThings from '@/components/Instrumentation/DeviceOfThings'
+import AdminDeviceOfThings from '@/components/Instrumentation/adminDeviceOfThings/index'
+import AdminDeviceOfThingsDetails from '@/components/Instrumentation/adminDeviceOfThings/Details'
 import ProductOfThingsAdd from '@/components/Instrumentation/productOfThings/ProductOfThingsAdd'
 import ProductOfThingsEdit from '@/components/Instrumentation/productOfThings/ProductOfThingsEdit'
 import ProductOfThingsDetails from '@/components/Instrumentation/productOfThings/Details'
+import AdminProductOfThings from '@/components/Instrumentation/adminProductOfThings/AdminProductOfThings'
+import AdminProductOfThingsAudit from '@/components/Instrumentation/adminProductOfThings/Audit'
+import AdminProductOfThingsDetails from '@/components/Instrumentation/adminProductOfThings/Details'
+import Monitoring from '@/components/Instrumentation/adminMonitoring/Monitoring'
+import DataAnalysis from '@/components/Instrumentation/adminDataAnalysis/DataAnalysis'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
       path: '/',
       redirect: '/Home',
+    },
+    {
+      path: '/DataAnalysis',
+      name: 'DataAnalysis',
+      component: DataAnalysis,
+      props: {
+        pageName: '数据分析'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: []
+    },
+    {
+      path: '/Monitoring',
+      name: 'Monitoring',
+      component: Monitoring,
+      props: {
+        pageName: '实时监控'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: []
+    },
+    {
+      path: '/AdminProductOfThings',
+      name: 'AdminProductOfThings',
+      component: AdminProductOfThings,
+      props: {
+        pageName: '物联产品'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'AdminProductOfThingsDetails/:id/',
+        name: 'AdminProductOfThingsDetails',
+        component: AdminProductOfThingsDetails,
+        props: {
+          pageName: '产品详情'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, {
+        path: 'AdminProductOfThingsAudit/:id/',
+        name: 'AdminProductOfThingsAudit',
+        component: AdminProductOfThingsAudit,
+        props: {
+          pageName: '产品审核'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
     },
     {
       path: '/ProductOfThings',
@@ -101,16 +163,26 @@ const router = new Router({
       ]
     },
     {
-      path: '/DeviceOfThings',
-      name: 'DeviceOfThings',
-      component: DeviceOfThings,
+      path: '/AdminDeviceOfThings',
+      name: 'AdminDeviceOfThings',
+      component: AdminDeviceOfThings,
       props: {
         pageName: '物联设备'
       },
       meta: {
         requireAuth: true,
       },
-      children: []
+      children: [{
+        path: 'AdminDeviceOfThingsDetails/:id/',
+        name: 'AdminDeviceOfThingsDetails',
+        component: AdminDeviceOfThingsDetails,
+        props: {
+          pageName: '添加菜谱包'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
     },
     {
       path: '/CookingPackage',

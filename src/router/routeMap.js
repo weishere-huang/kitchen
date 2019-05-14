@@ -5,13 +5,31 @@ export default [{
     icon: '&#xe626;',
     subMenu: [{
         menu: '物联产品',
-        route: '/ProductOfThings',
+        route: '/AdminProductOfThings',
         permissionCode: 'home_employee_lookup'
       },
       {
+        menu: '产品详情',
+        routeReg: /^\/AdminProductOfThings\/AdminProductOfThingsDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'order_detail_lookup'
+      },
+      {
+        menu: '产品审核',
+        routeReg: /^\/AdminProductOfThings\/AdminProductOfThingsAudit\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'order_detail_lookup'
+      },
+      {
         menu: '物联设备',
-        route: '/DeviceOfThings',
+        route: '/AdminDeviceOfThings',
         permissionCode: 'home_employee_lookup'
+      },
+      {
+        menu: '设备详情',
+        routeReg: /^\/AdminDeviceOfThings\/AdminDeviceOfThingsDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'order_detail_lookup'
       },
       {
         menu: '数据分析',
@@ -100,7 +118,7 @@ export default [{
     menu: '信息管理',
     permissionCode: 'checkIn',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe69e;',
     subMenu: [{
         menu: '服务网点',
         route: '/Service',
@@ -148,7 +166,7 @@ export default [{
     menu: '用户管理',
     permissionCode: 'checkIn',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe653;',
     subMenu: [{
         menu: '用户列表',
         route: '/User',
@@ -271,7 +289,6 @@ export default [{
       {
         menu: '菜谱包列表',
         route: '/cookingPackage',
-        visible: false,
         permissionCode: 'menu_add_lookup'
       }, {
         menu: '修改菜谱包',
@@ -297,6 +314,22 @@ export default [{
         permissionCode: 'supplierOrder_detail_lookup'
       },
       {
+        menu: '商品列表',
+        route: '/Store',
+        permissionCode: 'supplierMall_list_lookup'
+      },
+      {
+        menu: '添加商品',
+        route: '/Store/AddMenu',
+        visible: true,
+        permissionCode: 'supplierMall_add_lookup'
+      }, {
+        menu: '修改商品',
+        routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'supplierMall_update_lookup'
+      },
+      {
         menu: '优惠券',
         route: '/DiscountCoupon',
         permissionCode: 'supplierMall_list_lookup'
@@ -313,22 +346,39 @@ export default [{
     defaultDock: false,
     icon: '&#xe626;',
     subMenu: [{
-      menu: '订单列表',
-      route: '/Order',
-      permissionCode: 'supplierOrder_list_lookup'
-    }, {
-      menu: '订单详情',
-      routeReg: /^\/Order\/Details\/\d{1,}$/i,
-      visible: true,
-      permissionCode: 'supplierOrder_detail_lookup'
-    }, {
-      menu: '优惠券',
-      route: '/DiscountCoupon',
-      permissionCode: 'supplierMall_list_lookup'
-    }, {
-      menu: '红包',
-      route: '/RedPacket',
-      permissionCode: 'supplierMall_list_lookup'
-    }, ]
+        menu: '订单列表',
+        route: '/Order',
+        permissionCode: 'supplierOrder_list_lookup'
+      }, {
+        menu: '订单详情',
+        routeReg: /^\/Order\/Details\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'supplierOrder_detail_lookup'
+      },
+      {
+        menu: '商品列表',
+        route: '/Store',
+        permissionCode: 'supplierMall_list_lookup'
+      },
+      {
+        menu: '添加商品',
+        route: '/Store/AddMenu',
+        visible: true,
+        permissionCode: 'supplierMall_add_lookup'
+      }, {
+        menu: '修改商品',
+        routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'supplierMall_update_lookup'
+      }, {
+        menu: '优惠券',
+        route: '/DiscountCoupon',
+        permissionCode: 'supplierMall_list_lookup'
+      }, {
+        menu: '红包',
+        route: '/RedPacket',
+        permissionCode: 'supplierMall_list_lookup'
+      },
+    ]
   }
 ]

@@ -5,7 +5,7 @@
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>物联产品添加</h4>
+				<h4>产品添加</h4>
 			</div>
 			<div class="table_list">
 				<el-form label-width="200px" size="small">
