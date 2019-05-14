@@ -46,6 +46,7 @@ import RedPacket from '@/components/redPacket/RedPacket'
 import ProductOfThings from '@/components/Instrumentation/productOfThings/ProductOfThings'
 import DeviceOfThings from '@/components/Instrumentation/DeviceOfThings'
 import ProductOfThingsAdd from '@/components/Instrumentation/productOfThings/ProductOfThingsAdd'
+import ProductOfThingsEdit from '@/components/Instrumentation/productOfThings/ProductOfThingsEdit'
 import ProductOfThingsDetails from '@/components/Instrumentation/productOfThings/Details'
 Vue.use(Router)
 const router = new Router({
@@ -65,26 +66,39 @@ const router = new Router({
         requireAuth: true,
       },
       children: [{
-        path: 'ProductOfThingsAdd',
-        name: 'ProductOfThingsAdd',
-        component: ProductOfThingsAdd,
-        props: {
-          pageName: '产品添加'
+          path: 'ProductOfThingsAdd',
+          name: 'ProductOfThingsAdd',
+          component: ProductOfThingsAdd,
+          props: {
+            pageName: '产品添加'
+          },
+          meta: {
+            requireAuth: true,
+          },
         },
-        meta: {
-          requireAuth: true,
+        {
+          path: 'ProductOfThingsEdit/:id/',
+          name: 'ProductOfThingsEdit',
+          component: ProductOfThingsEdit,
+          props: {
+            pageName: '产品修改'
+          },
+          meta: {
+            requireAuth: true,
+          },
         },
-      }, {
-        path: 'ProductOfThingsDetails/:id/',
-        name: 'ProductOfThingsDetails',
-        component: ProductOfThingsAdd,
-        props: {
-          pageName: '产品详情'
+        {
+          path: 'ProductOfThingsDetails/:id/',
+          name: 'ProductOfThingsDetails',
+          component: ProductOfThingsDetails,
+          props: {
+            pageName: '产品详情'
+          },
+          meta: {
+            requireAuth: true,
+          },
         },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
+      ]
     },
     {
       path: '/DeviceOfThings',

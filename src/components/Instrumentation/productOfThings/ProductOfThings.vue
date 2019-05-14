@@ -85,8 +85,8 @@
 						</el-table-column>
 						<el-table-column label="操作" width="140">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini">查看</el-button>
-								<el-button type="text" size="mini">修改</el-button>
+								<el-button type="text" size="mini" @click="toDetails(scope.$index, scope.row)">查看</el-button>
+								<el-button type="text" size="mini" @click="toEdit(scope.$index, scope.row)">修改</el-button>
 								<el-popover placement="top" width="180" v-model="scope.row.visible">
 									<p style="line-height:32px;text-align:center;">
 										<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -163,6 +163,16 @@ export default {
 		};
 	},
 	methods: {
+		toDetails(index, row) {
+			this.$router.push({
+				path: "/ProductOfThings/ProductOfThingsDetails/" + row.id
+			});
+		},
+		toEdit(index, row) {
+			this.$router.push({
+				path: "/ProductOfThings/ProductOfThingsEdit/" + row.id
+			});
+		},
 		changeState(row, index) {
 			console.log(this.tableData[index].state);
 			let qs = require("qs");

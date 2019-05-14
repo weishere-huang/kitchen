@@ -1,11 +1,11 @@
 <template>
-	<div class="product_things_add">
+	<div class="product_things_edit">
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>物联产品添加</h4>
+				<h4>物联产品修改</h4>
 			</div>
 			<div class="table_list">
 				<el-form label-width="200px" size="small">
@@ -190,7 +190,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.product_things_add {
+.product_things_edit {
 	font-size: 14px;
 	color: @font-normal;
 	.top_list {

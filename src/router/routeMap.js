@@ -235,6 +235,12 @@ export default [{
         permissionCode: 'menu_add_lookup'
       },
       {
+        menu: '物联产品修改',
+        routeReg: /^\/ProductOfThings\/ProductOfThingsEdit\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'menu_update_lookup'
+      },
+      {
         menu: '物联产品详情',
         routeReg: /^\/ProductOfThings\/ProductOfThingsDetails\/\d{1,}$/i,
         visible: true,
