@@ -17,7 +17,8 @@ module.exports = {
     app: ["babel-polyfill", './src/main.js'],
     login: './src/js/login.js',
     forgetpassword: './src/js/forgetpassword.js',
-    printorder: './src/js/printorder.js'
+    printorder: './src/js/printorder.js',
+    register: './src/js/register.js'
   },
   output: {
     path: config.build.assetsRoot,

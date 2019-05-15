@@ -59,16 +59,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
-      cssProcessorOptions: config.build.productionSourceMap ?
-        {
-          safe: true,
-          map: {
-            inline: false
-          }
-        } :
-        {
-          safe: true
+      cssProcessorOptions: config.build.productionSourceMap ? {
+        safe: true,
+        map: {
+          inline: false
         }
+      } : {
+        safe: true
+      }
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
@@ -114,18 +112,30 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency',
       chunks: ['manifest', 'vendor', 'forgetpassword']
     }),
-     new HtmlWebpackPlugin({
-       filename: config.build.printorder,
-       template: 'printorder.html',
-       inject: true,
-       minify: {
-         removeComments: true,
-         collapseWhitespace: true,
-         removeAttributeQuotes: true
-       },
-       chunksSortMode: 'dependency',
-       chunks: ['manifest', 'vendor', 'printorder']
-     }),
+    new HtmlWebpackPlugin({
+      filename: config.build.printorder,
+      template: 'printorder.html',
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency',
+      chunks: ['manifest', 'vendor', 'printorder']
+    }),
+    new HtmlWebpackPlugin({
+      filename: config.build.register,
+      template: 'register.html',
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency',
+      chunks: ['manifest', 'vendor', 'printorder']
+    }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting
