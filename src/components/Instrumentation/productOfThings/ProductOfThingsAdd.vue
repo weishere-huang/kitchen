@@ -56,13 +56,13 @@
 							<div slot="tip" class="el-upload__tip">请上传《长虹物联产品接入协议》扫描件，文件小于10MB的pdf/png/jpeg</div>
 						</el-upload>
 					</el-form-item>
-					<el-form-item label="产品连接示意图：" prop>
+					<el-form-item label="产品LOGO" prop>
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
-							:on-preview="handlePictureCardPreview1"
-							:on-remove="handleRemove1"
-							:on-success="handleAvatarSuccess1"
+							:on-preview="(file)=>{ return handlePictureCardPreview1(file,1)}"
+							:on-remove="(res,file)=>{ return handleRemove1(res,file,1)}"
+							:on-success="(res,file)=>{ return handleAvatarSuccess1(res,file,1)}"
 							:before-upload="beforeAvatarUpload1"
 							:limit="1"
 							class="upload_show"
@@ -70,7 +70,23 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">请上传产品连接示意图，要求：600px*800px，小于1MB的jpg或png，</div>
+						<div class="el-upload__tip tip_style">上传法人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
+					</el-form-item>
+					<el-form-item label="产品连接示意图：" prop>
+						<el-upload
+							:action="imgApi()"
+							list-type="picture-card"
+							:on-preview="(file)=>{ return handlePictureCardPreview1(file,2)}"
+							:on-remove="(res,file)=>{ return handleRemove1(res,file,2)}"
+							:on-success="(res,file)=>{ return handleAvatarSuccess1(res,file,2)}"
+							:before-upload="beforeAvatarUpload1"
+							:limit="1"
+							class="upload_show"
+							accept="image/png, image/jpeg"
+						>
+							<i class="el-icon-plus"></i>
+						</el-upload>
+						<div class="el-upload__tip tip_style">上传法人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
@@ -130,7 +146,7 @@ export default {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
-		handlePictureCardPreview1(file) {
+		handlePictureCardPreview1(file, a) {
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;
 		},
@@ -162,7 +178,7 @@ export default {
 				return isSize;
 			}
 		},
-		handleAvatarSuccess1(res, file) {
+		handleAvatarSuccess1(res, file, a) {
 			if (res.code === 200) {
 				// this.cookbook.recipeImg = res.data;
 				this.$message({
@@ -176,7 +192,7 @@ export default {
 				});
 			}
 		},
-		handleRemove1(file, fileList) {
+		handleRemove1(file, fileList, a) {
 			// this.cookbook.recipeImg = null;
 		}
 	}
@@ -218,6 +234,9 @@ export default {
 		.table_list {
 			overflow: hidden;
 			padding: 10px;
+		}
+		.el-upload-list {
+			width: 400px;
 		}
 	}
 }
