@@ -225,9 +225,7 @@ export default {
 				condition: ""
 			},
 			addRedPacketRules: {
-				name: [
-					{ required: true, message: "请输入红包名称", trigger: "blur" }
-				],
+				name: [{ required: true, message: "请输入红包名称", trigger: "blur" }],
 				denomination: [
 					{ required: true, message: "请输入面额", trigger: "blur" },
 					{

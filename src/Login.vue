@@ -34,7 +34,12 @@
 				</el-form-item>
 				<el-form-item>
 					<div class="forget_password">
-						<a href="forgetpassword.html">忘记密码</a>
+						<div style="float:left;">
+							<a href="forgetpassword.html">忘记密码</a>
+						</div>
+						<div style="float:right;">
+							<a href="register.html">注册</a>
+						</div>
 					</div>
 				</el-form-item>
 			</el-form>

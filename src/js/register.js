@@ -5,7 +5,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import Axios from '../AxiosRequest';
 import '../assets/less/layout.less'
+import global from '../components/global/Global'
 Vue.config.productionTip = false
+Vue.prototype.global = global;
 Vue.prototype.axios = axios;
 Vue.prototype.Axios = Axios;
 Vue.use(ElementUI)
