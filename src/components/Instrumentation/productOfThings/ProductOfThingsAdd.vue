@@ -8,28 +8,44 @@
 				<h4>产品添加</h4>
 			</div>
 			<div class="table_list">
-				<el-form label-width="200px" size="small">
+				<el-form label-width="200px" size="small" :model="addProduct">
 					<el-form-item label="产品名称：" prop>
-						<el-input type="text" maxlength="20" placeholder style="width:400px;"></el-input>
+						<el-input
+							type="text"
+							maxlength="20"
+							v-model="addProduct.deviceName"
+							placeholder
+							style="width:400px;"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="产品类型：" prop>
-						<el-select type="text" maxlength="20" placeholder style="width:130px">
-							<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
-						</el-select>
-						<el-select type="text" maxlength="20" placeholder style="width:130px">
-							<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
-						</el-select>
-						<el-select type="text" maxlength="20" placeholder style="width:132px">
-							<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
-						</el-select>
+						<el-cascader
+							expand-trigger="hover"
+							:options="options"
+							v-model="addProduct.deviceCateName"
+							style="width:400px;"
+						></el-cascader>
 					</el-form-item>
 					<el-form-item label="连网类型：" prop>
-						<el-select type="text" maxlength="20" placeholder style="width:400px;">
-							<el-option v-for="item in 3" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						<el-select
+							type="text"
+							v-model="addProduct.networkType"
+							maxlength="20"
+							placeholder
+							style="width:400px;"
+						>
+							<el-option label="WIFI" value="0"></el-option>
+							<el-option label="4G" value="1"></el-option>
+							<el-option label="NB-loT" value="2"></el-option>
+							<el-option label="LoRa" value="3"></el-option>
+							<el-option label="ZigBee" value="4"></el-option>
+							<el-option label="以太网" value="5"></el-option>
+							<el-option label="其他" value="6"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="产品描述：" prop>
 						<el-input
+							v-model="addProduct.introduce"
 							type="textarea"
 							resize="none"
 							rows="4"
@@ -56,7 +72,7 @@
 							<div slot="tip" class="el-upload__tip">请上传《长虹物联产品接入协议》扫描件，文件小于10MB的pdf/png/jpeg</div>
 						</el-upload>
 					</el-form-item>
-					<el-form-item label="产品LOGO" prop>
+					<el-form-item label="产品LOGO：" prop>
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -70,7 +86,7 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">上传法人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
+						<div class="el-upload__tip tip_style">请上传该产品LOGO图片，要求：256px*256px，小于200KB的jpg或png</div>
 					</el-form-item>
 					<el-form-item label="产品连接示意图：" prop>
 						<el-upload
@@ -86,16 +102,21 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">上传法人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
+						<div class="el-upload__tip tip_style">请上传产品连接示意图，要求：600px*800px，小于1MB的jpg或png</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label prop>
-						<el-checkbox value="1">我已经认真阅读并同意《服务条款》《物联产品接入协议》</el-checkbox>
+						<el-checkbox v-model="addProduct.checkValue" value="1">我已经认真阅读并同意</el-checkbox>《服务条款》《物联产品接入协议》
 					</el-form-item>
 					<el-form-item label prop>
-						<el-button type="primary" size="small">提交申请</el-button>
+						<el-button
+							type="primary"
+							:disabled="addProduct.checkValue==false"
+							size="small"
+							@click="addProductOfThings"
+						>提交申请</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -103,12 +124,65 @@
 	</div>
 </template>
 <script>
+let options = [
+	{
+		value: "智能生活",
+		label: "智能生活",
+		children: [
+			{
+				value: "厨房电器",
+				label: "厨房电器",
+				children: [
+					{
+						value: "炒菜机器人",
+						label: "炒菜机器人"
+					},
+					{
+						value: "洗碗机",
+						label: "洗碗机"
+					},
+					{
+						value: "微波炉",
+						label: "微波炉"
+					},
+					{
+						value: "电饭煲",
+						label: "电饭煲"
+					},
+					{
+						value: "电压力锅",
+						label: "电压力锅"
+					},
+					{
+						value: "电烤箱",
+						label: "电烤箱"
+					}
+				]
+			}
+		]
+	}
+];
 export default {
+	inject: ["reload"],
 	data() {
 		return {
+			options,
+			selectedOptions2: [],
 			fileList: [],
 			dialogImageUrl: "",
-			dialogVisible: false
+			dialogVisible: false,
+			addProduct: {
+				enterpriseId: 123,
+				enterpriseName: "光大实业",
+				deviceName: "",
+				deviceCateName: [],
+				networkType: "",
+				introduce: "",
+				agreement: "",
+				logo: "",
+				linkImg: "",
+				checkValue: false
+			}
 		};
 	},
 	methods: {
@@ -131,7 +205,10 @@ export default {
 			}
 		},
 		handleRemove(file, fileList) {
-			console.log(file, fileList);
+			this.fileList.splice(
+				this.fileList.findIndex(item => item.url == file.url),
+				1
+			);
 		},
 		handlePreview(file) {
 			console.log(file);
@@ -180,7 +257,12 @@ export default {
 		},
 		handleAvatarSuccess1(res, file, a) {
 			if (res.code === 200) {
-				// this.cookbook.recipeImg = res.data;
+				if (a == 1) {
+					this.addProduct.logo = res.data;
+				}
+				if (a == 2) {
+					this.addProduct.linkImg = res.data;
+				}
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -193,7 +275,45 @@ export default {
 			}
 		},
 		handleRemove1(file, fileList, a) {
-			// this.cookbook.recipeImg = null;
+			if (a == 1) {
+				this.addProduct.logo = "";
+			}
+			if (a == 2) {
+				this.addProduct.linkImg = "";
+			}
+		},
+		addProductOfThings() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				enterpriseId: 123,
+				enterpriseName: "光大实业",
+				deviceName: this.addProduct.deviceName,
+				deviceCateName: JSON.stringify(this.addProduct.deviceCateName),
+				networkType: this.addProduct.networkType,
+				introduce: this.addProduct.introduce,
+				agreement: JSON.stringify(this.fileList),
+				logo: this.addProduct.logo,
+				linkImg: this.addProduct.linkImg
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-enterprise/device/add",
+					type: "post",
+					option: {
+						successMsg: "添加成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.$router.back(-1);
+					this.reload();
+				} else {
+					this.$message.error("添加失败,请重新尝试");
+				}
+			});
 		}
 	}
 };

@@ -33,12 +33,12 @@ export default [{
       },
       {
         menu: '数据分析',
-        route: '/DataAnalysis',
+        route: '/AdminDataAnalysis',
         permissionCode: 'home_employee_lookup'
       },
       {
         menu: '实时监控',
-        route: '/Monitoring',
+        route: '/AdminMonitoring',
         permissionCode: 'home_employee_lookup'
       }
     ]
@@ -265,6 +265,27 @@ export default [{
         permissionCode: 'menu_update_lookup'
       },
       {
+        menu: '物联设备',
+        route: '/DeviceOfThings',
+        permissionCode: 'menu_add_lookup'
+      },
+      {
+        menu: '设备详情',
+        routeReg: /^\/DeviceOfThings\/DeviceOfThingsDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'menu_add_lookup'
+      },
+      {
+        menu: '数据分析',
+        route: '/DataAnalysis',
+        permissionCode: 'home_employee_lookup'
+      },
+      {
+        menu: '实时监控',
+        route: '/Monitoring',
+        permissionCode: 'home_employee_lookup'
+      },
+      {
         menu: '菜谱列表',
         route: '/Cookbook',
         permissionCode: 'manu_list_lookup'
@@ -305,38 +326,38 @@ export default [{
       {
         menu: '订单列表',
         route: '/Order',
-        permissionCode: 'supplierOrder_list_lookup'
+        permissionCode: 'home_employee_lookup'
       },
       {
         menu: '订单详情',
         routeReg: /^\/Order\/Details\/\d{1,}$/i,
         visible: true,
-        permissionCode: 'supplierOrder_detail_lookup'
+        permissionCode: 'home_employee_lookup'
       },
       {
         menu: '商品列表',
         route: '/Store',
-        permissionCode: 'supplierMall_list_lookup'
+        permissionCode: 'home_employee_lookup'
       },
       {
         menu: '添加商品',
         route: '/Store/AddMenu',
         visible: true,
-        permissionCode: 'supplierMall_add_lookup'
+        permissionCode: 'home_employee_lookup'
       }, {
         menu: '修改商品',
         routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
         visible: true,
-        permissionCode: 'supplierMall_update_lookup'
+        permissionCode: 'home_employee_lookup'
       },
       {
         menu: '优惠券',
         route: '/DiscountCoupon',
-        permissionCode: 'supplierMall_list_lookup'
+        permissionCode: 'menu_update_lookup'
       }, {
         menu: '红包',
         route: '/RedPacket',
-        permissionCode: 'supplierMall_list_lookup'
+        permissionCode: 'menu_update_lookup'
       },
     ]
   },

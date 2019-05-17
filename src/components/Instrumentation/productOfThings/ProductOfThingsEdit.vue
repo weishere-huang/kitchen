@@ -9,27 +9,46 @@
 			</div>
 			<div class="table_list">
 				<el-form label-width="200px" size="small">
+					<el-form-item label="驳回原因：" prop>
+						<span>{{editProduct.auditOpinion}}</span>
+					</el-form-item>
 					<el-form-item label="产品名称：" prop>
-						<el-input type="text" maxlength="20" placeholder style="width:400px;"></el-input>
+						<el-input
+							type="text"
+							maxlength="20"
+							v-model="editProduct.deviceName"
+							placeholder
+							style="width:400px;"
+						></el-input>
 					</el-form-item>
 					<el-form-item label="产品类型：" prop>
-						<el-select type="text" maxlength="20" placeholder style="width:130px">
-							<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
-						</el-select>
-						<el-select type="text" maxlength="20" placeholder style="width:130px">
-							<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
-						</el-select>
-						<el-select type="text" maxlength="20" placeholder style="width:132px">
-							<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
-						</el-select>
+						<el-cascader
+							expand-trigger="hover"
+							:options="options"
+							v-model="editProduct.deviceCateName"
+							style="width:400px;"
+						></el-cascader>
 					</el-form-item>
 					<el-form-item label="连网类型：" prop>
-						<el-select type="text" maxlength="20" placeholder style="width:400px;">
-							<el-option v-for="item in 3" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						<el-select
+							type="text"
+							v-model="editProduct.networkType"
+							maxlength="20"
+							placeholder
+							style="width:400px;"
+						>
+							<el-option label="WIFI" value="0"></el-option>
+							<el-option label="4G" value="1"></el-option>
+							<el-option label="NB-loT" value="2"></el-option>
+							<el-option label="LoRa" value="3"></el-option>
+							<el-option label="ZigBee" value="4"></el-option>
+							<el-option label="以太网" value="5"></el-option>
+							<el-option label="其他" value="6"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="产品描述：" prop>
 						<el-input
+							v-model="editProduct.introduce"
 							type="textarea"
 							resize="none"
 							rows="4"
@@ -67,6 +86,7 @@
 							:limit="1"
 							class="upload_show"
 							accept="image/png, image/jpeg"
+							:file-list="fileListLogo"
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
@@ -83,6 +103,7 @@
 							:limit="1"
 							class="upload_show"
 							accept="image/png, image/jpeg"
+							:file-list="fileListLink"
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
@@ -92,10 +113,15 @@
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label prop>
-						<el-checkbox value="1">我已经认真阅读并同意《服务条款》《物联产品接入协议》</el-checkbox>
+						<el-checkbox value="1" v-model="editProduct.checkValue">我已经认真阅读并同意</el-checkbox>《服务条款》《物联产品接入协议》
 					</el-form-item>
 					<el-form-item label prop>
-						<el-button type="primary" size="small">提交申请</el-button>
+						<el-button
+							type="primary"
+							:disabled="editProduct.checkValue==false"
+							size="small"
+							@click="editProductOfThings"
+						>提交申请</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -103,12 +129,66 @@
 	</div>
 </template>
 <script>
+let options = [
+	{
+		value: "智能生活",
+		label: "智能生活",
+		children: [
+			{
+				value: "厨房电器",
+				label: "厨房电器",
+				children: [
+					{
+						value: "炒菜机器人",
+						label: "炒菜机器人"
+					},
+					{
+						value: "洗碗机",
+						label: "洗碗机"
+					},
+					{
+						value: "微波炉",
+						label: "微波炉"
+					},
+					{
+						value: "电饭煲",
+						label: "电饭煲"
+					},
+					{
+						value: "电压力锅",
+						label: "电压力锅"
+					},
+					{
+						value: "电烤箱",
+						label: "电烤箱"
+					}
+				]
+			}
+		]
+	}
+];
 export default {
+	inject: ["reload"],
 	data() {
 		return {
+			options,
+			fileListLogo: [],
+			fileListLink: [],
 			fileList: [],
 			dialogImageUrl: "",
-			dialogVisible: false
+			dialogVisible: false,
+			editProduct: {
+				enterpriseId: 123,
+				enterpriseName: "光大实业",
+				deviceName: "",
+				deviceCateName: [],
+				networkType: "",
+				introduce: "",
+				agreement: "",
+				logo: "",
+				linkImg: "",
+				checkValue: false
+			}
 		};
 	},
 	methods: {
@@ -131,7 +211,10 @@ export default {
 			}
 		},
 		handleRemove(file, fileList) {
-			console.log(file, fileList);
+			this.fileList.splice(
+				this.fileList.findIndex(item => item.url == file.url),
+				1
+			);
 		},
 		handlePreview(file) {
 			console.log(file);
@@ -181,6 +264,12 @@ export default {
 		handleAvatarSuccess1(res, file, a) {
 			if (res.code === 200) {
 				// this.cookbook.recipeImg = res.data;
+				if (a == 1) {
+					this.editProduct.logo = res.data;
+				}
+				if (a == 2) {
+					this.editProduct.linkImg = res.data;
+				}
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -193,8 +282,97 @@ export default {
 			}
 		},
 		handleRemove1(file, fileList, a) {
-			// this.cookbook.recipeImg = null;
+			if (a == 1) {
+				this.editProduct.logo = "";
+			}
+			if (a == 2) {
+				this.editProduct.linkImg = "";
+			}
+		},
+		findOne(id) {
+			this.Axios(
+				{
+					params: { id: id },
+					url: "/api-enterprise/device/auditone",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					Object.assign(this.editProduct, result.data.data);
+					this.editProduct.deviceCateName = JSON.parse(
+						this.editProduct.deviceCateName
+					);
+					this.editProduct.agreement = JSON.parse(this.editProduct.agreement);
+					this.editProduct.networkType = this.editProduct.networkType.toString();
+					this.fileList = this.editProduct.agreement;
+					// this.editProduct.linkName = this.editProduct.linkImg.substring(
+					// 	this.editProduct.linkImg.lastIndexOf("/") + 1
+					// );
+					// this.editProduct.linkImg =
+					// 	this.global.imgPath +
+					// 	this.oneProductMsg.linkImg.replace("img:", "");
+					this.fileListLogo = [
+						{
+							name: this.editProduct.logo.substring(
+								this.editProduct.logo.lastIndexOf("/") + 1
+							),
+							url:
+								this.global.imgPath + this.editProduct.logo.replace("img:", "")
+						}
+					];
+					this.fileListLink = [
+						{
+							name: this.editProduct.linkImg.substring(
+								this.editProduct.linkImg.lastIndexOf("/") + 1
+							),
+							url:
+								this.global.imgPath +
+								this.editProduct.linkImg.replace("img:", "")
+						}
+					];
+				}
+			});
+		},
+		editProductOfThings() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				id: this.editProduct.id,
+				deviceName: this.editProduct.deviceName,
+				deviceCateName: JSON.stringify(this.editProduct.deviceCateName),
+				networkType: this.editProduct.networkType,
+				introduce: this.editProduct.introduce,
+				agreement: JSON.stringify(this.fileList),
+				logo: this.editProduct.logo,
+				linkImg: this.editProduct.linkImg
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-enterprise/device/update",
+					type: "post",
+					option: {
+						successMsg: "添加成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.$router.back(-1);
+					this.reload();
+				} else {
+					this.$message.error("添加失败,请重新尝试");
+				}
+			});
 		}
+	},
+	created() {
+		this.findOne(this.$route.params.id);
 	}
 };
 </script>

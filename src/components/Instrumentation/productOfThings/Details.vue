@@ -10,43 +10,91 @@
 			<div class="table_list">
 				<el-form label-width="200px" size="small">
 					<el-form-item label="产品名称：" prop>
-						<span></span>
+						<span>{{oneProductMsg.deviceName}}</span>
 					</el-form-item>
 					<el-form-item label="产品类型：" prop>
-						<span></span>
+						<span>{{oneProductMsg.deviceCateName}}</span>
 					</el-form-item>
 					<el-form-item label="申请设备厂商：" prop>
-						<span></span>
+						<span>{{oneProductMsg.enterpriseName}}</span>
 					</el-form-item>
 					<el-form-item label="审核状态：" prop>
-						<span></span>
+						<span>{{oneProductMsg.state==0?'待审核':oneProductMsg.state==1?'已通过':'已驳回'}}</span>
 					</el-form-item>
 					<el-form-item label="审核时间：" prop>
-						<span></span>
+						<span>{{oneProductMsg.deviceName}}</span>
+					</el-form-item>
+					<el-form-item label="ProductKey：" prop>
+						<span>{{oneProductMsg.deviceKey}}</span>
 					</el-form-item>
 					<el-form-item label="连网类型：" prop>
-						<span></span>
+						<span>{{oneProductMsg.networkType==0?'WIFI':oneProductMsg.networkType==1?'4G':oneProductMsg.networkType==2?'NB-loT':oneProductMsg.networkType==3?'LoRa':oneProductMsg.networkType==4?'ZigBee':oneProductMsg.networkType==5?'以太网':'其他'}}</span>
 					</el-form-item>
 					<el-form-item label="接入设备数量：" prop>
-						<span></span>
+						<span>{{oneProductMsg.userCount}}</span>
 					</el-form-item>
 					<el-form-item label="产品描述：" prop>
-						<span></span>
+						<span>{{oneProductMsg.introduce}}</span>
 					</el-form-item>
 					<el-form-item label="产品协议：" prop>
-						<span></span>
+						<span v-for="(item, index) in oneProductMsg.agreement" :key="index">{{item.name}}</span>
 					</el-form-item>
 					<el-form-item label="产品连接示意图：" prop>
-						<span></span>
+						<span>{{oneProductMsg.linkName}}</span>
 					</el-form-item>
 					<el-form-item label="申请时间：" prop>
-						<span></span>
+						<span>{{oneProductMsg.gmtCreate}}</span>
 					</el-form-item>
 				</el-form>
 			</div>
 		</div>
 	</div>
 </template>
+<script>
+export default {
+	data() {
+		return {
+			oneProductMsg: {}
+		};
+	},
+	methods: {
+		findOne(id) {
+			this.Axios(
+				{
+					params: { id: id },
+					url: "/api-enterprise/device/auditone",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.oneProductMsg = result.data.data;
+					this.oneProductMsg.deviceCateName = JSON.parse(
+						this.oneProductMsg.deviceCateName
+					).join("--");
+					this.oneProductMsg.agreement = JSON.parse(
+						this.oneProductMsg.agreement
+					);
+					this.oneProductMsg.linkName = this.oneProductMsg.linkImg.substring(
+						this.oneProductMsg.linkImg.lastIndexOf("/") + 1
+					);
+					this.oneProductMsg.linkImg =
+						this.global.imgPath +
+						this.oneProductMsg.linkImg.replace("img:", "");
+				}
+			});
+		}
+	},
+	created() {
+		this.findOne(this.$route.params.id);
+	}
+};
+</script>
+
 <style lang="less">
 @main-color: #1cc09f;
 @bgColor: #f0f2f5;

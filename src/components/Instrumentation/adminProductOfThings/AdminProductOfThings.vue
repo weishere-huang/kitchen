@@ -25,58 +25,55 @@
 					>
 						<el-table-column label="产品名称" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.nickName }}</span>
+								<span>{{ scope.row.deviceName }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="产品分类" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.phone }}</span>
+								<span>{{ scope.row.deviceCateName[2] }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="网路类型" min-width="80">
+						<el-table-column label="接入厂商" min-width="120">
+							<template slot-scope="scope">
+								<span>{{ scope.row.enterpriseName }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="已绑定用户" min-width="120">
+							<template slot-scope="scope">
+								<span>{{ scope.row.userCount }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="产品描述" min-width="100">
+							<template slot-scope="scope">
+								<span>{{ scope.row.introduce }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="审核状态" min-width="100">
 							<template slot-scope="scope">
 								<span
-									@click="$router.push({path:'/AdminOrder'})"
-									style="cursor: pointer;"
-								>{{ scope.row.order }}</span>
+									:style="{color:scope.row.state==0?'red':scope.row.state==1?'#999999':'#333333'}"
+								>{{ scope.row.state==0?'待审核':scope.row.state==1?"已通过":"已驳回" }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="已接入的设备厂商" min-width="120">
-							<template slot-scope="scope">
-								<span
-									@click="$router.push({path:'/Integral'})"
-									style="cursor: pointer;"
-									class="score_style"
-								>{{ scope.row.userScoreDO.score }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="已绑定的设备" min-width="120">
-							<template slot-scope="scope">
-								<span
-									@click="$router.push({path:'/Integral'})"
-									style="cursor: pointer;"
-									class="score_style"
-								>{{ scope.row.userScoreDO.score }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="备注" min-width="100">
-							<template slot-scope="scope">
-								<span
-									@click="$router.push({path:'/Integral'})"
-									style="cursor: pointer;"
-									class="score_style"
-								>{{ scope.row.userScoreDO.score }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="创建时间" min-width="120" show-overflow-tooltip>
+						<el-table-column label="申请时间" min-width="120" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{scope.row.gmtCreate}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="toAudit(scope.$index, scope.row)">审核</el-button>
-								<el-button type="text" size="mini" @click="toDetails(scope.$index, scope.row)">查看</el-button>&nbsp;&nbsp;
+								<el-button
+									type="text"
+									v-if="scope.row.state==0"
+									size="mini"
+									@click="toAudit(scope.$index, scope.row)"
+								>审核</el-button>
+								<el-button
+									type="text"
+									v-if="scope.row.state!=0"
+									size="mini"
+									@click="toDetails(scope.$index, scope.row)"
+								>查看</el-button>&nbsp;&nbsp;
 								<el-popover placement="top" width="180" v-model="scope.row.visible">
 									<p style="line-height:32px;text-align:center;">
 										<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -191,17 +188,11 @@ export default {
 				}
 			);
 		},
-		resetPasswords(index, rowData) {
-			rowData.resetvisible = false;
-			let params = { type: "edit", index: index, rowData: rowData };
-			console.log(params);
-			this.resetpsw(rowData.userId);
-		},
 		handleDelete(index, rowData) {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
 			console.log(params);
-			this.deleteuser(rowData.userId);
+			this.deleteProduct(rowData.id);
 		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
@@ -224,74 +215,50 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						state: this.states,
-						keyWord: this.keyWord
+						keyword: this.keyWord
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-user/userInfo/listUserInfo"
+					url: "/api-enterprise/device/list"
 				},
 				this
 			).then(
 				result => {
-					console.log(result);
+					console.log(result.data.data.content);
 					this.tableData = result.data.data.content;
-					for (let i = 0; i < this.tableData.length; i++) {
-						if (this.tableData[i].state == 0) {
-							this.tableData[i].state = true;
-						} else {
-							this.tableData[i].state = false;
-						}
-						// this.tableData[i].state = this.tableData[i].state.toString;
-					}
 					this.total = result.data.data.totalElement;
+					for (let i = 0; i < this.tableData.length; i++) {
+						this.tableData[i].deviceCateName = JSON.parse(
+							this.tableData[i].deviceCateName
+						);
+					}
 				},
 				({ type, info }) => {}
 			);
 		},
-		deleteuser(userId) {
+		deleteProduct(id) {
 			let qs = require("qs");
 			let data = qs.stringify({
-				id: userId
+				id: id
 			});
 			this.Axios(
 				{
 					params: data,
-					url: "/api-user/userInfo/deleteInfo",
-					// url:"/api-sso/user/resetpassword",
+					url: "/api-enterprise/device/delete",
 					type: "post",
 					option: {
-						enableMsg: false
+						successMsg: "删除成功"
 					}
 				},
 				this
 			).then(result => {
+				console.log(result);
 				if (result.data.code === 200) {
-					this.reload();
-				}
-				console.log(result.data);
-			});
-		},
-		resetpsw(userId) {
-			let qs = require("qs");
-			let data = qs.stringify({
-				id: userId
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-sso/user/resetpassword",
-					type: "post",
-					option: {
-						enableMsg: false
-					}
-				},
-				this
-			).then(result => {
-				if (result.data.code === 200) {
-					this.$message.success("修改成功~");
+					this.getlist();
+				} else {
+					this.$message.error("删除失败");
 				}
 			});
 		}

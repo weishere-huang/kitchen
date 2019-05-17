@@ -1,24 +1,32 @@
 <template>
-	<div class="product_things">
+	<div class="admin_devide_things">
 		<div :class="[{hide:isHideList}]">
-			<div class="top_list">
-				<permission-button
-					permCode="manu_list_lookup.menu_list_add"
-					banType="disable"
-					size="small"
-					type="primary"
-					class="el-icon-circle-plus-outline"
-					@click="$router.push({path:'/ProductOfThings/ProductOfThingsAdd'})"
-				>创建产品</permission-button>
-			</div>
 			<div class="bottom_list">
 				<div class="top_title">
-					<h4>产品列表</h4>
+					<h4>设备列表</h4>
 					<div class="top_search">
-						<el-col :span="15" style="padding:0 5px;">
-							<el-input size="small" style="width:100%;" clearable placeholder="产品名称" v-model="keyWord"></el-input>
+						<el-col :span="7">
+							所属产品：
+							<el-select size="small" placeholder style="width:150px;">
+								<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
+							</el-select>
 						</el-col>
-						<el-col :span="9" style="padding:0 5px;">
+						<el-col :span="6">
+							状态：
+							<el-select size="small" placeholder style="width:150px;">
+								<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="6" style="padding:0 5px;">
+							<el-input
+								size="small"
+								style="width:100%;"
+								clearable
+								placeholder="设备名称/型号/接入用户"
+								v-model="keyWord"
+							></el-input>
+						</el-col>
+						<el-col :span="5" style="padding:0 5px;">
 							<el-button size="small" plain @click="searchlist">搜索</el-button>
 							<el-button size="small" plain @click="searchlist">重置</el-button>
 						</el-col>
@@ -33,67 +41,54 @@
 						tooltip-effect="light"
 						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
 					>
-						<el-table-column label="产品名称" min-width="100" show-overflow-tooltip>
+						<el-table-column label="设备名称" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.deviceName }}</span>
+								<span>{{ scope.row.nickName }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="产品分类" min-width="100" show-overflow-tooltip>
+						<el-table-column label="所属产品" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.deviceCateName[2] }}</span>
+								<span>{{ scope.row.phone }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="接入厂商" min-width="120">
-							<template slot-scope="scope">
-								<span>{{ scope.row.enterpriseName }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="已绑定用户" min-width="120">
-							<template slot-scope="scope">
-								<span>{{ scope.row.userCount }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="产品描述" min-width="100">
-							<template slot-scope="scope">
-								<span>{{ scope.row.introduce }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="审核状态" min-width="100">
+						<el-table-column label="设备型号" min-width="80">
 							<template slot-scope="scope">
 								<span
-									:style="{color:scope.row.state==0?'red':scope.row.state==1?'#999999':'#333333'}"
-								>{{ scope.row.state==0?'待审核':scope.row.state==1?"已通过":"已驳回" }}</span>
+									@click="$router.push({path:'/AdminOrder'})"
+									style="cursor: pointer;"
+								>{{ scope.row.order }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="申请时间" min-width="120" show-overflow-tooltip>
+						<el-table-column label="用户昵称" min-width="120">
 							<template slot-scope="scope">
-								<span>{{scope.row.gmtCreate}}</span>
+								<span
+									@click="$router.push({path:'/Integral'})"
+									style="cursor: pointer;"
+									class="score_style"
+								>{{ scope.row.userScoreDO.score }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="账号（手机号）" min-width="120">
+							<template slot-scope="scope">
+								<span
+									@click="$router.push({path:'/Integral'})"
+									style="cursor: pointer;"
+									class="score_style"
+								>{{ scope.row.userScoreDO.score }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="状态" min-width="100">
+							<template slot-scope="scope">
+								<span
+									@click="$router.push({path:'/Integral'})"
+									style="cursor: pointer;"
+									class="score_style"
+								>{{ scope.row.userScoreDO.score }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">
 							<template slot-scope="scope">
-								<el-button
-									type="text"
-									size="mini"
-									v-if="scope.row.state!=2"
-									@click="toDetails(scope.$index, scope.row)"
-								>查看</el-button>
-								<el-button
-									type="text"
-									size="mini"
-									v-if="scope.row.state==2"
-									@click="toEdit(scope.$index, scope.row)"
-								>修改</el-button>
-								<el-popover placement="top" width="180" v-model="scope.row.visible">
-									<p style="line-height:32px;text-align:center;">
-										<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
-									</p>
-									<div style="text-align: center; margin: 0">
-										<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
-										<el-button type="primary" size="mini" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
-									</div>
-									<el-button slot="reference" type="text" size="mini">删除</el-button>
-								</el-popover>
+								<el-button type="text" size="mini" @click="toDetails(scope.$index, scope.row)">查看</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -120,7 +115,6 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
-			dialogVisible: false,
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			total: 0,
 			pageIndex: 1,
@@ -162,43 +156,14 @@ export default {
 	methods: {
 		toDetails(index, row) {
 			this.$router.push({
-				path: "/ProductOfThings/ProductOfThingsDetails/" + row.id
-			});
-		},
-		toEdit(index, row) {
-			this.$router.push({
-				path: "/ProductOfThings/ProductOfThingsEdit/" + row.id
+				path: "/AdminDeviceOfThings/AdminDeviceOfThingsDetails/" + row.id
 			});
 		},
 		handleDelete(index, rowData) {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
 			console.log(params);
-			this.deleteProduct(rowData.id);
-		},
-		deleteProduct(id) {
-			let qs = require("qs");
-			let data = qs.stringify({
-				id: id
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-enterprise/device/delete",
-					type: "post",
-					option: {
-						successMsg: "删除成功"
-					}
-				},
-				this
-			).then(result => {
-				console.log(result);
-				if (result.data.code === 200) {
-					this.getlist();
-				} else {
-					this.$message.error("删除失败");
-				}
-			});
+			this.deleteuser(rowData.userId);
 		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
@@ -221,26 +186,29 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						keyword: this.keyWord,
-						enterpriseId: 123
+						state: this.states,
+						keyWord: this.keyWord
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-enterprise/device/list"
+					url: "/api-user/userInfo/listUserInfo"
 				},
 				this
 			).then(
 				result => {
-					console.log(result.data.data.content);
+					console.log(result);
 					this.tableData = result.data.data.content;
-					this.total = result.data.data.totalElement;
 					for (let i = 0; i < this.tableData.length; i++) {
-						this.tableData[i].deviceCateName = JSON.parse(
-							this.tableData[i].deviceCateName
-						);
+						if (this.tableData[i].state == 0) {
+							this.tableData[i].state = true;
+						} else {
+							this.tableData[i].state = false;
+						}
+						// this.tableData[i].state = this.tableData[i].state.toString;
 					}
+					this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
 			);
@@ -275,7 +243,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.product_things {
+.admin_devide_things {
 	font-size: 14px;
 	color: @font-normal;
 
@@ -301,7 +269,7 @@ export default {
 			float: left;
 		}
 		.top_search {
-			width: 400px;
+			width: 800px;
 			float: right;
 		}
 	}

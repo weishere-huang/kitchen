@@ -301,38 +301,7 @@ export default {
 			},
 			dialogVisible: false,
 			currentPage: 1,
-			tableData: [
-				{
-					name: "无限制10元",
-					denomination: "10",
-					validity: "2019-05-01 至 2019-05-10",
-					sendSum: "1000",
-					get: "2",
-					surplus: "998",
-					condition: "无限制",
-					state: 1
-				},
-				{
-					name: "满100减10元",
-					denomination: "10",
-					validity: "2019-05-01 至 2019-05-10",
-					sendSum: "1000",
-					get: "0",
-					surplus: "1000",
-					condition: "满100",
-					state: 0
-				},
-				{
-					name: "满2000减200元",
-					denomination: "200",
-					validity: "2019-05-01 至 2019-05-10",
-					sendSum: "1000",
-					get: "2",
-					surplus: "998",
-					condition: "满2000",
-					state: 1
-				}
-			],
+			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
 			total: null

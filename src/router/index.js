@@ -52,14 +52,30 @@ import ProductOfThingsDetails from '@/components/Instrumentation/productOfThings
 import AdminProductOfThings from '@/components/Instrumentation/adminProductOfThings/AdminProductOfThings'
 import AdminProductOfThingsAudit from '@/components/Instrumentation/adminProductOfThings/Audit'
 import AdminProductOfThingsDetails from '@/components/Instrumentation/adminProductOfThings/Details'
-import Monitoring from '@/components/Instrumentation/adminMonitoring/Monitoring'
-import DataAnalysis from '@/components/Instrumentation/adminDataAnalysis/DataAnalysis'
+import AdminMonitoring from '@/components/Instrumentation/adminMonitoring/Monitoring'
+import AdminDataAnalysis from '@/components/Instrumentation/adminDataAnalysis/DataAnalysis'
+import DeviceOfThings from '@/components/Instrumentation/deviceOfThings/index'
+import DeviceOfThingsDetails from '@/components/Instrumentation/deviceOfThings/Details'
+import Monitoring from '@/components/Instrumentation/monitoring/Monitoring'
+import DataAnalysis from '@/components/Instrumentation/dataAnalysis/DataAnalysis'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
       path: '/',
       redirect: '/Home',
+    },
+    {
+      path: '/Monitoring',
+      name: 'Monitoring',
+      component: Monitoring,
+      props: {
+        pageName: '实时监控'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: []
     },
     {
       path: '/DataAnalysis',
@@ -74,9 +90,43 @@ const router = new Router({
       children: []
     },
     {
-      path: '/Monitoring',
-      name: 'Monitoring',
-      component: Monitoring,
+      path: '/DeviceOfThings',
+      name: 'DeviceOfThings',
+      component: DeviceOfThings,
+      props: {
+        pageName: '物联设备'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'DeviceOfThingsDetails/:id/',
+        name: 'DeviceOfThingsDetails',
+        component: DeviceOfThingsDetails,
+        props: {
+          pageName: '设备详情'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
+    },
+    {
+      path: '/AdminDataAnalysis',
+      name: 'AdminDataAnalysis',
+      component: AdminDataAnalysis,
+      props: {
+        pageName: '数据分析'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: []
+    },
+    {
+      path: '/AdminMonitoring',
+      name: 'AdminMonitoring',
+      component: AdminMonitoring,
       props: {
         pageName: '实时监控'
       },
@@ -177,7 +227,7 @@ const router = new Router({
         name: 'AdminDeviceOfThingsDetails',
         component: AdminDeviceOfThingsDetails,
         props: {
-          pageName: '添加菜谱包'
+          pageName: '设备详情'
         },
         meta: {
           requireAuth: true,
