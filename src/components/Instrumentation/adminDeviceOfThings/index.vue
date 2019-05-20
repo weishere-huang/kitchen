@@ -3,18 +3,26 @@
 		<div :class="[{hide:isHideList}]">
 			<div class="bottom_list">
 				<div class="top_title">
-					<h4>产品列表</h4>
+					<h4>设备列表</h4>
 					<div class="top_search">
 						<el-col :span="7">
 							所属产品：
-							<el-select size="small" placeholder style="width:150px;">
-								<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
+							<el-select size="small" v-model="productValue" placeholder style="width:150px;">
+								<el-option label="全部" value="-1"></el-option>
+								<el-option
+									v-for="item in productList"
+									:key="item.id"
+									:label="item.deviceName"
+									:value="item.id"
+								></el-option>
 							</el-select>
 						</el-col>
 						<el-col :span="6">
 							状态：
-							<el-select size="small" placeholder style="width:150px;">
-								<el-option v-for="item in 3" :key="item.value" :label="item" :value="item"></el-option>
+							<el-select size="small" v-model="state" placeholder style="width:150px;">
+								<el-option label="全部" value="-1"></el-option>
+								<el-option label="在线" value="0"></el-option>
+								<el-option label="离线" value="1"></el-option>
 							</el-select>
 						</el-col>
 						<el-col :span="6" style="padding:0 5px;">
@@ -41,49 +49,34 @@
 						tooltip-effect="light"
 						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
 					>
-						<el-table-column label="设备名称" min-width="100" show-overflow-tooltip>
+						<el-table-column label="设备名称/自定义" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.nickName }}</span>
+								<span>{{ scope.row.name }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="所属产品" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.phone }}</span>
+								<span>{{ scope.row.deviceName }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="设备型号" min-width="80">
 							<template slot-scope="scope">
-								<span
-									@click="$router.push({path:'/AdminOrder'})"
-									style="cursor: pointer;"
-								>{{ scope.row.order }}</span>
+								<span>{{ scope.row.deviceModel }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="用户昵称" min-width="120">
 							<template slot-scope="scope">
-								<span
-									@click="$router.push({path:'/Integral'})"
-									style="cursor: pointer;"
-									class="score_style"
-								>{{ scope.row.userScoreDO.score }}</span>
+								<span>{{ scope.row.userName }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="账号（手机号）" min-width="120">
 							<template slot-scope="scope">
-								<span
-									@click="$router.push({path:'/Integral'})"
-									style="cursor: pointer;"
-									class="score_style"
-								>{{ scope.row.userScoreDO.score }}</span>
+								<span>{{ scope.row.phone }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="状态" min-width="100">
 							<template slot-scope="scope">
-								<span
-									@click="$router.push({path:'/Integral'})"
-									style="cursor: pointer;"
-									class="score_style"
-								>{{ scope.row.userScoreDO.score }}</span>
+								<span>{{ scope.row.state==0?"开机":scope.row.state==1?"关机":"故障" }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">
@@ -119,38 +112,11 @@ export default {
 			total: 0,
 			pageIndex: 1,
 			pageSize: 10,
-			options: [
-				{
-					label: "WIFI",
-					value: 0
-				},
-				{
-					label: "4G",
-					value: 1
-				},
-				{
-					label: "NB-loT",
-					value: 2
-				},
-				{
-					label: "LoRa",
-					value: 3
-				},
-				{
-					label: "ZigBee",
-					value: 4
-				},
-				{
-					label: "以太网",
-					value: 5
-				},
-				{
-					label: "其他",
-					value: 6
-				}
-			],
 			tableData: [],
-			keyWord: null
+			keyWord: null,
+			state: "-1",
+			productValue: "-1",
+			productList: []
 		};
 	},
 	methods: {
@@ -187,34 +153,46 @@ export default {
 						page: this.pageIndex,
 						size: this.pageSize,
 						state: this.states,
-						keyWord: this.keyWord
+						keyword: this.keyWord
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-user/userInfo/listUserInfo"
+					url: "/api-enterprise/deviceuser/list"
 				},
 				this
 			).then(
 				result => {
 					console.log(result);
 					this.tableData = result.data.data.content;
-					for (let i = 0; i < this.tableData.length; i++) {
-						if (this.tableData[i].state == 0) {
-							this.tableData[i].state = true;
-						} else {
-							this.tableData[i].state = false;
-						}
-						// this.tableData[i].state = this.tableData[i].state.toString;
-					}
 					this.total = result.data.data.totalElement;
+				},
+				({ type, info }) => {}
+			);
+		},
+		getProductlist() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-enterprise/device/findPassList"
+				},
+				this
+			).then(
+				result => {
+					// console.log(result);
+					this.productList = result.data.data;
 				},
 				({ type, info }) => {}
 			);
 		}
 	},
 	created() {
+		this.getProductlist();
 		this.getlist();
 		let a = this.$route.matched.find(item => item.name === "ProductOfThingsAdd")
 			? true

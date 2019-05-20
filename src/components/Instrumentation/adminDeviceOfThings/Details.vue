@@ -11,49 +11,64 @@
 				<el-col :span="8">
 					<el-form label-width="200px" size="small">
 						<el-form-item label="设备名称/自定义：" prop>
-							<span></span>
+							<span>{{deviceDetails.name}}</span>
 						</el-form-item>
 						<el-form-item label="所属产品：" prop>
-							<span></span>
+							<span>{{deviceDetails.deviceName}}</span>
 						</el-form-item>
 						<el-form-item label="设备型号：" prop>
-							<span></span>
+							<span>{{deviceDetails.deviceModel}}</span>
 						</el-form-item>
 						<el-form-item label="设备序号：" prop>
-							<span></span>
+							<span>{{deviceDetails.deviceNumber}}</span>
 						</el-form-item>
 						<el-form-item label="软件版本：" prop>
-							<span></span>
+							<span>{{deviceDetails.softwareVersion}}</span>
 						</el-form-item>
 						<el-form-item label="固件版本：" prop>
-							<span></span>
+							<span>{{deviceDetails.hardwareVersion}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="140px" size="small">
-						<el-form-item label="用户昵称：" prop>
-							<span></span>
+						<el-form-item label="用户昵称：">
+							<span>{{deviceDetails.userName}}</span>
 						</el-form-item>
-						<el-form-item label="账号（手机号）：" prop>
-							<span></span>
+						<el-form-item label="账号（手机号）：">
+							<span>{{deviceDetails.phone}}</span>
 						</el-form-item>
-						<el-form-item label="接入时间：" prop>
-							<span></span>
+						<el-form-item label="接入时间：">
+							<span>{{deviceDetails.gmtCreate}}</span>
 						</el-form-item>
-						<el-form-item label="接入IP" prop>
-							<span></span>
+						<el-form-item label="接入IP:">
+							<span>{{deviceDetails.interIp}}</span>
 						</el-form-item>
-						<el-form-item label="最近在线时间" prop>
-							<span></span>
+						<el-form-item label="最近在线时间:">
+							<span>{{deviceDetails.name}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8" class="on_off">
-					<div class="big_circle">
-						<div class="small_circle"></div>
+					<div class="icon_case">
+						<i
+							class="iconfont"
+							v-if="deviceDetails.isOnline==0"
+							style="font-size:48px;color:#2BABE3"
+						>&#xe6b5;</i>
+						<i class="iconfont" v-if="deviceDetails.isOnline==1" style="font-size:48px;">&#xe78e;</i>
+						<i
+							class="iconfont"
+							v-if="deviceDetails.state==0"
+							style="font-size:48px;color:#70B603"
+						>&#xe655;</i>
+						<i class="iconfont" v-if="deviceDetails.state==1" style="font-size:48px;">&#xe655;</i>
 					</div>
-					<div style="text-align: center;margin-top:20px;">当前状态：开机</div>
+
+					<div style="text-align: center;margin-top:20px;">
+						<span style="padding:0 40px;">{{deviceDetails.isOnline==0?"在线":"离线"}}</span>
+						<span style="padding:0 40px;">{{deviceDetails.state==0?"开机":"关机"}}</span>
+					</div>
 				</el-col>
 			</div>
 		</div>
@@ -130,7 +145,8 @@ export default {
 					phone: "开机",
 					order: "3`45"
 				}
-			]
+			],
+			deviceDetails: {}
 		};
 	},
 	methods: {
@@ -142,7 +158,28 @@ export default {
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
+		},
+		findOne(id) {
+			this.Axios(
+				{
+					params: { id: id },
+					url: "/api-enterprise/deviceuser/findone",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.deviceDetails = result.data.data;
+				}
+			});
 		}
+	},
+	created() {
+		this.findOne(this.$route.params.id);
 	}
 };
 </script>
@@ -188,6 +225,12 @@ export default {
 		padding: 40px 0;
 		margin-top: 40px;
 		border-left: @border;
+	}
+	.icon_case {
+		text-align: center;
+		i {
+			margin: 0 30px;
+		}
 	}
 	.big_circle {
 		width: 60px;

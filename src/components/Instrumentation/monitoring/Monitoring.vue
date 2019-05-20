@@ -9,19 +9,15 @@
 					<ul class="statistics_case">
 						<li>
 							<div>设备总数</div>
-							<div>43233</div>
+							<div>{{deviceCountMsg.sum!=""?deviceCountMsg.sum:0}}</div>
 						</li>
 						<li>
 							<div>当前在线</div>
-							<div>43233</div>
+							<div>{{deviceCountMsg.on!=""?deviceCountMsg.on:0}}</div>
 						</li>
 						<li>
 							<div>当前离线</div>
-							<div>43233</div>
-						</li>
-						<li>
-							<div>当前故障</div>
-							<div>43233</div>
+							<div>{{deviceCountMsg.off!=""?deviceCountMsg.off:0}}</div>
 						</li>
 					</ul>
 				</div>
@@ -35,172 +31,120 @@ var echarts = require("echarts");
 export default {
 	inject: ["reload"],
 	data() {
-		return {};
-	},
-	mounted() {
-		let myChart = echarts.init(document.getElementById("monitoring"));
-		let Option = {
-			title: {
-				text: "设备运行折线图"
-			},
-			tooltip: {
-				trigger: "axis"
-			},
-			legend: {
-				data: ["在线", "离线", "故障"]
-			},
-			grid: {
-				left: "3%",
-				right: "4%",
-				bottom: "3%",
-				containLabel: true
-			},
-			toolbox: {
-				feature: {
-					saveAsImage: {}
-				}
-			},
-			xAxis: {
-				type: "category",
-				boundaryGap: false,
-				data: [
-					"9:00",
-					"9:30",
-					"10:00",
-					"10:30",
-					"11:00",
-					"11:30",
-					"12:00",
-					"12:30",
-					"13:00",
-					"13:30",
-					"14:00",
-					"14:30",
-					"15:00",
-					"15:30",
-					"16:00",
-					"16:30",
-					"17:00",
-					"17:30",
-					"18:00",
-					"18:30",
-					"19:00",
-					"19:30",
-					"20:00",
-					"20:30",
-					"21:00",
-					"21:30"
-				]
-			},
-			yAxis: {
-				type: "value"
-			},
-			series: [
-				{
-					name: "在线",
-					type: "line",
-					stack: "总量",
-					data: [
-						120,
-						132,
-						101,
-						134,
-						90,
-						230,
-						210,
-						132,
-						101,
-						134,
-						90,
-						230,
-						210,
-						132,
-						101,
-						134,
-						90,
-						230,
-						210,
-						132,
-						101,
-						134,
-						90,
-						230,
-						210
-					]
-				},
-				{
-					name: "离线",
-					type: "line",
-					stack: "总量",
-					data: [
-						220,
-						182,
-						191,
-						234,
-						290,
-						330,
-						310,
-						182,
-						191,
-						234,
-						290,
-						330,
-						310,
-						182,
-						191,
-						234,
-						290,
-						330,
-						310,
-						182,
-						191,
-						234,
-						290,
-						330,
-						310
-					]
-				},
-				{
-					name: "故障",
-					type: "line",
-					stack: "总量",
-					data: [
-						150,
-						232,
-						201,
-						154,
-						190,
-						330,
-						410,
-						232,
-						201,
-						154,
-						190,
-						330,
-						410,
-						232,
-						201,
-						154,
-						190,
-						330,
-						410,
-						232,
-						201,
-						154,
-						190,
-						330,
-						410
-					]
-				}
-			]
-		};
-		myChart.setOption(Option);
-		window.onresize = function() {
-			myChart.resize();
+		return {
+			deviceCountMsg: {
+				sum: "",
+				on: "",
+				off: ""
+			}
 		};
 	},
-	methods: {},
-	created() {},
+	mounted() {},
+	methods: {
+		getTopList() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-enterprise/deviceuser/findBindDeviceCount",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.deviceCountMsg.sum = result.data.data.find(item => {
+						return item.title == "设备总数";
+					}).count;
+					this.deviceCountMsg.on = result.data.data.find(item => {
+						return item.title == "当前在线";
+					}).count;
+					this.deviceCountMsg.off = result.data.data.find(item => {
+						return item.title == "当前离线";
+					}).count;
+				}
+			});
+		},
+		getAxisMsg() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-enterprise/mock/listDeviceStateMonitor",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				// console.log(result);
+				if (result.data.code === 200) {
+					let date = result.data.data.date;
+					let offline = result.data.data.offline;
+					let online = result.data.data.online;
+					let myChart = echarts.init(document.getElementById("monitoring"));
+					date = date.map(item => {
+						return item.split(" ")[1].substring(0, 5);
+					});
+					console.log(date);
+					let Option = {
+						title: {
+							text: "设备运行折线图"
+						},
+						tooltip: {
+							trigger: "axis"
+						},
+						legend: {
+							data: ["在线", "离线"]
+						},
+						grid: {
+							left: "3%",
+							right: "4%",
+							bottom: "3%",
+							containLabel: true
+						},
+						toolbox: {
+							feature: {
+								saveAsImage: {}
+							}
+						},
+						xAxis: {
+							type: "category",
+							boundaryGap: false,
+							data: date
+						},
+						yAxis: {
+							type: "value"
+						},
+						series: [
+							{
+								name: "在线",
+								type: "line",
+								stack: "总量",
+								data: online
+							},
+							{
+								name: "离线",
+								type: "line",
+								stack: "总量",
+								data: offline
+							}
+						]
+					};
+					myChart.setOption(Option);
+					window.onresize = function() {
+						myChart.resize();
+					};
+				}
+			});
+		}
+	},
+	created() {
+		this.getAxisMsg();
+		this.getTopList();
+	},
 	watch: {}
 };
 </script>

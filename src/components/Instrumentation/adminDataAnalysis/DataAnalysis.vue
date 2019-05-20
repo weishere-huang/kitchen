@@ -43,12 +43,12 @@
 					<el-table-column label="排序" type="index" width="50" show-overflow-tooltip></el-table-column>
 					<el-table-column label="城市" min-width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span>{{ scope.row.phone }}</span>
+							<span>{{ scope.row.cityName }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="设备数" min-width="50">
 						<template slot-scope="scope">
-							<span>{{ scope.row.order }}</span>
+							<span>{{ scope.row.deviceCount }}</span>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -58,7 +58,7 @@
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
 						:current-page.sync="pageIndex"
-						:page-sizes="[10, 20,40, 100]"
+						:page-sizes="[14, 28,50, 100]"
 						:page-size="pageSize"
 						layout="sizes, prev, pager, next"
 						:total="total"
@@ -154,7 +154,7 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
+				// console.log(result);
 				if (result.data.code === 200) {
 					this.deviceCount = result.data.data;
 				}
@@ -164,12 +164,12 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getlist();
+			this.getTableList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getlist();
+			this.getTableList();
 		},
 
 		getBar() {
@@ -184,11 +184,9 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
+				// console.log(result);
 				let dateVal = JSON.parse(JSON.stringify(result.data.data.date));
 				let bindCount = JSON.parse(JSON.stringify(result.data.data.bindCount));
-				console.log(dateVal);
-				console.log(bindCount);
 				if (result.data.code === 200) {
 					let myChart = echarts.init(
 						document.getElementById("adminDataAnalysis")
@@ -224,7 +222,7 @@ export default {
 						],
 						series: [
 							{
-								name: "直接访问",
+								name: "绑定数量",
 								type: "bar",
 								data: bindCount,
 								barMaxWidth: 50,
@@ -243,9 +241,29 @@ export default {
 					};
 				}
 			});
+		},
+		getTableList() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-enterprise/deviceuser/cityDevice",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.tableData = result.data.data.content;
+					this.total = result.data.data.totalElement;
+				}
+			});
 		}
 	},
 	created() {
+		this.getTableList();
 		this.getBar();
 		this.getTopList();
 	},

@@ -2,7 +2,7 @@ export default [{
     menu: '智慧物联',
     permissionCode: 'things',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe64e;',
     subMenu: [{
         menu: '物联产品',
         route: '/AdminProductOfThings',
@@ -47,7 +47,7 @@ export default [{
     menu: '电商平台',
     permissionCode: 'Ebusiness',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe627;',
     subMenu: [{
         menu: '首页',
         route: '/AdminHome',
@@ -138,12 +138,14 @@ export default [{
         menu: '消息通知',
         route: '/Information',
         permissionCode: 'messagepush_lookup'
-      }, {
+      },
+      {
         menu: '发送消息',
         route: '/Information/NewInformation',
         visible: true,
         permissionCode: 'messagepush_add_lookup'
-      }, {
+      },
+      {
         menu: '查看详情',
         routeReg: /^\/Information\/DetailsInformation\/\d{1,}$/i,
         visible: true,
@@ -155,12 +157,41 @@ export default [{
     menu: '入住管理',
     permissionCode: 'checkIn',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe861;',
     subMenu: [{
-      menu: '入住管理',
-      route: '/CheckIn',
-      permissionCode: 'home_employee_lookup'
-    }]
+        menu: '设备厂商',
+        route: '/Manufacturer',
+        permissionCode: 'home_employee_lookup'
+      },
+      {
+        menu: '查看详情',
+        routeReg: /^\/Manufacturer\/ManufacturerDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'messagepush_detail_lookup'
+      },
+      {
+        menu: '审核',
+        routeReg: /^\/Manufacturer\/ManufacturerAudit\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'messagepush_detail_lookup'
+      },
+      {
+        menu: '商家',
+        route: '/Merchant',
+        permissionCode: 'home_employee_lookup'
+      },
+      {
+        menu: '查看详情',
+        routeReg: /^\/Merchant\/MerchantDetails\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'messagepush_detail_lookup'
+      }, {
+        menu: '审核',
+        routeReg: /^\/Merchant\/MerchantAudit\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'messagepush_detail_lookup'
+      },
+    ]
   },
   {
     menu: '用户管理',
@@ -183,7 +214,7 @@ export default [{
     menu: '留言管理',
     permissionCode: 'checkIn',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe65d;',
     subMenu: [{
       menu: '留言与反馈',
       route: '/GuestBook',
@@ -194,7 +225,7 @@ export default [{
     menu: '系统设置',
     permissionCode: 'system',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe603;',
     subMenu: [{
         menu: '系统设置',
         route: '/System',
@@ -240,7 +271,7 @@ export default [{
     menu: '设备厂商',
     permissionCode: 'manufacturer',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe600;',
     subMenu: [{
         menu: '物联产品',
         route: '/ProductOfThings',
@@ -365,7 +396,7 @@ export default [{
     menu: '商家',
     permissionCode: 'merchant',
     defaultDock: false,
-    icon: '&#xe626;',
+    icon: '&#xe637;',
     subMenu: [{
         menu: '订单列表',
         route: '/Order',

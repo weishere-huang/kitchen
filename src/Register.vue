@@ -10,15 +10,18 @@
 						<el-step title="完成"></el-step>
 					</el-steps>
 					<div style="padding-bottom:40px;" v-show="firstCase">
-						<el-radio-group v-model="radio" style="width:100%;margin-top:40px;padding-bottom:40px;">
-							<el-radio :border="true" :label="3">
+						<el-radio-group
+							v-model="registerMsg.type"
+							style="width:100%;margin-top:40px;padding-bottom:40px;"
+						>
+							<el-radio :border="true" label="1">
 								<div class="radio_case">
 									<p>设备厂商</p>
 									<p>主要用于智能设备接入及管理</p>
 								</div>
 							</el-radio>
 
-							<el-radio :border="true" :label="6" style="margin-top:20px;">
+							<el-radio :border="true" label="2" style="margin-top:20px;">
 								<div class="radio_case">
 									<p>商家</p>
 									<p>主要用于管理商品、订单等信息</p>
@@ -33,25 +36,34 @@
 					<div class="register_msg" v-show="secondCase">
 						<el-form size="small" label-width="160px" style="margin-top:40px;padding-bottom:40px;">
 							<el-form-item label="企业名称" prop>
-								<el-input type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.name" type="text" maxlength="30"></el-input>
 							</el-form-item>
 							<el-form-item label="统一社会信用代码" prop>
-								<el-input type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.creditCode" type="text" maxlength="18"></el-input>
 							</el-form-item>
 							<el-form-item label="法人" prop>
-								<el-input type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.legalPerson" type="text" maxlength="30"></el-input>
 							</el-form-item>
 							<el-form-item label="注册地址" prop>
-								<el-input type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.address" type="text" maxlength="30"></el-input>
 							</el-form-item>
 							<el-form-item label="营业范围" prop>
-								<el-input type="textarea" rows="4" resize="none" maxlength="30"></el-input>
+								<el-input
+									v-model="registerMsg.businessScope"
+									type="textarea"
+									rows="4"
+									resize="none"
+									maxlength="30"
+								></el-input>
 							</el-form-item>
 							<el-form-item label="申请人姓名" prop>
-								<el-input type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.applicant" type="text" maxlength="30"></el-input>
 							</el-form-item>
 							<el-form-item label="申请人手机号" prop>
-								<el-input type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.phone" type="text" maxlength="30"></el-input>
+							</el-form-item>
+							<el-form-item label="初始密码" prop>
+								<el-input v-model="registerMsg.password" type="password" maxlength="30"></el-input>
 							</el-form-item>
 							<el-form-item label="营业执照" prop>
 								<el-upload
@@ -131,7 +143,7 @@
 								<div class="el-upload__tip tip_style">上传法人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
 							</el-form-item>
 							<el-form-item label prop>
-								<el-button style="width:120px;" plain>返回</el-button>
+								<el-button style="width:120px;" @click="toBack" plain>返回</el-button>
 								<el-button type="primary" style="width:120px;" @click="toNext(2)">下一步</el-button>
 							</el-form-item>
 						</el-form>
@@ -155,6 +167,8 @@
 	</div>
 </template>
 <script>
+import md5 from "js-md5/src/md5.js";
+import CryptoJS from "crypto-js/crypto-js.js";
 export default {
 	data() {
 		return {
@@ -164,16 +178,107 @@ export default {
 			active: 0,
 			radio: "",
 			dialogImageUrl: "",
-			dialogVisible: false
+			dialogVisible: false,
+			registerMsg: {
+				name: "",
+				type: "",
+				creditCode: "",
+				legalPerson: "",
+				address: "",
+				businessScope: "",
+				applicant: "",
+				phone: "",
+				businessLicenseImg: "",
+				applicantIDCard: "",
+				legalPersonIdCard: "",
+				password: "",
+				applicantIDCardNegative: "",
+				legalPersonIdCardNegative: ""
+			}
 		};
 	},
 	methods: {
+		encryptByDES(message, key) {
+			const keyHex = CryptoJS.enc.Utf8.parse(key);
+			const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+				mode: CryptoJS.mode.ECB,
+				padding: CryptoJS.pad.Pkcs7
+			});
+			return encrypted.toString();
+		},
+		register() {
+			let pass = this.registerMsg.password;
+			pass = md5(pass);
+			let key = "*chang_hong_device_cloud";
+			let a = pass;
+			pass = this.encryptByDES(a, key);
+			let qs = require("qs");
+			let data = qs.stringify({
+				name: this.registerMsg.name,
+				password: pass,
+				type: this.registerMsg.type,
+				creditCode: this.registerMsg.creditCode,
+				legalPerson: this.registerMsg.legalPerson,
+				address: this.registerMsg.address,
+				businessScope: this.registerMsg.businessScope,
+				applicant: this.registerMsg.applicant,
+				phone: this.registerMsg.phone,
+				businessLicenseImg: this.registerMsg.businessLicenseImg,
+				applicantIDCard: this.registerMsg.applicantIDCard,
+				legalPersonIdCard: this.registerMsg.legalPersonIdCard,
+				applicantIDCardNegative: this.registerMsg.applicantIDCardNegative,
+				legalPersonIdCardNegative: this.registerMsg.legalPersonIdCardNegative
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						// enableMsg: false
+						successMsg: "注册成功！"
+					},
+					type: "post",
+					url: "/api-enterprise/enterprise/addEnterprise",
+					loadingConfig: {
+						target: document.querySelector(".register")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+						this.active = 3;
+						this.secondCase = false;
+						this.thirdCase = true;
+						document.getElementsByClassName(
+							"register_case"
+						)[0].style.marginTop = "-300px";
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
 		imgApi() {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
 		handleRemove1(file, fileList, a) {
 			// this.cookbook.recipeImg = null;
+			if (a == 1) {
+				this.registerMsg.businessLicenseImg = "";
+			}
+			if (a == 2) {
+				this.registerMsg.applicantIDCard = "";
+			}
+			if (a == 3) {
+				this.registerMsg.applicantIDCardNegative = "";
+			}
+			if (a == 4) {
+				this.registerMsg.legalPersonIdCard = "";
+			}
+			if (a == 5) {
+				this.registerMsg.legalPersonIdCardNegative = "";
+			}
 			console.log("handleRemove1:" + a);
 		},
 		handlePictureCardPreview1(file, a) {
@@ -210,9 +315,23 @@ export default {
 			}
 		},
 		handleAvatarSuccess1(res, file, a) {
-			console.log("handleAvatarSuccess1:" + a);
 			if (res.code === 200) {
 				// this.cookbook.recipeImg = res.data;
+				if (a == 1) {
+					this.registerMsg.businessLicenseImg = res.data;
+				}
+				if (a == 2) {
+					this.registerMsg.applicantIDCard = res.data;
+				}
+				if (a == 3) {
+					this.registerMsg.applicantIDCardNegative = res.data;
+				}
+				if (a == 4) {
+					this.registerMsg.legalPersonIdCard = res.data;
+				}
+				if (a == 5) {
+					this.registerMsg.legalPersonIdCardNegative = res.data;
+				}
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -236,15 +355,18 @@ export default {
 					"-400px";
 			}
 			if (a == 2) {
-				this.active = 3;
-				this.secondCase = false;
-				this.thirdCase = true;
-				document.getElementsByClassName("register_case")[0].style.marginTop =
-					"-300px";
+				this.register();
 			}
 			if (a == 3) {
 				window.location.href = "/login.html";
 			}
+		},
+		toBack() {
+			this.firstCase = true;
+			this.secondCase = false;
+			this.active = 0;
+			document.getElementsByClassName("register_case")[0].style.marginTop =
+				"-300px";
 		}
 	}
 };

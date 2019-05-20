@@ -1,44 +1,9 @@
 <template>
-	<div class="admin_devide_things">
+	<div class="manufacturer_list">
 		<div :class="[{hide:isHideList}]">
 			<div class="bottom_list">
 				<div class="top_title">
-					<h4>设备列表</h4>
-					<div class="top_search">
-						<el-col :span="7">
-							所属产品：
-							<el-select size="small" v-model="productValue" placeholder style="width:150px;">
-								<el-option label="全部" value="-1"></el-option>
-								<el-option
-									v-for="item in productList"
-									:key="item.id"
-									:label="item.deviceName"
-									:value="item.id"
-								></el-option>
-							</el-select>
-						</el-col>
-						<el-col :span="6">
-							状态：
-							<el-select size="small" v-model="state" placeholder style="width:150px;">
-								<el-option label="全部" value="-1"></el-option>
-								<el-option label="在线" value="0"></el-option>
-								<el-option label="离线" value="1"></el-option>
-							</el-select>
-						</el-col>
-						<el-col :span="6" style="padding:0 5px;">
-							<el-input
-								size="small"
-								style="width:100%;"
-								clearable
-								placeholder="设备名称/型号/接入用户"
-								v-model="keyWord"
-							></el-input>
-						</el-col>
-						<el-col :span="5" style="padding:0 5px;">
-							<el-button size="small" plain @click="searchlist">搜索</el-button>
-							<el-button size="small" plain @click="searchlist">重置</el-button>
-						</el-col>
-					</div>
+					<h4>设备厂商</h4>
 				</div>
 				<div class="table_list">
 					<el-table
@@ -49,39 +14,52 @@
 						tooltip-effect="light"
 						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
 					>
-						<el-table-column label="设备名称/自定义" min-width="100" show-overflow-tooltip>
+						<el-table-column label="单位名称" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.name }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="所属产品" min-width="100" show-overflow-tooltip>
+						<el-table-column label="申请人姓名" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.deviceName }}</span>
+								<span>{{ scope.row.applicant }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="设备型号" min-width="80">
-							<template slot-scope="scope">
-								<span>{{ scope.row.deviceModel }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="用户昵称" min-width="120">
-							<template slot-scope="scope">
-								<span>{{ scope.row.userName }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="账号（手机号）" min-width="120">
+						<el-table-column label="申请人手机号" min-width="80">
 							<template slot-scope="scope">
 								<span>{{ scope.row.phone }}</span>
 							</template>
 						</el-table-column>
+						<el-table-column label="申请时间" min-width="120">
+							<template slot-scope="scope">
+								<span>{{ scope.row.gmtCreate }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="审核时间" min-width="120">
+							<template slot-scope="scope">
+								<span>{{scope.row.auditState==1?"-": scope.row.enterpriseAuditRecordDOS[scope.row.enterpriseAuditRecordDOS.length-1].gmtCreate }}</span>
+							</template>
+						</el-table-column>
 						<el-table-column label="状态" min-width="100">
 							<template slot-scope="scope">
-								<span>{{ scope.row.state==0?"开机":scope.row.state==1?"关机":"故障" }}</span>
+								<span>{{ scope.row.auditState==1?'待审核':scope.row.auditState==2?"已通过":"已驳回" }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="toDetails(scope.$index, scope.row)">查看</el-button>
+								<el-button
+									type="text"
+									size="mini"
+									v-if="scope.row.auditState==1"
+									@click="toAudit(scope.$index, scope.row)"
+								>审核</el-button>
+								<el-button type="text" size="mini" v-if="scope.row.state==1&&scope.row.auditState==2">启用</el-button>
+								<el-button type="text" size="mini" v-if="scope.row.state==2&&scope.row.auditState==2">禁用</el-button>
+								<el-button
+									type="text"
+									size="mini"
+									v-if="scope.row.auditState!=1"
+									@click="toDetails(scope.$index, scope.row)"
+								>详情</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -105,93 +83,49 @@
 </template>
 <script>
 export default {
-	inject: ["reload"],
 	data() {
 		return {
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			total: 0,
 			pageIndex: 1,
 			pageSize: 10,
-			options: [
-				{
-					label: "WIFI",
-					value: 0
-				},
-				{
-					label: "4G",
-					value: 1
-				},
-				{
-					label: "NB-loT",
-					value: 2
-				},
-				{
-					label: "LoRa",
-					value: 3
-				},
-				{
-					label: "ZigBee",
-					value: 4
-				},
-				{
-					label: "以太网",
-					value: 5
-				},
-				{
-					label: "其他",
-					value: 6
-				}
-			],
-			tableData: [],
-			keyWord: null,
-			state: "-1",
-			productValue: "-1",
-			productList: []
+			tableData: []
 		};
 	},
 	methods: {
 		toDetails(index, row) {
 			this.$router.push({
-				path: "/DeviceOfThings/DeviceOfThingsDetails/" + row.id
+				path: "/Manufacturer/ManufacturerDetails/" + row.id
 			});
 		},
-		handleDelete(index, rowData) {
-			rowData.visible = false;
-			let params = { type: "delete", index: index, rowData: rowData };
-			console.log(params);
-			this.deleteuser(rowData.userId);
+		toAudit(index, row) {
+			this.$router.push({
+				path: "/Manufacturer/ManufacturerAudit/" + row.id
+			});
 		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getlist();
+			this.getList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getlist();
+			this.getList();
 		},
-		searchlist() {
-			this.pageIndex = 1;
-			this.getlist();
-		},
-		getlist() {
+		getList() {
 			this.Axios(
 				{
 					params: {
 						page: this.pageIndex,
-						size: this.pageSize,
-						state: this.states,
-						keyword: this.keyWord,
-						enterpriseId: 123,
-						deviceId: this.productValue
+						size: this.pageSize
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-enterprise/deviceuser/list"
+					url: "/api-enterprise/enterprise/enterpriseList"
 				},
 				this
 			).then(
@@ -202,32 +136,10 @@ export default {
 				},
 				({ type, info }) => {}
 			);
-		},
-		getProductlist() {
-			this.Axios(
-				{
-					params: {
-						enterpriseId: 123
-					},
-					option: {
-						enableMsg: false
-					},
-					type: "get",
-					url: "/api-enterprise/device/findPassList"
-				},
-				this
-			).then(
-				result => {
-					// console.log(result);
-					this.productList = result.data.data;
-				},
-				({ type, info }) => {}
-			);
 		}
 	},
 	created() {
-		this.getProductlist();
-		this.getlist();
+		this.getList();
 		let a = this.$route.matched.find(item => item.name === "ProductOfThingsAdd")
 			? true
 			: false;
@@ -255,7 +167,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.admin_devide_things {
+.manufacturer_list {
 	font-size: 14px;
 	color: @font-normal;
 
@@ -279,10 +191,6 @@ export default {
 
 		h4 {
 			float: left;
-		}
-		.top_search {
-			width: 800px;
-			float: right;
 		}
 	}
 	.table_list {

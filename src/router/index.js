@@ -58,12 +58,84 @@ import DeviceOfThings from '@/components/Instrumentation/deviceOfThings/index'
 import DeviceOfThingsDetails from '@/components/Instrumentation/deviceOfThings/Details'
 import Monitoring from '@/components/Instrumentation/monitoring/Monitoring'
 import DataAnalysis from '@/components/Instrumentation/dataAnalysis/DataAnalysis'
+import Manufacturer from '@/components/checkIn/manufacturer/Manufacturer'
+import ManufacturerAudit from '@/components/checkIn/manufacturer/Audit'
+import ManufacturerDetails from '@/components/checkIn/manufacturer/Details'
+import Merchant from '@/components/checkIn/merchant/Merchant'
+import MerchantAudit from '@/components/checkIn/merchant/Audit'
+import MerchantDetails from '@/components/checkIn/merchant/Details'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
       path: '/',
       redirect: '/Home',
+    },
+    {
+      path: '/Manufacturer',
+      name: 'Manufacturer',
+      component: Manufacturer,
+      props: {
+        pageName: '设备厂商'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'ManufacturerDetails/:id/',
+        name: 'ManufacturerDetails',
+        component: ManufacturerDetails,
+        props: {
+          pageName: '查看详情'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, {
+        path: 'ManufacturerAudit/:id/',
+        name: 'ManufacturerAudit',
+        component: ManufacturerAudit,
+        props: {
+          pageName: '审核'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
+    },
+    {
+      path: '/Merchant',
+      name: 'Merchant',
+      component: Merchant,
+      props: {
+        pageName: '商家'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+          path: 'MerchantDetails/:id/',
+          name: 'MerchantDetails',
+          component: MerchantDetails,
+          props: {
+            pageName: '查看详情'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'MerchantAudit/:id/',
+          name: 'MerchantAudit',
+          component: MerchantAudit,
+          props: {
+            pageName: '审核'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+      ]
     },
     {
       path: '/Monitoring',

@@ -22,7 +22,7 @@
 						<el-cascader
 							expand-trigger="hover"
 							:options="options"
-							v-model="addProduct.deviceCateName"
+							v-model="addProduct.deviceCateId"
 							style="width:400px;"
 						></el-cascader>
 					</el-form-item>
@@ -126,35 +126,35 @@
 <script>
 let options = [
 	{
-		value: "智能生活",
+		value: 1,
 		label: "智能生活",
 		children: [
 			{
-				value: "厨房电器",
+				value: 2,
 				label: "厨房电器",
 				children: [
 					{
-						value: "炒菜机器人",
+						value: 3,
 						label: "炒菜机器人"
 					},
 					{
-						value: "洗碗机",
+						value: 4,
 						label: "洗碗机"
 					},
 					{
-						value: "微波炉",
+						value: 5,
 						label: "微波炉"
 					},
 					{
-						value: "电饭煲",
+						value: 6,
 						label: "电饭煲"
 					},
 					{
-						value: "电压力锅",
+						value: 7,
 						label: "电压力锅"
 					},
 					{
-						value: "电烤箱",
+						value: 8,
 						label: "电烤箱"
 					}
 				]
@@ -175,7 +175,7 @@ export default {
 				enterpriseId: 123,
 				enterpriseName: "光大实业",
 				deviceName: "",
-				deviceCateName: [],
+				deviceCateId: [],
 				networkType: "",
 				introduce: "",
 				agreement: "",
@@ -288,7 +288,9 @@ export default {
 				enterpriseId: 123,
 				enterpriseName: "光大实业",
 				deviceName: this.addProduct.deviceName,
-				deviceCateName: JSON.stringify(this.addProduct.deviceCateName),
+				deviceCateId: this.addProduct.deviceCateId[
+					this.addProduct.deviceCateId.length - 1
+				],
 				networkType: this.addProduct.networkType,
 				introduce: this.addProduct.introduce,
 				agreement: JSON.stringify(this.fileList),

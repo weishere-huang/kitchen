@@ -9,15 +9,15 @@
 					<ul class="statistics_case">
 						<li>
 							<div>产品总数</div>
-							<div>123</div>
+							<div>{{deviceCount.deviceCount}}</div>
 						</li>
 						<li>
 							<div>设备总数</div>
-							<div>43233</div>
+							<div>{{deviceCount.allcount}}</div>
 						</li>
 						<li>
 							<div>今日绑定设备</div>
-							<div>21</div>
+							<div>{{deviceCount.todayCount}}</div>
 						</li>
 					</ul>
 				</div>
@@ -43,12 +43,12 @@
 					<el-table-column label="排序" type="index" width="50" show-overflow-tooltip></el-table-column>
 					<el-table-column label="城市" min-width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span>{{ scope.row.phone }}</span>
+							<span>{{ scope.row.cityName }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="设备数" min-width="50">
 						<template slot-scope="scope">
-							<span>{{ scope.row.order }}</span>
+							<span>{{ scope.row.deviceCount }}</span>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -58,7 +58,7 @@
 						@size-change="handleSizeChange"
 						@current-change="handleCurrentChange"
 						:current-page.sync="pageIndex"
-						:page-sizes="[10, 20,40, 100]"
+						:page-sizes="[14, 28,50, 100]"
 						:page-size="pageSize"
 						layout="sizes, prev, pager, next"
 						:total="total"
@@ -79,131 +79,30 @@ export default {
 			total: 0,
 			pageIndex: 1,
 			pageSize: 10,
-			tableData: [
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				},
-				{
-					phone: "上海",
-					order: "22"
-				}
-			]
+			tableData: [],
+			deviceCount: {}
 		};
 	},
-	mounted() {
-		let myChart = echarts.init(document.getElementById("dataAnalysis"));
-		let option = {
-			color: ["#3398DB"],
-			tooltip: {
-				trigger: "axis",
-				axisPointer: {
-					// 坐标轴指示器，坐标轴触发有效
-					type: "line" // 默认为直线，可选为：'line' | 'shadow'
-				}
-			},
-			grid: {
-				left: "3%",
-				right: "4%",
-				bottom: "3%",
-				containLabel: true
-			},
-			xAxis: [
-				{
-					type: "category",
-					data: [
-						"一月",
-						"二月",
-						"三月",
-						"四月",
-						"五月",
-						"六月",
-						"七月",
-						"八月",
-						"九月",
-						"十月",
-						"十一月",
-						"十二月"
-					],
-					axisTick: {
-						alignWithLabel: true
-					}
-				}
-			],
-			yAxis: [
-				{
-					type: "value"
-				}
-			],
-			series: [
-				{
-					name: "直接访问",
-					type: "bar",
-					data: [10, 52, 200, 334, 390, 330, 220, 200, 334, 390, 330, 220],
-					barMaxWidth: 50,
-					itemStyle: {
-						normal: {
-							color: "#1cc09f"
-						}
-					}
-				}
-			]
-		};
-		myChart.setOption(option);
-
-		window.onresize = function() {
-			myChart.resize();
-		};
-	},
+	mounted() {},
 	methods: {
+		getTopList() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-enterprise/deviceuser/findDeviceCount",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.deviceCount = result.data.data;
+				}
+			});
+		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
@@ -214,9 +113,102 @@ export default {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getlist();
+		},
+		getBar() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-enterprise/deviceuser/findBindDistributed",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				let dateVal = JSON.parse(JSON.stringify(result.data.data.date));
+				let bindCount = JSON.parse(JSON.stringify(result.data.data.bindCount));
+				console.log(dateVal);
+				console.log(bindCount);
+				if (result.data.code === 200) {
+					let myChart = echarts.init(document.getElementById("dataAnalysis"));
+					let option = {
+						color: ["#3398DB"],
+						tooltip: {
+							trigger: "axis",
+							axisPointer: {
+								// 坐标轴指示器，坐标轴触发有效
+								type: "line" // 默认为直线，可选为：'line' | 'shadow'
+							}
+						},
+						grid: {
+							left: "3%",
+							right: "4%",
+							bottom: "3%",
+							containLabel: true
+						},
+						xAxis: [
+							{
+								type: "category",
+								data: dateVal,
+								axisTick: {
+									alignWithLabel: true
+								}
+							}
+						],
+						yAxis: [
+							{
+								type: "value"
+							}
+						],
+						series: [
+							{
+								name: "设备总数",
+								type: "bar",
+								data: bindCount,
+								barMaxWidth: 50,
+								itemStyle: {
+									normal: {
+										color: "#1cc09f"
+									}
+								}
+							}
+						]
+					};
+					myChart.setOption(option);
+
+					window.onresize = function() {
+						myChart.resize();
+					};
+				}
+			});
+		},
+		getTableList() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-enterprise/deviceuser/cityDevice",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.tableData = result.data.data.content;
+					this.total = result.data.data.totalElement;
+				}
+			});
 		}
 	},
-	created() {},
+	created() {
+		this.getTableList();
+		this.getTopList();
+		this.getBar();
+	},
 	watch: {},
 	components: {
 		distribute

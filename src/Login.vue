@@ -38,7 +38,7 @@
 							<a href="forgetpassword.html">忘记密码</a>
 						</div>
 						<div style="float:right;">
-							<a href="register.html">注册</a>
+							<a @click="toregister">注册</a>
 						</div>
 					</div>
 				</el-form-item>
@@ -149,16 +149,16 @@ export default {
 					pass = this.encryptByDES(a, key);
 					let qs = require("qs");
 					let data = qs.stringify({
-						phoneOrName: this.userMsg.name,
-						passWord: pass,
-						verifyCode: 1015
+						params: this.userMsg.name,
+						password: pass,
+						source: 2
 					});
 					this.Axios(
 						{
 							params: data,
 							option: {},
 							type: "post",
-							url: "/api-platform/employee/login",
+							url: "/api-sso/user/login",
 							loadingConfig: {
 								target: document.querySelector(".login")
 							}
@@ -195,6 +195,9 @@ export default {
 					return false;
 				}
 			});
+		},
+		toregister() {
+			window.location.href = "register.html";
 		},
 		getImgPath() {
 			this.Axios(
