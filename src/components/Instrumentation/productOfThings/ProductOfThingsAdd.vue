@@ -148,14 +148,6 @@ let options = [
 					{
 						value: 6,
 						label: "电饭煲"
-					},
-					{
-						value: 7,
-						label: "电压力锅"
-					},
-					{
-						value: 8,
-						label: "电烤箱"
 					}
 				]
 			}

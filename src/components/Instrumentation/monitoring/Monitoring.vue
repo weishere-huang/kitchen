@@ -79,11 +79,12 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					let date = result.data.data.date;
 					let offline = result.data.data.offline;
 					let online = result.data.data.online;
+					console.log(offline);
+					console.log(online);
 					let myChart = echarts.init(document.getElementById("monitoring"));
 					date = date.map(item => {
 						return item.split(" ")[1].substring(0, 5);
@@ -122,13 +123,11 @@ export default {
 							{
 								name: "在线",
 								type: "line",
-								stack: "总量",
 								data: online
 							},
 							{
 								name: "离线",
 								type: "line",
-								stack: "总量",
 								data: offline
 							}
 						]

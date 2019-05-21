@@ -124,13 +124,11 @@ export default {
 							{
 								name: "在线",
 								type: "line",
-								stack: "总量",
 								data: online
 							},
 							{
 								name: "离线",
 								type: "line",
-								stack: "总量",
 								data: offline
 							}
 						]

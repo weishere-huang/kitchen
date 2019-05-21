@@ -1,11 +1,11 @@
 <template>
-	<div class="add_advertising">
+	<div class="edit_advertising">
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>添加广告</h4>
+				<h4>修改广告</h4>
 			</div>
 			<div class="table_list">
 				<el-form
@@ -292,7 +292,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.add_advertising {
+.edit_advertising {
 	font-size: 14px;
 	color: @font-normal;
 	.el-form {

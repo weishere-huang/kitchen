@@ -25,7 +25,7 @@
 						<el-cascader
 							expand-trigger="hover"
 							:options="options"
-							v-model="editProduct.deviceCateName"
+							v-model="editProduct.deviceCateId"
 							style="width:400px;"
 						></el-cascader>
 					</el-form-item>
@@ -131,36 +131,28 @@
 <script>
 let options = [
 	{
-		value: "智能生活",
+		value: 1,
 		label: "智能生活",
 		children: [
 			{
-				value: "厨房电器",
+				value: 2,
 				label: "厨房电器",
 				children: [
 					{
-						value: "炒菜机器人",
+						value: 3,
 						label: "炒菜机器人"
 					},
 					{
-						value: "洗碗机",
+						value: 4,
 						label: "洗碗机"
 					},
 					{
-						value: "微波炉",
+						value: 5,
 						label: "微波炉"
 					},
 					{
-						value: "电饭煲",
+						value: 6,
 						label: "电饭煲"
-					},
-					{
-						value: "电压力锅",
-						label: "电压力锅"
-					},
-					{
-						value: "电烤箱",
-						label: "电烤箱"
 					}
 				]
 			}
@@ -289,6 +281,33 @@ export default {
 				this.editProduct.linkImg = "";
 			}
 		},
+		getParent(data2, nodeId2) {
+			var arrRes = [];
+			if (data2.length == 0) {
+				if (!!nodeId2) {
+					arrRes.unshift(data2);
+				}
+				return arrRes;
+			}
+			let rev = (data, nodeId) => {
+				for (var i = 0, length = data.length; i < length; i++) {
+					let node = data[i];
+					if (node.value == nodeId) {
+						arrRes.unshift(node);
+						rev(data2, node.parent_id);
+						break;
+					} else {
+						if (!!node.children) {
+							rev(node.children, nodeId);
+						}
+					}
+				}
+				return arrRes;
+			};
+			arrRes = rev(data2, nodeId2);
+			console.log(arrRes);
+			return arrRes;
+		},
 		findOne(id) {
 			this.Axios(
 				{
@@ -303,10 +322,11 @@ export default {
 			).then(result => {
 				console.log(result);
 				if (result.data.code === 200) {
+					// this.getParent(options, this.editProduct.deviceCateId);
 					Object.assign(this.editProduct, result.data.data);
-					this.editProduct.deviceCateName = JSON.parse(
-						this.editProduct.deviceCateName
-					);
+					// this.editProduct.deviceCateName = JSON.parse(
+					// 	this.editProduct.deviceCateName
+					// );
 					this.editProduct.agreement = JSON.parse(this.editProduct.agreement);
 					this.editProduct.networkType = this.editProduct.networkType.toString();
 					this.fileList = this.editProduct.agreement;

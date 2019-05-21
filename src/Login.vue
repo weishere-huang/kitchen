@@ -180,8 +180,8 @@ export default {
 									this.encryptByDES(this.userMsg.password, key)
 								);
 								// window.location.href = "/Cookbook";
-								if (result.data.data.employeeType == 0) {
-									window.location.href = "/AdminHome";
+								if (result.data.data.employeeType == 3) {
+									window.location.href = "/AdminProductOfThings";
 								}
 								if (result.data.data.employeeType == 1) {
 									window.location.href = "/Home";

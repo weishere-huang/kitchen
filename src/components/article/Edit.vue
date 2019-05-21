@@ -1,46 +1,27 @@
 <template>
-	<div class="add_information">
+	<div class="article_edit">
 		<div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
 		</div>
 		<div class="bottom_list">
 			<div class="top_title">
-				<h4>新建消息</h4>
+				<h4>文章添加</h4>
 			</div>
 			<div class="table_list">
-				<el-form
-					label-width="200px"
-					size="small"
-					:inline-message="true"
-					style="margin-top: 20px;"
-					ref="cookbook"
-					:model="addInfo"
-					:rules="rulesAddInfo"
-				>
-					<el-form-item label="消息标题：" prop="title">
-						<el-input
-							v-model="addInfo.title"
-							type="text"
-							maxlength="30"
-							placeholder="如：双11钜惠，菜品大促销！！！"
-							size="small"
-							style="width:700px;"
-						></el-input>
+				<el-form label-width="200px" size="small" style="margin-top:20px">
+					<el-form-item label="标题：">
+						<el-input type="text" maxlength="30" style="width:400px;"></el-input>
 					</el-form-item>
-					<el-form-item label="接收对象：" prop>
-						<span>全部用户</span>
+					<el-form-item label="分类：">
+						<el-select style="width:400px;">
+							<el-option value="1" label="普通文章"></el-option>
+							<el-option value="2" label="公告通知"></el-option>
+						</el-select>
 					</el-form-item>
-					<el-form-item label="消息内容：" prop="content">
-						<el-input
-							type="textarea"
-							size="small"
-							style="width:700px;"
-							rows="6"
-							maxlength="250"
-							v-model="addInfo.content"
-						></el-input>
+					<el-form-item label="标签：">
+						<el-input maxlength="8" style="width:400px;" type="text"></el-input>
 					</el-form-item>
-					<el-form-item label="消息图片：" prop>
+					<el-form-item label="缩略图：">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -54,14 +35,14 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">建议尺寸：宽1000px，高不限，≤2MB的jpg或png（图片可为空）。</div>
+						<div class="el-upload__tip tip_style">要求：750*460像素，小于1MB的jpg或png</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label="内容：">
 						<editor
-							id="editorActivity"
+							id="editor_id"
 							height="300px"
 							width="700px"
 							:uploadJson="uploadJson()"
@@ -72,16 +53,6 @@
 							:loadStyleMode="false"
 						></editor>
 					</el-form-item>
-					<el-form-item>
-						<permission-button
-							permCode="messagepush_lookup.messagepush_list_add"
-							banType="disable"
-							size="small"
-							type="primary"
-							@click="submitForm('cookbook')"
-						>立即发送</permission-button>
-						<!--<el-button size="small" type="primary" @click="saveim">立即发送</el-button>-->
-					</el-form-item>
 				</el-form>
 			</div>
 		</div>
@@ -90,21 +61,11 @@
 <script>
 import editor from "../public/kindeditor";
 export default {
-	inject: ["reload"],
 	data() {
 		return {
 			editorText: "",
-			dialogVisible: false,
 			dialogImageUrl: "",
-			addInfo: {
-				title: null,
-				content: null,
-				img: null
-			},
-			rulesAddInfo: {
-				title: [{ required: true, message: "请输入标题", trigger: "blur" }],
-				content: [{ required: true, message: "请输入内容", trigger: "blur" }]
-			}
+			dialogVisible: false
 		};
 	},
 	methods: {
@@ -116,37 +77,26 @@ export default {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
-		submitForm(formName) {
-			this.$refs[formName].validate(valid => {
-				if (valid) {
-					this.saveim();
-				} else {
-					return false;
-				}
-			});
-		},
 		imgApi() {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
 		handleRemove1(file, fileList) {
-			console.log(file, fileList);
-			this.cookbook.recipeImg = null;
-			this.addInfo.img = null;
+			// this.cookbook.recipeImg = null;
 		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 / 1024 <= 2;
+			const isPicSize = file.size / 1024 / 1024 <= 1;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于2M");
+				this.$message.error("上传图片不能大于1M");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
-					let width = 10000000;
-					let height = 100000000000;
+					let width = 600000;
+					let height = 600000;
 					let _URL = window.URL || window.webkitURL;
 					let img = new Image();
 					img.onload = function() {
@@ -159,7 +109,7 @@ export default {
 						return file;
 					},
 					() => {
-						this.$message.error("上传的图片必须宽在1000px以内的");
+						this.$message.error("上传的图片必须是等于或小于600*600!");
 						return Promise.reject();
 					}
 				);
@@ -168,50 +118,19 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addInfo.img = res.data;
+				// this.cookbook.recipeImg = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
 				});
-				// console.log(this.cookbook.recipeImg);
 			} else {
 				this.$message({
 					message: "图片上传不成功！",
 					type: "error"
 				});
 			}
-		},
-		saveim() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				userId: JSON.parse(sessionStorage.getItem("user")).employeeId,
-				title: this.addInfo.title,
-				content: this.addInfo.content,
-				messageCate: -1,
-				messageType: -1,
-				messagePushType: -1,
-				img: this.addInfo.img
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-message/message/addMessagePush",
-					type: "post",
-					option: {
-						enableMsg: false
-					}
-				},
-				this
-			).then(result => {
-				console.log(result.data);
-				if (result.data.code === 200) {
-					this.$router.back(-1);
-					this.reload();
-				}
-			});
 		}
 	},
-	created() {},
 	components: {
 		editor
 	}
@@ -225,7 +144,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.add_information {
+.article_edit {
 	font-size: 14px;
 	color: @font-normal;
 	.top_list {
@@ -253,21 +172,6 @@ export default {
 		.table_list {
 			overflow: hidden;
 			padding: 10px;
-		}
-	}
-	.el-upload__tip {
-		font-size: 12px;
-		color: #606266;
-		margin-top: 7px;
-		line-height: 20px;
-		display: inline-block;
-		vertical-align: bottom;
-		padding-left: 8px;
-		line-height: 40px;
-	}
-	.textarea_style {
-		textarea {
-			height: 80px;
 		}
 	}
 }

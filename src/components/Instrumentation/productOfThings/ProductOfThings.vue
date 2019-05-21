@@ -40,7 +40,7 @@
 						</el-table-column>
 						<el-table-column label="产品分类" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.deviceCateName[2] }}</span>
+								<span>{{ scope.row.deviceCateName }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="接入厂商" min-width="120">
@@ -236,11 +236,11 @@ export default {
 					console.log(result.data.data.content);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
-					for (let i = 0; i < this.tableData.length; i++) {
-						this.tableData[i].deviceCateName = JSON.parse(
-							this.tableData[i].deviceCateName
-						);
-					}
+					// for (let i = 0; i < this.tableData.length; i++) {
+					// 	this.tableData[i].deviceCateName = JSON.parse(
+					// 		this.tableData[i].deviceCateName
+					// 	);
+					// }
 				},
 				({ type, info }) => {}
 			);

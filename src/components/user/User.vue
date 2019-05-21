@@ -1,114 +1,103 @@
 <template>
 	<div class="user_list">
-		<div class="top_title">
-			<h4>用户列表</h4>
-			<div class="top_search">
-				<el-col :span="9" style="padding:0 5px;">
-					<el-select v-model="states" placeholder="请选择" size="small">
-						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-					</el-select>
-				</el-col>
-				<el-col :span="11" style="padding:0 5px;">
-					<el-input size="small" style="width:100%;" clearable placeholder="昵称/手机号" v-model="keyWord"></el-input>
-				</el-col>
-				<el-col :span="4" style="padding:0 5px;">
-					<el-button size="small" plain @click="searchlist">搜索</el-button>
-				</el-col>
+		<div :class="[{hide:isHideList}]">
+			<div class="top_title">
+				<h4>用户列表</h4>
+				<div class="top_search">
+					<el-col :span="9" style="padding:0 5px;">
+						<el-select v-model="states" placeholder="请选择" size="small">
+							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="11" style="padding:0 5px;">
+						<el-input size="small" style="width:100%;" clearable placeholder="昵称/手机号" v-model="keyWord"></el-input>
+					</el-col>
+					<el-col :span="4" style="padding:0 5px;">
+						<el-button size="small" plain @click="searchlist">搜索</el-button>
+					</el-col>
+				</div>
+			</div>
+			<div class="table_list">
+				<el-table
+					:data="tableData"
+					style="width: 100%"
+					size="mini"
+					stripe
+					tooltip-effect="light"
+					:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+				>
+					<el-table-column label="昵称" min-width="100" show-overflow-tooltip>
+						<template slot-scope="scope">
+							<span>{{ scope.row.nickName }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="手机号" min-width="120" show-overflow-tooltip>
+						<template slot-scope="scope">
+							<span>{{ scope.row.phone }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="订单" min-width="80">
+						<template slot-scope="scope">
+							<span
+								@click="$router.push({path:'/AdminOrder'})"
+								style="cursor: pointer;"
+							>{{ scope.row.order }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="积分" min-width="80">
+						<template slot-scope="scope">
+							<span
+								@click="$router.push({path:'/Integral'})"
+								style="cursor: pointer;"
+								class="score_style"
+							>{{ scope.row.userScoreDO.score }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>
+						<template slot-scope="scope">
+							<span>{{scope.row.gmtCreate}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="状态" width="100" show-overflow-tooltip>
+						<template slot-scope="scope">
+							<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
+								<permission-switch
+									permCode="user_manager_list_lookup.user_manager_list_resetpsd"
+									banType="disable"
+									v-model="scope.row.state"
+									active-color="#13ce66"
+									inactive-color="#ff4949"
+									@change="changeState(scope.row,scope.$index)"
+								></permission-switch>
+							</el-tooltip>
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="100">
+						<template slot-scope="scope">
+							<el-button
+								slot="reference"
+								type="text"
+								@click="toDetails(scope.row,scope.$index)"
+								size="mini"
+							>详情</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
+			<div class="block" style="margin-top:10px;float:right">
+				<el-pagination
+					background
+					@size-change="handleSizeChange"
+					@current-change="handleCurrentChange"
+					:current-page.sync="pageIndex"
+					:page-sizes="[10, 20,40, 100]"
+					:page-size="pageSize"
+					layout="sizes, prev, pager, next"
+					:total="total"
+				></el-pagination>
 			</div>
 		</div>
-		<div class="table_list">
-			<el-table
-				:data="tableData"
-				style="width: 100%"
-				size="mini"
-				stripe
-				tooltip-effect="light"
-				:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
-			>
-				<el-table-column label="昵称" min-width="100" show-overflow-tooltip>
-					<template slot-scope="scope">
-						<span>{{ scope.row.nickName }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="手机号" min-width="120" show-overflow-tooltip>
-					<template slot-scope="scope">
-						<span>{{ scope.row.phone }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="订单" min-width="80">
-					<template slot-scope="scope">
-						<span
-							@click="$router.push({path:'/AdminOrder'})"
-							style="cursor: pointer;"
-						>{{ scope.row.order }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="积分" min-width="80">
-					<template slot-scope="scope">
-						<span
-							@click="$router.push({path:'/Integral'})"
-							style="cursor: pointer;"
-							class="score_style"
-						>{{ scope.row.userScoreDO.score }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>
-					<template slot-scope="scope">
-						<span>{{scope.row.gmtCreate}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="状态" width="100" show-overflow-tooltip>
-					<template slot-scope="scope">
-						<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
-							<permission-switch
-								permCode="user_manager_list_lookup.user_manager_list_resetpsd"
-								banType="disable"
-								v-model="scope.row.state"
-								active-color="#13ce66"
-								inactive-color="#ff4949"
-								@change="changeState(scope.row,scope.$index)"
-							></permission-switch>
-						</el-tooltip>
-					</template>
-				</el-table-column>
-				<!-- <el-table-column label="操作" width="140">
-					<template slot-scope="scope">
-						<el-popover placement="top" width="180" v-model="scope.row.resetvisible">
-							<p style="line-height:32px;text-align:center;">
-								<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定重置吗？
-							</p>
-							<div style="text-align: center; margin: 0">
-								<el-button size="mini" plain @click="scope.row.resetvisible = false">取消</el-button>
-								<el-button type="primary" size="mini" @click="resetPasswords(scope.$index, scope.row)">确定</el-button>
-							</div>
-							<el-button slot="reference" type="text" size="mini">重置密码</el-button>
-						</el-popover>
-						<el-popover placement="top" width="180" v-model="scope.row.visible">
-							<p style="line-height:32px;text-align:center;">
-								<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
-							</p>
-							<div style="text-align: center; margin: 0">
-								<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
-								<el-button type="primary" size="mini" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
-							</div>
-							<el-button slot="reference" type="text">删除</el-button>
-						</el-popover>
-					</template>
-				</el-table-column>-->
-			</el-table>
-		</div>
-		<div class="block" style="margin-top:10px;float:right">
-			<el-pagination
-				background
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:current-page.sync="pageIndex"
-				:page-sizes="[10, 20,40, 100]"
-				:page-size="pageSize"
-				layout="sizes, prev, pager, next"
-				:total="total"
-			></el-pagination>
-		</div>
+		<router-view></router-view>
 	</div>
 </template>
 <script>
@@ -116,6 +105,7 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			isHideList: this.$route.params.id !== undefined ? true : false,
 			total: 0,
 			pageIndex: 1,
 			pageSize: 10,
@@ -139,6 +129,11 @@ export default {
 		};
 	},
 	methods: {
+		toDetails(row, index) {
+			this.$router.push({
+				path: "/User/UserDetails/" + row.id
+			});
+		},
 		changeState(row, index) {
 			console.log(this.tableData[index].state);
 			let qs = require("qs");
@@ -274,6 +269,22 @@ export default {
 	},
 	created() {
 		this.getlist();
+		let a = this.$route.matched.find(item => item.name === "ProductOfThingsAdd")
+			? true
+			: false;
+		let b = this.$route.params.id !== undefined ? true : false;
+		this.isHideList = a || b ? true : false;
+	},
+	watch: {
+		$route() {
+			let a = this.$route.matched.find(
+				item => item.name === "ProductOfThingsAdd"
+			)
+				? true
+				: false;
+			let b = this.$route.params.id !== undefined ? true : false;
+			this.isHideList = a || b ? true : false;
+		}
 	}
 };
 </script>
@@ -288,7 +299,7 @@ export default {
 .user_list {
 	font-size: 14px;
 	color: @font-normal;
-	background-color: white;
+
 	padding-bottom: 10px;
 	overflow: hidden;
 	.top_title {
@@ -296,6 +307,7 @@ export default {
 		line-height: 60px;
 		overflow: hidden;
 		border-bottom: @border;
+		background-color: white;
 
 		h4 {
 			float: left;
@@ -306,6 +318,7 @@ export default {
 		}
 	}
 	.table_list {
+		background-color: white;
 		overflow: hidden;
 		padding: 10px;
 		.el-table--mini td,

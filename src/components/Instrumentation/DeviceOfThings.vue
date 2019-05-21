@@ -1,7 +1,7 @@
 <template>
 	<div class="table">
 		<editor
-			id="editor_id"
+			:id="editor_id"
 			height="500px"
 			width="700px"
 			:uploadJson="uploadJson()"

@@ -13,6 +13,7 @@
 						<span>{{ manufacturerMsg.auditState==1?'待审核':manufacturerMsg.auditState==2?"已通过":"已驳回" }}</span>
 						<span
 							:style="{color:manufacturerMsg.auditState==3?'red':''}"
+							v-if="manufacturerMsg.enterpriseAuditRecordDOS.auditOpinion!=''||null"
 						>（{{manufacturerMsg.enterpriseAuditRecordDOS.auditOpinion}}）</span>
 					</el-form-item>
 					<el-form-item label="企业名称：" prop>

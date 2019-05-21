@@ -643,7 +643,7 @@ export default {
 	.top_nav {
 		width: 88px;
 		height: 72px;
-		padding: 12px 8px 0;
+		padding: 16px 8px 0;
 		list-style-type: none;
 		float: left;
 		cursor: pointer;
@@ -654,7 +654,7 @@ export default {
 			background-color: rgb(19, 134, 111);
 		}
 		i {
-			font-size: 28px;
+			font-size: 24px;
 		}
 	}
 }

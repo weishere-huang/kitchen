@@ -52,8 +52,18 @@
 									v-if="scope.row.auditState==1"
 									@click="toAudit(scope.$index, scope.row)"
 								>审核</el-button>
-								<el-button type="text" size="mini" v-if="scope.row.state==1&&scope.row.auditState==2">启用</el-button>
-								<el-button type="text" size="mini" v-if="scope.row.state==2&&scope.row.auditState==2">禁用</el-button>
+								<el-button
+									type="text"
+									size="mini"
+									@click="changeStateEnable(scope.$index, scope.row)"
+									v-if="scope.row.state==1&&scope.row.auditState==2"
+								>启用</el-button>
+								<el-button
+									type="text"
+									size="mini"
+									@click="changeStateDown(scope.$index, scope.row)"
+									v-if="scope.row.state==2&&scope.row.auditState==2"
+								>禁用</el-button>
 								<el-button
 									type="text"
 									size="mini"
@@ -93,6 +103,54 @@ export default {
 		};
 	},
 	methods: {
+		changeStateEnable(index, row) {
+			let qs = require("qs");
+			let data = qs.stringify({
+				enterpriseId: row.id
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-enterprise/enterprise/enableEnterprise",
+					type: "post",
+					option: {
+						successMsg: "启用成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.getList();
+				} else {
+					this.$message.error("操作失败");
+				}
+			});
+		},
+		changeStateDown(index, row) {
+			let qs = require("qs");
+			let data = qs.stringify({
+				enterpriseId: row.id
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-enterprise/enterprise/downEnterprise",
+					type: "post",
+					option: {
+						successMsg: "禁用成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.getList();
+				} else {
+					this.$message.error("操作失败");
+				}
+			});
+		},
 		toDetails(index, row) {
 			this.$router.push({
 				path: "/Manufacturer/ManufacturerDetails/" + row.id

@@ -15,6 +15,8 @@ import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
 import Problems from '@/components/message/Problems'
 import Advertising from '@/components/message/Advertising'
+import AdvertisingAdd from '@/components/message/advertisingAdd/AddAdvertising'
+import AdvertisingEdit from '@/components/message/advertisingAdd/EditAdvertising'
 import Supplier from '@/components/supplier/index'
 import AddSupplier from '@/components/supplier/AddSupplier'
 import EditSupplier from '@/components/supplier/EditSupplier'
@@ -64,12 +66,51 @@ import ManufacturerDetails from '@/components/checkIn/manufacturer/Details'
 import Merchant from '@/components/checkIn/merchant/Merchant'
 import MerchantAudit from '@/components/checkIn/merchant/Audit'
 import MerchantDetails from '@/components/checkIn/merchant/Details'
+import UserAnalysis from '@/components/user/userAnalysis/UserAnalysis'
+import UserDetails from '@/components/user/UserDetails'
+import Article from '@/components/article/Article'
+import ArticleAdd from '@/components/article/Add'
+import ArticleEdit from '@/components/article/Edit'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
       path: '/',
       redirect: '/Home',
+    },
+    {
+      path: '/Article',
+      name: 'Article',
+      component: Article,
+      props: {
+        pageName: '文章列表'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+          path: 'ArticleAdd',
+          name: 'ArticleAdd',
+          component: ArticleAdd,
+          props: {
+            pageName: '添加文章'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'ArticleEdit/:id/',
+          name: 'ArticleEdit',
+          component: ArticleEdit,
+          props: {
+            pageName: '修改文章'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        }
+      ]
     },
     {
       path: '/Manufacturer',
@@ -729,6 +770,27 @@ const router = new Router({
       meta: {
         requireAuth: true,
       },
+      children: [{
+        path: 'AdvertisingAdd',
+        name: 'AdvertisingAdd',
+        component: AdvertisingAdd,
+        props: {
+          pageName: '发送消息'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, {
+        path: 'AdvertisingEdit/:id/',
+        name: 'AdvertisingEdit',
+        component: AdvertisingEdit,
+        props: {
+          pageName: '查看详情'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }]
     },
     {
       path: '/User',
@@ -736,6 +798,28 @@ const router = new Router({
       component: User,
       props: {
         pageName: '用户列表'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'UserDetails/:id/',
+        name: 'UserDetails',
+        component: UserDetails,
+        props: {
+          pageName: '用户详情'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
+    },
+    {
+      path: '/UserAnalysis',
+      name: 'UserAnalysis',
+      component: UserAnalysis,
+      props: {
+        pageName: '用户分析'
       },
       meta: {
         requireAuth: true,
