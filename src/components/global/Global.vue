@@ -1,6 +1,6 @@
 <script>
 const apiSrc = "http://192.168.1.104:8861";
-const apiImg = "http://192.168.1.104:8861";
+const apiImg = "/api";//"http://192.168.1.104:8861";
 const imgPath = sessionStorage.getItem("imgPath");
 const versionNumber = "3.0.0.190520_alpha";
 //测试环境地址
