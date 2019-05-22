@@ -25,7 +25,7 @@ import '../static/UE/ueditor.all'
 import '../static/UE/ueditor.parse'
 import '../static/kindeditor/themes/default/default.css'
 import '../static/kindeditor/themes/default/default.css'
-import '../static/kindeditor/kindeditor-all-min.js'
+import '../static/kindeditor/kindeditor-all.js'
 import '../static/kindeditor/lang/zh-CN.js'
 import "../static/china"
 // import '../static/UE/lang/zh-cn/zh-cn'

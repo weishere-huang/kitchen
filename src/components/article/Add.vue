@@ -46,6 +46,7 @@
 							height="300px"
 							width="700px"
 							:uploadJson="uploadJson()"
+							:afterUpload="afterUpload"
 							:content.sync="editorText"
 							:fileManagerJson="look()"
 							pluginsPath="../../../static/kindeditor/plugins"
@@ -76,6 +77,9 @@ export default {
 		uploadJson() {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
+		},
+		afterUpload(data){
+			return 'http://'+data;
 		},
 		imgApi() {
 			let url = this.global.apiImg + "/api-upload/upload";
