@@ -10,7 +10,7 @@
 			<div class="table_list">
 				<el-form label-width="200px" size="small">
 					<el-form-item label="驳回原因：" prop>
-						<span>{{editProduct.auditOpinion}}</span>
+						<span style="color:red;">{{editProduct.auditOpinion}}</span>
 					</el-form-item>
 					<el-form-item label="产品名称：" prop>
 						<el-input

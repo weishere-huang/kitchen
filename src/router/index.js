@@ -44,7 +44,9 @@ import Distributor from '@/components/distributor/index'
 import AddDistributor from '@/components/distributor/AddSupplier'
 import EditDistributor from '@/components/distributor/EditSupplier'
 import DiscountCoupon from '@/components/marketing/DiscountCoupon'
+import AdminDiscountCoupon from '@/components/marketing/AdminDiscountCoupon'
 import RedPacket from '@/components/redPacket/RedPacket'
+import AdminRedPacket from '@/components/redPacket/AdminRedPacket'
 import ProductOfThings from '@/components/Instrumentation/productOfThings/ProductOfThings'
 import AdminDeviceOfThings from '@/components/Instrumentation/adminDeviceOfThings/index'
 import AdminDeviceOfThingsDetails from '@/components/Instrumentation/adminDeviceOfThings/Details'
@@ -420,6 +422,28 @@ const router = new Router({
       component: Integral,
       props: {
         pageName: '积分明细'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/AdminDiscountCoupon',
+      name: 'AdminDiscountCoupon',
+      component: AdminDiscountCoupon,
+      props: {
+        pageName: '优惠券'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/AdminRedPacket',
+      name: 'AdminRedPacket',
+      component: AdminRedPacket,
+      props: {
+        pageName: '红包'
       },
       meta: {
         requireAuth: true,

@@ -1,291 +1,247 @@
 <template>
-	<div class="classify_list">
+	<div class="cookbook_classify">
 		<div class="top_list">
-			<el-button
+			<permission-button
+				permCode="menu_cate_lookup.menu_cate_add"
+				banType="disable"
 				size="small"
 				type="primary"
 				class="el-icon-circle-plus-outline"
-				@click="addClassifyShow"
-			>添加分类</el-button>
+				@click="dialogAdd=true"
+			>添加分类</permission-button>
+			<el-dialog title="添加分类" :visible.sync="dialogAdd" width="500px" :close-on-click-modal="false">
+				<el-form
+					label-width="100px"
+					style="margin-top:16px;"
+					:model="classify"
+					:rules="classifyRules"
+					ref="classify"
+				>
+					<el-form-item label="上级分类：" prop="parentNo">
+						<select-list v-on:handlechange="handlechange"></select-list>
+					</el-form-item>
+					<el-form-item label="分类名称：" prop="cateName">
+						<el-input size="small" style="width:99%;" maxlength="20" v-model="classify.cateName"></el-input>
+					</el-form-item>
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="dialogAdd = false" plain size="small">取 消</el-button>
+					<el-button type="primary" @click="addClassify('classify')" size="small">确 定</el-button>
+				</span>
+			</el-dialog>
 		</div>
 		<div class="bottom_list">
-			<div class="top_title">
-				<h4>商品分类</h4>
+			<div class="top_list">
+				<h2>分类管理</h2>
 			</div>
-			<div class="table_list">
-				<el-table
-					:data="tableData"
-					style="width: 100%"
-					size="mini"
-					stripe
-					tooltip-effect="light"
-					:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+			<div style="padding:10px;overflow:hidden">
+				<div class="tree_title">
+					<span style="padding-left:8px;">分类名称</span>
+					<span style="display:inline-block;width:190px;">操作</span>
+				</div>
+				<el-tree
+					:data="classifyData"
+					:props="defaultProps"
+					node-key="id"
+					default-expand-all
+					:expand-on-click-node="true"
 				>
-					<el-table-column label="分类名称" min-width="120" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<span>{{ scope.row.cateName }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="商品数量" min-width="120" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<span>{{ scope.row.goodsCount }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="排序" min-width="100" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<el-popover
-								popper-class="color_text"
-								ref="popover2"
-								placement="right"
-								trigger="focus"
-								content="数值越大排序越靠前"
-							></el-popover>
-							<el-input
-								v-popover:popover2
-								size="small"
-								type="number"
-								step="0"
-								v-model="scope.row.sortLevel"
-								style="width:80px;padding:0;"
-								@change="handleSortLevel(scope.row,scope.$index)"
-							></el-input>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作" width="150">
-						<template slot-scope="scope">
-							<el-button
+					<span class="custom-tree-node" slot-scope="{ node, data }">
+						<span>{{ node.label }}</span>
+						<span style="display:inline-block;width:190px;" @click.stop>
+							<permission-button
+								permCode="menu_cate_lookup.menu_cate_update"
+								banType="disable"
 								type="text"
 								size="mini"
-								@click.stop.prevent="handleEdit(scope.$index, scope.row)"
-							>修改</el-button>
-							<el-popover placement="top" width="180" v-model="scope.row.visible">
+								@click="() => append(data)"
+							>修改</permission-button>
+							<el-popover placement="top" width="180" v-model="data.visible">
 								<p style="line-height:32px;text-align:center;">
 									<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
 								</p>
 								<div style="text-align: center; margin: 0">
-									<el-button size="small" plain @click="scope.row.visible = false">取消</el-button>
-									<el-button type="primary" size="small" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
+									<el-button size="small" plain @click="data.visible = false">取消</el-button>
+									<el-button type="primary" size="small" @click="() => remove(node, data)">确定</el-button>
 								</div>
-								<el-button slot="reference" type="text">删除</el-button>
+								<permission-button
+									permCode="menu_cate_lookup.menu_cate_delete"
+									banType="disable"
+									slot="reference"
+									type="text"
+								>删除</permission-button>
 							</el-popover>
-						</template>
-					</el-table-column>
-				</el-table>
+						</span>
+					</span>
+				</el-tree>
 			</div>
 		</div>
-		<el-dialog title="添加分类" :visible.sync="dialogVisible" width="500px">
-			<el-form label-width="120px" style="padding-top:10px;" size="small" :model="addClassifyName">
-				<el-form-item
-					label="分类名称："
-					prop="classifyName"
-					:rules="[{ required: true, message: '名称不能为空', trigger: 'blur'},{max: 8, message: '只能输入8个以内汉字'}]"
-				>
-					<el-input
-						type="text"
-						maxlength="20"
-						size="small"
-						style="width:90%;"
-						v-model="addClassifyName.classifyName"
-					></el-input>
+		<el-dialog title="修改分类" :visible.sync="dialogEdit" width="500px" :close-on-click-modal="false">
+			<el-form
+				label-width="100px"
+				style="margin-top:16px;"
+				:model="editClassify"
+				:rules="editClassifyRules"
+				ref="editClassify"
+			>
+				<el-form-item label="分类名称：" prop="cateName">
+					<el-input size="small" maxlength="20" style="width:99%;" v-model="editClassify.cateName"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-				<el-button size="small" @click="dialogVisible = false" plain>取 消</el-button>
-				<el-button size="small" type="primary" @click="addClassify">确 定</el-button>
-			</span>
-		</el-dialog>
-		<el-dialog title="修改分类" :visible.sync="editClassify" width="500px">
-			<el-form label-width="120px" style="padding-top:10px;" size="small" :model="editMsg">
-				<el-form-item
-					label="分类名称："
-					prop="cateName"
-					:rules="[{ required: true, message: '名称不能为空', trigger: ['blur' ,'change']},{max: 8, message: '只能输入8个以内汉字'}]"
-				>
-					<el-input
-						type="text"
-						maxlength="20"
-						size="small"
-						style="width:90%;"
-						v-model="editMsg.cateName"
-					></el-input>
-				</el-form-item>
-				<el-form-item
-					label="排序："
-					prop="sortLevel"
-					:rules="[{type: 'number', message: '只能输入正整数', trigger:  'change'},{validator:validator,trigger:['blur','change']}]"
-				>
-					<el-input type="number" size="small" style="width:50%;" v-model.number="editMsg.sortLevel"></el-input>
-				</el-form-item>
-			</el-form>
-			<span slot="footer" class="dialog-footer">
-				<el-button size="small" @click="editClassify = false" plain>取 消</el-button>
-				<el-button size="small" type="primary" @click="saveEdit">确 定</el-button>
+				<el-button @click="dialogEdit = false" plain size="small">取 消</el-button>
+				<el-button type="primary" @click="handeditClassify('editClassify')" size="small">确 定</el-button>
 			</span>
 		</el-dialog>
 	</div>
 </template>
 <script>
+import selectList from "../public/select";
 export default {
 	inject: ["reload"],
 	data() {
 		return {
-			editMsg: {
-				sortLevel: "",
+			visible: false,
+			classify: {
+				label: "",
+				parentNo: "",
 				cateName: ""
 			},
-			addClassifyName: {
-				classifyName: ""
+			classifyRules: {
+				parentNo: [
+					{
+						required: true,
+						message: "请选择上级分类",
+						trigger: ["change", "blur"]
+					}
+				],
+				cateName: [
+					{ required: true, message: "请填写分类名称", trigger: "blur" },
+					{ max: 8, message: "只能输入8个以内汉字" }
+				]
 			},
-			editClassify: false,
-			isShow: "1",
-			dialogVisible: false,
-			value: "",
-			tableData: []
+			editClassify: {
+				cateName: ""
+			},
+			editClassifyRules: {
+				cateName: [
+					{ required: true, message: "请填写分类名称", trigger: "blur" },
+					{ max: 8, message: "只能输入8个以内汉字" }
+				]
+			},
+			selectShow: false,
+			dialogAdd: false,
+			dialogEdit: false,
+			classifyData: [],
+			defaultProps: {
+				children: "children",
+				label: "cateName"
+			}
 		};
 	},
 	methods: {
-		addClassifyShow() {
-			this.addClassifyName.classifyName = "";
-			this.dialogVisible = true;
-		},
-		handleSortLevel(row, index) {
-			if (/^[0-9]*[1-9][0-9]*$/.test(row.sortLevel)) {
-				this.editMsg = row;
-				this.saveEdit();
-			} else {
-				this.$message.error("排序只能为正整数，请重新输入");
-				// this.getClassfy();
-			}
-		},
-		validator(rule, value, callback) {
-			if (/^\d*(\.?\d{0,0})$/g.test(value) == false) {
-				callback(new Error("只能为正整数"));
-			} else {
-				callback();
-			}
-		},
-		addClassify() {
-			if (this.addClassifyName.classifyName == "") {
-				this.$message.error("名称不能为空！");
-			} else if (this.addClassifyName.classifyName.length > 8) {
-			} else {
-				let qs = require("qs");
-				let datas = qs.stringify({
-					cateName: this.addClassifyName.classifyName
-				});
-				this.Axios(
-					{
-						params: datas,
-						option: {
-							successMsg: "保存成功"
+		handeditClassify(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.dialogEdit = false;
+					let qs = require("qs");
+					let data = qs.stringify({
+						cateId: this.editClassify.id,
+						cateName: this.editClassify.cateName
+					});
+					this.Axios(
+						{
+							params: data,
+							url: "/api-recipe/recipeCate/updateCate",
+							type: "post",
+							option: {
+								successMsg: "修改成功"
+							}
 						},
-						type: "post",
-						url: "/api-mall/itemCat/addItemCate",
-						loadingConfig: {
-							target: document.querySelector(".classify_list")
-						}
-					},
-					this
-				).then(
-					result => {
-						console.log(result);
-						if (result.data.code === 200) {
-							this.dialogVisible = false;
-							this.reload();
-						}
-					},
-					({ type, info }) => {}
-				);
-			}
-		},
-		saveEdit() {
-			if (this.editMsg.cateName == "") {
-				this.$message.error("名称不能为空！");
-			} else if (this.editMsg.cateName.length > 8) {
-			} else {
-				let qs = require("qs");
-				let datas = qs.stringify({
-					cateName: this.editMsg.cateName,
-					cateId: this.editMsg.id,
-					sortLevel: this.editMsg.sortLevel
-				});
-				this.Axios(
-					{
-						params: datas,
-						option: {
-							successMsg: "保存成功"
-						},
-						type: "post",
-						url: "/api-mall/itemCat/updateCate",
-						loadingConfig: {
-							target: document.querySelector(".classify_list")
-						}
-					},
-					this
-				).then(
-					result => {
-						console.log(result);
-						if (result.data.code === 200) {
-							this.editClassify = false;
-							this.getClassfy();
-						}
-					},
-					({ type, info }) => {}
-				);
-			}
-		},
-		handleEdit(index, rowData) {
-			let params = { type: "edit", index: index, rowData: rowData };
-			console.log(params);
-			this.editClassify = true;
-			Object.assign(this.editMsg, rowData);
-			// this.editMsg = rowData;
-		},
-		handleDelete(index, rowData) {
-			rowData.visible = false;
-			let params = { type: "delete", index: index, rowData: rowData };
-			if (rowData.goodsCount > 0) {
-				this.$message.error(
-					"该分类包含商品信息，请转移或删除商品后，再删除该分类。"
-				);
-			} else {
-				let qs = require("qs");
-				let datas = qs.stringify({
-					cateId: rowData.id
-				});
-				this.Axios(
-					{
-						params: datas,
-						option: {
-							successMsg: "删除成功"
-						},
-						type: "post",
-						url: "/api-mall/itemCat/delCate",
-						loadingConfig: {
-							target: document.querySelector(".classify_list")
-						}
-					},
-					this
-				).then(
-					result => {
-						console.log(result);
+						this
+					).then(result => {
 						if (result.data.code === 200) {
 							this.reload();
 						}
-					},
-					({ type, info }) => {}
-				);
-			}
+					});
+				} else {
+					return false;
+				}
+			});
 		},
-		changeUp(index, val) {
-			console.log(val);
-			if (val.show == "1") {
-				this.tableData[index].show = "0";
-			} else {
-				this.tableData[index].show = "1";
-			}
+		addClassify(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.dialogAdd = false;
+					let qs = require("qs");
+					let data = qs.stringify({
+						parentNo: this.classify.parentNo,
+						cateName: this.classify.cateName
+					});
+					this.Axios(
+						{
+							params: data,
+							url: "/api-recipe/recipeCate/addCate",
+							type: "post",
+							option: {
+								successMsg: "保存成功"
+							}
+						},
+						this
+					).then(result => {
+						if (result.data.code === 200) {
+							this.reload();
+						}
+					});
+				} else {
+					return false;
+				}
+			});
 		},
-		getClassfy() {
+		handleClose() {
+			this.selectShow = false;
+		},
+		changeSort(data) {},
+		handleClick(tba, event) {
+			this.btnShow = tba.name;
+		},
+		append(data) {
+			this.dialogEdit = true;
+			Object.assign(this.editClassify, data);
+		},
+		remove(node, val) {
+			if (val.children) {
+				this.$message.error("不能删除含有子类的分类");
+				val.visible = false;
+				return;
+			}
+			let qs = require("qs");
+			let data = qs.stringify({
+				cateId: val.id
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-recipe/recipeCate/delCate",
+					type: "post",
+					option: {
+						successMsg: "删除成功"
+					}
+				},
+				this
+			).then(result => {
+				if (result.data.code === 200) {
+					this.reload();
+				}
+			});
+		},
+		handlechange(params) {
+			this.selectShow = false;
+			// this.classify.label = params.cateName;
+			// this.classify.parentNo = params.cateNo;
+			this.classify.parentNo = params;
+		},
+		getClassifyList() {
 			this.Axios(
 				{
 					params: {},
@@ -293,22 +249,57 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-mall/itemCat/listCate"
+					url: "/api-recipe/recipeCate/listCate"
 				},
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
-					this.tableData = result.data.data;
+					for (let i = 0; i < result.data.data.length; i++) {
+						result.data.data[i].visible = false;
+					}
+					if (result.data.code === 200) {
+						let arr = Math.min.apply(
+							null,
+							result.data.data.map(item => {
+								return item.parentNo;
+							})
+						);
+						this.classifyData = this.filterArray(result.data.data, arr);
+					}
 				},
 				({ type, info }) => {}
 			);
+		},
+		filterArray(data, parent) {
+			let vm = this;
+			var tree = [];
+			var temp;
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].parentNo == parent) {
+					var obj = data[i];
+					temp = this.filterArray(data, data[i].cateNo);
+					if (temp.length > 0) {
+						obj.children = temp;
+					}
+					tree.push(obj);
+				}
+			}
+			return tree;
 		}
 	},
 	created() {
-		this.getClassfy();
+		this.getClassifyList();
 	},
-	watch: {}
+	components: {
+		selectList
+	},
+	watch: {
+		dialogAdd() {
+			if (this.dialogAdd === false) {
+				this.classify.cateName = "";
+			}
+		}
+	}
 };
 </script>
 
@@ -319,64 +310,58 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.classify_list {
+.cookbook_classify {
 	font-size: 14px;
 	color: @font-normal;
 	.top_list {
-		// line-height: 60px;
 		background-color: white;
 		padding: 10px;
 	}
 	.bottom_list {
 		background-color: white;
 		margin-top: 10px;
-		padding-bottom: 10px;
-		overflow: hidden;
-		.top_title {
+		padding: 10px 0;
+		.top_list {
 			padding: 0 10px;
 			line-height: 60px;
 			overflow: hidden;
 			border-bottom: @border;
-			h4 {
-				float: left;
-			}
-			.top_search {
-				width: 400px;
-				float: right;
-			}
 		}
-		.table_list {
-			overflow: hidden;
-			padding: 10px;
-			.el-input__inner {
-				padding: 0;
-				border: none;
-				&:focus {
-					border: 1px solid #1cc09f;
-				}
-			}
+		.tree_title {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-size: 14px;
+			padding-right: 8px;
+			line-height: 40px;
+			background-color: #f1f1f1;
+		}
+		.el-tree-node__content {
+			height: 40px;
 		}
 	}
-	input::-webkit-outer-spin-button,
-	input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
+	.custom-tree-node {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 14px;
+		padding-right: 8px;
 	}
-	input[type="number"] {
-		-moz-appearance: textfield;
-	}
-	.el-radio__input.is-checked .el-radio__inner {
-		border-color: #1cc09f;
-		background: #1cc09f;
-	}
-	.el-radio__input.is-checked + .el-radio__label {
-		color: #1cc09f;
-	}
-	.el-radio__inner:hover {
-		border-color: #1cc09f;
-	}
-	.el-dialog__footer {
-		padding: 10px 50px 20px;
+	h2 {
+		line-height: 40px;
 	}
 }
+.select_case {
+	background-color: white;
+	height: 150px;
+	width: 363px;
+	overflow: scroll;
+	border: @border;
+	border-color: #1cc09f;
+	position: absolute;
+	top: 92px;
+	left: 116px;
+}
 </style>
-

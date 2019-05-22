@@ -247,7 +247,20 @@ export default {
 						}
 					},
 					tooltip: {
-						trigger: "item"
+						trigger: "item",
+						formatter: function(params) {
+							let topTip =
+								"<div style='padding:8px;'>" +
+								"设备数量" +
+								"<br/>" +
+								params.name +
+								"：" +
+								params.value[2] +
+								"（台）" +
+								"<br/>" +
+								"</div>";
+							return topTip;
+						}
 					},
 					legend: {
 						orient: "vertical",
@@ -283,7 +296,7 @@ export default {
 							coordinateSystem: "geo",
 							data: convertData(data),
 							symbolSize: function(val) {
-								return val[2] / 10;
+								return val[2];
 							},
 							label: {
 								normal: {
@@ -313,7 +326,7 @@ export default {
 									.slice(0, 6)
 							),
 							symbolSize: function(val) {
-								return val[2] / 10;
+								return val[2];
 							},
 							showEffectOn: "render",
 							rippleEffect: {

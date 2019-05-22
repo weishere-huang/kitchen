@@ -8,186 +8,26 @@
 				<h4>商品详情</h4>
 			</div>
 			<el-form label-width="200px" size="mini" :inline-message="true" :model="editmenu" ref="editmenu">
-				<el-form-item label="菜谱选择：" prop="recipeName">
-					<el-input
-						size="small"
-						suffix-icon="el-icon-arrow-down"
-						type="text"
-						style="width:300px;"
-						placeholder="请选择"
-						@focus="dialogCookbook=true"
-						v-model="editmenu.recipeName"
-						:disabled="true"
-					></el-input>
+				<el-form-item label="商品名称：" prop="recipeName">
+					<span></span>
 				</el-form-item>
-				<el-form-item label="商品分类：" prop="itemCate">
-					<el-select
-						v-model="editmenu.itemCate"
-						:disabled="true"
-						placeholder="请选择"
-						size="small"
-						style="width:300px;"
-					>
-						<el-option v-for="item in classify" :key="item.value" :label="item.cateName" :value="item.no"></el-option>
-					</el-select>
+				<el-form-item label="商品分类：" prop="recipeName">
+					<span></span>
 				</el-form-item>
-				<el-form-item label="商品价格：" prop="itemPrice">
-					<el-input
-						v-model.number="editmenu.itemPrice"
-						type="number"
-						size="small"
-						style="width:300px;"
-						placeholder="单位：元"
-						step="0.01"
-						:disabled="true"
-					></el-input>
+				<el-form-item label="价格：" prop="recipeName">
+					<span></span>
 				</el-form-item>
-				<el-form-item label="商品库存：" prop="stockNow">
-					<el-input
-						type="number"
-						:disabled="true"
-						size="small"
-						style="width:300px;"
-						v-model.number="editmenu.stockNow"
-					></el-input>
+				<el-form-item label="上/下架：" prop="recipeName">
+					<span></span>
 				</el-form-item>
-				<el-form-item label="上/下架：" prop="state">
-					<el-radio v-model="editmenu.state" label="1" :disabled="true">上架</el-radio>
-					<el-radio v-model="editmenu.state" label="2" :disabled="true">下架</el-radio>
+				<el-form-item label="是否推荐：" prop="recipeName">
+					<span></span>
 				</el-form-item>
-				<el-form-item label="加入推荐：" prop="recommendType">
-					<el-checkbox v-model="editmenu.recommendType.hotMenu" :disabled="true">热销</el-checkbox>
-					<el-checkbox v-model="editmenu.recommendType.newMenu" :disabled="true">新品</el-checkbox>
+				<el-form-item label="商品缩略图：" prop="recipeName">
+					<img style="width:80px;height:80px" src alt>
 				</el-form-item>
-				<div class="line"></div>
-				<el-form-item label="商品名称：">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model.number="cookbook.recipeName"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="商品分类：">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model.number="cookbook.cateName"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="烹饪时长：">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model.number="cookbook.cookingTime"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
-					<el-radio-group v-model="cookbook.spicy" size="small" style="width:192px;" :disabled="true">
-						<el-radio-button label="0">
-							<i class="iconfont" style="color:#999999;">&#xe612;</i>
-						</el-radio-button>
-						<el-radio-button label="1">
-							<i class="iconfont" style="color:red;">&#xe612;</i>
-						</el-radio-button>
-						<el-radio-button label="2">
-							<i class="iconfont" style="color:red;">&#xe613;</i>
-						</el-radio-button>
-						<el-radio-button label="3">
-							<i class="iconfont" style="color:red;">&#xe614;</i>
-						</el-radio-button>
-					</el-radio-group>
-					<span>
-						<span v-if="cookbook.spicy==0">无辣</span>
-						<span v-if="cookbook.spicy==1">微辣</span>
-						<span v-if="cookbook.spicy==2">中辣</span>
-						<span v-if="cookbook.spicy==3">特辣</span>
-					</span>
-				</el-form-item>
-				<el-form-item label="净含量：" prop="itemWeight">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model.number="cookbook.weight"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="食材搭配：" prop="spec">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model="cookbook.spec"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="商品图片：">
-					<!-- <el-upload
-						action="https://jsonplaceholder.typicode.com/posts/"
-						list-type="picture-card"
-						:on-preview="handlePictureCardPreview"
-						:on-remove="handleRemove"
-						:disabled="true"
-					>
-						<i class="el-icon-plus"></i>
-					</el-upload>-->
-					<el-dialog :visible.sync="dialogVisible" class="showPic">
-						<img width="100%" :src="dialogImageUrl" alt>
-					</el-dialog>
-					<div style="width:80px;height:80px;">
-						<img
-							:src="cookbook.recipeImg"
-							alt
-							style="width:80px;height:80px;"
-							@click="handlePictureCardPreview(cookbook.recipeImg)"
-						>
-					</div>
-				</el-form-item>
-				<el-form-item label="主料：">
-					<el-input
-						:disabled="true"
-						size="small"
-						style="width:600px;"
-						type="textarea"
-						rows="6"
-						class="textarea_style"
-						placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。"
-						v-model="cookbook.ingredient"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="辅料：">
-					<el-input
-						:disabled="true"
-						size="small"
-						style="width:600px;"
-						type="textarea"
-						rows="6"
-						class="textarea_style"
-						placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。"
-						v-model="cookbook.accessories"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="介绍：">
-					<el-input
-						:disabled="true"
-						class="textarea_style"
-						size="small"
-						style="width:600px;"
-						type="textarea"
-						rows="6"
-						placeholder="（选填）"
-						v-model="cookbook.introduce"
-					></el-input>
-				</el-form-item>
-				<el-form-item label>
-					<!-- <el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button> -->
-					<!-- <el-button size="small" type="primary" @click="submitForm('editmenu')">保存</el-button> -->
+				<el-form-item label="商品详情：" prop="recipeName">
+					<div style="width:800px;hieght:500px;"></div>
 				</el-form-item>
 			</el-form>
 		</div>

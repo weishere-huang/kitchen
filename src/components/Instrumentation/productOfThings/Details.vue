@@ -37,10 +37,15 @@
 						<span>{{oneProductMsg.introduce}}</span>
 					</el-form-item>
 					<el-form-item label="产品协议：" prop>
-						<span v-for="(item, index) in oneProductMsg.agreement" :key="index">{{item.name}}</span>
+						<span
+							class="pic_style"
+							v-for="(item, index) in oneProductMsg.agreement"
+							:key="index"
+							@click="look(global.imgPath + item.url.replace('img:', ''))"
+						>{{item.name}}</span>
 					</el-form-item>
 					<el-form-item label="产品连接示意图：" prop>
-						<span>{{oneProductMsg.linkName}}</span>
+						<span class="pic_style" @click="look(oneProductMsg.linkImg)">{{oneProductMsg.linkName}}</span>
 					</el-form-item>
 					<el-form-item label="申请时间：" prop>
 						<span>{{oneProductMsg.gmtCreate}}</span>
@@ -48,16 +53,25 @@
 				</el-form>
 			</div>
 		</div>
+		<el-dialog :visible.sync="dialogVisible" class="showPic">
+			<img width="100%" :src="dialogImageUrl" alt>
+		</el-dialog>
 	</div>
 </template>
 <script>
 export default {
 	data() {
 		return {
+			dialogVisible: false,
+			dialogImageUrl: "",
 			oneProductMsg: {}
 		};
 	},
 	methods: {
+		look(a) {
+			this.dialogImageUrl = a;
+			this.dialogVisible = true;
+		},
 		findOne(id) {
 			this.Axios(
 				{
@@ -70,12 +84,11 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
 				if (result.data.code === 200) {
 					this.oneProductMsg = result.data.data;
-					this.oneProductMsg.deviceCateName = JSON.parse(
-						this.oneProductMsg.deviceCateName
-					).join("--");
+					// this.oneProductMsg.deviceCateName = JSON.parse(
+					// 	this.oneProductMsg.deviceCateName
+					// ).join("--");
 					this.oneProductMsg.agreement = JSON.parse(
 						this.oneProductMsg.agreement
 					);
@@ -130,6 +143,13 @@ export default {
 		.table_list {
 			overflow: hidden;
 			padding: 10px;
+		}
+	}
+	.pic_style {
+		color: #1cc09f;
+		cursor: pointer;
+		&:hover {
+			text-decoration: underline;
 		}
 	}
 }

@@ -112,12 +112,12 @@
 								<span>{{scope.row.stockNow}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="净含量（克）" min-width="90" show-overflow-tooltip>
+						<!-- <el-table-column label="净含量（克）" min-width="90" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.itemWeight}}</span>
 							</template>
-						</el-table-column>
-						<el-table-column label="上/下架" min-width="60">
+						</el-table-column>-->
+						<el-table-column label="上架状态" min-width="60">
 							<template slot-scope="scope">
 								<!-- <div @click.stop.prevent="changeUp(scope.$index, scope.row)"> -->
 								<i class="iconfont" v-if="scope.row.state=='1'" style="color:green;">&#xe659;</i>
@@ -125,7 +125,7 @@
 								<!-- </div> -->
 							</template>
 						</el-table-column>
-						<el-table-column label="新品" min-width="60">
+						<el-table-column label="商家推荐" min-width="60">
 							<template slot-scope="scope">
 								<!-- <div @click.stop.prevent="changeNew(scope.$index, scope.row)"> -->
 								<i
@@ -141,9 +141,8 @@
 								<!-- </div> -->
 							</template>
 						</el-table-column>
-						<el-table-column label="热销" min-width="60">
+						<!-- <el-table-column label="热销" min-width="60">
 							<template slot-scope="scope">
-								<!-- <div @click.stop.prevent="changeHot(scope.$index, scope.row)"> -->
 								<i
 									class="iconfont"
 									v-if="scope.row.recommendType.hotMenu===true"
@@ -154,10 +153,9 @@
 									v-if="scope.row.recommendType.hotMenu===false"
 									style="color:red;"
 								>&#xe658;</i>
-								<!-- </div> -->
 							</template>
-						</el-table-column>
-						<el-table-column label="代理商" min-width="150" show-overflow-tooltip>
+						</el-table-column>-->
+						<el-table-column label="发布者" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<!-- <el-popover
 									popper-class="color_text"
@@ -178,7 +176,7 @@
 								<span>{{scope.row.salesTerritoryName}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="操作" min-width="50">
+						<el-table-column label="操作" width="120">
 							<template slot-scope="scope">
 								<permission-button
 									permCode="mall_list_lookup.mall_list_update"
@@ -187,7 +185,7 @@
 									size="mini"
 									@click.stop.prevent="handleEdit(scope.$index, scope.row)"
 								>查看</permission-button>
-								<!-- <el-popover placement="top" width="180" v-model="scope.row.visible">
+								<el-popover placement="top" width="180" v-model="scope.row.visible">
 									<p style="line-height:32px;text-align:center;">
 										<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
 									</p>
@@ -196,7 +194,7 @@
 										<el-button type="primary" size="small" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
 									</div>
 									<el-button slot="reference" type="text">删除</el-button>
-								</el-popover>-->
+								</el-popover>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -256,10 +254,10 @@ export default {
 		};
 	},
 	methods: {
-	  search(){
-	    this.pageIndex=1;
-	    this.foodlist();
-    },
+		search() {
+			this.pageIndex = 1;
+			this.foodlist();
+		},
 		editfood(data) {
 			let qs = require("qs");
 			let datas = qs.stringify({
