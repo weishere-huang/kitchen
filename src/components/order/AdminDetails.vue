@@ -21,7 +21,7 @@
 					@click="dialogClose=true"
 					v-if="orderDetails.platformState!=3&&orderDetails.platformState!=9"
 				>关闭</el-button>-->
-				<el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button>
+				<!-- <el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button> -->
 				<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
 			</div>
 			<el-dialog
@@ -101,7 +101,7 @@
 						<el-form-item label="收货人：">
 							<span>{{orderDetails.address.consignee+(orderDetails.address.gender==1?"先生":"女士")}}</span>
 						</el-form-item>
-						<el-form-item label="手机号：">
+						<el-form-item label="收货人手机号：">
 							<span>{{orderDetails.address.phone}}</span>
 						</el-form-item>
 					</el-form>
@@ -111,8 +111,9 @@
 						<el-form-item label="收货地址：">
 							<span>{{orderDetails.address.area+orderDetails.address.address}}</span>
 						</el-form-item>
-						<el-form-item label="配送时间：">
-							<span style="color:#1cc09f">{{sendTime}}</span>
+						<el-form-item label="快递运单号：">
+							<span>{{sendTime}}</span>
+							<span style="color:#1cc09f">状态跟踪</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -136,7 +137,11 @@
 							<span>（含配送费 {{orderDetails.postFee/100}}元）</span>
 						</el-form-item>
 						<el-form-item label="- 优惠：">
-							<span>¥ 0.00</span>
+							<span>¥ 0.00</span>(
+							<span>
+								<span>红包￥2.00</span>&nbsp;
+								<span>优惠券￥2.00</span>)
+							</span>
 						</el-form-item>
 						<el-form-item label="实付：">
 							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span>

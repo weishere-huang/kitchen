@@ -49,12 +49,12 @@
 						tooltip-effect="light"
 						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
 					>
-						<el-table-column label="名称" min-width="100" show-overflow-tooltip>
+						<el-table-column label="名称" min-width="120" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.itemName }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="分类" min-width="80" show-overflow-tooltip>
+						<el-table-column label="分类" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.cateName }}</span>
 							</template>
@@ -103,9 +103,9 @@
 								></el-popover>
 							</template>
 						</el-table-column>
-						<el-table-column label="净含量（克）" min-width="100" show-overflow-tooltip>
+						<el-table-column label="运费" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.itemWeight}}</span>
+								<span>￥{{ scope.row.itemWeight}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="*上/下架" min-width="60">
@@ -120,7 +120,7 @@
 								</div>
 							</template>
 						</el-table-column>
-						<el-table-column label="*新品" min-width="60">
+						<el-table-column label="*推荐" min-width="60">
 							<template slot-scope="scope">
 								<div @click.stop.prevent="changeNew(scope.$index, scope.row)">
 									<i
@@ -136,7 +136,7 @@
 								</div>
 							</template>
 						</el-table-column>
-						<el-table-column label="*热销" min-width="60">
+						<!-- <el-table-column label="*热销" min-width="60">
 							<template slot-scope="scope">
 								<div @click.stop.prevent="changeHot(scope.$index, scope.row)">
 									<i
@@ -151,8 +151,8 @@
 									>&#xe658;</i>
 								</div>
 							</template>
-						</el-table-column>
-						<el-table-column label="*排序" min-width="80" show-overflow-tooltip>
+						</el-table-column>-->
+						<el-table-column label="*排序" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<el-popover
 									popper-class="color_text"
@@ -172,7 +172,7 @@
 								></el-input>
 							</template>
 						</el-table-column>
-						<el-table-column label="操作" min-width="100">
+						<el-table-column label="操作" width="100">
 							<template slot-scope="scope">
 								<el-button
 									type="text"
@@ -248,10 +248,10 @@ export default {
 		};
 	},
 	methods: {
-	  search(){
-	    this.pageIndex=1;
-	    this.foodlist();
-    },
+		search() {
+			this.pageIndex = 1;
+			this.foodlist();
+		},
 		editfood(data) {
 			let qs = require("qs");
 			let datas = qs.stringify({

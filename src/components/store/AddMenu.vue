@@ -15,17 +15,13 @@
 				:model="addMenu"
 				ref="addMenu"
 			>
-				<el-form-item label="菜谱选择：" prop="recipeName">
+				<el-form-item label="商品名称：" prop="recipeName">
 					<el-input
 						size="small"
-						suffix-icon="el-icon-arrow-down"
 						type="text"
 						style="width:300px;"
-						placeholder="请选择"
 						v-model="addMenu.recipeName"
-						@focus="dialogCoobook = true"
 						maxlength="20"
-						:readonly="true"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品分类：" prop="itemCate">
@@ -33,7 +29,7 @@
 						<el-option v-for="item in classify" :key="item.value" :label="item.cateName" :value="item.no"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="商品价格：" prop="itemPrice">
+				<el-form-item label="价格：" prop="itemPrice">
 					<el-input
 						v-model.number="addMenu.itemPrice"
 						type="number"
@@ -44,7 +40,7 @@
 						maxlength="20"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="商品库存：" prop="stockNow">
+				<el-form-item label="库存数量：" prop="stockNow">
 					<el-input
 						maxlength="20"
 						type="number"
@@ -57,136 +53,41 @@
 					<el-radio v-model="addMenu.state" label="1">上架</el-radio>
 					<el-radio v-model="addMenu.state" label="2">下架</el-radio>
 				</el-form-item>
-				<el-form-item label="加入推荐：" prop="recommendType">
-					<el-checkbox v-model="addMenu.recommendType.hotMenu">热销</el-checkbox>
-					<el-checkbox v-model="addMenu.recommendType.newMenu">新品</el-checkbox>
+				<el-form-item label="是否推荐：" prop="recommendType">
+					<el-radio v-model="addMenu.state" label="1">是</el-radio>
+					<el-radio v-model="addMenu.state" label="2">否</el-radio>
 				</el-form-item>
-				<div class="line"></div>
-				<el-form-item label="商品名称：">
-					<el-input
-						maxlength="20"
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model="cookbook.recipeName"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="商品分类：">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model="cookbook.cateName"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="烹饪时长：">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model="cookbook.cookingTime"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
-					<el-radio-group v-model="cookbook.spicy" size="small" style="width:192px;" :disabled="true">
-						<el-radio-button label="0">
-							<i class="iconfont" style="color:#999999;">&#xe612;</i>
-						</el-radio-button>
-						<el-radio-button label="1">
-							<i class="iconfont" style="color:red;">&#xe612;</i>
-						</el-radio-button>
-						<el-radio-button label="2">
-							<i class="iconfont" style="color:red;">&#xe613;</i>
-						</el-radio-button>
-						<el-radio-button label="3">
-							<i class="iconfont" style="color:red;">&#xe614;</i>
-						</el-radio-button>
-					</el-radio-group>
-					<span>
-						<span v-if="cookbook.spicy==0">无辣</span>
-						<span v-if="cookbook.spicy==1">微辣</span>
-						<span v-if="cookbook.spicy==2">中辣</span>
-						<span v-if="cookbook.spicy==3">特辣</span>
-					</span>
-				</el-form-item>
-				<el-form-item label="净含量：" prop="itemWeight">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model.number="cookbook.weight"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="食材搭配：" prop="itemSpec">
-					<el-input
-						type="text"
-						size="small"
-						:disabled="true"
-						style="width:300px;"
-						v-model.number="cookbook.ingredient"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="商品图片：">
-					<!-- <el-upload
-						action="https://jsonplaceholder.typicode.com/posts/"
+				<el-form-item label="商品缩略图：" prop>
+					<el-upload
+						:action="imgApi()"
 						list-type="picture-card"
-						:on-preview="handlePictureCardPreview"
-						:on-remove="handleRemove"
-						:disabled="true"
+						:on-preview="handlePictureCardPreview1"
+						:on-remove="handleRemove1"
+						:on-success="handleAvatarSuccess1"
+						:before-upload="beforeAvatarUpload1"
+						:limit="1"
+						class="upload_show"
+						accept="image/png, image/jpeg"
 					>
 						<i class="el-icon-plus"></i>
-					</el-upload>-->
+					</el-upload>
+					<div class="el-upload__tip tip_style">要求：750*460像素，小于1MB的jpg或png</div>
 					<el-dialog :visible.sync="dialogVisible" class="showPic">
 						<img width="100%" :src="dialogImageUrl" alt>
 					</el-dialog>
-					<div style="width:80px;height:80px;">
-						<img
-							:src="cookbook.recipeImg"
-							alt
-							style="width:80px;height:80px;"
-							@click="handlePictureCardPreview(cookbook.recipeImg)"
-						>
-					</div>
 				</el-form-item>
-				<el-form-item label="主料：">
-					<el-input
-						:disabled="true"
-						size="small"
-						style="width:600px;"
-						type="textarea"
-						rows="6"
-						class="textarea_style"
-						placeholder="如：猪肉450克切片，青蒜苗3根切段，大葱2根切断。"
-						v-model="cookbook.ingredient"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="辅料：">
-					<el-input
-						:disabled="true"
-						size="small"
-						style="width:600px;"
-						type="textarea"
-						rows="6"
-						class="textarea_style"
-						placeholder="如：生姜1块，大蒜2瓣，豆瓣酱1勺，花椒10粒，生抽2勺。"
-						v-model="cookbook.accessories"
-					></el-input>
-				</el-form-item>
-				<el-form-item label="介绍：">
-					<el-input
-						:disabled="true"
-						class="textarea_style"
-						size="small"
-						style="width:600px;"
-						type="textarea"
-						rows="6"
-						placeholder="（选填）"
-						v-model="cookbook.introduce"
-					></el-input>
+				<el-form-item label="商品详情：">
+					<editor
+						id="editorMenu"
+						height="300px"
+						width="700px"
+						:uploadJson="uploadJson()"
+						:content.sync="editorText"
+						:fileManagerJson="()=>look()"
+						pluginsPath="../../../static/kindeditor/plugins"
+						filePostName="file"
+						:loadStyleMode="false"
+					></editor>
 				</el-form-item>
 				<el-form-item label>
 					<!-- <el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button> -->
@@ -194,25 +95,23 @@
 				</el-form-item>
 			</el-form>
 		</div>
-		<el-dialog title="绑定菜谱" :visible.sync="dialogCoobook" width="714px" :close-on-click-modal="false">
-			<div style="overflow:hidden;margin-top:16px;">
-				<dialog-coobook v-on:dialogCoobookHide="dialogCoobookHide"></dialog-coobook>
-			</div>
-		</el-dialog>
 		<el-dialog :visible.sync="dialogPreview" width="414px" class="showPic el_show">
 			<Preview :MenuMsg="addMenu"></Preview>
 		</el-dialog>
 	</div>
 </template>
 <script>
-import ueditor from "../public/Ue";
+import editor from "../public/kindeditor";
 import areaList from "../public/Area";
-import dialogCoobook from "./addCookbook/addCookbook";
+
 import Preview from "./preview/Preview";
 export default {
 	inject: ["reload"],
 	data() {
 		return {
+			editorText: "",
+			dialogImageUrl: "",
+			dialogVisible: false,
 			dialogPreview: false,
 			addMenu: {
 				recipeName: "",
@@ -272,20 +171,9 @@ export default {
 				]
 			},
 			cookbook: "",
-			dialogCoobook: false,
 			areaShow: false,
 			defaultMsg: "",
-			config: {
-				initialFrameWidth: null,
-				initialFrameHeight: 350
-			},
-			classify: [
-				{
-					value: "炒菜",
-					label: "炒菜"
-				}
-			],
-			dialogImageUrl: "",
+			classify: [],
 			dialogVisible: false
 		};
 	},
@@ -330,30 +218,59 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		dialogCoobookHide(params) {
-			console.log(params);
-			this.dialogCoobook = params.ishide;
-			this.cookbook = params.value;
-			this.cookbook.recipeImg =
-				this.global.imgPath + this.cookbook.recipeImg.replace("img:", "");
-			this.addMenu.recipeName = this.cookbook.recipeName;
-		},
 		getUEContent() {
 			this.savespu();
 		},
-		handleRemove(file, fileList) {
-			console.log(file, fileList);
-			this.addMenu.itemImg = null;
+		look() {
+			let url = this.global.imgPath;
+			return url;
 		},
-		handlePictureCardPreview(file) {
-			if (file != "" || null) {
-				this.dialogImageUrl = file;
-				this.dialogVisible = true;
+		uploadJson() {
+			let url = this.global.apiImg + "/api-upload/upload";
+			return url;
+		},
+		imgApi() {
+			let url = this.global.apiImg + "/api-upload/upload";
+			return url;
+		},
+		handleRemove1(file, fileList) {
+			// this.cookbook.recipeImg = null;
+		},
+		handlePictureCardPreview1(file) {
+			this.dialogImageUrl = file.url;
+			this.dialogVisible = true;
+		},
+		beforeAvatarUpload1(file) {
+			const isPicSize = file.size / 1024 / 1024 <= 1;
+			if (isPicSize == false) {
+				this.$message.error("上传图片不能大于1M");
+				return false;
+			} else {
+				const isSize = new Promise(function(resolve, reject) {
+					let width = 600000;
+					let height = 600000;
+					let _URL = window.URL || window.webkitURL;
+					let img = new Image();
+					img.onload = function() {
+						let valid = img.width <= width && img.height <= height;
+						valid ? resolve() : reject();
+					};
+					img.src = _URL.createObjectURL(file);
+				}).then(
+					() => {
+						return file;
+					},
+					() => {
+						this.$message.error("上传的图片必须是等于或小于600*600!");
+						return Promise.reject();
+					}
+				);
+				return isSize;
 			}
 		},
-		handleAvatarSuccess(res, file) {
+		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addMenu.itemImg = res.data;
+				// this.cookbook.recipeImg = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -364,34 +281,6 @@ export default {
 					type: "error"
 				});
 			}
-			console.log(res);
-			console.log(file);
-		},
-		beforeAvatarUpload(file) {
-			const isSize = new Promise(function(resolve, reject) {
-				let width = 600;
-				let height = 600;
-				let _URL = window.URL || window.webkitURL;
-				let img = new Image();
-				img.onload = function() {
-					let valid = img.width <= width && img.height <= height;
-					valid ? resolve() : reject();
-				};
-				img.src = _URL.createObjectURL(file);
-			}).then(
-				() => {
-					return file;
-				},
-				() => {
-					this.$message.error("上传的图片必须是等于或小于600*600!");
-					return Promise.reject();
-				}
-			);
-			const isPicSize = file.size / 1024 <= 80;
-			if (!isPicSize) {
-				this.$message.error("上传图片不能大于80KB");
-			}
-			return isSize && isPicSize;
 		},
 		savespu() {
 			let qs = require("qs");
@@ -435,10 +324,10 @@ export default {
 		this.getClassfy();
 	},
 	components: {
-		ueditor,
 		areaList,
-		dialogCoobook,
-		Preview
+
+		Preview,
+		editor
 	}
 };
 </script>

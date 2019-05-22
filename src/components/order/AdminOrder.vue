@@ -142,7 +142,17 @@ export default {
 					value: 9
 				}
 			],
-			tableData: [],
+			tableData: [
+				{
+					orderNo: "332939491",
+					phone: "1329993919",
+					orderMoney: "10000",
+					gmtCreate: "2019-5-19 19:20:40",
+					platformState: "1",
+					supplierName: "天天超市",
+					id: 123
+				}
+			],
 			items: [
 				{
 					label: "订单编号",
@@ -155,20 +165,6 @@ export default {
 					width: 90
 				},
 				{
-					label: "下单时间",
-					prop: "gmtCreate",
-					width: 140
-				},
-				{
-					label: "收货人/手机号",
-					prop: "address",
-					width: 120,
-					formatter: function(row, column) {
-						let str = row.address.consignee + " " + row.address.phone;
-						return str;
-					}
-				},
-				{
 					label: "总金额",
 					prop: "orderMoney",
 					width: 70,
@@ -177,9 +173,9 @@ export default {
 					}
 				},
 				{
-					label: "支付方式",
-					prop: "payType",
-					width: 80
+					label: "下单时间",
+					prop: "gmtCreate",
+					width: 140
 				},
 				{
 					label: "订单状态",
@@ -234,11 +230,11 @@ export default {
 				if (new Date(this.searchDate1) > new Date(this.searchDate2)) {
 					this.$message.error("结束日期必须大于起始日期，请重新选择");
 				} else {
-				  this.pageIndex = 1;
+					this.pageIndex = 1;
 					this.listOrder();
 				}
 			} else {
-			  this.pageIndex=1;
+				this.pageIndex = 1;
 				this.listOrder();
 			}
 		},
@@ -366,7 +362,7 @@ export default {
 		}
 	},
 	created() {
-		this.listOrder();
+		// this.listOrder();
 		let a = this.$route.matched.find(item => item.name === "Details")
 			? true
 			: false;

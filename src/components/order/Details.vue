@@ -11,14 +11,14 @@
 					@click="dialogSend=true"
 					v-if="orderDetails.platformState==2"
 				>发货</permission-button>
-				<permission-button
+				<!-- <permission-button
 					permCode="supplierOrder_detail_lookup.supplierOrder_detai_pay"
 					banType="disable"
 					size="small"
 					type="primary"
 					@click="dialogPay=true"
 					v-if="orderDetails.platformState==0"
-				>付款</permission-button>
+				>付款</permission-button>-->
 				<permission-button
 					permCode="supplierOrder_detail_lookup.supplierOrder_detai_schedule"
 					banType="disable"
@@ -27,7 +27,7 @@
 					@click="dialogClose=true"
 					v-if="orderDetails.platformState==0"
 				>关闭</permission-button>
-				<el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button>
+				<!-- <el-button size="small" type="primary" @click="dialogPlan=true">进度</el-button> -->
 				<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
 			</div>
 			<el-dialog
@@ -37,10 +37,23 @@
 				:close-on-click-modal="false"
 				top="30vh"
 			>
-				<span style="line-height:40px;">
+				<!-- <span style="line-height:40px;">
 					<i class="el-icon-warning" style="color:#FF6600;font-size:18px;"></i>
 					发货后不能撤销，您要继续吗？
-				</span>
+				</span>-->
+				<el-form label-width="85px" style="padding-top:16px;">
+					<el-form-item label="快递公司：">
+						<el-select type="text" style="width:99%" v-model="payOI" placeholder="请选择快递公司">
+							<el-option v-for="(item, index) in 10" :key="index" :value="item" :label="item"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="运单号：">
+						<el-input type="text" style="width:99%" v-model="payOI" placeholder="请输入快递运单号"></el-input>
+					</el-form-item>
+					<el-form-item label="备注：">
+						<el-input type="textarea" rows="3" style="width:99%" v-model="payOI" placeholder="请输入备注"></el-input>
+					</el-form-item>
+				</el-form>
 				<span slot="footer" class="dialog-footer">
 					<el-button size="small" @click="dialogSend = false" plain>取 消</el-button>
 					<el-button size="small" type="primary" @click="shipments">确 定</el-button>
@@ -117,8 +130,9 @@
 						<el-form-item label="收货地址：">
 							<span>{{orderDetails.address.area+orderDetails.address.address}}</span>
 						</el-form-item>
-						<el-form-item label="配送时间：">
-							<span style="color:#1cc09f">{{sendTime}}</span>
+						<el-form-item label="快递运单号：">
+							<span>{{sendTime}}</span>
+							<span style="color:#1cc09f">状态跟踪</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -142,7 +156,11 @@
 							<span>（含配送费 {{orderDetails.postFee/100}}元）</span>
 						</el-form-item>
 						<el-form-item label="- 优惠：">
-							<span>¥ 0.00</span>
+							<span>¥ 0.00</span>(
+							<span>
+								<span>红包￥2.00</span>&nbsp;
+								<span>优惠券￥2.00</span>)
+							</span>
 						</el-form-item>
 						<el-form-item label="实付：">
 							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span>
@@ -448,7 +466,7 @@ export default {
 		}
 	},
 	created() {
-		this.getDetails(this.$route.params.id);
+		// this.getDetails(this.$route.params.id);
 	},
 	components: {
 		tableList
