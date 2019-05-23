@@ -24,6 +24,7 @@ import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
 import SystemLog from '@/components/system/SystemLog'
 import System from '@/components/system/System'
+import MerchantSystem from '@/components/system/MerchantSystem'
 import Security from '@/components/system/Security'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
 import EditRole from '@/components/system/addOrEditRole/EditRole'
@@ -667,6 +668,17 @@ const router = new Router({
       component: Administrator,
       props: {
         pageName: '管理员列表'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/MerchantSystem',
+      name: 'MerchantSystem',
+      component: MerchantSystem,
+      props: {
+        pageName: '商城设置'
       },
       meta: {
         requireAuth: true,

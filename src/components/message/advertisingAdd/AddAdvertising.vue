@@ -15,23 +15,24 @@
 					ref="addAdvertising"
 					:rules="advertisingRules"
 				>
-					<el-form-item label="广告名称：" prop="title">
-						<el-input v-model="addMsg.title" size="small" style="width:400px" maxlength="50"></el-input>
+					<el-form-item label="广告名称：" prop="name">
+						<el-input v-model="addMsg.name" size="small" style="width:400px" maxlength="50"></el-input>
 					</el-form-item>
-					<el-form-item label="广告位置：" prop="title">
-						<el-select style="width:400px">
-							<el-option label="APP主页-顶部图片 750*450" value="1"></el-option>
-							<el-option label="APP主页-广告图 750*250" value="2"></el-option>
-							<el-option label="APP商城-轮播图 750*250" value="3"></el-option>
-							<el-option label="APP发现-轮播图 750*250" value="4"></el-option>
+					<el-form-item label="广告位置：" prop="position">
+						<el-select v-model="addMsg.position" style="width:400px">
+							<el-option v-if="employeeType==3" label="APP主页-顶部图片 750*450" :value="0"></el-option>
+							<el-option v-if="employeeType==3" label="APP主页-广告图 750*250" :value="1"></el-option>
+							<el-option v-if="employeeType==3" label="APP商城-轮播图 750*250" :value="2"></el-option>
+							<el-option v-if="employeeType==3" label="APP发现-轮播图 750*250" :value="3"></el-option>
+							<el-option v-if="employeeType!=3" label="店面主页-轮播图 750*250" :value="4"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="广告链接地址：" prop="linkUrl">
+					<el-form-item label="广告链接地址：" prop="url">
 						<el-input
 							size="small"
 							placeholder="http 或 https开头，URL填写后广告内容将失效"
 							style="width:400px"
-							v-model="addMsg.linkUrl"
+							v-model="addMsg.url"
 							maxlength="200"
 						></el-input>
 					</el-form-item>
@@ -57,13 +58,13 @@
 							value-format="yyyy/MM/dd HH:mm:ss"
 						></el-date-picker>
 					</el-form-item>
-					<el-form-item label="是否显示：" prop="state">
-						<el-radio-group v-model="addMsg.state">
+					<el-form-item label="是否显示：" prop="isDisplay">
+						<el-radio-group v-model="addMsg.isDisplay">
 							<el-radio :label="0" name="state">是</el-radio>
 							<el-radio :label="1" name="state">否</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="广告缩略图：" prop="mainPic">
+					<el-form-item label="广告缩略图：" prop="img">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -73,8 +74,6 @@
 							:before-upload="beforeAvatarUpload1"
 							:class="{disable:uploadShow1==2}"
 							class="upload_style"
-							v-model="addMsg.mainPic"
-							:file-list="mainPic"
 							:limit="1"
 							accept="image/png, image/jpeg"
 						>
@@ -91,9 +90,10 @@
 							height="300px"
 							width="700px"
 							:uploadJson="uploadJson()"
-							:content.sync="editorText"
+							:afterUpload="afterUpload"
+							:content.sync="addMsg.content"
 							:afterChange="afterChange()"
-							:fileManagerJson="look()"
+							:fileManagerJson="()=>look()"
 							pluginsPath="../../../static/kindeditor/plugins"
 							filePostName="file"
 							:loadStyleMode="false"
@@ -113,8 +113,7 @@ import editor from "../../public/kindeditor";
 export default {
 	data() {
 		return {
-			editorText: "直接初始化值", // 双向同步的变量
-			editorTextCopy: "", // content-change 事件回掉改变的对象
+			employeeType: JSON.parse(sessionStorage.getItem("user")).employeeType,
 			uploadShow1: 0,
 			uploadShow2: 0,
 			dialogImageUrl: null,
@@ -185,17 +184,21 @@ export default {
 				]
 			},
 			addMsg: {
-				title: "",
-				mainPic: "",
+				name: "",
+				position: "",
+				startTime: "",
+				endTime: "",
+				isDisplay: 0,
+				img: null,
 				content: "",
-				state: "",
-				startTime: null,
-				endTime: null,
-				linkUrl: ""
+				url: ""
 			}
 		};
 	},
 	methods: {
+		afterUpload(data) {
+			return this.global.imgPath + data.replace("img:", "");
+		},
 		look(a) {
 			console.log(a);
 			let url = this.global.imgPath;
@@ -242,12 +245,40 @@ export default {
 				return isSize;
 			}
 		},
-
+		addAdvertising() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				name: this.addMsg.name,
+				position: this.addMsg.position,
+				startTime: this.addMsg.startTime,
+				endTime: this.addMsg.endTime,
+				isDisplay: this.addMsg.isDisplay,
+				img: this.addMsg.img,
+				content: this.addMsg.content,
+				url: this.addMsg.url
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-platform/ad/addAd",
+					type: "post",
+					option: {
+						successMsg: "添加成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result.data);
+				if (result.data.code === 200) {
+					this.$router.back(-1);
+					this.reload();
+				}
+			});
+		},
 		handleAffirm(formName) {
-			let params = { type: "affirm", value: this.addMsg, isHide: false };
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-					this.$emit("beforeadd", params);
+					this.addAdvertising();
 				} else {
 					return false;
 				}
@@ -255,7 +286,7 @@ export default {
 		},
 
 		handleRemove(file, fileList) {
-			this.addMsg.mainPic = null;
+			this.addMsg.img = null;
 			this.uploadShow1 = 0;
 			console.log(file, fileList);
 		},
@@ -268,7 +299,7 @@ export default {
 
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
-				this.addMsg.mainPic = res.data;
+				this.addMsg.img = res.data;
 				this.uploadShow1 = 2;
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");

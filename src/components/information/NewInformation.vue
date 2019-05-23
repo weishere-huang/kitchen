@@ -30,7 +30,7 @@
 					<el-form-item label="接收对象：" prop>
 						<span>全部用户</span>
 					</el-form-item>
-					<el-form-item label="消息内容：" prop="content">
+					<!-- <el-form-item label="消息内容：" prop="content">
 						<el-input
 							type="textarea"
 							size="small"
@@ -39,7 +39,7 @@
 							maxlength="250"
 							v-model="addInfo.content"
 						></el-input>
-					</el-form-item>
+					</el-form-item>-->
 					<el-form-item label="消息图片：" prop>
 						<el-upload
 							:action="imgApi()"
@@ -59,14 +59,15 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="内容：">
+					<el-form-item label="内容：" prop="content">
 						<editor
 							id="editorActivity"
 							height="300px"
 							width="700px"
 							:uploadJson="uploadJson()"
-							:content.sync="editorText"
-							:fileManagerJson="look()"
+							:afterUpload="afterUpload"
+							:content.sync="addInfo.content"
+							:fileManagerJson="()=>look()"
 							pluginsPath="../../../static/kindeditor/plugins"
 							filePostName="file"
 							:loadStyleMode="false"
@@ -108,6 +109,9 @@ export default {
 		};
 	},
 	methods: {
+		afterUpload(data) {
+			return this.global.imgPath + data.replace("img:", "");
+		},
 		look() {
 			let url = this.global.imgPath;
 			return url;

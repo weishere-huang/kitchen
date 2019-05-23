@@ -131,7 +131,7 @@ export default {
 	methods: {
 		toDetails(row, index) {
 			this.$router.push({
-				path: "/User/UserDetails/" + row.id
+				path: "/User/UserDetails/" + row.userId
 			});
 		},
 		changeState(row, index) {

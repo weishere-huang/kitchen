@@ -18,7 +18,18 @@
 					ref="classify"
 				>
 					<el-form-item label="上级分类：" prop="parentNo">
-						<select-list v-on:handlechange="handlechange"></select-list>
+						<el-cascader
+							expand-trigger="hover"
+							:options="data"
+							:props="defaultProps1"
+							v-model="cookbook"
+							@change="handleChange"
+							:show-all-levels="false"
+							change-on-select
+							ref="selectValue"
+							style="width:99%;"
+							size="small"
+						></el-cascader>
 					</el-form-item>
 					<el-form-item label="分类名称：" prop="cateName">
 						<el-input size="small" style="width:99%;" maxlength="20" v-model="classify.cateName"></el-input>
@@ -101,6 +112,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			cookbook: [],
+			data: [],
 			visible: false,
 			classify: {
 				label: "",
@@ -134,12 +147,20 @@ export default {
 			dialogEdit: false,
 			classifyData: [],
 			defaultProps: {
-				children: "children",
+				children: "child",
 				label: "cateName"
+			},
+			defaultProps1: {
+				children: "child",
+				label: "cateName",
+				value: "no"
 			}
 		};
 	},
 	methods: {
+		handleChange(value) {
+			console.log(value);
+		},
 		handeditClassify(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
@@ -249,22 +270,19 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-recipe/recipeCate/listCate"
+					url: "/api-mall/itemCat/allCate"
 				},
 				this
 			).then(
 				result => {
-					for (let i = 0; i < result.data.data.length; i++) {
-						result.data.data[i].visible = false;
-					}
+					console.log(result.data.data[0]);
+					// for (let i = 0; i < result.data.data.length; i++) {
+					// 	result.data.data[i].visible = false;
+					// }
 					if (result.data.code === 200) {
-						let arr = Math.min.apply(
-							null,
-							result.data.data.map(item => {
-								return item.parentNo;
-							})
-						);
-						this.classifyData = this.filterArray(result.data.data, arr);
+						this.classifyData = result.data.data[0];
+						this.data=result.data.data[0];
+						// console.log(this.classifyData);
 					}
 				},
 				({ type, info }) => {}
@@ -277,7 +295,7 @@ export default {
 			for (var i = 0; i < data.length; i++) {
 				if (data[i].parentNo == parent) {
 					var obj = data[i];
-					temp = this.filterArray(data, data[i].cateNo);
+					temp = this.filterArray(data, data[i].no);
 					if (temp.length > 0) {
 						obj.children = temp;
 					}

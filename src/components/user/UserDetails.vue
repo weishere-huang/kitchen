@@ -11,31 +11,31 @@
 				<el-col :span="8">
 					<el-form label-width="200px" size="mini">
 						<el-form-item label="昵称：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.niceName}}</span>
 						</el-form-item>
 						<el-form-item label="手机号：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.phone}}</span>
 						</el-form-item>
 						<el-form-item label="用户状态：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.state==0?"正常":"禁用"}}</span>
 						</el-form-item>
 						<el-form-item label="生日：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.birthday}}</span>
 						</el-form-item>
 						<el-form-item label="性别：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.gender==0?"女":"男"}}</span>
 						</el-form-item>
 						<el-form-item label="设备数量：" prop>
-							<span></span>
+							<span>{{userMsg.deviceCount}}</span>
 						</el-form-item>
 						<el-form-item label="订单数：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.niceName}}</span>
 						</el-form-item>
 						<el-form-item label="注册时间：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.gmtCreate}}</span>
 						</el-form-item>
 						<el-form-item label="最近登录时间：" prop>
-							<span></span>
+							<span>{{userMsg.userInfo.newlyLoginTime}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -62,6 +62,10 @@
 export default {
 	data() {
 		return {
+			userMsg: {
+				deviceCount: "",
+				userInfo: {}
+			},
 			tagValue: [
 				"活跃",
 				"女",
@@ -113,6 +117,37 @@ export default {
 				"60%"
 			]
 		};
+	},
+	methods: {
+		getDetails(id) {
+			this.Axios(
+				{
+					params: {
+						userId: id
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-user/userInfo/userDetailInfo",
+					loadingConfig: {
+						target: document.querySelector(".user_details")
+					}
+				},
+				this
+			).then(
+				result => {
+					// console.log(result.data);
+					if (result.data.code === 200) {
+						this.userMsg = result.data.data;
+					}
+				},
+				({ type, info }) => {}
+			);
+		}
+	},
+	created() {
+		this.getDetails(this.$route.params.id);
 	}
 };
 </script>

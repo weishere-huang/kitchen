@@ -13,8 +13,8 @@
 					</div>
 					<i class="iconfont" style="color:#f25dd0;font-size:100px;">&#xe793;</i>
 					<div class="ratio_case">
-						<span>40%</span>
-						<span>60%</span>
+						<span>{{gender.nan*100}}%</span>
+						<span>{{gender.nv*100}}%</span>
 					</div>
 				</el-col>
 				<el-col :span="12">
@@ -41,12 +41,12 @@
 					<el-table-column label="排序" type="index" width="50" show-overflow-tooltip></el-table-column>
 					<el-table-column label="城市" min-width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span>{{ scope.row.cityName }}</span>
+							<span>{{ scope.row.name }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="设备数" min-width="50">
+					<el-table-column label="人数" min-width="50">
 						<template slot-scope="scope">
-							<span>{{ scope.row.deviceCount }}</span>
+							<span>{{ scope.row.cityCount }}</span>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -145,50 +145,12 @@ export default {
 					order: "22"
 				}
 			],
-			deviceCount: {}
+			deviceCount: {},
+			gender: {}
 		};
 	},
 	mounted() {
-		let userAnalysis = echarts.init(document.getElementById("userAnalysis"));
 		let consumption = echarts.init(document.getElementById("consumption"));
-		let option = {
-			title: {
-				text: "",
-				subtext: "",
-				x: ""
-			},
-			tooltip: {
-				trigger: "item",
-				formatter: "{a} <br/>{b} : {c} "
-			},
-			legend: {
-				orient: "vertical",
-				bottom: "bottom",
-				data: ["19岁及以下", "20-29岁", "30-39岁", "40-29岁", "50岁及以上"]
-			},
-			series: [
-				{
-					name: "年龄范围",
-					type: "pie",
-					radius: "55%",
-					center: ["50%", "50%"],
-					data: [
-						{ value: 335, name: "19岁及以下" },
-						{ value: 310, name: "20-29岁" },
-						{ value: 234, name: "30-39岁" },
-						{ value: 135, name: "40-29岁" },
-						{ value: 1548, name: "50岁及以上" }
-					],
-					itemStyle: {
-						emphasis: {
-							shadowBlur: 10,
-							shadowOffsetX: 0,
-							shadowColor: "rgba(0, 0, 0, 0.5)"
-						}
-					}
-				}
-			]
-		};
 		let consumption0ption = {
 			color: ["#1cc09f"],
 			tooltip: {
@@ -227,19 +189,17 @@ export default {
 				}
 			]
 		};
-		userAnalysis.setOption(option);
 		consumption.setOption(consumption0ption);
 		window.onresize = function() {
-			userAnalysis.resize();
 			consumption.resize();
 		};
 	},
 	methods: {
-		getTopList() {
+		getGenderList() {
 			this.Axios(
 				{
 					params: {},
-					url: "/api-enterprise/deviceuser/findDeviceCount",
+					url: "/api-user/userInfo/userGenderCounted",
 					type: "get",
 					option: {
 						enableMsg: false
@@ -249,7 +209,68 @@ export default {
 			).then(result => {
 				// console.log(result);
 				if (result.data.code === 200) {
-					this.deviceCount = result.data.data;
+					this.gender = result.data.data;
+					document.getElementsByClassName("man")[0].style.width =
+						this.gender.nan * 100 + "%";
+					document.getElementsByClassName("woman")[0].style.width =
+						this.gender.nv * 100 + "%";
+				}
+			});
+		},
+		getPie() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-user/userInfo/userAgeCounted",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				if (result.data.code === 200) {
+					let key = result.data.data.map(item => item.name);
+					let value = result.data.data.map(item => item.value);
+					let userAnalysis = echarts.init(
+						document.getElementById("userAnalysis")
+					);
+					let option = {
+						title: {
+							text: "",
+							subtext: "",
+							x: ""
+						},
+						tooltip: {
+							trigger: "item",
+							formatter: "{a} <br/>{b} : {c} "
+						},
+						legend: {
+							orient: "vertical",
+							bottom: "bottom",
+							data: key
+						},
+						series: [
+							{
+								name: "年龄范围",
+								type: "pie",
+								radius: "55%",
+								center: ["50%", "50%"],
+								data: result.data.data,
+								itemStyle: {
+									emphasis: {
+										shadowBlur: 10,
+										shadowOffsetX: 0,
+										shadowColor: "rgba(0, 0, 0, 0.5)"
+									}
+								}
+							}
+						]
+					};
+					userAnalysis.setOption(option);
+					window.onresize = function() {
+						userAnalysis.resize();
+					};
 				}
 			});
 		},
@@ -287,26 +308,28 @@ export default {
 			this.Axios(
 				{
 					params: {},
-					url: "/api-enterprise/deviceuser/cityDevice",
-					type: "get",
+					url: "/api-user/address/cityAddress",
+					type: "post",
 					option: {
 						enableMsg: false
 					}
 				},
 				this
 			).then(result => {
-				console.log(result);
+				// console.log(result);
 				if (result.data.code === 200) {
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
+					// console.log(this.tableData);
 				}
 			});
 		}
 	},
 	created() {
 		this.getTableList();
-		this.getBar();
-		this.getTopList();
+		// this.getBar();
+		this.getGenderList();
+		this.getPie();
 	},
 	watch: {},
 	components: {

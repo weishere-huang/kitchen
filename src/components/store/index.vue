@@ -217,18 +217,18 @@ export default {
 	data() {
 		return {
 			currentPage: 1,
-			classifyValue: -2,
-			stateValue: -2,
+			classifyValue: -1,
+			stateValue: -1,
 			classifyOptions: [
 				{
 					cateName: "全部分类",
-					no: -2
+					no: -1
 				}
 			],
 			stateOptions: [
 				{
 					label: "全部状态",
-					value: -2
+					value: -1
 				},
 				{
 					label: "下架",
@@ -418,16 +418,16 @@ export default {
 				{
 					params: {
 						page: this.pageIndex,
-						size: this.pageSize,
-						state: this.stateValue,
-						cate: this.classifyValue,
-						name: this.keyword
+						size: this.pageSize
+						// state: this.stateValue,
+						// cateName: this.classifyValue,
+						// title: this.keyword
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-mall/mallManage/itemList",
+					url: "/api-mall/product/list",
 					loadingConfig: {
 						target: document.querySelector(".store_list")
 					}
@@ -436,22 +436,7 @@ export default {
 			).then(
 				result => {
 					console.log(result);
-					for (let i = 0; i < result.data.data.content.length; i++) {
-						result.data.data.content[i].itemPrice =
-							result.data.data.content[i].itemPrice / 100;
-						result.data.data.content[i].itemWeight =
-							result.data.data.content[i].itemWeight / 100;
-						result.data.data.content[i].recommendType = JSON.parse(
-							result.data.data.content[i].recommendType
-						);
-					}
 					this.tableData = result.data.data.content;
-					for (let j = 0; j < this.tableData.length; j++) {
-						this.tableData[j].recommendType.newMenu =
-							result.data.data.content[j].recommendType.newMenu;
-						this.tableData[j].recommendType.hotMenu =
-							result.data.data.content[j].recommendType.hotMenu;
-					}
 					this.total = result.data.data.totalElement;
 				},
 				({ type, info }) => {}
@@ -470,7 +455,7 @@ export default {
 				this
 			).then(
 				result => {
-					result.data.data.splice(0, 0, { cateName: "全部类别", no: -2 });
+					result.data.data.splice(0, 0, { cateName: "全部类别", no: -1 });
 					this.classifyOptions = result.data.data;
 				},
 				({ type, info }) => {}

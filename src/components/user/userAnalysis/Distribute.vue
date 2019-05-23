@@ -15,7 +15,7 @@ export default {
 			this.Axios(
 				{
 					params: {},
-					url: "/api-enterprise/deviceuser/findMapInfo",
+					url: "/api-user/userInfo/findUserMap",
 					type: "get",
 					option: {
 						enableMsg: false
@@ -245,7 +245,20 @@ export default {
 						}
 					},
 					tooltip: {
-						trigger: "item"
+						trigger: "item",
+						formatter: function(params) {
+							let topTip =
+								"<div style='padding:8px;'>" +
+								"城市用户分布" +
+								"<br/>" +
+								params.name +
+								"：" +
+								params.value[2] +
+								"（人）" +
+								"<br/>" +
+								"</div>";
+							return topTip;
+						}
 					},
 					legend: {
 						orient: "vertical",
@@ -281,7 +294,6 @@ export default {
 							coordinateSystem: "geo",
 							data: convertData(data),
 							symbolSize: function(val) {
-								console.log(val[2]);
 								return val[2];
 							},
 							label: {

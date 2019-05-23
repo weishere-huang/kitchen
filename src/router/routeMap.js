@@ -1,5 +1,4 @@
-export default [
-  {
+export default [{
     menu: '智慧物联',
     permissionCode: 'things',
     defaultDock: false,
@@ -459,6 +458,11 @@ export default [
         visible: true,
         permissionCode: 'messagepush_detail_lookup'
       },
+      {
+        menu: '商城设置',
+        route: '/MerchantSystem',
+        permissionCode: 'message_advertisement_lookup'
+      },
     ]
   },
   {
@@ -470,7 +474,8 @@ export default [
         menu: '订单列表',
         route: '/Order',
         permissionCode: 'supplierOrder_list_lookup'
-      }, {
+      },
+      {
         menu: '订单详情',
         routeReg: /^\/Order\/Details\/\d{1,}$/i,
         visible: true,
@@ -491,16 +496,19 @@ export default [
         route: '/Store/AddMenu',
         visible: true,
         permissionCode: 'supplierMall_add_lookup'
-      }, {
+      },
+      {
         menu: '修改商品',
         routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
         visible: true,
         permissionCode: 'supplierMall_update_lookup'
-      }, {
+      },
+      {
         menu: '优惠券',
         route: '/DiscountCoupon',
         permissionCode: 'supplierMall_list_lookup'
-      }, {
+      },
+      {
         menu: '红包',
         route: '/RedPacket',
         permissionCode: 'supplierMall_list_lookup'
@@ -509,16 +517,23 @@ export default [
         menu: '广告列表',
         route: '/Advertising',
         permissionCode: 'message_advertisement_lookup'
-      }, {
+      },
+      {
         menu: '添加广告',
         route: '/Advertising/AdvertisingAdd',
         visible: true,
         permissionCode: 'messagepush_add_lookup'
-      }, {
+      },
+      {
         menu: '修改广告',
         routeReg: /^\/Advertising\/AdvertisingEdit\/\d{1,}$/i,
         visible: true,
         permissionCode: 'messagepush_detail_lookup'
+      },
+      {
+        menu: '商城设置',
+        route: '/MerchantSystem',
+        permissionCode: 'message_advertisement_lookup'
       },
     ]
   }

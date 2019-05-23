@@ -43,7 +43,7 @@
 								<span>{{ scope.row.deviceCateName }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="接入厂商" min-width="120">
+						<el-table-column label="接入厂商" min-width="120" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.enterpriseName }}</span>
 							</template>
@@ -53,7 +53,7 @@
 								<span>{{ scope.row.userCount }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="产品描述" min-width="100">
+						<el-table-column label="产品描述" show-overflow-tooltip min-width="100">
 							<template slot-scope="scope">
 								<span>{{ scope.row.introduce }}</span>
 							</template>

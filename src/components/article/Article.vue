@@ -15,8 +15,8 @@
 				<div class="top_title">
 					<h4>文章列表</h4>
 					<div class="top_search">
-						<el-col :span="10" style="padding:0 5px;">
-							<el-select v-model="faqType" placeholder="请选择" size="small" :clearable="true">
+						<el-col :span="8" style="padding:0 5px;">
+							<el-select v-model="articleType" placeholder="请选择" size="small" :clearable="true">
 								<el-option
 									v-for="item in classify"
 									:key="item.value"
@@ -25,8 +25,8 @@
 								></el-option>
 							</el-select>
 						</el-col>
-						<el-col :span="10" style="padding:0 5px;">
-							<el-input size="small" v-model="keyword" clearable></el-input>
+						<el-col :span="12" style="padding:0 5px;">
+							<el-input size="small" placeholder="请输入标题" v-model="keyword" clearable></el-input>
 						</el-col>
 						<el-col :span="4" style="padding:0 5px;">
 							<el-button size="small" @click="search" plain>搜索</el-button>
@@ -76,22 +76,12 @@ export default {
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			permissionuUpdate: "message_faq_lookup.message_faq_update",
 			permissionDetele: "message_faq_lookup.message_faq_delete",
-			addMsg: {
-				title: "",
-				faqType: "",
-				content: ""
-			},
-			editMsg: {},
-			dialogAdd: false,
-			dialogEdit: false,
 			classify: [
-				{ label: "订单问题", value: 1 },
-				{ label: "支付问题", value: 2 },
-				{ label: "其他问题", value: 3 }
+				{ label: "全部分类", value: -1 },
+				{ label: "普通文章", value: 0 },
+				{ label: "公告通知", value: 1 }
 			],
-			cities: [],
 			currentPage: 1,
-			value: "",
 			items: [
 				{
 					label: "标题",
@@ -100,14 +90,10 @@ export default {
 				},
 				{
 					label: "分类",
-					prop: "faqType",
+					prop: "type",
 					width: 80,
 					formatter: function(row, column) {
-						return row.faqType == 1
-							? "订单问题"
-							: row.faqType == 2
-							? "支付问题"
-							: "其他问题";
+						return row.type == 0 ? "普通文章" : "公告通知";
 					}
 				},
 				{
@@ -120,7 +106,7 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			faqType: null,
+			articleType: -1,
 			keyword: null
 		};
 	},
@@ -132,12 +118,12 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getServiceList();
+			this.getArticleList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getServiceList();
+			this.getArticleList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
@@ -148,7 +134,7 @@ export default {
 			}
 			if (params.type === "delete") {
 				console.log(params);
-				this.deletefaq(params.rowData.id);
+				this.deleteArticle(params.rowData.id);
 			}
 		},
 		handleSelectionChange(selection) {
@@ -157,20 +143,20 @@ export default {
 		getRow(row, event) {
 			console.log(row);
 		},
-		getfaqList() {
+		getArticleList() {
 			this.Axios(
 				{
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						faqType: this.faqType,
+						type: this.articleType,
 						keyword: this.keyword
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/faq/faqlist"
+					url: "/api-platform/Article/list"
 				},
 				this
 			).then(
@@ -185,18 +171,18 @@ export default {
 		search() {
 			this.pageIndex = 1;
 			this.pageSize = 15;
-			this.getfaqList();
+			this.getArticleList();
 		},
 		//修改常见问题
-		deletefaq(id) {
+		deleteArticle(id) {
 			let qs = require("qs");
 			let data = qs.stringify({
-				id: id
+				articleId: id
 			});
 			this.Axios(
 				{
 					params: data,
-					url: "/api-platform/faq/deletefaq",
+					url: "/api-platform/Article/del",
 					type: "post",
 					option: {
 						enableMsg: false
@@ -211,7 +197,7 @@ export default {
 		}
 	},
 	created() {
-		this.getfaqList();
+		this.getArticleList();
 		let a = this.$route.matched.find(item => item.name === "ArticleAdd")
 			? true
 			: false;

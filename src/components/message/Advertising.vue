@@ -14,6 +14,24 @@
 			<div class="bottom_list">
 				<div class="top_title">
 					<h4>广告列表</h4>
+					<div class="top_search">
+						<el-col :span="8" style="padding:0 5px;">
+							<el-select v-model="position" placeholder="请选择" size="small">
+								<el-option label="全部" :value="-1"></el-option>
+								<el-option v-if="employeeType==3" label="APP主页-顶部图片" :value="0"></el-option>
+								<el-option v-if="employeeType==3" label="APP主页-广告图" :value="1"></el-option>
+								<el-option v-if="employeeType==3" label="APP商城-轮播图" :value="2"></el-option>
+								<el-option v-if="employeeType==3" label="APP发现-轮播图" :value="3"></el-option>
+								<el-option v-if="employeeType!=3" label="店面主页-轮播图" :value="4"></el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="13" style="padding:0 5px;">
+							<el-input size="small" placeholder="请输入广告名称" v-model="keyword" clearable></el-input>
+						</el-col>
+						<el-col :span="3" style="padding:0 5px;">
+							<el-button size="small" @click="getAdvertisingList" plain>搜索</el-button>
+						</el-col>
+					</div>
 				</div>
 				<div class="table_list">
 					<el-table
@@ -26,20 +44,18 @@
 					>
 						<el-table-column label="广告名称" min-width="150" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.title }}</span>
+								<span>{{ scope.row.name }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="广告位置" min-width="200">
+							<template slot-scope="scope">
+								<span>{{scope.row.position==0?"APP主页-顶部图片":scope.row.position==1?"APP主页-广告图":scope.row.position==2?"APP商城-轮播图":scope.row.position==3?"APP发现-轮播图":scope.row.position==4?"店面主页-轮播图":""}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="缩略图" min-width="200" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span @click="getPic(replacePic(scope.row.mainPic))">
-									<img :src="replacePic(scope.row.mainPic)" alt style="width:180px;height:60px;">
-								</span>
-							</template>
-						</el-table-column>
-						<el-table-column label="内容图" min-width="200">
-							<template slot-scope="scope">
-								<span @click="getPic(replacePic(scope.row.content))">
-									<img :src="replacePic(scope.row.content)" alt style="width:180px;height:60px;">
+								<span @click="getPic(replacePic(scope.row.img))">
+									<img :src="replacePic(scope.row.img)" alt style="width:180px;height:60px;">
 								</span>
 							</template>
 						</el-table-column>
@@ -86,7 +102,19 @@
 						</el-table-column>
 					</el-table>
 				</div>
-				<div class="hint">提示：最多可添加6条广告。</div>
+				<!-- <div class="hint">提示：最多可添加6条广告。</div> -->
+				<div class="block" style="margin-top:10px;float:right">
+					<el-pagination
+						background
+						@size-change="handleSizeChange"
+						@current-change="handleCurrentChange"
+						:current-page.sync="pageIndex"
+						:page-sizes="[10, 20,40, 100]"
+						:page-size="pageSize"
+						layout="sizes, prev, pager, next"
+						:total="total"
+					></el-pagination>
+				</div>
 			</div>
 			<el-dialog :visible.sync="mainPicShow" append-to-body class="showPic">
 				<img width="100%" :src="dialogShowPic" alt>
@@ -102,21 +130,34 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			employeeType: JSON.parse(sessionStorage.getItem("user")).employeeType,
 			isHideList: this.$route.params.id !== undefined ? true : false,
 			contentShow: false,
 			mainPicShow: false,
-			editMsg: {},
-			addMsg: {},
 			dialogEdit: false,
 			dialogAdd: false,
 			currentPage: 1,
 			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
-			dialogShowPic: ""
+			dialogShowPic: "",
+			total: 0,
+			position: -1,
+			keyword: null
 		};
 	},
 	methods: {
+		handleSizeChange(val) {
+			console.log(`每页 ${val} 条`);
+			this.pageIndex = 1;
+			this.pageSize = val;
+			this.getAdvertisingList();
+		},
+		handleCurrentChange(val) {
+			console.log(`当前页: ${val}`);
+			this.pageIndex = val;
+			this.getAdvertisingList();
+		},
 		replacePic(img) {
 			return this.global.imgPath + img.replace("img:", "");
 		},
@@ -133,86 +174,46 @@ export default {
 		},
 		handleDelete(index, rowData) {
 			rowData.visible = false;
-			let params = { type: "delete", index: index, rowData: rowData };
-			this.beforeDelete(rowData.id);
-			console.log(params);
+			this.deleteAdvertising(rowData.id);
 		},
 		getAdvertisingList() {
 			this.Axios(
 				{
-					params: {},
+					params: {
+						page: this.pageIndex,
+						size: this.pageSize,
+						position: this.position,
+						keyWord: this.keyword
+					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/Advertisement/list"
+					url: "/api-platform/ad/adList"
 				},
 				this
 			).then(
 				result => {
 					console.log(result.data);
-					this.tableData = result.data.data;
+					if (result.data.code === 200) {
+						this.tableData = result.data.data.content;
+						this.total = result.data.data.totalElement;
+						console.log(this.tableData);
+					}
 				},
 				({ type, info }) => {}
 			);
 		},
-		beforeDelete(id) {
-			this.deleteAdvertising(id);
-		},
+
 		deleteAdvertising(id) {
 			let qs = require("qs");
 			let data = qs.stringify({
-				id: id
+				adId: id
 			});
 			this.Axios(
 				{
 					params: data,
-					url: "/api-platform/Advertisement/delete",
-					type: "post",
-					option: {
-						enableMsg: false
-					}
-				},
-				this
-			).then(result => {
-				console.log(result.data);
-				if (result.data.code === 200) {
-					this.reload();
-				}
-			});
-		},
-		//添加广告
-		beforeadd(params) {
-			if (params.type == "cancel") {
-				console.log(params);
-				this.dialogAdd = params.isHide;
-			}
-			if (params.type == "affirm") {
-				console.log(params);
-				this.addMsg = params.value;
-				console.log(this.addMsg);
-				this.addAdvertising();
-				this.dialogAdd = params.isHide;
-			}
-		},
-		addAdvertising() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				title: this.addMsg.title,
-				// mainPic:this.addMsg.mainPic,
-				mainPic: this.addMsg.mainPic,
-				content: this.addMsg.content,
-				linkUrl: this.addMsg.linkUrl,
-				advertType: 0,
-				advertContentType: 0,
-				startTime: this.addMsg.startTime,
-				endTime: this.addMsg.endTime,
-				state: this.addMsg.state
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-platform/Advertisement/add",
+					url: "/api-platform/ad/del",
 					type: "post",
 					option: {
 						enableMsg: false
@@ -239,38 +240,38 @@ export default {
 				this.updateAdvertising();
 				this.dialogEdit = params.isHide;
 			}
-		},
-		updateAdvertising() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				id: this.editMsg.id,
-				title: this.editMsg.title,
-				mainPic: this.editMsg.mainPic,
-				content: this.editMsg.content,
-				linkUrl: this.editMsg.linkUrl,
-				advertType: 0,
-				advertContentType: 0,
-				startTime: this.editMsg.startTime.replace(/-/g, "/"),
-				endTime: this.editMsg.endTime.replace(/-/g, "/"),
-				state: this.editMsg.state
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-platform/Advertisement/update",
-					type: "post",
-					option: {
-						enableMsg: false
-					}
-				},
-				this
-			).then(result => {
-				console.log(result.data);
-				if (result.data.code === 200) {
-					this.reload();
-				}
-			});
 		}
+		// updateAdvertising() {
+		// 	let qs = require("qs");
+		// 	let data = qs.stringify({
+		// 		id: this.editMsg.id,
+		// 		title: this.editMsg.title,
+		// 		mainPic: this.editMsg.mainPic,
+		// 		content: this.editMsg.content,
+		// 		linkUrl: this.editMsg.linkUrl,
+		// 		advertType: 0,
+		// 		advertContentType: 0,
+		// 		startTime: this.editMsg.startTime.replace(/-/g, "/"),
+		// 		endTime: this.editMsg.endTime.replace(/-/g, "/"),
+		// 		state: this.editMsg.state
+		// 	});
+		// 	this.Axios(
+		// 		{
+		// 			params: data,
+		// 			url: "/api-platform/Advertisement/update",
+		// 			type: "post",
+		// 			option: {
+		// 				enableMsg: false
+		// 			}
+		// 		},
+		// 		this
+		// 	).then(result => {
+		// 		console.log(result.data);
+		// 		if (result.data.code === 200) {
+		// 			this.reload();
+		// 		}
+		// 	});
+		// }
 	},
 	created() {
 		this.getAdvertisingList();
@@ -330,7 +331,7 @@ export default {
 				float: left;
 			}
 			.top_search {
-				width: 400px;
+				width: 600px;
 				float: right;
 			}
 		}
@@ -342,6 +343,7 @@ export default {
 			line-height: 50px;
 			padding-left: 20px;
 			color: @font-subsidiary;
+			display: inline;
 		}
 	}
 }

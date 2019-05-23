@@ -9,19 +9,19 @@
 			</div>
 			<div class="table_list">
 				<el-form label-width="200px" size="small" style="margin-top:20px">
-					<el-form-item label="标题：">
-						<el-input type="text" maxlength="30" style="width:400px;"></el-input>
+					<el-form-item label="标题：" prop="title">
+						<el-input type="text" v-model="articleMsg.title" maxlength="30" style="width:400px;"></el-input>
 					</el-form-item>
 					<el-form-item label="分类：">
-						<el-select style="width:400px;">
-							<el-option value="1" label="普通文章"></el-option>
-							<el-option value="2" label="公告通知"></el-option>
+						<el-select style="width:400px;" v-model="articleMsg.type" prop="title">
+							<el-option value="0" label="普通文章"></el-option>
+							<el-option value="1" label="公告通知"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="标签：">
-						<el-input maxlength="8" style="width:400px;" type="text"></el-input>
+					<el-form-item label="标签：" prop="title">
+						<el-input maxlength="8" v-model="articleMsg.label" style="width:400px;" type="text"></el-input>
 					</el-form-item>
-					<el-form-item label="缩略图：">
+					<el-form-item label="缩略图：" prop="title">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -31,6 +31,7 @@
 							:before-upload="beforeAvatarUpload1"
 							:limit="1"
 							class="upload_show"
+							:file-list="fileList"
 							accept="image/png, image/jpeg"
 						>
 							<i class="el-icon-plus"></i>
@@ -40,18 +41,22 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="内容：">
+					<el-form-item label="内容：" prop="title">
 						<editor
-							id="editor_id"
+							id="editorArticle"
 							height="300px"
 							width="700px"
 							:uploadJson="uploadJson()"
-							:content.sync="editorText"
-							:fileManagerJson="look()"
+							:afterUpload="afterUpload"
+							:content.sync="articleMsg.content"
+							:fileManagerJson="()=>look()"
 							pluginsPath="../../../static/kindeditor/plugins"
 							filePostName="file"
 							:loadStyleMode="false"
 						></editor>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="updateArticle">保 存</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -61,14 +66,26 @@
 <script>
 import editor from "../public/kindeditor";
 export default {
+	inject: ["reload"],
 	data() {
 		return {
+			fileList: [],
 			editorText: "",
 			dialogImageUrl: "",
-			dialogVisible: false
+			dialogVisible: false,
+			articleMsg: {
+				title: "",
+				type: "",
+				label: "",
+				img: "",
+				content: ""
+			}
 		};
 	},
 	methods: {
+		afterUpload(data) {
+			return this.global.imgPath + data.replace("img:", "");
+		},
 		look() {
 			let url = this.global.imgPath;
 			return url;
@@ -129,7 +146,70 @@ export default {
 					type: "error"
 				});
 			}
+		},
+		updateArticle() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				id: this.articleMsg.id,
+				title: this.articleMsg.title,
+				type: this.articleMsg.type,
+				label: this.articleMsg.label,
+				img: this.articleMsg.img,
+				content: this.articleMsg.content
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-platform/Article/update",
+					type: "post",
+					option: {
+						successMsg: "修改成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result.data);
+				if (result.data.code === 200) {
+					this.$router.back(-1);
+					this.reload();
+				}
+			});
+		},
+		getOneArticle(id) {
+			this.Axios(
+				{
+					params: {
+						articleId: id
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/Article/findOne"
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						console.log(result.data);
+						this.articleMsg = result.data.data;
+						this.fileList = [
+							{
+								name: this.articleMsg.img.substring(
+									this.articleMsg.img.lastIndexOf("/") + 1
+								),
+								url:
+									this.global.imgPath + this.articleMsg.img.replace("img:", "")
+							}
+						];
+					}
+				},
+				({ type, info }) => {}
+			);
 		}
+	},
+	created() {
+		this.getOneArticle(this.$route.params.id);
 	},
 	components: {
 		editor

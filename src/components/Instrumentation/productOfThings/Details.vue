@@ -22,7 +22,7 @@
 						<span>{{oneProductMsg.state==0?'待审核':oneProductMsg.state==1?'已通过':'已驳回'}}</span>
 					</el-form-item>
 					<el-form-item label="审核时间：" prop>
-						<span>{{oneProductMsg.deviceName}}</span>
+						<span>{{oneProductMsg.auditCreate}}</span>
 					</el-form-item>
 					<el-form-item label="ProductKey：" prop>
 						<span>{{oneProductMsg.deviceKey}}</span>
@@ -85,6 +85,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
+					console.log(result.data.data);
 					this.oneProductMsg = result.data.data;
 					// this.oneProductMsg.deviceCateName = JSON.parse(
 					// 	this.oneProductMsg.deviceCateName
