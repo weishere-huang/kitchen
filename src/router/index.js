@@ -74,12 +74,36 @@ import UserDetails from '@/components/user/UserDetails'
 import Article from '@/components/article/Article'
 import ArticleAdd from '@/components/article/Add'
 import ArticleEdit from '@/components/article/Edit'
+import EnterpriseAuditedIndex from '@/components/enterpriseAudited/index'
+import EnterpriseAuditedEdit from '@/components/enterpriseAudited/Edit'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
       path: '/',
       redirect: '/Home',
+    },
+    {
+      path: '/EnterpriseAuditedIndex',
+      name: 'EnterpriseAuditedIndex',
+      component: EnterpriseAuditedIndex,
+      props: {
+        pageName: '审核'
+      },
+      meta: {
+        requireAuth: true,
+      },
+      children: [{
+        path: 'EnterpriseAuditedEdit/:id/',
+        name: 'EnterpriseAuditedEdit',
+        component: EnterpriseAuditedEdit,
+        props: {
+          pageName: '修改注册'
+        },
+        meta: {
+          requireAuth: true,
+        },
+      }, ]
     },
     {
       path: '/Article',

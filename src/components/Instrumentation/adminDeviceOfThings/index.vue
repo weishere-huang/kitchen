@@ -51,7 +51,7 @@
 					>
 						<el-table-column label="设备名称/自定义" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.name }}</span>
+								<span>{{ scope.row.name==""||scope.row.name==null?'默认名称':scope.row.name }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="所属产品" min-width="100" show-overflow-tooltip>
@@ -152,8 +152,9 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						state: this.states,
-						keyword: this.keyWord
+						deviceId: this.productValue,
+						keyword: this.keyWord,
+						isOnline: this.state
 					},
 					option: {
 						enableMsg: false

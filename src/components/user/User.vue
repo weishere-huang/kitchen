@@ -50,7 +50,7 @@
 								@click="$router.push({path:'/Integral'})"
 								style="cursor: pointer;"
 								class="score_style"
-							>{{ scope.row.userScoreDO.score }}</span>
+							>{{ scope.row.score }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="注册时间" min-width="120" show-overflow-tooltip>

@@ -15,23 +15,24 @@
 				:model="addMenu"
 				ref="addMenu"
 			>
-				<el-form-item label="商品名称：" prop="recipeName">
-					<el-input
-						size="small"
-						type="text"
+				<el-form-item label="商品名称：" prop="title">
+					<el-input size="small" type="text" style="width:300px;" v-model="addMenu.title" maxlength="20"></el-input>
+				</el-form-item>
+				<el-form-item label="商品分类：" prop>
+					<el-cascader
+						expand-trigger="hover"
+						:options="classify"
+						:props="defaultProps1"
+						v-model="addMenu.cateId"
+						:show-all-levels="false"
+						ref="selectValue"
 						style="width:300px;"
-						v-model="addMenu.recipeName"
-						maxlength="20"
-					></el-input>
+						size="small"
+					></el-cascader>
 				</el-form-item>
-				<el-form-item label="商品分类：" prop="itemCate">
-					<el-select v-model="addMenu.itemCate" placeholder="请选择" size="small" style="width:300px;">
-						<el-option v-for="item in classify" :key="item.value" :label="item.cateName" :value="item.no"></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="价格：" prop="itemPrice">
+				<el-form-item label="价格：" prop="price">
 					<el-input
-						v-model.number="addMenu.itemPrice"
+						v-model.number="addMenu.price"
 						type="number"
 						size="small"
 						style="width:300px;"
@@ -50,12 +51,12 @@
 					></el-input>
 				</el-form-item>
 				<el-form-item label="上/下架：" prop="state">
-					<el-radio v-model="addMenu.state" label="1">上架</el-radio>
-					<el-radio v-model="addMenu.state" label="2">下架</el-radio>
+					<el-radio v-model="addMenu.isShelf" :label="1">上架</el-radio>
+					<el-radio v-model="addMenu.isShelf" :label="0">下架</el-radio>
 				</el-form-item>
 				<el-form-item label="是否推荐：" prop="recommendType">
-					<el-radio v-model="addMenu.state" label="1">是</el-radio>
-					<el-radio v-model="addMenu.state" label="2">否</el-radio>
+					<el-radio v-model="addMenu.isRecommend" :label="2">是</el-radio>
+					<el-radio v-model="addMenu.isRecommend" :label="3">否</el-radio>
 				</el-form-item>
 				<el-form-item label="商品缩略图：" prop>
 					<el-upload
@@ -67,6 +68,7 @@
 						:before-upload="beforeAvatarUpload1"
 						:limit="1"
 						class="upload_show"
+						:file-list="fileList"
 						accept="image/png, image/jpeg"
 					>
 						<i class="el-icon-plus"></i>
@@ -76,13 +78,23 @@
 						<img width="100%" :src="dialogImageUrl" alt>
 					</el-dialog>
 				</el-form-item>
+				<el-form-item label="商品描述：" prop="description">
+					<el-input
+						type="textarea"
+						rows="6"
+						resize="none"
+						style="width:700px;"
+						v-model="addMenu.description"
+					></el-input>
+				</el-form-item>
 				<el-form-item label="商品详情：">
 					<editor
 						id="editorMenu"
 						height="300px"
 						width="700px"
 						:uploadJson="uploadJson()"
-						:content.sync="editorText"
+						:afterUpload="afterUpload"
+						:content.sync="addMenu.info"
 						:fileManagerJson="()=>look()"
 						pluginsPath="../../../static/kindeditor/plugins"
 						filePostName="file"
@@ -109,20 +121,26 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			fileList: [],
+			defaultProps1: {
+				children: "child",
+				label: "cateName",
+				value: "id"
+			},
 			editorText: "",
 			dialogImageUrl: "",
 			dialogVisible: false,
 			dialogPreview: false,
 			addMenu: {
-				recipeName: "",
-				itemCate: "",
-				itemPrice: "",
+				title: "",
+				description: "",
+				price: "",
+				cateId: [],
 				stockNow: "",
-				state: "2",
-				recommendType: {
-					newMenu: false,
-					hotMenu: false
-				}
+				isRecommend: "",
+				isShelf: "",
+				img: "",
+				info: ""
 			},
 			addMenuRules: {
 				recipeName: [
@@ -178,15 +196,18 @@ export default {
 		};
 	},
 	methods: {
+		afterUpload(data) {
+			return this.global.imgPath + data.replace("img:", "");
+		},
 		submitForm(formName) {
-			this.$refs[formName].validate(valid => {
-				if (valid) {
-					this.savespu();
-				} else {
-					this.$message.warning("请填写完整信息！");
-					return false;
-				}
-			});
+			// this.$refs[formName].validate(valid => {
+			// 	if (valid) {
+			this.savespu();
+			// } else {
+			// 	this.$message.warning("请填写完整信息！");
+			// 	return false;
+			// }
+			// });
 		},
 		// handleInput(row) {
 		//   row.target.value = row.target.value.match(/^\d*(\.?\d{0,2})/g)[0] || null;
@@ -211,9 +232,10 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
+					console.log(result.data.data[0]);
 					// result.data.data.splice(0,0,{cateName:"全部类别",id:-2})
-					this.classify = result.data.data;
+					this.classify = result.data.data[0];
+					this.findOne(this.$route.params.id);
 				},
 				({ type, info }) => {}
 			);
@@ -285,19 +307,21 @@ export default {
 		savespu() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				itemName: this.cookbook.recipeName,
-				itemCate: this.addMenu.itemCate,
-				itemPrice: this.addMenu.itemPrice,
-				itemWeight: this.cookbook.weight,
+				id: this.addMenu.id,
+				title: this.addMenu.title,
+				description: this.addMenu.description,
+				price: this.addMenu.price * 100,
+				cateId: this.addMenu.cateId[this.addMenu.cateId.length - 1],
 				stockNow: this.addMenu.stockNow,
-				state: this.addMenu.state,
-				menuId: this.cookbook.id,
-				recommendType: JSON.stringify(this.addMenu.recommendType)
+				isRecommend: this.addMenu.isRecommend,
+				isShelf: this.addMenu.isShelf,
+				img: this.addMenu.img,
+				info: this.addMenu.info
 			});
 			this.Axios(
 				{
 					params: data,
-					url: "/api-mall/mallManage/addItem",
+					url: "/api-mall/product/update",
 					type: "post",
 					option: {
 						successMsg: "保存成功"
@@ -311,11 +335,66 @@ export default {
 				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
-					this.reload();
+					// this.reload();
 				} else {
 					this.$message.error("出库失败,请重新尝试");
 				}
 			});
+		},
+
+		getnode(array, label) {
+			let stack = [];
+			let going = true;
+			let walker = (array, label) => {
+				array.forEach(item => {
+					if (!going) return;
+					stack.push(item["id"]);
+					if (item["id"] === label) {
+						going = false;
+					} else if (item["child"]) {
+						walker(item["child"], label);
+					} else {
+						stack.pop();
+					}
+				});
+				if (going) stack.pop();
+			};
+
+			walker(array, label);
+			this.addMenu.cateId = stack;
+			return stack.join("-");
+		},
+		findOne(id) {
+			this.Axios(
+				{
+					params: {
+						id: id,
+						source: 2
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-mall/product/productInfo"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data.data.product);
+					this.addMenu = result.data.data.product;
+					this.addMenu.price = this.addMenu.price / 100;
+					this.fileList = [
+						{
+							name: this.addMenu.img.substring(
+								this.addMenu.img.lastIndexOf("/") + 1
+							),
+							url: this.global.imgPath + this.addMenu.img.replace("img:", "")
+						}
+					];
+					this.getnode(this.classify, result.data.data.product.cateId);
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 

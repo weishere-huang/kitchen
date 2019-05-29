@@ -14,14 +14,15 @@
 					<h4>商品列表</h4>
 					<div class="top_search">
 						<el-col :span="6" style="padding:0 5px;">
-							<el-select v-model="classifyValue" placeholder="请选择" size="small">
-								<el-option
-									v-for="item in classifyOptions"
-									:key="item.value"
-									:label="item.cateName"
-									:value="item.no"
-								></el-option>
-							</el-select>
+							<el-cascader
+								expand-trigger="hover"
+								:options="classifyOptions"
+								:props="defaultProps1"
+								v-model="classifyValue"
+								:show-all-levels="false"
+								style="width:100%;"
+								size="small"
+							></el-cascader>
 						</el-col>
 						<el-col :span="6" style="padding:0 5px;">
 							<el-select v-model="stateValue" placeholder="请选择" size="small">
@@ -34,13 +35,7 @@
 							</el-select>
 						</el-col>
 						<el-col :span="9" style="padding:0 5px;">
-							<el-input
-								clearable
-								size="small"
-								style="width:100%;"
-								placeholder="商品名称/代理商"
-								v-model="keyword"
-							></el-input>
+							<el-input clearable size="small" style="width:100%;" placeholder="商品名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="3" style="padding:0 5px;">
 							<el-button size="small" plain @click="search">搜索</el-button>
@@ -57,7 +52,7 @@
 					>
 						<el-table-column label="名称" min-width="140" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.itemName }}</span>
+								<span>{{ scope.row.title }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="分类" min-width="80" show-overflow-tooltip>
@@ -67,113 +62,31 @@
 						</el-table-column>
 						<el-table-column label="单价（元）" min-width="100">
 							<template slot-scope="scope">
-								<!-- <el-popover
-									popper-class="color_text"
-									ref="popover1"
-									placement="right"
-									trigger="focus"
-									content="只保留小数点后两位"
-								></el-popover>￥
-								<el-input
-									:readonly="true"
-									v-popover:popover1
-									size="small"
-									type="number"
-									step="0.01"
-									v-model="scope.row.itemPrice"
-									style="width:60px;padding:0;"
-									@change="handleInput(scope.row,scope.$index)"
-								></el-input>-->
-								<span>￥{{scope.row.itemPrice}}</span>
+								<span>￥{{scope.row.price}}</span>
 							</template>
 						</el-table-column>
-						<!-- <el-table-column label="库存" min-width="80" show-overflow-tooltip>
-							<template slot-scope="scope">
-								<span>{{ scope.row.inventory }}</span>
-							</template>
-						</el-table-column>-->
 						<el-table-column label="库存" min-width="70" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<!-- <el-input
-									size="small"
-									type="number"
-									v-model="scope.row.stockNow"
-									style="width:60px;padding:0;"
-									v-popover:popover
-									@change="handleCookkingTime(scope.row,scope.$index)"
-								></el-input>
-								<el-popover
-									popper-class="color_text"
-									ref="popover"
-									placement="right"
-									trigger="focus"
-									content="只能是整数"
-								></el-popover>-->
 								<span>{{scope.row.stockNow}}</span>
 							</template>
 						</el-table-column>
-						<!-- <el-table-column label="净含量（克）" min-width="90" show-overflow-tooltip>
+
+						<el-table-column label="上/下架" min-width="60">
 							<template slot-scope="scope">
-								<span>{{ scope.row.itemWeight}}</span>
-							</template>
-						</el-table-column>-->
-						<el-table-column label="上架状态" min-width="60">
-							<template slot-scope="scope">
-								<!-- <div @click.stop.prevent="changeUp(scope.$index, scope.row)"> -->
-								<i class="iconfont" v-if="scope.row.state=='1'" style="color:green;">&#xe659;</i>
-								<i class="iconfont" v-if="scope.row.state=='2'" style="color:red;">&#xe658;</i>
-								<!-- </div> -->
+								<i class="iconfont" v-if="scope.row.isShelf=='1'" style="color:green;">&#xe659;</i>
+								<i class="iconfont" v-if="scope.row.isShelf=='0'" style="color:red;">&#xe658;</i>
 							</template>
 						</el-table-column>
 						<el-table-column label="商家推荐" min-width="60">
 							<template slot-scope="scope">
-								<!-- <div @click.stop.prevent="changeNew(scope.$index, scope.row)"> -->
-								<i
-									class="iconfont"
-									v-if="scope.row.recommendType.newMenu===true"
-									style="color:green;"
-								>&#xe659;</i>
-								<i
-									class="iconfont"
-									v-if="scope.row.recommendType.newMenu===false"
-									style="color:red;"
-								>&#xe658;</i>
-								<!-- </div> -->
+								<i class="iconfont" v-if="scope.row.isRecommend==2" style="color:green;">&#xe659;</i>
+								<i class="iconfont" v-if="scope.row.isRecommend==3" style="color:red;">&#xe658;</i>
 							</template>
 						</el-table-column>
-						<!-- <el-table-column label="热销" min-width="60">
-							<template slot-scope="scope">
-								<i
-									class="iconfont"
-									v-if="scope.row.recommendType.hotMenu===true"
-									style="color:green;"
-								>&#xe659;</i>
-								<i
-									class="iconfont"
-									v-if="scope.row.recommendType.hotMenu===false"
-									style="color:red;"
-								>&#xe658;</i>
-							</template>
-						</el-table-column>-->
+
 						<el-table-column label="发布者" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<!-- <el-popover
-									popper-class="color_text"
-									ref="popover2"
-									placement="right"
-									trigger="focus"
-									content="数值越大排序越靠前"
-								></el-popover>
-								<el-input
-									@change="handleSortLevel(scope.row,scope.$index)"
-									v-popover:popover2
-									size="small"
-									type="number"
-									step="0"
-									v-model="scope.row.sortLevel"
-									style="width:60px;padding:0;"
-								></el-input>-->
-								<span>{{scope.row.salesTerritoryName}}</span>
+								<span>{{scope.row.enterpriseName}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="120">
@@ -222,8 +135,13 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			defaultProps1: {
+				children: "child",
+				label: "cateName",
+				value: "id"
+			},
 			currentPage: 1,
-			classifyValue: -2,
+			classifyValue: [-2],
 			stateValue: -2,
 			classifyOptions: [
 				{
@@ -238,7 +156,7 @@ export default {
 				},
 				{
 					label: "下架",
-					value: 2
+					value: 0
 				},
 				{
 					label: "上架",
@@ -387,13 +305,13 @@ export default {
 			// 		})
 			// 		.catch(() => {});
 			// }
-			if (val.recommendType.newMenu === false) {
-				this.tableData[index].recommendType.newMenu = true;
-				this.editfood(val);
-			} else {
-				this.tableData[index].recommendType.newMenu = false;
-				this.editfood(val);
-			}
+			// if (val.recommendType.newMenu === false) {
+			// 	this.tableData[index].recommendType.newMenu = true;
+			// 	this.editfood(val);
+			// } else {
+			// 	this.tableData[index].recommendType.newMenu = false;
+			// 	this.editfood(val);
+			// }
 		},
 		changeUp(index, val) {
 			if (val.state == "1") {
@@ -419,15 +337,15 @@ export default {
 					params: {
 						page: this.pageIndex,
 						size: this.pageSize,
-						state: this.stateValue,
-						cate: this.classifyValue,
-						name: this.keyword
+						isShelf: this.stateValue,
+						cateId: this.classifyValue[this.classifyValue.length - 1],
+						title: this.keyword
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-mall/mallManage/itemListOnAdmin",
+					url: "/api-mall/product/list",
 					loadingConfig: {
 						target: document.querySelector(".store_list")
 					}
@@ -435,24 +353,11 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
-					for (let i = 0; i < result.data.data.content.length; i++) {
-						result.data.data.content[i].itemPrice =
-							result.data.data.content[i].itemPrice / 100;
-						result.data.data.content[i].itemWeight =
-							result.data.data.content[i].itemWeight / 100;
-						result.data.data.content[i].recommendType = JSON.parse(
-							result.data.data.content[i].recommendType
-						);
-					}
 					this.tableData = result.data.data.content;
-					for (let j = 0; j < this.tableData.length; j++) {
-						this.tableData[j].recommendType.newMenu =
-							result.data.data.content[j].recommendType.newMenu;
-						this.tableData[j].recommendType.hotMenu =
-							result.data.data.content[j].recommendType.hotMenu;
-					}
 					this.total = result.data.data.totalElement;
+					for (let i = 0; i < this.tableData.length; i++) {
+						this.tableData[i].price = this.tableData[i].price / 100;
+					}
 				},
 				({ type, info }) => {}
 			);
@@ -470,8 +375,13 @@ export default {
 				this
 			).then(
 				result => {
-					result.data.data.splice(0, 0, { cateName: "全部类别", no: -2 });
-					this.classifyOptions = result.data.data;
+					if (result.data.code === 200) {
+						result.data.data[0].unshift({
+							cateName: "全部分类",
+							id: -2
+						});
+						this.classifyOptions = result.data.data[0];
+					}
 				},
 				({ type, info }) => {}
 			);

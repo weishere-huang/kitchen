@@ -188,18 +188,14 @@ export default {
 		saveim() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				userId: JSON.parse(sessionStorage.getItem("user")).employeeId,
 				title: this.addInfo.title,
 				content: this.addInfo.content,
-				messageCate: -1,
-				messageType: -1,
-				messagePushType: -1,
 				img: this.addInfo.img
 			});
 			this.Axios(
 				{
 					params: data,
-					url: "/api-message/message/addMessagePush",
+					url: "/api-message/notice/addNotice",
 					type: "post",
 					option: {
 						enableMsg: false

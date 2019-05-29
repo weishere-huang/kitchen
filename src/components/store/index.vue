@@ -14,14 +14,15 @@
 					<h4>商品列表</h4>
 					<div class="top_search">
 						<el-col :span="6" style="padding:0 5px;">
-							<el-select v-model="classifyValue" placeholder="请选择" size="small">
-								<el-option
-									v-for="item in classifyOptions"
-									:key="item.value"
-									:label="item.cateName"
-									:value="item.no"
-								></el-option>
-							</el-select>
+							<el-cascader
+								expand-trigger="hover"
+								:options="classifyOptions"
+								:props="defaultProps1"
+								v-model="classifyValue"
+								:show-all-levels="false"
+								style="width:100%;"
+								size="small"
+							></el-cascader>
 						</el-col>
 						<el-col :span="6" style="padding:0 5px;">
 							<el-select v-model="stateValue" placeholder="请选择" size="small">
@@ -51,7 +52,7 @@
 					>
 						<el-table-column label="名称" min-width="120" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.itemName }}</span>
+								<span>{{ scope.row.title }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="分类" min-width="100" show-overflow-tooltip>
@@ -73,17 +74,12 @@
 									size="small"
 									type="number"
 									step="0.01"
-									v-model="scope.row.itemPrice"
+									v-model="scope.row.price"
 									style="width:60px;padding:0;"
 									@change="handleInput(scope.row,scope.$index)"
 								></el-input>
 							</template>
 						</el-table-column>
-						<!-- <el-table-column label="库存" min-width="80" show-overflow-tooltip>
-							<template slot-scope="scope">
-								<span>{{ scope.row.inventory }}</span>
-							</template>
-						</el-table-column>-->
 						<el-table-column label="*库存" min-width="110" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<el-input
@@ -103,55 +99,38 @@
 								></el-popover>
 							</template>
 						</el-table-column>
-						<el-table-column label="运费" min-width="100" show-overflow-tooltip>
-							<template slot-scope="scope">
-								<span>￥{{ scope.row.itemWeight}}</span>
-							</template>
-						</el-table-column>
 						<el-table-column label="*上/下架" min-width="60">
 							<template slot-scope="scope">
 								<div @click.stop.prevent="changeUp(scope.$index, scope.row)">
 									<i
 										class="iconfont"
-										v-if="scope.row.state=='1'"
+										v-if="scope.row.isShelf=='1'"
 										style="color:green;cursor: pointer;"
 									>&#xe659;</i>
-									<i class="iconfont" v-if="scope.row.state=='2'" style="color:red;cursor: pointer;">&#xe658;</i>
+									<i
+										class="iconfont"
+										v-if="scope.row.isShelf=='0'"
+										style="color:red;cursor: pointer;"
+									>&#xe658;</i>
 								</div>
 							</template>
 						</el-table-column>
-						<el-table-column label="*推荐" min-width="60">
+						<el-table-column label="*商家推荐" min-width="60">
 							<template slot-scope="scope">
 								<div @click.stop.prevent="changeNew(scope.$index, scope.row)">
 									<i
 										class="iconfont"
-										v-if="scope.row.recommendType.newMenu===true"
+										v-if="scope.row.isRecommend==2"
 										style="color:green;cursor: pointer;"
 									>&#xe659;</i>
 									<i
 										class="iconfont"
-										v-if="scope.row.recommendType.newMenu===false"
+										v-if="scope.row.isRecommend==3"
 										style="color:red;cursor: pointer;"
 									>&#xe658;</i>
 								</div>
 							</template>
 						</el-table-column>
-						<!-- <el-table-column label="*热销" min-width="60">
-							<template slot-scope="scope">
-								<div @click.stop.prevent="changeHot(scope.$index, scope.row)">
-									<i
-										class="iconfont"
-										v-if="scope.row.recommendType.hotMenu===true"
-										style="color:green;cursor: pointer;"
-									>&#xe659;</i>
-									<i
-										class="iconfont"
-										v-if="scope.row.recommendType.hotMenu===false"
-										style="color:red;cursor: pointer;"
-									>&#xe658;</i>
-								</div>
-							</template>
-						</el-table-column>-->
 						<el-table-column label="*排序" min-width="100" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<el-popover
@@ -216,23 +195,28 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			defaultProps1: {
+				children: "child",
+				label: "cateName",
+				value: "id"
+			},
 			currentPage: 1,
-			classifyValue: -1,
-			stateValue: -1,
+			classifyValue: [-2],
+			stateValue: -2,
 			classifyOptions: [
 				{
 					cateName: "全部分类",
-					no: -1
+					id: -2
 				}
 			],
 			stateOptions: [
 				{
 					label: "全部状态",
-					value: -1
+					value: -2
 				},
 				{
 					label: "下架",
-					value: 2
+					value: 0
 				},
 				{
 					label: "上架",
@@ -256,18 +240,17 @@ export default {
 			let qs = require("qs");
 			let datas = qs.stringify({
 				id: data.id,
-				itemPrice: data.itemPrice,
+				price: data.price * 100,
 				stockNow: data.stockNow,
-				state: data.state,
-				sortLevel: data.sortLevel,
-				menuId: data.menuId,
-				recommendType: JSON.stringify(data.recommendType)
+				isShelf: data.isShelf,
+				isRecommend: data.isRecommend,
+				sortLevel: data.sortLevel
 			});
 
 			this.Axios(
 				{
 					params: datas,
-					url: "/api-mall/mallManage/updateItem",
+					url: "/api-mall/product/update",
 					type: "post",
 					option: {
 						// successMsg: "编辑成功"
@@ -289,8 +272,7 @@ export default {
 			);
 		},
 		handleInput(row, index) {
-			console.log(row);
-			if (/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){0,2})?$/.test(row.itemPrice)) {
+			if (/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){0,2})?$/.test(row.price)) {
 				this.editfood(row);
 			} else {
 				this.$message.error("价格只能保留两位小数，且不能为负数，请重新输入");
@@ -301,9 +283,6 @@ export default {
 			// this.editfood(row);
 		},
 		handleCookkingTime(row, index) {
-			// this.tableData[index].cookingTime =
-			// 	row.cookingTime.match(/^\d*(\d{0,0})/g)[0] || null;
-			// this.editfood(row);
 			if (/^[0-9]*[0-9][0-9]*$/.test(row.stockNow)) {
 				this.editfood(row);
 			} else {
@@ -330,7 +309,7 @@ export default {
 			rowData.visible = false;
 			let qs = require("qs");
 			let datas = qs.stringify({
-				itemId: rowData.id
+				id: rowData.id
 			});
 			this.Axios(
 				{
@@ -339,7 +318,7 @@ export default {
 						enableMsg: false
 					},
 					type: "post",
-					url: "/api-mall/mallManage/delItem",
+					url: "/api-mall/product/del",
 					loadingConfig: {
 						target: document.querySelector(".store_list")
 					}
@@ -373,43 +352,20 @@ export default {
 			this.foodlist();
 		},
 		changeNew(index, val) {
-			// if (val.state == 1) {
-			// 	this.changeState(val);
-			// } else {
-			// 	this.$confirm("菜谱下架，绑定的商品也同样会下架, 是否继续?", "提示", {
-			// 		confirmButtonText: "确定",
-			// 		cancelButtonText: "取消",
-			// 		type: "warning",
-			// 		cancelButtonClass: "is-plain"
-			// 	})
-			// 		.then(() => {
-			// 			this.changeState(val);
-			// 		})
-			// 		.catch(() => {});
-			// }
-			if (val.recommendType.newMenu === false) {
-				this.tableData[index].recommendType.newMenu = true;
+			if (val.isRecommend == 2) {
+				this.tableData[index].isRecommend = 3;
 				this.editfood(val);
 			} else {
-				this.tableData[index].recommendType.newMenu = false;
+				this.tableData[index].isRecommend = 2;
 				this.editfood(val);
 			}
 		},
 		changeUp(index, val) {
-			if (val.state == "1") {
-				this.tableData[index].state = "2";
+			if (val.isShelf == "1") {
+				this.tableData[index].isShelf = "0";
 				this.editfood(val);
 			} else {
-				this.tableData[index].state = "1";
-				this.editfood(val);
-			}
-		},
-		changeHot(index, val) {
-			if (val.recommendType.hotMenu === false) {
-				this.tableData[index].recommendType.hotMenu = true;
-				this.editfood(val);
-			} else {
-				this.tableData[index].recommendType.hotMenu = false;
+				this.tableData[index].isShelf = "1";
 				this.editfood(val);
 			}
 		},
@@ -418,10 +374,10 @@ export default {
 				{
 					params: {
 						page: this.pageIndex,
-						size: this.pageSize
-						// state: this.stateValue,
-						// cateName: this.classifyValue,
-						// title: this.keyword
+						size: this.pageSize,
+						isShelf: this.stateValue,
+						cateId: this.classifyValue[this.classifyValue.length - 1],
+						title: this.keyword
 					},
 					option: {
 						enableMsg: false
@@ -435,9 +391,11 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
+					for (let i = 0; i < this.tableData.length; i++) {
+						this.tableData[i].price = this.tableData[i].price / 100;
+					}
 				},
 				({ type, info }) => {}
 			);
@@ -455,8 +413,13 @@ export default {
 				this
 			).then(
 				result => {
-					result.data.data.splice(0, 0, { cateName: "全部类别", no: -1 });
-					this.classifyOptions = result.data.data;
+					if (result.data.code === 200) {
+						result.data.data[0].unshift({
+							cateName: "全部分类",
+							id: -2
+						});
+						this.classifyOptions = result.data.data[0];
+					}
 				},
 				({ type, info }) => {}
 			);
@@ -478,6 +441,7 @@ export default {
 				: false;
 			let b = this.$route.params.id !== undefined ? true : false;
 			this.isHideList = a || b ? true : false;
+			this.foodlist();
 		}
 	}
 };

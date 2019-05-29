@@ -22,7 +22,7 @@
 							expand-trigger="hover"
 							:options="data"
 							:props="defaultProps1"
-							v-model="cookbook"
+							v-model="classify.parentNo"
 							@change="handleChange"
 							:show-all-levels="false"
 							change-on-select
@@ -48,7 +48,10 @@
 			<div style="padding:10px;overflow:hidden">
 				<div class="tree_title">
 					<span style="padding-left:8px;">分类名称</span>
-					<span style="display:inline-block;width:190px;">操作</span>
+					<span>
+						<span style="display:inline-block;width:190px;">排序</span>
+						<span style="display:inline-block;width:190px;">操作</span>
+					</span>
 				</div>
 				<el-tree
 					:data="classifyData"
@@ -59,7 +62,17 @@
 				>
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span>{{ node.label }}</span>
-						<span style="display:inline-block;width:190px;" @click.stop>
+						<span style="display:inline-block;width:385px;" @click.stop>
+							<span style="margin-right:90px;">
+								<el-input
+									size="small"
+									type="number"
+									@focus="getFocusData(data)"
+									v-model="sortChange=data.sortLevel"
+									style="width:100px;"
+									@change="changeSort(sortChange)"
+								></el-input>
+							</span>
 							<permission-button
 								permCode="menu_cate_lookup.menu_cate_update"
 								banType="disable"
@@ -112,12 +125,13 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			sortChange: "",
 			cookbook: [],
-			data: [],
+			data: [{ cateName: "顶级分类", no: "0" }],
 			visible: false,
 			classify: {
 				label: "",
-				parentNo: "",
+				parentNo: [],
 				cateName: ""
 			},
 			classifyRules: {
@@ -125,6 +139,16 @@ export default {
 					{
 						required: true,
 						message: "请选择上级分类",
+						trigger: ["change", "blur"]
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (value.length >= 3) {
+								callback(new Error("不能为第三级添加分类"));
+							} else {
+								callback();
+							}
+						},
 						trigger: ["change", "blur"]
 					}
 				],
@@ -168,12 +192,13 @@ export default {
 					let qs = require("qs");
 					let data = qs.stringify({
 						cateId: this.editClassify.id,
-						cateName: this.editClassify.cateName
+						cateName: this.editClassify.cateName,
+						sortLevel: this.editClassify.sortLevel
 					});
 					this.Axios(
 						{
 							params: data,
-							url: "/api-recipe/recipeCate/updateCate",
+							url: "/api-mall/itemCat/updateCate",
 							type: "post",
 							option: {
 								successMsg: "修改成功"
@@ -182,7 +207,7 @@ export default {
 						this
 					).then(result => {
 						if (result.data.code === 200) {
-							this.reload();
+							this.getClassifyList();
 						}
 					});
 				} else {
@@ -196,13 +221,13 @@ export default {
 					this.dialogAdd = false;
 					let qs = require("qs");
 					let data = qs.stringify({
-						parentNo: this.classify.parentNo,
+						parentNo: this.classify.parentNo[this.classify.parentNo.length - 1],
 						cateName: this.classify.cateName
 					});
 					this.Axios(
 						{
 							params: data,
-							url: "/api-recipe/recipeCate/addCate",
+							url: "/api-mall/itemCat/addItemCate",
 							type: "post",
 							option: {
 								successMsg: "保存成功"
@@ -211,7 +236,7 @@ export default {
 						this
 					).then(result => {
 						if (result.data.code === 200) {
-							this.reload();
+							this.getClassifyList();
 						}
 					});
 				} else {
@@ -222,16 +247,43 @@ export default {
 		handleClose() {
 			this.selectShow = false;
 		},
-		changeSort(data) {},
+		changeSort(sort) {
+			this.editClassify.sortLevel = sort;
+			let qs = require("qs");
+			let data = qs.stringify({
+				cateId: this.editClassify.id,
+				cateName: this.editClassify.cateName,
+				sortLevel: this.editClassify.sortLevel
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-mall/itemCat/updateCate",
+					type: "post",
+					option: {
+						successMsg: "修改成功"
+					}
+				},
+				this
+			).then(result => {
+				if (result.data.code === 200) {
+					this.getClassifyList();
+				}
+			});
+		},
 		handleClick(tba, event) {
 			this.btnShow = tba.name;
+		},
+		getFocusData(data) {
+			Object.assign(this.editClassify, data);
 		},
 		append(data) {
 			this.dialogEdit = true;
 			Object.assign(this.editClassify, data);
 		},
 		remove(node, val) {
-			if (val.children) {
+			console.log(val);
+			if (val.child) {
 				this.$message.error("不能删除含有子类的分类");
 				val.visible = false;
 				return;
@@ -243,7 +295,7 @@ export default {
 			this.Axios(
 				{
 					params: data,
-					url: "/api-recipe/recipeCate/delCate",
+					url: "/api-mall/itemCat/delCate",
 					type: "post",
 					option: {
 						successMsg: "删除成功"
@@ -252,7 +304,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.reload();
+					this.getClassifyList();
 				}
 			});
 		},
@@ -281,8 +333,8 @@ export default {
 					// }
 					if (result.data.code === 200) {
 						this.classifyData = result.data.data[0];
-						this.data=result.data.data[0];
-						// console.log(this.classifyData);
+						this.data = this.data.concat(result.data.data[0]);
+						console.log(this.data);
 					}
 				},
 				({ type, info }) => {}

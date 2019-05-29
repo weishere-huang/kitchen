@@ -197,7 +197,7 @@ export default [{
     ]
   },
   {
-    menu: '入住管理',
+    menu: '入驻管理',
     permissionCode: 'checkIn',
     defaultDock: false,
     icon: '&#xe861;',
@@ -326,6 +326,17 @@ export default [{
     defaultDock: false,
     icon: '&#xe600;',
     subMenu: [{
+        menu: '审核查询',
+        route: '/EnterpriseAuditedIndex',
+        permissionCode: 'home_employee_lookup'
+      },
+      {
+        menu: '修改注册',
+        routeReg: /^\/EnterpriseAuditedIndex\/EnterpriseAuditedEdit\/\d{1,}$/i,
+        visible: true,
+        permissionCode: 'menu_update_lookup'
+      },
+      {
         menu: '物联产品',
         route: '/ProductOfThings',
         permissionCode: 'home_employee_lookup'
@@ -465,76 +476,4 @@ export default [{
       },
     ]
   },
-  {
-    menu: '商家',
-    permissionCode: 'merchant',
-    defaultDock: false,
-    icon: '&#xe637;',
-    subMenu: [{
-        menu: '订单列表',
-        route: '/Order',
-        permissionCode: 'supplierOrder_list_lookup'
-      },
-      {
-        menu: '订单详情',
-        routeReg: /^\/Order\/Details\/\d{1,}$/i,
-        visible: true,
-        permissionCode: 'supplierOrder_detail_lookup'
-      },
-      {
-        menu: '商品列表',
-        route: '/Store',
-        permissionCode: 'supplierMall_list_lookup'
-      },
-      // {
-      //   menu: '商品分类',
-      //   route: '/Classify',
-      //   permissionCode: 'supplierMall_cate_lookup'
-      // },
-      {
-        menu: '添加商品',
-        route: '/Store/AddMenu',
-        visible: true,
-        permissionCode: 'supplierMall_add_lookup'
-      },
-      {
-        menu: '修改商品',
-        routeReg: /^\/Store\/EditMenu\/\d{1,}$/i,
-        visible: true,
-        permissionCode: 'supplierMall_update_lookup'
-      },
-      {
-        menu: '优惠券',
-        route: '/DiscountCoupon',
-        permissionCode: 'supplierMall_list_lookup'
-      },
-      {
-        menu: '红包',
-        route: '/RedPacket',
-        permissionCode: 'supplierMall_list_lookup'
-      },
-      {
-        menu: '广告列表',
-        route: '/Advertising',
-        permissionCode: 'message_advertisement_lookup'
-      },
-      {
-        menu: '添加广告',
-        route: '/Advertising/AdvertisingAdd',
-        visible: true,
-        permissionCode: 'messagepush_add_lookup'
-      },
-      {
-        menu: '修改广告',
-        routeReg: /^\/Advertising\/AdvertisingEdit\/\d{1,}$/i,
-        visible: true,
-        permissionCode: 'messagepush_detail_lookup'
-      },
-      {
-        menu: '商城设置',
-        route: '/MerchantSystem',
-        permissionCode: 'message_advertisement_lookup'
-      },
-    ]
-  }
 ]

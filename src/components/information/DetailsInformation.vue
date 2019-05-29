@@ -23,17 +23,6 @@
 					<el-form-item label="接收对象：" prop>
 						<span>全部用户</span>
 					</el-form-item>
-					<el-form-item label="消息内容：" prop>
-						<el-input
-							v-model="addInfo.content"
-							:readonly="true"
-							type="textarea"
-							size="small"
-							style="width:700px;"
-							rows="6"
-							maxlength="50"
-						></el-input>
-					</el-form-item>
 					<el-form-item label="消息图片：" prop>
 						<div class="show_msg_pic">
 							<img :src="addInfo.img" alt v-if="addInfo.img!=''" @click="showMsgPic">
@@ -42,6 +31,9 @@
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
+					</el-form-item>
+					<el-form-item label="消息内容：" prop>
+						<div style="width:750px;" v-html="addInfo.content"></div>
 					</el-form-item>
 					<!-- <el-form-item>
 						<el-button size="small" type="primary" @click="submitForm('cookbook')">立即发送</el-button>
@@ -140,20 +132,21 @@ export default {
 			this.Axios(
 				{
 					params: {
-						messageId: id
+						noticeId: id
 					},
 					option: {},
 					type: "get",
-					url: "/api-message/message/getOne"
+					url: "/api-message/notice/findOne"
 				},
 				this
 			).then(
 				result => {
 					console.log(result.data);
 					this.addInfo = result.data.data;
-					if(this.addInfo.img !==""||this.addInfo!=null){
-					  this.addInfo.img = this.global.imgPath + this.addInfo.img.replace("img:", "");
-          }
+					if (this.addInfo.img !== "" || this.addInfo != null) {
+						this.addInfo.img =
+							this.global.imgPath + this.addInfo.img.replace("img:", "");
+					}
 					console.log(this.addInfo);
 				},
 				({ type, info }) => {}

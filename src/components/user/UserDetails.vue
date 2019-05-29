@@ -11,7 +11,7 @@
 				<el-col :span="8">
 					<el-form label-width="200px" size="mini">
 						<el-form-item label="昵称：" prop>
-							<span>{{userMsg.userInfo.niceName}}</span>
+							<span>{{userMsg.userInfo.nikeName}}</span>
 						</el-form-item>
 						<el-form-item label="手机号：" prop>
 							<span>{{userMsg.userInfo.phone}}</span>
@@ -20,7 +20,7 @@
 							<span>{{userMsg.userInfo.state==0?"正常":"禁用"}}</span>
 						</el-form-item>
 						<el-form-item label="生日：" prop>
-							<span>{{userMsg.userInfo.birthday}}</span>
+							<span>{{userMsg.userInfo.brithday}}</span>
 						</el-form-item>
 						<el-form-item label="性别：" prop>
 							<span>{{userMsg.userInfo.gender==0?"女":"男"}}</span>
@@ -44,14 +44,13 @@
 						class="tag"
 						v-for="(item, index) in tagValue"
 						:key="index"
-						:style="{'background-color':BgColor[index],'top':topValue[index],'left':leftValue[index]}"
-					>{{item}}</span>
-
-					<div class="user_photo_case">
-						<img
-							src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2629648377,3202501847&fm=26&gp=0.jpg"
-							alt
-						>
+						:style="{'background-color':BgColor[numberIndex[index]],'top':topValue[numberIndex[index]],'left':leftValue[numberIndex[index]]}"
+					>{{item.labelName}}</span>
+					<div class="user_photo_case" v-if="userMsg.userInfo.headImg==null||''">
+						<img src="../../assets/image/userPic.png" alt>
+					</div>
+					<div class="user_photo_case" v-if="userMsg.userInfo.headImg!=null||''">
+						<img :src="global.imgPath+userMsg.userInfo.headImg.replace('img:','')" alt>
 					</div>
 				</el-col>
 			</div>
@@ -62,6 +61,7 @@
 export default {
 	data() {
 		return {
+			numberIndex: [],
 			userMsg: {
 				deviceCount: "",
 				userInfo: {}
@@ -119,6 +119,36 @@ export default {
 		};
 	},
 	methods: {
+		getNumber(num) {
+			var sum = num;
+			function randomNum(sum) {
+				return Math.floor(Math.random() * 10);
+			}
+
+			var arr = [];
+			arr[0] = randomNum(sum);
+
+			var flag = true;
+			do {
+				var temp = randomNum(sum);
+
+				for (var i = 0; i < arr.length; i++) {
+					if (temp === arr[i]) {
+						flag = true;
+						break;
+					} else {
+						flag = false;
+						continue;
+					}
+				}
+				if (!flag) {
+					arr.push(temp);
+					flag = true;
+				}
+			} while (arr.length < sum && flag);
+			this.numberIndex = arr;
+			console.log(arr);
+		},
 		getDetails(id) {
 			this.Axios(
 				{
@@ -137,9 +167,12 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result.data);
+					console.log(result.data);
 					if (result.data.code === 200) {
 						this.userMsg = result.data.data;
+						this.tagValue = result.data.data.userLabel;
+						this.getNumber(this.tagValue.length);
+						// console.log(this.tagValue.length);
 					}
 				},
 				({ type, info }) => {}
@@ -147,6 +180,7 @@ export default {
 		}
 	},
 	created() {
+		// this.getNumber();
 		this.getDetails(this.$route.params.id);
 	}
 };
@@ -197,14 +231,14 @@ export default {
 					border-radius: 50%;
 					overflow: hidden;
 					font-size: 0;
-					background-color: #1cc09f;
+					// background-color: #1cc09f;
 					position: absolute;
 					top: 50%;
 					left: 50%;
 					margin-top: -100px;
 					margin-left: -100px;
 					img {
-						// width: 200px;
+						width: 200px;
 						height: 200px;
 					}
 				}
@@ -213,7 +247,7 @@ export default {
 					width: 80px;
 					height: 30px;
 					color: white;
-					background-color: #1cc09f;
+					// background-color: #1cc09f;
 					border-radius: 15px;
 					text-align: center;
 					line-height: 30px;

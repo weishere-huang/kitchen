@@ -68,7 +68,7 @@
 						</el-table-column>
 						<el-table-column label="发放商家" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.useConditionStr }}</span>
+								<span>{{ scope.row.enterpriseName }}</span>
 							</template>
 						</el-table-column>
 						<!-- <el-table-column label="操作" width="140">
@@ -186,7 +186,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-platform/coupon/listCoupon"
+					url: "/api-platform/coupon/listOnAdmin"
 				},
 				this
 			).then(

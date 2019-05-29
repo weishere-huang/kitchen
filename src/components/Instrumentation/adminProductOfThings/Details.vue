@@ -20,6 +20,7 @@
 					</el-form-item>
 					<el-form-item label="审核状态：" prop>
 						<span>{{oneProductMsg.state==0?'待审核':oneProductMsg.state==1?'已通过':'已驳回'}}</span>
+						<span v-if="oneProductMsg.auditOpinion!=''||null">（{{oneProductMsg.auditOpinion}}）</span>
 					</el-form-item>
 					<el-form-item label="审核时间：" prop>
 						<span>{{oneProductMsg.deviceName}}</span>
@@ -84,6 +85,7 @@ export default {
 				},
 				this
 			).then(result => {
+				console.log(result.data.data);
 				if (result.data.code === 200) {
 					this.oneProductMsg = result.data.data;
 					// this.oneProductMsg.deviceCateName = JSON.parse(

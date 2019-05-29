@@ -594,7 +594,7 @@ export default {
 		}
 	},
 	created() {
-		this.getMsg();
+		// this.getMsg();
 		this.getSaleMoney(0);
 		this.getLeaveMessage();
 	},

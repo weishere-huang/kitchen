@@ -110,7 +110,7 @@ export default {
 			if (params.type === "detalis") {
 				console.log(params);
 				this.$router.push(
-					"/Information/DetailsInformation/" + params.rowData.messageId
+					"/Information/DetailsInformation/" + params.rowData.id
 				);
 			}
 		},
@@ -125,10 +125,10 @@ export default {
 						size: this.pageSize
 					},
 					option: {
-            enableMsg: false
+						enableMsg: false
 					},
 					type: "get",
-					url: "/api-message/message/findList"
+					url: "/api-message/notice/list"
 				},
 				this
 			).then(

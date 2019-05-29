@@ -15,23 +15,24 @@
 				:model="addMenu"
 				ref="addMenu"
 			>
-				<el-form-item label="商品名称：" prop="recipeName">
-					<el-input
-						size="small"
-						type="text"
+				<el-form-item label="商品名称：" prop="title">
+					<el-input size="small" type="text" style="width:300px;" v-model="addMenu.title" maxlength="20"></el-input>
+				</el-form-item>
+				<el-form-item label="商品分类：" prop="cateId">
+					<el-cascader
+						expand-trigger="hover"
+						:options="classify"
+						:props="defaultProps1"
+						v-model="addMenu.cateId"
+						:show-all-levels="false"
+						ref="selectValue"
 						style="width:300px;"
-						v-model="addMenu.recipeName"
-						maxlength="20"
-					></el-input>
+						size="small"
+					></el-cascader>
 				</el-form-item>
-				<el-form-item label="商品分类：" prop="itemCate">
-					<el-select v-model="addMenu.itemCate" placeholder="请选择" size="small" style="width:300px;">
-						<el-option v-for="item in classify" :key="item.value" :label="item.cateName" :value="item.no"></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="价格：" prop="itemPrice">
+				<el-form-item label="价格：" prop="price">
 					<el-input
-						v-model.number="addMenu.itemPrice"
+						v-model.number="addMenu.price"
 						type="number"
 						size="small"
 						style="width:300px;"
@@ -49,15 +50,15 @@
 						v-model.number="addMenu.stockNow"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="上/下架：" prop="state">
-					<el-radio v-model="addMenu.state" label="1">上架</el-radio>
-					<el-radio v-model="addMenu.state" label="2">下架</el-radio>
+				<el-form-item label="上/下架：" prop="isShelf">
+					<el-radio v-model="addMenu.isShelf" label="1">上架</el-radio>
+					<el-radio v-model="addMenu.isShelf" label="0">下架</el-radio>
 				</el-form-item>
-				<el-form-item label="是否推荐：" prop="recommendType">
-					<el-radio v-model="addMenu.state" label="1">是</el-radio>
-					<el-radio v-model="addMenu.state" label="2">否</el-radio>
+				<el-form-item label="是否推荐：" prop="isRecommend">
+					<el-radio v-model="addMenu.isRecommend" label="2">是</el-radio>
+					<el-radio v-model="addMenu.isRecommend" label="3">否</el-radio>
 				</el-form-item>
-				<el-form-item label="商品缩略图：" prop>
+				<el-form-item label="商品缩略图：" prop="img">
 					<el-upload
 						:action="imgApi()"
 						list-type="picture-card"
@@ -76,13 +77,23 @@
 						<img width="100%" :src="dialogImageUrl" alt>
 					</el-dialog>
 				</el-form-item>
+				<el-form-item label="商品描述：" prop="description">
+					<el-input
+						type="textarea"
+						rows="6"
+						resize="none"
+						style="width:700px;"
+						v-model="addMenu.description"
+					></el-input>
+				</el-form-item>
 				<el-form-item label="商品详情：">
 					<editor
 						id="editorMenu"
 						height="300px"
 						width="700px"
 						:uploadJson="uploadJson()"
-						:content.sync="editorText"
+						:content.sync="addMenu.info"
+						:afterUpload="afterUpload"
 						:fileManagerJson="()=>look()"
 						pluginsPath="../../../static/kindeditor/plugins"
 						filePostName="file"
@@ -109,20 +120,25 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			defaultProps1: {
+				children: "child",
+				label: "cateName",
+				value: "id"
+			},
 			editorText: "",
 			dialogImageUrl: "",
 			dialogVisible: false,
 			dialogPreview: false,
 			addMenu: {
-				recipeName: "",
-				itemCate: "",
-				itemPrice: "",
+				title: "",
+				description: "",
+				price: "",
+				cateId: [],
 				stockNow: "",
-				state: "2",
-				recommendType: {
-					newMenu: false,
-					hotMenu: false
-				}
+				isRecommend: "",
+				isShelf: "",
+				img: "",
+				info: ""
 			},
 			addMenuRules: {
 				recipeName: [
@@ -178,6 +194,9 @@ export default {
 		};
 	},
 	methods: {
+		afterUpload(data) {
+			return this.global.imgPath + data.replace("img:", "");
+		},
 		submitForm(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
@@ -198,7 +217,7 @@ export default {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
-		getClassfy() {
+		getClassifyList() {
 			this.Axios(
 				{
 					params: {},
@@ -211,13 +230,18 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
-					// result.data.data.splice(0,0,{cateName:"全部类别",id:-2})
-					this.classify = result.data.data;
+					console.log(result.data.data[0]);
+					// for (let i = 0; i < result.data.data.length; i++) {
+					// 	result.data.data[i].visible = false;
+					// }
+					if (result.data.code === 200) {
+						this.classify = result.data.data[0];
+					}
 				},
 				({ type, info }) => {}
 			);
 		},
+
 		getUEContent() {
 			this.savespu();
 		},
@@ -235,6 +259,7 @@ export default {
 		},
 		handleRemove1(file, fileList) {
 			// this.cookbook.recipeImg = null;
+			this.addMenu.img = null;
 		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
@@ -270,7 +295,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				// this.cookbook.recipeImg = res.data;
+				this.addMenu.img = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -285,19 +310,20 @@ export default {
 		savespu() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				itemName: this.cookbook.recipeName,
-				itemCate: this.addMenu.itemCate,
-				itemPrice: this.addMenu.itemPrice,
-				itemWeight: this.cookbook.weight,
+				title: this.addMenu.title,
+				description: this.addMenu.description,
+				price: this.addMenu.price * 100,
+				cateId: this.addMenu.cateId[this.addMenu.cateId.length - 1],
 				stockNow: this.addMenu.stockNow,
-				state: this.addMenu.state,
-				menuId: this.cookbook.id,
-				recommendType: JSON.stringify(this.addMenu.recommendType)
+				isRecommend: this.addMenu.isRecommend,
+				isShelf: this.addMenu.isShelf,
+				img: this.addMenu.img,
+				info: this.addMenu.info
 			});
 			this.Axios(
 				{
 					params: data,
-					url: "/api-mall/mallManage/addItem",
+					url: "/api-mall/product/add",
 					type: "post",
 					option: {
 						successMsg: "保存成功"
@@ -321,7 +347,7 @@ export default {
 
 	mounted() {},
 	created() {
-		this.getClassfy();
+		this.getClassifyList();
 	},
 	components: {
 		areaList,

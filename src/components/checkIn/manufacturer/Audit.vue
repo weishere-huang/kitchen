@@ -183,8 +183,8 @@ export default {
 			).then(result => {
 				console.log(result);
 				if (result.data.code === 200) {
-					this.reload();
 					this.$router.back(-1);
+				
 				} else {
 					this.$message.error("审核失败");
 				}

@@ -46,8 +46,8 @@
 						></el-input>
 						</el-tooltip>
 						&nbsp;元=1积分
-					</el-form-item> -->
-					<el-form-item label="单商品购买上限：" prop="itemLimit">
+					</el-form-item>-->
+					<!-- <el-form-item label="单商品购买上限：" prop="itemLimit">
 						<el-tooltip class="item" effect="light" content="单个商品最多能购买多少份，0为不限制" placement="right">
 							<el-input
 								type="number"
@@ -190,8 +190,8 @@
 							</el-tooltip>
 						</span>
 					</el-form-item>
-					<el-form-item label="配送时段1：" prop="timeFrame1.startTime">
-						<!-- <el-time-picker
+					<el-form-item label="配送时段1：" prop="timeFrame1.startTime">-->
+					<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame1"
 							range-separator="至"
@@ -203,8 +203,8 @@
 							size="small"
 							style="width:300px;"
 							@focus="defaultValue(1)"
-						></el-time-picker>-->
-						<el-time-picker
+					></el-time-picker>-->
+					<!-- <el-time-picker
 							value-format="HH-mm"
 							format="HH:mm"
 							v-model="systemMsg.timeFrame1.startTime"
@@ -218,9 +218,9 @@
 							placeholder="结束时间"
 							style="width:143px"
 						></el-time-picker>
-					</el-form-item>
-					<el-form-item label="配送时段2：" prop="timeFrame2.startTime">
-						<!-- <el-time-picker
+					</el-form-item>-->
+					<!-- <el-form-item label="配送时段2：" prop="timeFrame2.startTime"> -->
+					<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame2"
 							range-separator="至"
@@ -232,8 +232,8 @@
 							size="small"
 							style="width:300px;"
 							@focus="defaultValue(2)"
-						></el-time-picker>-->
-						<el-time-picker
+					></el-time-picker>-->
+					<!-- <el-time-picker
 							value-format="HH-mm"
 							format="HH:mm"
 							v-model="systemMsg.timeFrame2.startTime"
@@ -247,9 +247,9 @@
 							placeholder="结束时间"
 							style="width:143px"
 						></el-time-picker>
-					</el-form-item>
-					<el-form-item label="配送时段3：" prop="timeFrame3.startTime">
-						<!-- <el-time-picker
+					</el-form-item>-->
+					<!-- <el-form-item label="配送时段3：" prop="timeFrame3.startTime"> -->
+					<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame3"
 							range-separator="至"
@@ -261,8 +261,8 @@
 							size="small"
 							style="width:300px;"
 							@focus="defaultValue(3)"
-						></el-time-picker>-->
-						<el-time-picker
+					></el-time-picker>-->
+					<!-- <el-time-picker
 							value-format="HH-mm"
 							format="HH:mm"
 							v-model="systemMsg.timeFrame3.startTime"
@@ -277,8 +277,8 @@
 							style="width:143px"
 						></el-time-picker>
 					</el-form-item>
-					<el-form-item label="配送时段4：" prop="timeFrame4.startTime">
-						<!-- <el-time-picker
+					<el-form-item label="配送时段4：" prop="timeFrame4.startTime">-->
+					<!-- <el-time-picker
 							is-range
 							v-model="systemMsg.timeFrame4"
 							range-separator="至"
@@ -290,8 +290,8 @@
 							size="small"
 							style="width:300px;"
 							@focus="defaultValue(4)"
-						></el-time-picker>-->
-						<el-time-picker
+					></el-time-picker>-->
+					<!-- <el-time-picker
 							value-format="HH-mm"
 							format="HH:mm"
 							v-model="systemMsg.timeFrame4.startTime"
@@ -305,6 +305,11 @@
 							placeholder="结束时间"
 							style="width:143px"
 						></el-time-picker>
+					</el-form-item>-->
+					<el-form-item label="积分：">
+						1元=
+						<el-input style="width:60px;"></el-input>&nbsp;积分&nbsp;&nbsp;&nbsp;&nbsp;签到赠送
+						<el-input style="width:60px;"></el-input>&nbsp;积分
 					</el-form-item>
 					<el-form-item>
 						<el-button size="small" type="primary" @click="submitForm('systemMsg')">保存</el-button>

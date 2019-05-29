@@ -277,8 +277,6 @@ export default {
 		addProductOfThings() {
 			let qs = require("qs");
 			let data = qs.stringify({
-				enterpriseId: 123,
-				enterpriseName: "光大实业",
 				deviceName: this.addProduct.deviceName,
 				deviceCateId: this.addProduct.deviceCateId[
 					this.addProduct.deviceCateId.length - 1

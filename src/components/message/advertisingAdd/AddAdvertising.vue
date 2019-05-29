@@ -111,6 +111,7 @@
 <script>
 import editor from "../../public/kindeditor";
 export default {
+	inject:["reload"],
 	data() {
 		return {
 			employeeType: JSON.parse(sessionStorage.getItem("user")).employeeType,

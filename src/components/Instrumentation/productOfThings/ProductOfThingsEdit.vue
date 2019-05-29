@@ -281,32 +281,28 @@ export default {
 				this.editProduct.linkImg = "";
 			}
 		},
-		getParent(data2, nodeId2) {
-			var arrRes = [];
-			if (data2.length == 0) {
-				if (!!nodeId2) {
-					arrRes.unshift(data2);
-				}
-				return arrRes;
-			}
-			let rev = (data, nodeId) => {
-				for (var i = 0, length = data.length; i < length; i++) {
-					let node = data[i];
-					if (node.value == nodeId) {
-						arrRes.unshift(node);
-						rev(data2, node.parent_id);
-						break;
+		getnode(array, label) {
+			let stack = [];
+			let going = true;
+			let walker = (array, label) => {
+				array.forEach(item => {
+					if (!going) return;
+					stack.push(item["value"]);
+					if (item["value"] === label) {
+						going = false;
+					} else if (item["children"]) {
+						walker(item["children"], label);
 					} else {
-						if (!!node.children) {
-							rev(node.children, nodeId);
-						}
+						stack.pop();
 					}
-				}
-				return arrRes;
+				});
+				if (going) stack.pop();
 			};
-			arrRes = rev(data2, nodeId2);
-			console.log(arrRes);
-			return arrRes;
+
+			walker(array, label);
+			this.editProduct.deviceCateId = stack;
+			console.log(this.editProduct.deviceCateId);
+			return stack.join("-");
 		},
 		findOne(id) {
 			this.Axios(
@@ -322,20 +318,11 @@ export default {
 			).then(result => {
 				console.log(result);
 				if (result.data.code === 200) {
-					// this.getParent(options, this.editProduct.deviceCateId);
 					Object.assign(this.editProduct, result.data.data);
-					// this.editProduct.deviceCateName = JSON.parse(
-					// 	this.editProduct.deviceCateName
-					// );
+					console.log(result.data.data.deviceCateId);
 					this.editProduct.agreement = JSON.parse(this.editProduct.agreement);
 					this.editProduct.networkType = this.editProduct.networkType.toString();
 					this.fileList = this.editProduct.agreement;
-					// this.editProduct.linkName = this.editProduct.linkImg.substring(
-					// 	this.editProduct.linkImg.lastIndexOf("/") + 1
-					// );
-					// this.editProduct.linkImg =
-					// 	this.global.imgPath +
-					// 	this.oneProductMsg.linkImg.replace("img:", "");
 					this.fileListLogo = [
 						{
 							name: this.editProduct.logo.substring(
@@ -355,6 +342,7 @@ export default {
 								this.editProduct.linkImg.replace("img:", "")
 						}
 					];
+					this.getnode(this.options, result.data.data.deviceCateId);
 				}
 			});
 		},
@@ -363,7 +351,9 @@ export default {
 			let data = qs.stringify({
 				id: this.editProduct.id,
 				deviceName: this.editProduct.deviceName,
-				deviceCateName: JSON.stringify(this.editProduct.deviceCateName),
+				deviceCateId: this.editProduct.deviceCateId[
+					this.editProduct.deviceCateId.length - 1
+				],
 				networkType: this.editProduct.networkType,
 				introduce: this.editProduct.introduce,
 				agreement: JSON.stringify(this.fileList),
