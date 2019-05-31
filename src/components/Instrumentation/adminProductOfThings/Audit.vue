@@ -15,6 +15,9 @@
 					<el-form-item label="产品类型：" prop>
 						<span>{{oneProductMsg.deviceCateName}}</span>
 					</el-form-item>
+					<el-form-item label="申请设备厂商：" prop>
+						<span>{{oneProductMsg.enterpriseName}}</span>
+					</el-form-item>
 					<el-form-item label="连网类型：" prop>
 						<span>{{oneProductMsg.networkType==0?'WIFI':oneProductMsg.networkType==1?'4G':oneProductMsg.networkType==2?'NB-loT':oneProductMsg.networkType==3?'LoRa':oneProductMsg.networkType==4?'ZigBee':oneProductMsg.networkType==5?'以太网':'其他'}}</span>
 					</el-form-item>

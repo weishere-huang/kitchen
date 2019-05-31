@@ -99,21 +99,25 @@
 				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="收货人：">
-							<span>{{orderDetails.address.consignee+(orderDetails.address.gender==1?"先生":"女士")}}</span>
+							<!-- <span>{{orderDetails.address.consignee+(orderDetails.address.gender==1?"先生":"女士")}}</span> -->
+							<span>庄先生</span>
 						</el-form-item>
 						<el-form-item label="收货人手机号：">
-							<span>{{orderDetails.address.phone}}</span>
+							<!-- <span>{{orderDetails.address.phone}}</span> -->
+							<span>13608253396</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="16" class="form_case">
 					<el-form label-width="30%">
 						<el-form-item label="收货地址：">
-							<span>{{orderDetails.address.area+orderDetails.address.address}}</span>
+							<!-- <span>{{orderDetails.address.area+orderDetails.address.address}}</span> -->
+							<span>四川省 遂宁市 大英县 蓬莱镇 蓬乐街246号</span>
 						</el-form-item>
 						<el-form-item label="快递运单号：">
-							<span>{{sendTime}}</span>
-							<span style="color:#1cc09f">状态跟踪</span>
+							<!-- <span>{{sendTime}}</span> -->
+							<span>15553431289502</span>
+							<!-- <span style="color:#1cc09f">状态跟踪</span> -->
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -127,24 +131,29 @@
 				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="订单编号：">
-							<span>{{orderDetails.orderNo}}</span>
+							<!-- <span>{{orderDetails.orderNo}}</span> -->
+							<span>1888238410129</span>
 						</el-form-item>
 						<el-form-item label="下单用户：">
-							<span>{{orderDetails.phone}}</span>
+							<!-- <span>{{orderDetails.phone}}</span> -->
+							<span>13608253396</span>
 						</el-form-item>
 						<el-form-item label="商品总金额：">
-							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span>
-							<span>（含配送费 {{orderDetails.postFee/100}}元）</span>
+							<!-- <span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span> -->
+							<span style="font-weight: 600;">¥ 158</span>
+							<!-- <span>（含配送费 {{orderDetails.postFee/100}}元）</span> -->
+							<span>（含配送费 12元）</span>
 						</el-form-item>
 						<el-form-item label="- 优惠：">
-							<span>¥ 0.00</span>(
+							<span>¥ 28.00</span>(
 							<span>
-								<span>红包￥2.00</span>&nbsp;
-								<span>优惠券￥2.00</span>)
+								<span>红包￥10.00</span>&nbsp;
+								<span>优惠券￥18.00</span>)
 							</span>
 						</el-form-item>
 						<el-form-item label="实付：">
-							<span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span>
+							<!-- <span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span> -->
+							<span style="font-weight: 600;">¥ 130</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -156,18 +165,23 @@
 							<span style="color:#3399FF" v-if="orderDetails.platformState==1">待收货</span>
 							<span style="color:#333333" v-if="orderDetails.platformState==3">已完成</span>
 							<span style="color:#999999" v-if="orderDetails.platformState==9">已关闭</span>
+							<span style="color:#3399FF">待收货</span>
 						</el-form-item>
 						<el-form-item label="支付方式：">
-							<span>{{orderDetails.payType}}</span>
+							<!-- <span>{{orderDetails.payType}}</span> -->
+							<span>支付宝</span>
 						</el-form-item>
 						<el-form-item label="下单时间：">
-							<span>{{orderDetails.gmtCreate==null||""?'--':orderDetails.gmtCreate}}</span>
+							<!-- <span>{{orderDetails.gmtCreate==null||""?'--':orderDetails.gmtCreate}}</span> -->
+							<span>2019-5-20 16:30:45</span>
 						</el-form-item>
 						<el-form-item label="付款时间：">
-							<span>{{orderDetails.payTime==null||""?"--":orderDetails.payTime}}</span>
+							<!-- <span>{{orderDetails.payTime==null||""?"--":orderDetails.payTime}}</span> -->
+							<span>2019-5-20 16:34:25</span>
 						</el-form-item>
 						<el-form-item label="发货时间：">
-							<span>{{orderDetails.sendGoodTime==null||""?"--":orderDetails.sendGoodTime}}</span>
+							<!-- <span>{{orderDetails.sendGoodTime==null||""?"--":orderDetails.sendGoodTime}}</span> -->
+							<span>2019-5-20 17:23:20</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -225,7 +239,31 @@ export default {
 			payOI: "",
 			closeOI: "",
 			orderDetails: {
-				address: {}
+				orderMoney: 15800,
+				postFee: 1200,
+				address: {},
+				items: [
+					{
+						itemName: "素炒花菜",
+						itemPrice: "800",
+						number: 1
+					},
+					{
+						itemName: "思乡小炒肉",
+						itemPrice: "1800",
+						number: 2
+					},
+					{
+						itemName: "三药排骨汤",
+						itemPrice: "3200",
+						number: 1
+					},
+					{
+						itemName: "人参乌鸡汤",
+						itemPrice: "7000",
+						number: 1
+					}
+				]
 			},
 			state: 1,
 			dialogSend: false,
@@ -260,14 +298,7 @@ export default {
 					}
 				}
 			],
-			tableData: [
-				{
-					name: "素炒花菜",
-					price: "¥ 8.80元 ",
-					number: "1",
-					subtotal: "¥8.8元 "
-				}
-			],
+			tableData: [],
 			column: [
 				{
 					label: "操作时间",
@@ -297,11 +328,11 @@ export default {
 			],
 			tableData1: [
 				{
-					time: "2018-01-01 12:38:38",
+					time: "2019-05-20 17:00:20",
 					person: "roulen",
 					things: "设置订单状态",
 					content: "已发货",
-					cause: "付款超时，系统自动关闭"
+					cause: "支付问题，系统已到账"
 				}
 			]
 		};
@@ -437,7 +468,7 @@ export default {
 		}
 	},
 	created() {
-		this.getDetails(this.$route.params.id);
+		// this.getDetails(this.$route.params.id);
 	},
 	components: {
 		tableList

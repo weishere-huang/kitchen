@@ -141,6 +141,11 @@ export default {
 						sessionStorage.removeItem("token");
 						sessionStorage.removeItem("user");
 						sessionStorage.removeItem("permissionUrl");
+						sessionStorage.removeItem("imgPath");
+						sessionStorage.removeItem("area");
+						sessionStorage.removeItem("activeIndex");
+						sessionStorage.removeItem("itemMenu");
+						sessionStorage.removeItem("orderIds");
 						this.$message.success("密码修改成功，即将跳转至登录页面！");
 						setTimeout(() => {
 							window.location.href = "/login.html";

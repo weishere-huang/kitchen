@@ -13,8 +13,8 @@ module.exports = {
     proxyTable: {
       '/api': {
         //target: 'http://www.hyazi.com:9881',
-        //target: 'http://localhost:8888',
-        target:'http://192.168.1.104:8861',
+        // target: 'http://118.25.217.48',
+        target: 'http://192.168.1.104:8861',
         pathRewrite: {
           "^/api": ""
         },

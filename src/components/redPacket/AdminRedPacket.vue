@@ -6,16 +6,21 @@
 					<h4>红包</h4>
 					<div class="top_search">
 						<el-col :span="6" style="padding:0 5px;">
-							<el-select style="width:100%;" v-model="merchant" size="small">
-								<el-option v-for="(item, index) in 3" :key="index" :value="item" :label="item"></el-option>
+							<el-select style="width:100%;" v-model="merchant" size="small" clearable>
+								<el-option
+									v-for="(item, index) in shopMsg"
+									:key="index"
+									:value="item.value"
+									:label="item.label"
+								></el-option>
 							</el-select>
 						</el-col>
 						<el-col :span="12" style="padding:0 5px;">
 							<el-input size="small" clearable placeholder="红包名称" v-model="keyword"></el-input>
 						</el-col>
 						<el-col :span="6" style="padding:0 5px;">
-							<el-button size="small" plain @click>搜索</el-button>
-							<el-button size="small" plain @click>重置</el-button>
+							<el-button size="small" plain @click="search()">搜索</el-button>
+							<el-button size="small" plain @click="reload()">重置</el-button>
 						</el-col>
 					</div>
 				</div>
@@ -129,10 +134,15 @@ export default {
 			tableData: [],
 			pageIndex: 1,
 			pageSize: 10,
-			total: null
+			total: null,
+			shopMsg: []
 		};
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1;
+			this.getRedPacketList();
+		},
 		handleSizeChange(val) {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
@@ -150,7 +160,9 @@ export default {
 				{
 					params: {
 						page: this.pageIndex,
-						size: this.pageSize
+						size: this.pageSize,
+						enterpriseId: this.merchant,
+						name: this.keyword
 					},
 					option: {
 						enableMsg: false
@@ -161,7 +173,7 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
+					// console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;
@@ -175,10 +187,39 @@ export default {
 				},
 				({ type, info }) => {}
 			);
+		},
+		getClassify() {
+			this.Axios(
+				{
+					params: {
+						page: -1
+					},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-enterprise/enterprise/allEnterprise"
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						result.data.data.map(item => {
+							this.shopMsg.push({
+								label: item.name,
+								value: item.id
+							});
+						});
+						console.log(this.shopMsg);
+					}
+				},
+				({ type, info }) => {}
+			);
 		}
 	},
 	created() {
 		this.getRedPacketList();
+		this.getClassify();
 	},
 	watch: {},
 	components: {}

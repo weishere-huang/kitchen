@@ -61,13 +61,13 @@
 					></table-list>
 					<div style="margin-top:20px;float:left;padding-left:10px;padding-bottom:10px;">
 						<el-button size="small" type="primary" @click="toPrintOrder">打印订单</el-button>
-						<permission-button
+						<el-button
 							permCode="supplierOrder_list_lookup.supplierOrder_list_out"
 							banType="disable"
 							size="small"
 							type="primary"
 							@click="shipments"
-						>发货</permission-button>
+						>发货</el-button>
 					</div>
 					<div class="block" style="margin-top:20px;float:right;padding-bottom:10px;">
 						<el-pagination
@@ -144,11 +144,56 @@ export default {
 			],
 			tableData: [
 				{
-					orderNo: "332939491",
-					phone: "1329993919",
-					orderMoney: "10000",
-					gmtCreate: "2019-5-19 19:20:40",
+					orderNo: "1888238410129",
+					phone: "13608253396",
+					orderMoney: "15800",
+					gmtCreate: "2019-5-20 16:30:45",
 					platformState: "1",
+					supplierName: "天天超市",
+					id: 123
+				},
+				{
+					orderNo: "1888238410246",
+					phone: "16671451182",
+					orderMoney: "4800",
+					gmtCreate: "2019-5-23 13:10:25",
+					platformState: "2",
+					supplierName: "天华商城",
+					id: 134
+				},
+				{
+					orderNo: "1888238416709",
+					phone: "18523041132",
+					orderMoney: "7300",
+					gmtCreate: "2019-5-11 10:32:11",
+					platformState: "3",
+					supplierName: "鸿鑫连锁",
+					id: 188
+				},
+				{
+					orderNo: "1888238413321",
+					phone: "13188234490",
+					orderMoney: "9800",
+					gmtCreate: "2019-5-24 12:37:22",
+					platformState: "0",
+					supplierName: "鸿鑫连锁",
+					id: 190
+				},
+				{
+					orderNo: "1888238410091",
+					phone: "13299285502",
+					orderMoney: "29100",
+					gmtCreate: "2019-5-27 11:50:52",
+					platformState: "9",
+					supplierName: "天华商城",
+					id: 342
+				},
+				{
+					orderNo: "1888238410129",
+					phone: "13608253396",
+					orderMoney: "65300",
+					gmtCreate: "2019-5-20 16:30:45",
+					platformState: "3",
 					supplierName: "天天超市",
 					id: 123
 				}

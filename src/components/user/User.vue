@@ -38,10 +38,11 @@
 					</el-table-column>
 					<el-table-column label="订单" min-width="80">
 						<template slot-scope="scope">
-							<span
+							<span>--</span>
+							<!-- <span
 								@click="$router.push({path:'/AdminOrder'})"
 								style="cursor: pointer;"
-							>{{ scope.row.order }}</span>
+							>{{ scope.row.order }}</span> -->
 						</template>
 					</el-table-column>
 					<el-table-column label="积分" min-width="80">
@@ -61,14 +62,14 @@
 					<el-table-column label="状态" width="100" show-overflow-tooltip>
 						<template slot-scope="scope">
 							<el-tooltip :content="scope.row.state==false?'禁用':'正常'" placement="top" effect="light">
-								<permission-switch
+								<el-switch
 									permCode="user_manager_list_lookup.user_manager_list_resetpsd"
 									banType="disable"
 									v-model="scope.row.state"
 									active-color="#13ce66"
 									inactive-color="#ff4949"
 									@change="changeState(scope.row,scope.$index)"
-								></permission-switch>
+								></el-switch>
 							</el-tooltip>
 						</template>
 					</el-table-column>

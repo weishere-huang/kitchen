@@ -2,14 +2,7 @@
 	<div class="product_things">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<permission-button
-					permCode="manu_list_lookup.menu_list_add"
-					banType="disable"
-					size="small"
-					type="primary"
-					class="el-icon-circle-plus-outline"
-					@click="$router.push({path:'/ProductOfThings/ProductOfThingsAdd'})"
-				>创建产品</permission-button>
+				<el-button size="small" type="primary" class="el-icon-circle-plus-outline" @click="toAdd()">创建产品</el-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -20,7 +13,7 @@
 						</el-col>
 						<el-col :span="9" style="padding:0 5px;">
 							<el-button size="small" plain @click="searchlist">搜索</el-button>
-							<el-button size="small" plain @click="searchlist">重置</el-button>
+							<el-button size="small" plain @click="reload()">重置</el-button>
 						</el-col>
 					</div>
 				</div>
@@ -160,6 +153,9 @@ export default {
 		};
 	},
 	methods: {
+		toAdd() {
+			this.$router.push({ path: "/ProductOfThings/ProductOfThingsAdd" });
+		},
 		toDetails(index, row) {
 			this.$router.push({
 				path: "/ProductOfThings/ProductOfThingsDetails/" + row.id

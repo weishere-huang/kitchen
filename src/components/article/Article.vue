@@ -2,14 +2,14 @@
 	<div class="article">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<permission-button
+				<el-button
 					permCode="message_faq_lookup.message_faq_add"
 					banType="disable"
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/Article/ArticleAdd'})"
-				>添加信息</permission-button>
+				>添加信息</el-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -170,7 +170,6 @@ export default {
 		},
 		search() {
 			this.pageIndex = 1;
-			this.pageSize = 15;
 			this.getArticleList();
 		},
 		//修改常见问题

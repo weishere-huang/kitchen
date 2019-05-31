@@ -5,10 +5,10 @@
 				<div class="logoWrap">
 					<!-- <img src="./assets/image/logo.png"> -->
 					<h3>长虹智慧厨房</h3>
-					<div style="width:50px;float:left;padding-left:10px">
+					<!-- <div style="width:50px;float:left;padding-left:10px">
 						<i class="iconfont" v-show="isCollapse === true" v-on:click="TroggleHandle">&#xe62b;</i>
 						<i class="iconfont" v-show="isCollapse === false" v-on:click="TroggleHandle">&#xe62c;</i>
-					</div>
+					</div> -->
 				</div>
 				<el-menu
 					:router="true"
@@ -52,7 +52,7 @@
 			</el-aside>
 			<el-container>
 				<el-header style="background-color:#1CC09F;height:72px;">
-					<ul class="top_nav_case">
+					<ul class="top_nav_case" v-if="employeeType==3">
 						<li
 							v-for="(item, index) in menuSource"
 							:key="index"
@@ -64,10 +64,10 @@
 							<span slot="title">{{item.menu}}</span>
 						</li>
 					</ul>
-					<!-- <div class="breadcrumbWrap">
+					<div class="breadcrumbWrap" v-if="employeeType!=3">
 						<breadCrumb></breadCrumb>
 						<a href="login.html"></a>
-					</div>-->
+					</div>
 					<div class="stateList">
 						<ul>
 							<li>
@@ -499,6 +499,9 @@ export default {
 				sessionStorage.removeItem("permissionUrl");
 				sessionStorage.removeItem("imgPath");
 				sessionStorage.removeItem("area");
+				sessionStorage.removeItem("activeIndex");
+				sessionStorage.removeItem("itemMenu");
+				sessionStorage.removeItem("orderIds");
 				window.location.href = "/login.html";
 			});
 			// },({type,info})=>{})
@@ -521,6 +524,9 @@ export default {
 				sessionStorage.removeItem("permissionUrl");
 				sessionStorage.removeItem("imgPath");
 				sessionStorage.removeItem("area");
+				sessionStorage.removeItem("activeIndex");
+				sessionStorage.removeItem("itemMenu");
+				sessionStorage.removeItem("orderIds");
 				window.location.href = "/login.html";
 			});
 			// },({type,info})=>{})

@@ -1,15 +1,15 @@
 <template>
 	<div class="problems_list">
 		<div class="top_list">
-			<permission-button
+			<el-button
 				permCode="message_faq_lookup.message_faq_add"
 				banType="disable"
 				size="small"
 				type="primary"
 				class="el-icon-circle-plus-outline"
 				@click="toadd"
-			>添加信息</permission-button>
-			<el-button size="small" type="primary" @click="reload()">立即刷新</el-button>
+			>添加信息</el-button>
+			<!-- <el-button size="small" type="primary" @click="reload()">立即刷新</el-button> -->
 			<el-dialog :close-on-click-modal="false" title="添加信息" :visible.sync="dialogAdd" width="800px">
 				<add-problem v-on:beforeadd="beforeadd"></add-problem>
 				<!-- <span slot="footer" class="dialog-footer">

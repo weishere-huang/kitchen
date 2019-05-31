@@ -30,13 +30,13 @@
 								size="small"
 								style="width:100%;"
 								clearable
-								placeholder="设备名称/型号/接入用户"
+								placeholder="设备名称/型号/接入用户/接入IP"
 								v-model="keyWord"
 							></el-input>
 						</el-col>
 						<el-col :span="5" style="padding:0 5px;">
 							<el-button size="small" plain @click="searchlist">搜索</el-button>
-							<el-button size="small" plain @click="searchlist">重置</el-button>
+							<el-button size="small" plain @click="reload()">重置</el-button>
 						</el-col>
 					</div>
 				</div>
@@ -64,7 +64,7 @@
 								<span>{{ scope.row.deviceModel }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="用户昵称" min-width="120">
+						<!-- <el-table-column label="用户昵称" min-width="120">
 							<template slot-scope="scope">
 								<span>{{ scope.row.userName }}</span>
 							</template>
@@ -73,10 +73,15 @@
 							<template slot-scope="scope">
 								<span>{{ scope.row.phone }}</span>
 							</template>
-						</el-table-column>
+						</el-table-column>-->
 						<el-table-column label="状态" min-width="100">
 							<template slot-scope="scope">
 								<span>{{ scope.row.state==0?"开机":scope.row.state==1?"关机":"故障" }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="最近上线时间" min-width="120">
+							<template slot-scope="scope">
+								<span>{{ scope.row.newLoginTime }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">

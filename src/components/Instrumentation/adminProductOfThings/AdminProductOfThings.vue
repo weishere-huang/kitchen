@@ -10,7 +10,7 @@
 						</el-col>
 						<el-col :span="9" style="padding:0 5px;">
 							<el-button size="small" plain @click="searchlist">搜索</el-button>
-							<el-button size="small" plain @click="searchlist">重置</el-button>
+							<el-button size="small" plain @click="reload()">重置</el-button>
 						</el-col>
 					</div>
 				</div>

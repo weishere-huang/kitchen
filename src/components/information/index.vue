@@ -2,14 +2,14 @@
 	<div class="information_list">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<permission-button
+				<el-button
 					permCode="messagepush_lookup.messagepush_list_add"
 					banType="disable"
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/Information/NewInformation'})"
-				>&nbsp;新建消息</permission-button>
+				>&nbsp;新建消息</el-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">

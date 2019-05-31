@@ -40,13 +40,13 @@
 				</el-table-column>
 				<el-table-column label="操作" width="100">
 					<template slot-scope="scope">
-						<permission-button
+						<el-button
 							permCode="user_faq_list_lookup.user_faq_list_reply"
 							banType="disable"
 							type="text"
 							size="mini"
 							@click.stop.prevent="reply(scope.$index, scope.row)"
-						>回复</permission-button>
+						>回复</el-button>
 						<el-popover placement="top" width="180" v-model="scope.row.visible">
 							<p style="line-height:32px;text-align:center;">
 								<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -55,12 +55,12 @@
 								<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
 								<el-button type="primary" size="mini" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
 							</div>
-							<permission-button
+							<el-button
 								permCode="user_faq_list_lookup.user_faq_list_delete"
 								banType="disable"
 								slot="reference"
 								type="text"
-							>删除</permission-button>
+							>删除</el-button>
 						</el-popover>
 					</template>
 				</el-table-column>
@@ -174,7 +174,9 @@ export default {
 					params: data,
 					url: "/api-platform/advise/updateState",
 					type: "post",
-					option: {}
+					option: {
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {

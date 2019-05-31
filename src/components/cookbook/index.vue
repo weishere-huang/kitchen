@@ -2,14 +2,14 @@
 	<div class="cookbook_list">
 		<div :class="[{hide:isHideList}]">
 			<div class="top_list">
-				<permission-button
+				<el-button
 					permCode="manu_list_lookup.menu_list_add"
 					banType="disable"
 					size="small"
 					type="primary"
 					class="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/Cookbook/AddCookbook'})"
-				>添加菜谱</permission-button>
+				>添加菜谱</el-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -49,7 +49,7 @@
 						<el-table-column label="*上/下架" min-width="80">
 							<template slot-scope="scope">
 								<span>
-									<permission-button
+									<el-button
 										permCode="manu_list_lookup.menu_list_add"
 										banType="disable"
 										type="text"
@@ -57,8 +57,8 @@
 										@click.stop.prevent="changeUp(scope.$index, scope.row)"
 									>
 										<i class="iconfont" style="color:green;">&#xe659;</i>
-									</permission-button>
-									<permission-button
+									</el-button>
+									<el-button
 										permCode="manu_list_lookup.menu_list_add"
 										banType="disable"
 										type="text"
@@ -66,19 +66,19 @@
 										@click.stop.prevent="changeUp(scope.$index, scope.row)"
 									>
 										<i class="iconfont" style="color:red;">&#xe658;</i>
-									</permission-button>
+									</el-button>
 								</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="100">
 							<template slot-scope="scope">
-								<permission-button
+								<el-button
 									permCode="manu_list_lookup.menu_list_update"
 									banType="disable"
 									type="text"
 									size="mini"
 									@click.stop.prevent="handleEdit(scope.$index, scope.row)"
-								>修改</permission-button>
+								>修改</el-button>
 							</template>
 						</el-table-column>
 					</el-table>

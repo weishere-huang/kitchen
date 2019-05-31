@@ -1,14 +1,14 @@
 <template>
 	<div class="server_list">
 		<div class="top_list">
-			<permission-button
+			<el-button
 				permCode="message_service_lookup.message_service_add"
 				banType="disable"
 				size="small"
 				type="primary"
 				class="el-icon-circle-plus-outline"
 				@click="toadd"
-			>添加网点</permission-button>
+			>添加网点</el-button>
 			<el-dialog :close-on-click-modal="false" title="添加网点" :visible.sync="dialogAdd" width="500px">
 				<add-servive v-on:beforeadd="beforeadd"></add-servive>
 				<!-- <span slot="footer" class="dialog-footer">

@@ -7,10 +7,22 @@
 			<el-col :span="24">
 				<el-form size="small" label-width="200px" style="margin-top:20px;" :inline-message="true">
 					<el-form-item label="商家电话：" prop>
-						<el-input type="text" maxlength="20" style="width:300px;" placeholder></el-input>
+						<el-input
+							type="text"
+							v-model="systemMsg.phone"
+							maxlength="20"
+							style="width:300px;"
+							placeholder
+						></el-input>
 					</el-form-item>
 					<el-form-item label="店铺名称：" prop>
-						<el-input type="text" maxlength="20" style="width:300px;" placeholder></el-input>
+						<el-input
+							type="text"
+							v-model="systemMsg.enterpriseName"
+							maxlength="20"
+							style="width:300px;"
+							placeholder
+						></el-input>
 					</el-form-item>
 					<el-form-item label="店铺LOGO：" prop>
 						<el-upload
@@ -34,8 +46,14 @@
 					</el-form-item>
 					<el-form-item label="运费设置：" prop>
 						每个订单满
-						<el-input type="text" maxlength="20" style="width:80px;" placeholder></el-input>元包邮，未满则按
-						<el-input type="text" maxlength="20" style="width:80px;" placeholder></el-input>元收取。
+						<el-input
+							type="text"
+							v-model="systemMsg.shipping"
+							maxlength="20"
+							style="width:80px;"
+							placeholder
+						></el-input>元包邮，未满则按
+						<el-input type="text" v-model="systemMsg.fare" maxlength="20" style="width:80px;" placeholder></el-input>元收取。
 					</el-form-item>
 					<el-form-item label="公告：" prop>
 						<el-input
@@ -45,10 +63,11 @@
 							resize="none"
 							style="width:500px;"
 							placeholder
+							v-model="systemMsg.announcement"
 						></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">保 存</el-button>
+						<el-button type="primary" @click="save()">保 存</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -61,16 +80,63 @@ export default {
 		return {
 			fileList: [],
 			dialogVisible: false,
-			dialogImageUrl: ""
+			dialogImageUrl: "",
+			systemMsg: {
+				enterpriseName: "",
+				phone: "",
+				shipping: "",
+				logo: "",
+				fare: "",
+				announcement: ""
+			},
+			systemMsgRules: {
+				phone: [
+					{ required: true, message: "请设置客服热线", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/^0\d{2,3}-\d{7,8}$/.test(value) == false) {
+								callback(new Error("电话格式不正确"));
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur"]
+					}
+				]
+			}
 		};
 	},
 	methods: {
+		save() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				enterpriseName: this.systemMsg.enterpriseName,
+				phone: this.systemMsg.phone,
+				shipping: this.systemMsg.shipping,
+				logo: this.systemMsg.logo,
+				fare: this.systemMsg.fare,
+				announcement: this.systemMsg.announcement
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-enterprise/enterpriseSet/update",
+					type: "post",
+					option: {
+						successMsg: "修改成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+			});
+		},
 		imgApi() {
 			let url = this.global.apiImg + "/api-upload/upload";
 			return url;
 		},
 		handleRemove1(file, fileList) {
-			this.cookbook.recipeImg = null;
+			this.systemMsg.logo = null;
 		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
@@ -106,7 +172,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.cookbook.recipeImg = res.data;
+				this.systemMsg.logo = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -117,7 +183,40 @@ export default {
 					type: "error"
 				});
 			}
+		},
+		getSystemMsg() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-enterprise/enterpriseSet/info"
+				},
+				this
+			).then(result => {
+				// console.log(result.data);
+				if (result.data.code === 200) {
+					this.systemMsg = result.data.data;
+					console.log(this.systemMsg);
+					if (this.systemMsg.logo != null && this.systemMsg.logo != "") {
+						this.fileList = [
+							{
+								name: this.systemMsg.logo.substring(
+									this.systemMsg.logo.lastIndexOf("/") + 1
+								),
+								url:
+									this.global.imgPath + this.systemMsg.logo.replace("img:", "")
+							}
+						];
+					}
+				}
+			});
 		}
+	},
+	created() {
+		this.getSystemMsg();
 	}
 };
 </script>

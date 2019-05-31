@@ -1,14 +1,14 @@
 <template>
 	<div class="cookbook_classify">
 		<!-- <div class="top_list">
-			<permission-button
+			<el-button
 				permCode="menu_cate_lookup.menu_cate_add"
 				banType="disable"
 				size="small"
 				type="primary"
 				class="el-icon-circle-plus-outline"
 				@click="dialogAdd=true"
-		>添加分类</permission-button>-->
+		>添加分类</el-button>-->
 		<!-- <el-dialog title="添加分类" :visible.sync="dialogAdd" width="500px" :close-on-click-modal="false">
 				<el-form
 					label-width="100px"
@@ -49,13 +49,13 @@
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span>{{ node.label }}</span>
 						<!-- <span style="display:inline-block;width:190px;" @click.stop>
-							<permission-button
+							<el-button
 								permCode="menu_cate_lookup.menu_cate_update"
 								banType="disable"
 								type="text"
 								size="mini"
 								@click="() => append(data)"
-							>修改</permission-button>
+							>修改</el-button>
 							<el-popover placement="top" width="180" v-model="data.visible">
 								<p style="line-height:32px;text-align:center;">
 									<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
@@ -64,12 +64,12 @@
 									<el-button size="small" plain @click="data.visible = false">取消</el-button>
 									<el-button type="primary" size="small" @click="() => remove(node, data)">确定</el-button>
 								</div>
-								<permission-button
+								<el-button
 									permCode="menu_cate_lookup.menu_cate_delete"
 									banType="disable"
 									slot="reference"
 									type="text"
-								>删除</permission-button>
+								>删除</el-button>
 							</el-popover>
 						</span>-->
 					</span>

@@ -595,7 +595,7 @@ export default {
 	},
 	created() {
 		// this.getMsg();
-		this.getSaleMoney(0);
+		// this.getSaleMoney(0);
 		this.getLeaveMessage();
 	},
 	mounted() {}

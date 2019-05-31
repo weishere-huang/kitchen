@@ -216,13 +216,13 @@
 						</div>
 					</el-form-item>
 					<el-form-item>
-						<permission-button
+						<el-button
 							permCode="menu_update_lookup.menu_update_save"
 							banType="disable"
 							size="small"
 							type="primary"
 							@click="submitForm('editCookbook')"
-						>保存修改</permission-button>
+						>保存修改</el-button>
 					</el-form-item>
 				</el-form>
 			</div>

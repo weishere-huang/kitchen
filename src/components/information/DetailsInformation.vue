@@ -134,7 +134,9 @@ export default {
 					params: {
 						noticeId: id
 					},
-					option: {},
+					option: {
+						enableMsg: false
+					},
 					type: "get",
 					url: "/api-message/notice/findOne"
 				},

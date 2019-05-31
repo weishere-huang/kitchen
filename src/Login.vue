@@ -166,8 +166,6 @@ export default {
 						this
 					).then(
 						result => {
-							console.log(result);
-
 							if (result.data.code === 200) {
 								sessionStorage.permissionUrl = JSON.stringify(
 									result.data.data.permissionUrl
@@ -180,11 +178,19 @@ export default {
 									this.encryptByDES(this.userMsg.password, key)
 								);
 								// window.location.href = "/Cookbook";
-								if (result.data.data.employeeType == 3) {
+								if (result.data.data.state == 0) {
 									window.location.href = "/AdminProductOfThings";
-								}
-								if (result.data.data.employeeType == 1) {
-									window.location.href = "/Home";
+								} else if (result.data.data.state == 1) {
+									window.location.href = "/EnterpriseAuditedIndex";
+								} else if (result.data.data.state == 2) {
+									if (result.data.data.employeeType == 1) {
+										window.location.href = "/ProductOfThings";
+									}
+									if (result.data.data.employeeType == 2) {
+										window.location.href = "/Order";
+									}
+								} else if (result.data.data.state == 3) {
+									window.location.href = "/EnterpriseAuditedIndex";
 								}
 							}
 						},

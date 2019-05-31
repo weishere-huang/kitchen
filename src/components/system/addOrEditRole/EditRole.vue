@@ -33,7 +33,7 @@
 					highlight-current
 					:props="defaultProps"
 					:default-checked-keys="editpermission"
-          :default-expanded-keys="[0,1]"
+					:default-expanded-keys="[0,1]"
 				>
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span :title="data.name" class="listcontent">{{ data.name +" ("+data.dataUrl+")"}}</span>
@@ -107,21 +107,19 @@ export default {
 					params: {
 						roleId: id
 					},
-					option: {enableMsg: false},
+					option: { enableMsg: false },
 					type: "get",
-					url: "/api-platform/role/get"
+					url: "/api-platform/role/listPermissionByRole"
 				},
 				this
 			).then(
 				result => {
-					this.name = result.data.data.name;
-					this.description = result.data.data.description;
-					result.data.data.permissionRoles.map(item => {
+					this.name = result.data.data.role.name;
+					this.description = result.data.data.role.description;
+					result.data.data.permissionDOS.map(item => {
 						this.editpermission.push(item.permissionId);
 					});
 					this.editpermission = JSON.parse(JSON.stringify(this.editpermission));
-					console.log(this.editpermission);
-					console.log(result.data);
 				},
 				({ type, info }) => {}
 			);
@@ -130,7 +128,7 @@ export default {
 			this.Axios(
 				{
 					params: {},
-					option: {enableMsg: false},
+					option: { enableMsg: false },
 					type: "get",
 					url: "/api-platform/permission/listAllPermission"
 				},
