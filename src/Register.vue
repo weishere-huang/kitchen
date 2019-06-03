@@ -47,16 +47,26 @@
 							:rules="registerMsgRules"
 						>
 							<el-form-item label="企业名称" prop="name">
-								<el-input v-model="registerMsg.name" type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.name" placeholder="必须与营业执照名称保持一致" type="text" maxlength="30"></el-input>
 							</el-form-item>
 							<el-form-item label="统一社会信用代码" prop="creditCode">
-								<el-input v-model="registerMsg.creditCode" type="text" maxlength="18"></el-input>
+								<el-input
+									v-model="registerMsg.creditCode"
+									placeholder="填写18位统一社会信用代码"
+									type="text"
+									maxlength="18"
+								></el-input>
 							</el-form-item>
 							<el-form-item label="法人" prop="legalPerson">
-								<el-input v-model="registerMsg.legalPerson" type="text" maxlength="20"></el-input>
+								<el-input
+									v-model="registerMsg.legalPerson"
+									placeholder="填写营业执照法定代表人姓名"
+									type="text"
+									maxlength="20"
+								></el-input>
 							</el-form-item>
 							<el-form-item label="注册地址" prop="address">
-								<el-input v-model="registerMsg.address" type="text" maxlength="30"></el-input>
+								<el-input v-model="registerMsg.address" placeholder="填写营业执照住所地址" type="text" maxlength="30"></el-input>
 							</el-form-item>
 							<el-form-item label="营业范围" prop="businessScope">
 								<el-input
@@ -64,22 +74,29 @@
 									type="textarea"
 									rows="4"
 									resize="none"
-									maxlength="50"
+									maxlength="300"
+									placeholder="填写营业执经营范围"
 								></el-input>
 							</el-form-item>
 							<el-form-item label="申请人姓名" prop="applicant">
-								<el-input v-model="registerMsg.applicant" type="text" maxlength="20"></el-input>
+								<el-input v-model="registerMsg.applicant" placeholder="填写申请人姓名" type="text" maxlength="20"></el-input>
 							</el-form-item>
 							<el-form-item label="申请人手机号" prop="phone">
 								<el-input
 									v-model.number="registerMsg.phone"
+									placeholder="填写申请人11位手机号（用于登录和接收通知类短信）"
 									type="number"
 									oninput="if(value.length>11)value=value.slice(0,11)"
 									maxlength="11"
 								></el-input>
 							</el-form-item>
 							<el-form-item label="初始密码" prop="password">
-								<el-input v-model="registerMsg.password" type="password" maxlength="30"></el-input>
+								<el-input
+									v-model="registerMsg.password"
+									placeholder="6~20位字母、数字组成，区分大小写"
+									type="password"
+									maxlength="20"
+								></el-input>
 							</el-form-item>
 							<el-form-item label="营业执照" prop="businessLicenseImg">
 								<el-upload
@@ -156,7 +173,7 @@
 								>
 									<i class="el-icon-plus"></i>
 								</el-upload>
-								<div class="el-upload__tip tip_style">上传法人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
+								<div class="el-upload__tip tip_style">上传申请人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
 							</el-form-item>
 							<el-form-item label prop>
 								<el-button style="width:120px;" @click="toBack" plain>返回</el-button>
@@ -258,7 +275,23 @@ export default {
 					{ required: true, message: "请输入申请人姓名", trigger: "blur" }
 				],
 				password: [
-					{ required: true, message: "请输入初始密码", trigger: "blur" }
+					{ required: true, message: "请输入初始密码", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (
+								/^((?=.*[a-z])|(?=.*\d)|(?=.*[#@!~%^&*]))[a-z\d#@!$~%^&*]{6,20}$/i.test(
+									value
+								) === false
+							) {
+								callback(new Error("请输入6到20位的密码"));
+							} else if (/(\w)*(\w)\2{5}(\w)*/g.test(value) === true) {
+								callback(new Error("你的密码过于简单，请重新输入"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
 				],
 				businessLicenseImg: [
 					{ required: true, message: "请上传营业执照", trigger: "blur" }

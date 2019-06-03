@@ -31,7 +31,14 @@
 							:options="options"
 							v-model="addProduct.deviceCateId"
 							style="width:400px;"
+							@change="getDefinition"
+							ref="getLabe"
 						></el-cascader>
+						<span
+							style="color: #1cc09f;cursor: pointer;"
+							@click="drawer=true"
+							v-if="tableData.length>0"
+						>功能定义</span>
 					</el-form-item>
 					<el-form-item label="连网类型：" prop="networkType">
 						<el-select
@@ -57,7 +64,7 @@
 							resize="none"
 							rows="4"
 							maxlength="200"
-							placeholder
+							placeholder="请填写产品描述（最多200个字）"
 							style="width:400px;"
 						></el-input>
 					</el-form-item>
@@ -128,6 +135,29 @@
 				</el-form>
 			</div>
 		</div>
+		<el-dialog
+			title="查看功能定义"
+			:visible.sync="drawer"
+			width="600px"
+			:close-on-click-modal="true"
+			top="0"
+		>
+			<dir style="padding-top:20px;font-size:16px;">{{classifyLable[classifyLable.length-1]}}</dir>
+			<div style="padding-top:12px;color:#999999;padding-bottom:12px;">
+				该产品类型包含了{{tableData.length}}项预置功能，预置功能分为必填和选填。
+				<br/>
+				注：带*表示必填。
+			</div>
+			<el-table :data="tableData" style="width: 100%" border size="mini">
+				<el-table-column prop="function" label="功能"></el-table-column>
+				<el-table-column prop="identify" label="变量标识"></el-table-column>
+				<el-table-column prop="dataType" label="数据类型"></el-table-column>
+				<el-table-column prop="introduce" label="说明"></el-table-column>
+			</el-table>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="drawer = false" size="small" plain>关 闭</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -165,6 +195,8 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			tableData: [],
+			drawer: false,
 			options,
 			selectedOptions2: [],
 			fileList: [],
@@ -202,10 +234,34 @@ export default {
 				linkImg: [
 					{ required: true, message: "请上传产品连接示意图", trigger: "change" }
 				]
-			}
+			},
+			classifyLable: ""
 		};
 	},
 	methods: {
+		getDefinition() {
+			this.classifyLable = this.$refs["getLabe"].currentLabels;
+			this.Axios(
+				{
+					params: {
+						cateId: this.addProduct.deviceCateId[
+							this.addProduct.deviceCateId.length - 1
+						]
+					},
+					url: "/api-enterprise/dataModel/findByCateId",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.tableData = result.data.data;
+				}
+			});
+		},
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
 				console.log(file);
@@ -385,6 +441,18 @@ export default {
 		.el-upload-list {
 			width: 400px;
 		}
+	}
+	.el-dialog {
+		margin-top: 0px;
+		margin-right: 0;
+		height: 100vh;
+		margin-bottom: 0;
+	}
+	.el-dialog__footer {
+		position: absolute;
+		bottom: 0%;
+		width: 100%;
+		text-align: right;
 	}
 }
 </style>

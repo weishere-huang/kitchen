@@ -101,6 +101,7 @@
 							v-model="auditManufacturer.auditOpinion"
 							resize="none"
 							style="width:400px;"
+							maxlength="200"
 						></el-input>
 					</el-form-item>
 					<el-form-item label prop>

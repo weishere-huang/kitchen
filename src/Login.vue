@@ -9,7 +9,13 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input v-model="userMsg.password" type="password" maxlength="20" placeholder="密码">
+					<el-input
+						v-model="userMsg.password"
+						@keyup.enter.native="login('userMsg')"
+						type="password"
+						maxlength="20"
+						placeholder="密码"
+					>
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe652;</i>
 					</el-input>
 				</el-form-item>
@@ -20,6 +26,7 @@
 						placeholder="验证码"
 						maxlength="20"
 						style="width:60%;"
+						@keyup.enter.native="login('userMsg')"
 					>
 						<i slot="prefix" class="iconfont" style="color:#999999">&#xe636;</i>
 					</el-input>
@@ -197,7 +204,7 @@ export default {
 						({ type, info }) => {}
 					);
 				} else {
-					this.$message.error("请输入账号和密码！");
+					this.$message.error("请填写完整登录信息！");
 					return false;
 				}
 			});

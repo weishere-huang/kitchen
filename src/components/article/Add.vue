@@ -8,20 +8,28 @@
 				<h4>文章添加</h4>
 			</div>
 			<div class="table_list">
-				<el-form label-width="200px" size="small" style="margin-top:20px">
+				<el-form
+					label-width="200px"
+					size="small"
+					style="margin-top:20px"
+					:model="articleMsg"
+					ref="articleMsg"
+					:rules="articleMsgRulese"
+					:inline-message="true"
+				>
 					<el-form-item label="标题：" prop="title">
 						<el-input type="text" v-model="articleMsg.title" maxlength="30" style="width:400px;"></el-input>
 					</el-form-item>
-					<el-form-item label="分类：">
+					<el-form-item label="分类：" prop="type">
 						<el-select style="width:400px;" v-model="articleMsg.type" prop="title">
 							<el-option value="0" label="普通文章"></el-option>
 							<el-option value="1" label="公告通知"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="标签：" prop="title">
-						<el-input maxlength="8" v-model="articleMsg.label" style="width:400px;" type="text"></el-input>
+					<el-form-item label="标签：" prop="label">
+						<el-input maxlength="50" v-model="articleMsg.label" style="width:400px;" type="text"></el-input>
 					</el-form-item>
-					<el-form-item label="缩略图：" prop="title">
+					<el-form-item label="缩略图：" prop="img">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -40,7 +48,7 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="内容：" prop="title">
+					<el-form-item label="内容：" prop="content">
 						<editor
 							id="editorArticle"
 							height="300px"
@@ -55,7 +63,7 @@
 						></editor>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="addArticle">保 存</el-button>
+						<el-button type="primary" @click="addArticle('articleMsg')">保 存</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -65,7 +73,7 @@
 <script>
 import editor from "../public/kindeditor";
 export default {
-	inject:["reload"],
+	inject: ["reload"],
 	data() {
 		return {
 			editorText: "",
@@ -77,6 +85,13 @@ export default {
 				label: "",
 				img: "",
 				content: ""
+			},
+			articleMsgRulese: {
+				title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+				type: [{ required: true, message: "请选择分类", trigger: "change" }],
+				label: [{ required: true, message: "请输入标签", trigger: "blur" }],
+				img: [{ required: true, message: "请上传缩略图", trigger: "blur" }],
+				content: [{ required: true, message: "请输入内容", trigger: "blur" }]
 			}
 		};
 	},
@@ -145,30 +160,36 @@ export default {
 				});
 			}
 		},
-		addArticle() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				title: this.articleMsg.title,
-				type: this.articleMsg.type,
-				label: this.articleMsg.label,
-				img: this.articleMsg.img,
-				content: this.articleMsg.content
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-platform/Article/addArticle",
-					type: "post",
-					option: {
-						successMsg: "添加成功"
-					}
-				},
-				this
-			).then(result => {
-				console.log(result.data);
-				if (result.data.code === 200) {
-					this.$router.back(-1);
-					this.reload();
+		addArticle(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						title: this.articleMsg.title,
+						type: this.articleMsg.type,
+						label: this.articleMsg.label,
+						img: this.articleMsg.img,
+						content: this.articleMsg.content
+					});
+					this.Axios(
+						{
+							params: data,
+							url: "/api-platform/Article/addArticle",
+							type: "post",
+							option: {
+								successMsg: "添加成功"
+							}
+						},
+						this
+					).then(result => {
+						console.log(result.data);
+						if (result.data.code === 200) {
+							this.$router.back(-1);
+							this.reload();
+						}
+					});
+				} else {
+					return false;
 				}
 			});
 		}
