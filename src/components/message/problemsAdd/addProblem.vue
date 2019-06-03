@@ -1,10 +1,10 @@
 <template>
 	<div class="add_problem">
-		<el-form label-width="90px">
-			<el-form-item label="标题：">
+		<el-form label-width="90px" :model="addMsg" ref="addMsg" :rules="addMsgRules" size="small">
+			<el-form-item label="标题：" prop="title">
 				<el-input v-model="addMsg.title" size="small" style="width:99%" maxlength="80"></el-input>
 			</el-form-item>
-			<el-form-item label="分类：">
+			<el-form-item label="分类：" prop="faqType">
 				<el-select
 					v-model="sstype"
 					placeholder="请选择"
@@ -16,7 +16,7 @@
 				</el-select>
 			</el-form-item>
 
-			<el-form-item label="内容：">
+			<el-form-item label="内容：" prop="content">
 				<el-input
 					v-model="addMsg.content"
 					type="textarea"
@@ -27,8 +27,8 @@
 				></el-input>
 			</el-form-item>
 			<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
-				<el-button @click="handleCancel" size="small" plain>取 消</el-button>
-				<el-button type="primary" @click="handleAffirm('addAdvertising')" size="small">确 定</el-button>
+				<el-button @click="handleCancel('addMsg')" size="small" plain>取 消</el-button>
+				<el-button type="primary" @click="handleAffirm('addMsg')" size="small">确 定</el-button>
 			</div>
 		</el-form>
 	</div>
@@ -47,6 +47,11 @@ export default {
 				title: "",
 				faqType: "",
 				content: ""
+			},
+			addMsgRules: {
+				title: [{ required: true, message: "请填写标题", trigger: "blur" }],
+				faqType: [{ required: true, message: "请选择类型", trigger: "change" }],
+				content: [{ required: true, message: "请填写内容", trigger: "blur" }]
 			}
 		};
 	},
@@ -61,19 +66,20 @@ export default {
 		editchange() {
 			this.addMsg.faqType = this.sstype;
 		},
-		handleCancel(value) {
+		handleCancel(formName) {
 			let params = { type: "cancel", isHide: false };
+			this.$refs[formName].resetFields();
 			this.$emit("beforeadd", params);
 		},
 		handleAffirm(formName) {
 			let params = { type: "affirm", value: this.addMsg, isHide: false };
-			// this.$refs[formName].validate(valid => {
-			// 	if (valid) {
-			this.$emit("beforeadd", params);
-			// } else {
-			// 	return false;
-			// }
-			// });
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.$emit("beforeadd", params);
+				} else {
+					return false;
+				}
+			});
 		}
 	},
 	created() {
@@ -106,7 +112,7 @@ export default {
 		padding-top: 16px;
 	}
 	.el-form-item {
-		margin-bottom: 12px;
+		// margin-bottom: 12px;
 	}
 }
 </style>

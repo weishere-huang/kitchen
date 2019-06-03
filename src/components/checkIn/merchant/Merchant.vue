@@ -57,13 +57,14 @@
 									size="mini"
 									v-if="scope.row.state==1&&scope.row.auditState==2"
 									@click="changeStateEnable(scope.$index, scope.row)"
-								>启用</el-button>
+									style="color:#ff6600"
+								>已禁用</el-button>
 								<el-button
 									type="text"
 									size="mini"
 									v-if="scope.row.state==2&&scope.row.auditState==2"
 									@click="changeStateDown(scope.$index, scope.row)"
-								>禁用</el-button>
+								>已启用</el-button>
 								<el-button
 									type="text"
 									size="mini"

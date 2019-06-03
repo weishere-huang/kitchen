@@ -97,6 +97,7 @@
 							v-model="auditMerchantMsg.auditOpinion"
 							resize="none"
 							style="width:400px;"
+							maxlength="200"
 						></el-input>
 					</el-form-item>
 					<el-form-item label prop>
@@ -136,7 +137,7 @@ export default {
 				legalPersonIdCardNegative: ""
 			},
 			auditMerchantMsgRules: {
-				radio: [{ required: true, message: "请选审核类型", trigger: "blur" }],
+				radio: [{ required: true, message: "请选择审核类型", trigger: "blur" }],
 				auditOpinion: []
 			}
 		};

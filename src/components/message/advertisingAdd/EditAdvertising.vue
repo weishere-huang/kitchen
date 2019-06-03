@@ -102,7 +102,7 @@
 						></editor>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="updateAdvertising" size="small">确 定</el-button>
+						<el-button type="primary" @click="beforeUpdata('addAdvertising')" size="small">确 定</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -196,6 +196,19 @@ export default {
 		};
 	},
 	methods: {
+		beforeUpdata(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					if (this.addMsg.url == "" && this.addMsg.content == "") {
+						this.$message.error("广告链接地址和广告内容二者必填其一");
+					} else {
+						this.updateAdvertising();
+					}
+				} else {
+					return false;
+				}
+			});
+		},
 		afterUpload(data) {
 			return this.global.imgPath + data.replace("img:", "");
 		},

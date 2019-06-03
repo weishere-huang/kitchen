@@ -306,10 +306,28 @@
 							style="width:143px"
 						></el-time-picker>
 					</el-form-item>-->
-					<el-form-item label="积分：">
+					<el-form-item label="用户积分：" prop="payType">
+						<el-radio-group v-model="systemMsg.scoreopen">
+							<el-radio :label="0">开启</el-radio>
+							<el-radio :label="1">关闭</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="积分比例：">
 						1元=
-						<el-input style="width:60px;"></el-input>&nbsp;积分&nbsp;&nbsp;&nbsp;&nbsp;签到赠送
-						<el-input style="width:60px;"></el-input>&nbsp;积分
+						<el-input style="width:60px;" v-model="systemMsg.score"></el-input>&nbsp;积分&nbsp;&nbsp;&nbsp;&nbsp;签到赠送
+						<el-input style="width:60px;" v-model="systemMsg.register"></el-input>&nbsp;积分
+					</el-form-item>
+					<el-form-item label="评论功能：" prop="payType">
+						<el-radio-group v-model="systemMsg.comment">
+							<el-radio :label="0">开启</el-radio>
+							<el-radio :label="1">关闭</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="评论审核：" prop="payType">
+						<el-radio-group v-model="systemMsg.commentAudit">
+							<el-radio :label="0">需要</el-radio>
+							<el-radio :label="1">不需要</el-radio>
+						</el-radio-group>
 					</el-form-item>
 					<el-form-item>
 						<el-button size="small" type="primary" @click="submitForm('systemMsg')">保存</el-button>
@@ -325,6 +343,11 @@ export default {
 	data() {
 		return {
 			systemMsg: {
+				commentAudit: 1,
+				comment: 1,
+				register: "",
+				scoreopen: 1,
+				score: "",
 				sendMoney: null,
 				shippingFee: null,
 				receiveTimeout: null,
@@ -707,6 +730,8 @@ export default {
 					// result.data.data.allMoney = JSON.parse(result.data.data.allMoney);
 					console.log(result.data);
 					if (result.data.code === 200) {
+						this.systemMsg = result.data.data;
+
 						if (
 							result.data.data.allMoney != null &&
 							result.data.data.allMoney != ""
@@ -730,12 +755,7 @@ export default {
 						this.systemMsg.sendMoney = result.data.data.sendMoney / 100;
 						this.systemMsg.payType = JSON.parse(result.data.data.payType);
 						this.systemMsg.sendTime = result.data.data.sendTime;
-						this.systemMsg.timeFrame1.startTime = JSON.parse(
-							result.data.data.timeFrame1
-						).startTime;
-						this.systemMsg.timeFrame1.endTime = JSON.parse(
-							result.data.data.timeFrame1
-						).endTime;
+						this.systemMsg.timeFrame1 = JSON.parse(result.data.data.timeFrame1);
 						this.systemMsg.timeFrame2 = JSON.parse(result.data.data.timeFrame2);
 						this.systemMsg.timeFrame3 = JSON.parse(result.data.data.timeFrame3);
 						this.systemMsg.timeFrame4 = JSON.parse(result.data.data.timeFrame4);
@@ -765,7 +785,12 @@ export default {
 				timeFrame3: JSON.stringify(this.systemMsg.timeFrame3),
 				timeFrame4: JSON.stringify(this.systemMsg.timeFrame4),
 				allMoney: this.systemMsg.allMoney,
-				retentionTime: this.systemMsg.retentionTime
+				retentionTime: this.systemMsg.retentionTime,
+				score: this.systemMsg.score,
+				register: this.systemMsg.register,
+				comment: this.systemMsg.comment,
+				commentAudit: this.systemMsg.commentAudit,
+				scoreopen: this.systemMsg.scoreopen
 			});
 			this.Axios(
 				{

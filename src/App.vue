@@ -70,9 +70,9 @@
 					</div>
 					<div class="stateList">
 						<ul>
-							<li>
+							<!-- <li>
 								<a style="color:white;" @click="outOne">切换用户</a>
-							</li>
+							</li> -->
 							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
 							<!-- <li>
 								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">

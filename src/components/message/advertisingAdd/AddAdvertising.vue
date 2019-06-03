@@ -282,7 +282,11 @@ export default {
 		handleAffirm(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
-					this.addAdvertising();
+					if (this.addMsg.url == "" && this.addMsg.content == "") {
+						this.$message.error("广告链接地址和广告内容二者必填其一");
+					} else {
+						this.addAdvertising();
+					}
 				} else {
 					return false;
 				}
