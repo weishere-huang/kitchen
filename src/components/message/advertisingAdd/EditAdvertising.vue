@@ -121,8 +121,11 @@ export default {
 			dialogImageUrl: null,
 			dialogVisible: false,
 			advertisingRules: {
-				title: [{ required: true, message: "请填写广告标题", trigger: "blur" }],
-				mainPic: [{ required: true, message: "请添加图片", trigger: "change" }],
+				name: [{ required: true, message: "请填写广告名称", trigger: "blur" }],
+				img: [{ required: true, message: "请添加图片", trigger: "change" }],
+				position: [
+					{ required: true, message: "请选择广告位置", trigger: "change" }
+				],
 				content: [
 					{
 						validator: (rule, value, callback) => {
@@ -146,7 +149,7 @@ export default {
 						trigger: "change"
 					}
 				],
-				state: [
+				isDisplay: [
 					{ required: true, message: "请选择是否显示", trigger: "change" }
 				],
 				endTime: [

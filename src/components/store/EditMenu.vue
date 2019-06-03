@@ -18,7 +18,7 @@
 				<el-form-item label="商品名称：" prop="title">
 					<el-input size="small" type="text" style="width:300px;" v-model="addMenu.title" maxlength="20"></el-input>
 				</el-form-item>
-				<el-form-item label="商品分类：" prop>
+				<el-form-item label="商品分类：" prop="cateId">
 					<el-cascader
 						expand-trigger="hover"
 						:options="classify"
@@ -38,7 +38,7 @@
 						style="width:300px;"
 						placeholder="单位：元"
 						step="0.01"
-						maxlength="20"
+						oninput="if(value.length>10)value=value.slice(0,10)"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="库存数量：" prop="stockNow">
@@ -48,17 +48,18 @@
 						size="small"
 						style="width:300px;"
 						v-model.number="addMenu.stockNow"
+						oninput="if(value.length>10)value=value.slice(0,10)"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="上/下架：" prop="state">
+				<el-form-item label="上/下架：" prop="isShelf">
 					<el-radio v-model="addMenu.isShelf" :label="1">上架</el-radio>
 					<el-radio v-model="addMenu.isShelf" :label="0">下架</el-radio>
 				</el-form-item>
-				<el-form-item label="是否推荐：" prop="recommendType">
+				<el-form-item label="是否推荐：" prop="isRecommend">
 					<el-radio v-model="addMenu.isRecommend" :label="2">是</el-radio>
 					<el-radio v-model="addMenu.isRecommend" :label="3">否</el-radio>
 				</el-form-item>
-				<el-form-item label="商品缩略图：" prop>
+				<el-form-item label="商品缩略图：" prop="img">
 					<el-upload
 						:action="imgApi()"
 						list-type="picture-card"
@@ -85,9 +86,10 @@
 						resize="none"
 						style="width:700px;"
 						v-model="addMenu.description"
+						maxlength="300"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="商品详情：">
+				<el-form-item label="商品详情：" prop="info">
 					<editor
 						id="editorMenu"
 						height="300px"
@@ -143,17 +145,15 @@ export default {
 				info: ""
 			},
 			addMenuRules: {
-				recipeName: [
+				title: [
 					{
 						required: true,
 						message: "请输入商品名称",
-						trigger: "change"
+						trigger: "blur"
 					}
 				],
-				itemCate: [
-					{ required: true, message: "请选择分类", trigger: "change" }
-				],
-				itemPrice: [
+				cateId: [{ required: true, message: "请选择分类", trigger: "change" }],
+				price: [
 					{
 						required: true,
 						message: "请输入商品价格",
@@ -185,6 +185,34 @@ export default {
 							}
 						},
 						trigger: "blur"
+					}
+				],
+				isShelf: [
+					{
+						required: true,
+						message: "请选择上/下架",
+						trigger: "change"
+					}
+				],
+				isRecommend: [
+					{
+						required: true,
+						message: "请选择是否推荐",
+						trigger: "change"
+					}
+				],
+				img: [
+					{
+						required: true,
+						message: "请上传商品图片",
+						trigger: "change"
+					}
+				],
+				info: [
+					{
+						required: true,
+						message: "请填写商品详情",
+						trigger: "change"
 					}
 				]
 			},
@@ -256,7 +284,7 @@ export default {
 			return url;
 		},
 		handleRemove1(file, fileList) {
-			// this.cookbook.recipeImg = null;
+			this.addMenu.img = null;
 		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
@@ -292,7 +320,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				// this.cookbook.recipeImg = res.data;
+				this.addMenu.img = res.data;
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"

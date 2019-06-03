@@ -20,7 +20,6 @@
 									<p>主要用于智能设备接入及管理</p>
 								</div>
 							</el-radio>
-
 							<el-radio :border="true" label="2" style="margin-top:20px;">
 								<div class="radio_case">
 									<p>商家</p>
@@ -30,42 +29,59 @@
 						</el-radio-group>
 						<div style="text-align:center;">
 							<el-button style="width:120px;" plain @click="toLogin">返回</el-button>
-							<el-button type="primary" style="width:120px;" @click="toNext(1)">下一步</el-button>
+							<el-button
+								type="primary"
+								style="width:120px;"
+								@click="toNext(1)"
+								:disabled="registerMsg.type==''||registerMsg.type==null"
+							>下一步</el-button>
 						</div>
 					</div>
 					<div class="register_msg" v-show="secondCase">
-						<el-form size="small" label-width="160px" style="margin-top:40px;padding-bottom:40px;">
-							<el-form-item label="企业名称" prop>
+						<el-form
+							size="small"
+							label-width="160px"
+							style="margin-top:40px;padding-bottom:40px;"
+							:model="registerMsg"
+							ref="registerMsg"
+							:rules="registerMsgRules"
+						>
+							<el-form-item label="企业名称" prop="name">
 								<el-input v-model="registerMsg.name" type="text" maxlength="30"></el-input>
 							</el-form-item>
-							<el-form-item label="统一社会信用代码" prop>
+							<el-form-item label="统一社会信用代码" prop="creditCode">
 								<el-input v-model="registerMsg.creditCode" type="text" maxlength="18"></el-input>
 							</el-form-item>
-							<el-form-item label="法人" prop>
-								<el-input v-model="registerMsg.legalPerson" type="text" maxlength="30"></el-input>
+							<el-form-item label="法人" prop="legalPerson">
+								<el-input v-model="registerMsg.legalPerson" type="text" maxlength="20"></el-input>
 							</el-form-item>
-							<el-form-item label="注册地址" prop>
+							<el-form-item label="注册地址" prop="address">
 								<el-input v-model="registerMsg.address" type="text" maxlength="30"></el-input>
 							</el-form-item>
-							<el-form-item label="营业范围" prop>
+							<el-form-item label="营业范围" prop="businessScope">
 								<el-input
 									v-model="registerMsg.businessScope"
 									type="textarea"
 									rows="4"
 									resize="none"
-									maxlength="30"
+									maxlength="50"
 								></el-input>
 							</el-form-item>
-							<el-form-item label="申请人姓名" prop>
-								<el-input v-model="registerMsg.applicant" type="text" maxlength="30"></el-input>
+							<el-form-item label="申请人姓名" prop="applicant">
+								<el-input v-model="registerMsg.applicant" type="text" maxlength="20"></el-input>
 							</el-form-item>
-							<el-form-item label="申请人手机号" prop>
-								<el-input v-model="registerMsg.phone" type="text" maxlength="30"></el-input>
+							<el-form-item label="申请人手机号" prop="phone">
+								<el-input
+									v-model.number="registerMsg.phone"
+									type="number"
+									oninput="if(value.length>11)value=value.slice(0,11)"
+									maxlength="11"
+								></el-input>
 							</el-form-item>
-							<el-form-item label="初始密码" prop>
+							<el-form-item label="初始密码" prop="password">
 								<el-input v-model="registerMsg.password" type="password" maxlength="30"></el-input>
 							</el-form-item>
-							<el-form-item label="营业执照" prop>
+							<el-form-item label="营业执照" prop="businessLicenseImg">
 								<el-upload
 									:action="imgApi()"
 									list-type="picture-card"
@@ -84,7 +100,7 @@
 									<img width="100%" :src="dialogImageUrl" alt>
 								</el-dialog>
 							</el-form-item>
-							<el-form-item label="法人身份证" prop>
+							<el-form-item label="法人身份证" prop="applicantIDCard">
 								<el-upload
 									:action="imgApi()"
 									list-type="picture-card"
@@ -113,7 +129,7 @@
 								</el-upload>
 								<div class="el-upload__tip tip_style">上传法人身份证正反面彩色照片，小于2MB的jpg或png图片</div>
 							</el-form-item>
-							<el-form-item label="申请人身份证" prop>
+							<el-form-item label="申请人身份证" prop="legalPersonIdCard">
 								<el-upload
 									:action="imgApi()"
 									list-type="picture-card"
@@ -144,7 +160,7 @@
 							</el-form-item>
 							<el-form-item label prop>
 								<el-button style="width:120px;" @click="toBack" plain>返回</el-button>
-								<el-button type="primary" style="width:120px;" @click="toNext(2)">下一步</el-button>
+								<el-button type="primary" style="width:120px;" @click="toNext(2,'registerMsg')">下一步</el-button>
 							</el-form-item>
 						</el-form>
 					</div>
@@ -194,6 +210,85 @@ export default {
 				password: "",
 				applicantIDCardNegative: "",
 				legalPersonIdCardNegative: ""
+			},
+			registerMsgRules: {
+				name: [{ required: true, message: "请输入企业名称", trigger: "blur" }],
+				creditCode: [
+					{
+						required: true,
+						message: "请输入统一社会信用代码",
+						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (
+								/^[1-9A-GY]{1}[1239]{1}[\d]{6}[\dA-Z]{10}$/.test(value) == false
+							) {
+								callback(new Error("您输入的统一社会信用代码有误，请重新输入"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				legalPerson: [
+					{ required: true, message: "请输入法人", trigger: "blur" }
+				],
+				phone: [
+					{ required: true, message: "请输入申请人手机号", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (/^[1][0-9]{10}$/.test(value) == false) {
+								callback(new Error("您输入的手机号有误，请重新输入"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				address: [
+					{ required: true, message: "请输入注册地址", trigger: "blur" }
+				],
+				businessScope: [
+					{ required: true, message: "请输入营业范围", trigger: "blur" }
+				],
+				applicant: [
+					{ required: true, message: "请输入申请人姓名", trigger: "blur" }
+				],
+				password: [
+					{ required: true, message: "请输入初始密码", trigger: "blur" }
+				],
+				businessLicenseImg: [
+					{ required: true, message: "请上传营业执照", trigger: "blur" }
+				],
+				applicantIDCard: [
+					{ required: true, message: "请上传法人身份证", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (this.registerMsg.applicantIDCardNegative == "") {
+								callback(new Error("请上传完整法人身份证"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				],
+				legalPersonIdCard: [
+					{ required: true, message: "请上传申请人身份证", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (this.registerMsg.legalPersonIdCardNegative == "") {
+								callback(new Error("请上传完整申请人身份证"));
+							} else {
+								callback();
+							}
+						},
+						trigger: "blur"
+					}
+				]
 			}
 		};
 	},
@@ -346,7 +441,7 @@ export default {
 		toLogin() {
 			window.location.href = "/login.html";
 		},
-		toNext(a) {
+		toNext(a, formName) {
 			if (a == 1) {
 				this.firstCase = false;
 				this.secondCase = true;
@@ -355,7 +450,13 @@ export default {
 					"-400px";
 			}
 			if (a == 2) {
-				this.register();
+				this.$refs[formName].validate(valid => {
+					if (valid) {
+						this.register();
+					} else {
+						return false;
+					}
+				});
 			}
 			if (a == 3) {
 				window.location.href = "/login.html";

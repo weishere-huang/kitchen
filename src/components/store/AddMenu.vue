@@ -39,6 +39,7 @@
 						placeholder="单位：元"
 						step="0.01"
 						maxlength="20"
+						oninput="if(value.length>10)value=value.slice(0,10)"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="库存数量：" prop="stockNow">
@@ -48,15 +49,16 @@
 						size="small"
 						style="width:300px;"
 						v-model.number="addMenu.stockNow"
+						oninput="if(value.length>10)value=value.slice(0,10)"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="上/下架：" prop="isShelf">
-					<el-radio v-model="addMenu.isShelf" label="1">上架</el-radio>
-					<el-radio v-model="addMenu.isShelf" label="0">下架</el-radio>
+					<el-radio v-model="addMenu.isShelf" :label="1">上架</el-radio>
+					<el-radio v-model="addMenu.isShelf" :label="0">下架</el-radio>
 				</el-form-item>
 				<el-form-item label="是否推荐：" prop="isRecommend">
-					<el-radio v-model="addMenu.isRecommend" label="2">是</el-radio>
-					<el-radio v-model="addMenu.isRecommend" label="3">否</el-radio>
+					<el-radio v-model="addMenu.isRecommend" :label="2">是</el-radio>
+					<el-radio v-model="addMenu.isRecommend" :label="3">否</el-radio>
 				</el-form-item>
 				<el-form-item label="商品缩略图：" prop="img">
 					<el-upload
@@ -84,21 +86,24 @@
 						resize="none"
 						style="width:700px;"
 						v-model="addMenu.description"
+						maxlength="300"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="商品详情：">
-					<editor
-						id="editorMenu"
-						height="300px"
-						width="700px"
-						:uploadJson="uploadJson()"
-						:content.sync="addMenu.info"
-						:afterUpload="afterUpload"
-						:fileManagerJson="()=>look()"
-						pluginsPath="../../../static/kindeditor/plugins"
-						filePostName="file"
-						:loadStyleMode="false"
-					></editor>
+				<el-form-item label="商品详情：" prop="info">
+					<span>
+						<editor
+							id="editorMenu"
+							height="300px"
+							width="700px"
+							:uploadJson="uploadJson()"
+							:content.sync="addMenu.info"
+							:afterUpload="afterUpload"
+							:fileManagerJson="()=>look()"
+							pluginsPath="../../../static/kindeditor/plugins"
+							filePostName="file"
+							:loadStyleMode="false"
+						></editor>
+					</span>
 				</el-form-item>
 				<el-form-item label>
 					<!-- <el-button size="small" type="primary" @click="dialogPreview=true">预览</el-button> -->
@@ -135,23 +140,21 @@ export default {
 				price: "",
 				cateId: [],
 				stockNow: "",
-				isRecommend: "",
-				isShelf: "",
+				isRecommend: 3,
+				isShelf: 0,
 				img: "",
 				info: ""
 			},
 			addMenuRules: {
-				recipeName: [
+				title: [
 					{
 						required: true,
 						message: "请输入商品名称",
-						trigger: "change"
+						trigger: "blur"
 					}
 				],
-				itemCate: [
-					{ required: true, message: "请选择分类", trigger: "change" }
-				],
-				itemPrice: [
+				cateId: [{ required: true, message: "请选择分类", trigger: "change" }],
+				price: [
 					{
 						required: true,
 						message: "请输入商品价格",
@@ -183,6 +186,34 @@ export default {
 							}
 						},
 						trigger: "blur"
+					}
+				],
+				isShelf: [
+					{
+						required: true,
+						message: "请选择上/下架",
+						trigger: "change"
+					}
+				],
+				isRecommend: [
+					{
+						required: true,
+						message: "请选择是否推荐",
+						trigger: "change"
+					}
+				],
+				img: [
+					{
+						required: true,
+						message: "请上传商品图片",
+						trigger: "change"
+					}
+				],
+				info: [
+					{
+						required: true,
+						message: "请填写商品详情",
+						trigger: "change"
 					}
 				]
 			},

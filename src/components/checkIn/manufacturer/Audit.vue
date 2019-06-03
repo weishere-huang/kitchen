@@ -82,16 +82,29 @@
 				<h4>审核</h4>
 			</div>
 			<div class="table_list">
-				<el-form label-width="200px" size="small">
-					<el-form-item label="审核类型：" prop>
-						<el-radio v-model="radio" label="0">通过</el-radio>
-						<el-radio v-model="radio" label="1">驳回</el-radio>
+				<el-form
+					label-width="200px"
+					size="small"
+					:model="auditManufacturer"
+					:rules="auditManufacturerRules"
+					ref="auditManufacturer"
+					:inline-message="true"
+				>
+					<el-form-item label="审核类型：" prop="radio">
+						<el-radio v-model="auditManufacturer.radio" :label="0">通过</el-radio>
+						<el-radio v-model="auditManufacturer.radio" :label="1">驳回</el-radio>
 					</el-form-item>
-					<el-form-item label="审核说明：" prop>
-						<el-input type="textarea" rows="4" v-model="auditOpinion" resize="none" style="width:400px;"></el-input>
+					<el-form-item label="审核说明：" prop="auditOpinion">
+						<el-input
+							type="textarea"
+							rows="4"
+							v-model="auditManufacturer.auditOpinion"
+							resize="none"
+							style="width:400px;"
+						></el-input>
 					</el-form-item>
 					<el-form-item label prop>
-						<el-button type="primary" size="small" @click="auditManufacturer">提交审核</el-button>
+						<el-button type="primary" size="small" @click="setAuditManufacturer('auditManufacturer')">提交审核</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -103,10 +116,13 @@ export default {
 	inject: ["reload"],
 	data() {
 		return {
+			auditManufacturer: {
+				auditOpinion: "",
+				radio: 0
+			},
 			dialogVisible: false,
 			dialogImageUrl: "",
-			auditOpinion: "",
-			radio: "0",
+
 			manufacturerMsg: {
 				name: "",
 				type: "",
@@ -122,6 +138,10 @@ export default {
 				password: "",
 				applicantIDCardNegative: "",
 				legalPersonIdCardNegative: ""
+			},
+			auditManufacturerRules: {
+				radio: [{ required: true, message: "请选审核类型", trigger: "blur" }],
+				auditOpinion: []
 			}
 		};
 	},
@@ -163,36 +183,57 @@ export default {
 				}
 			});
 		},
-		auditManufacturer() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				enterpriseId: this.manufacturerMsg.id,
-				auditOpinion: this.auditOpinion,
-				passOrTurn: this.radio
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-enterprise/enterprise/audit",
-					type: "post",
-					option: {
-						successMsg: "审核成功"
-					}
-				},
-				this
-			).then(result => {
-				console.log(result);
-				if (result.data.code === 200) {
-					this.$router.back(-1);
-				
+		setAuditManufacturer(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						enterpriseId: this.manufacturerMsg.id,
+						auditOpinion: this.auditManufacturer.auditOpinion,
+						passOrTurn: this.auditManufacturer.radio
+					});
+					this.Axios(
+						{
+							params: data,
+							url: "/api-enterprise/enterprise/audit",
+							type: "post",
+							option: {
+								successMsg: "审核成功"
+							}
+						},
+						this
+					).then(result => {
+						console.log(result);
+						if (result.data.code === 200) {
+							this.$router.back(-1);
+						} else {
+							this.$message.error("审核失败");
+						}
+					});
 				} else {
-					this.$message.error("审核失败");
+					return false;
 				}
 			});
 		}
 	},
 	created() {
 		this.findOne(this.$route.params.id);
+	},
+	watch: {
+		auditManufacturer: {
+			handler(newValue, oldValue) {
+				if (this.auditManufacturer.radio == 1) {
+					this.auditManufacturerRules.auditOpinion.push({
+						required: true,
+						message: "请填写审核说明",
+						trigger: "blur"
+					});
+				} else {
+					this.auditManufacturerRules.auditOpinion.splice(0, 1);
+				}
+			},
+			deep: true
+		}
 	}
 };
 </script>

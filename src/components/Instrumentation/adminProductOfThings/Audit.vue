@@ -46,19 +46,36 @@
 				<h4>审核</h4>
 			</div>
 			<div class="table_list">
-				<el-form label-width="200px" size="small">
-					<el-form-item label="上次驳回原因：" prop v-if="oneProductMsg.auditOpinion=''||null">
-						<span style="color:red"></span>{{oneProductMsg.auditOpinion}}</span>
+				<el-form
+					label-width="200px"
+					size="small"
+					:model="auditProduct"
+					:rules="auditProductRules"
+					ref="auditProduct"
+					:inline-message="true"
+				>
+					<el-form-item
+						label="上次驳回原因："
+						prop
+						v-if="oneProductMsg.auditOpinion!=''&&oneProductMsg.auditOpinion!=null"
+					>
+						<span style="color:red">{{oneProductMsg.auditOpinion}}</span>
 					</el-form-item>
-					<el-form-item label="审核类型：" prop>
-						<el-radio v-model="radio" label="1">通过</el-radio>
-						<el-radio v-model="radio" label="2">驳回</el-radio>
+					<el-form-item label="审核类型：" prop="radio">
+						<el-radio v-model="auditProduct.radio" :label="1">通过</el-radio>
+						<el-radio v-model="auditProduct.radio" :label="2">驳回</el-radio>
 					</el-form-item>
-					<el-form-item label="审核说明：" prop>
-						<el-input type="textarea" rows="4" v-model="auditOpinion" resize="none" style="width:400px;"></el-input>
+					<el-form-item label="审核说明：" prop="auditOpinion">
+						<el-input
+							type="textarea"
+							rows="4"
+							v-model="auditProduct.auditOpinion"
+							resize="none"
+							style="width:400px;"
+						></el-input>
 					</el-form-item>
 					<el-form-item label prop>
-						<el-button type="primary" size="small" @click="auditProduct">提交审核</el-button>
+						<el-button type="primary" size="small" @click="setAuditProduct('auditProduct')">提交审核</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -75,9 +92,15 @@ export default {
 		return {
 			dialogVisible: false,
 			dialogImageUrl: "",
-			auditOpinion: "",
-			radio: "1",
-			oneProductMsg: {}
+			oneProductMsg: {},
+			auditProduct: {
+				auditOpinion: "",
+				radio: 1
+			},
+			auditProductRules: {
+				radio: [{ required: true, message: "请选审核类型", trigger: "blur" }],
+				auditOpinion: []
+			}
 		};
 	},
 	methods: {
@@ -115,38 +138,60 @@ export default {
 				}
 			});
 		},
-		auditProduct() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				auditObjectId: this.oneProductMsg.id,
-				auditorId: JSON.parse(sessionStorage.getItem("user")).employeeId,
-				auditObjectName: this.oneProductMsg.deviceName,
-				auditOpinion: this.auditOpinion,
-				state: this.radio
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-enterprise/device/audit",
-					type: "post",
-					option: {
-						successMsg: "审核成功"
-					}
-				},
-				this
-			).then(result => {
-				console.log(result);
-				if (result.data.code === 200) {
-					this.$router.back(-1);
-					this.reload();
+		setAuditProduct(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						auditObjectId: this.oneProductMsg.id,
+						auditorId: JSON.parse(sessionStorage.getItem("user")).employeeId,
+						auditObjectName: this.oneProductMsg.deviceName,
+						auditOpinion: this.auditProduct.auditOpinion,
+						state: this.auditProduct.radio
+					});
+					this.Axios(
+						{
+							params: data,
+							url: "/api-enterprise/device/audit",
+							type: "post",
+							option: {
+								successMsg: "审核成功"
+							}
+						},
+						this
+					).then(result => {
+						console.log(result);
+						if (result.data.code === 200) {
+							this.$router.back(-1);
+							this.reload();
+						} else {
+							this.$message.error("审核失败");
+						}
+					});
 				} else {
-					this.$message.error("审核失败");
+					return false;
 				}
 			});
 		}
 	},
 	created() {
 		this.findOne(this.$route.params.id);
+	},
+	watch: {
+		auditProduct: {
+			handler(newValue, oldValue) {
+				if (this.auditProduct.radio == 2) {
+					this.auditProductRules.auditOpinion.push({
+						required: true,
+						message: "请填写审核说明",
+						trigger: "blur"
+					});
+				} else {
+					this.auditProductRules.auditOpinion.splice(0, 1);
+				}
+			},
+			deep: true
+		}
 	}
 };
 </script>

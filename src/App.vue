@@ -594,7 +594,7 @@ export default {
 	created() {
 		this.getlist();
 		this.initPermission();
-		this.getArea();
+		// this.getArea();
 		this.editPassword.account = JSON.parse(
 			sessionStorage.getItem("user")
 		).account;

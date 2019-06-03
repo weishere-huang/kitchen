@@ -5,8 +5,16 @@
 				<h4>商城设置</h4>
 			</el-col>
 			<el-col :span="24">
-				<el-form size="small" label-width="200px" style="margin-top:20px;" :inline-message="true">
-					<el-form-item label="商家电话：" prop>
+				<el-form
+					size="small"
+					label-width="200px"
+					style="margin-top:20px;"
+					:inline-message="true"
+					:model="systemMsg"
+					:rules="systemMsgRules"
+					ref="systemMsg"
+				>
+					<el-form-item label="商家电话：" prop="phone">
 						<el-input
 							type="text"
 							v-model="systemMsg.phone"
@@ -15,7 +23,7 @@
 							placeholder
 						></el-input>
 					</el-form-item>
-					<el-form-item label="店铺名称：" prop>
+					<el-form-item label="店铺名称：" prop="enterpriseName">
 						<el-input
 							type="text"
 							v-model="systemMsg.enterpriseName"
@@ -24,7 +32,7 @@
 							placeholder
 						></el-input>
 					</el-form-item>
-					<el-form-item label="店铺LOGO：" prop>
+					<el-form-item label="店铺LOGO：" prop="logo">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -44,21 +52,29 @@
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
 					</el-form-item>
-					<el-form-item label="运费设置：" prop>
+					<el-form-item label="运费设置：" prop="shipping">
 						每个订单满
 						<el-input
-							type="text"
-							v-model="systemMsg.shipping"
+							type="number"
+							v-model.number="systemMsg.shipping"
 							maxlength="20"
 							style="width:80px;"
 							placeholder
+							oninput="if(value.length>5)value=value.slice(0,5)"
 						></el-input>元包邮，未满则按
-						<el-input type="text" v-model="systemMsg.fare" maxlength="20" style="width:80px;" placeholder></el-input>元收取。
+						<el-input
+							type="number"
+							v-model.number="systemMsg.fare"
+							maxlength="20"
+							style="width:80px;"
+							placeholder
+							oninput="if(value.length>5)value=value.slice(0,5)"
+						></el-input>元收取。
 					</el-form-item>
-					<el-form-item label="公告：" prop>
+					<el-form-item label="公告：" prop="announcement">
 						<el-input
 							type="textarea"
-							maxlength="20"
+							maxlength="300"
 							rows="4"
 							resize="none"
 							style="width:500px;"
@@ -67,7 +83,7 @@
 						></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="save()">保 存</el-button>
+						<el-button type="primary" @click="save('systemMsg')">保 存</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -102,33 +118,58 @@ export default {
 						},
 						trigger: ["blur"]
 					}
+				],
+				enterpriseName: [
+					{ required: true, message: "请设置店铺名称", trigger: "blur" }
+				],
+				logo: [{ required: true, message: "请设置店铺LOGO", trigger: "blur" }],
+				shipping: [
+					{ required: true, message: "请设置满减条件", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							if (this.systemMsg.shipping == "" || null) {
+								callback(new Error("请设置满减条件"));
+							} else if (this.systemMsg.fare == "" || null) {
+								callback(new Error("请设置运费"));
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur"]
+					}
 				]
 			}
 		};
 	},
 	methods: {
-		save() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				enterpriseName: this.systemMsg.enterpriseName,
-				phone: this.systemMsg.phone,
-				shipping: this.systemMsg.shipping,
-				logo: this.systemMsg.logo,
-				fare: this.systemMsg.fare,
-				announcement: this.systemMsg.announcement
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-enterprise/enterpriseSet/update",
-					type: "post",
-					option: {
-						successMsg: "修改成功"
-					}
-				},
-				this
-			).then(result => {
-				console.log(result);
+		save(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						enterpriseName: this.systemMsg.enterpriseName,
+						phone: this.systemMsg.phone,
+						shipping: this.systemMsg.shipping,
+						logo: this.systemMsg.logo,
+						fare: this.systemMsg.fare,
+						announcement: this.systemMsg.announcement
+					});
+					this.Axios(
+						{
+							params: data,
+							url: "/api-enterprise/enterpriseSet/update",
+							type: "post",
+							option: {
+								successMsg: "修改成功"
+							}
+						},
+						this
+					).then(result => {
+						// console.log(result);
+					});
+				} else {
+					return false;
+				}
 			});
 		},
 		imgApi() {

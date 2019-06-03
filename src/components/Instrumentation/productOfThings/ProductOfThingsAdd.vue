@@ -8,8 +8,15 @@
 				<h4>产品添加</h4>
 			</div>
 			<div class="table_list">
-				<el-form label-width="200px" size="small" :model="addProduct">
-					<el-form-item label="产品名称：" prop>
+				<el-form
+					:inline-message="true"
+					label-width="200px"
+					size="small"
+					:model="addProduct"
+					:rules="addProductRules"
+					ref="addProduct"
+				>
+					<el-form-item label="产品名称：" prop="deviceName">
 						<el-input
 							type="text"
 							maxlength="20"
@@ -18,7 +25,7 @@
 							style="width:400px;"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="产品类型：" prop>
+					<el-form-item label="产品类型：" prop="deviceCateId">
 						<el-cascader
 							expand-trigger="hover"
 							:options="options"
@@ -26,12 +33,12 @@
 							style="width:400px;"
 						></el-cascader>
 					</el-form-item>
-					<el-form-item label="连网类型：" prop>
+					<el-form-item label="连网类型：" prop="networkType">
 						<el-select
 							type="text"
 							v-model="addProduct.networkType"
 							maxlength="20"
-							placeholder
+							placeholder="请选择"
 							style="width:400px;"
 						>
 							<el-option label="WIFI" value="0"></el-option>
@@ -43,7 +50,7 @@
 							<el-option label="其他" value="6"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="产品描述：" prop>
+					<el-form-item label="产品描述：" prop="introduce">
 						<el-input
 							v-model="addProduct.introduce"
 							type="textarea"
@@ -54,7 +61,7 @@
 							style="width:400px;"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="产品协议：" prop>
+					<el-form-item label="产品协议：" prop="agreement">
 						<el-upload
 							class="upload-demo"
 							:action="imgApi()"
@@ -72,7 +79,7 @@
 							<div slot="tip" class="el-upload__tip">请上传《长虹物联产品接入协议》扫描件，文件小于10MB的pdf/png/jpeg</div>
 						</el-upload>
 					</el-form-item>
-					<el-form-item label="产品LOGO：" prop>
+					<el-form-item label="产品LOGO：" prop="logo">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -88,7 +95,7 @@
 						</el-upload>
 						<div class="el-upload__tip tip_style">请上传该产品LOGO图片，要求：256px*256px，小于200KB的jpg或png</div>
 					</el-form-item>
-					<el-form-item label="产品连接示意图：" prop>
+					<el-form-item label="产品连接示意图：" prop="linkImg">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -115,7 +122,7 @@
 							type="primary"
 							:disabled="addProduct.checkValue==false"
 							size="small"
-							@click="addProductOfThings"
+							@click="addProductOfThings('addProduct')"
 						>提交申请</el-button>
 					</el-form-item>
 				</el-form>
@@ -164,8 +171,6 @@ export default {
 			dialogImageUrl: "",
 			dialogVisible: false,
 			addProduct: {
-				enterpriseId: 123,
-				enterpriseName: "光大实业",
 				deviceName: "",
 				deviceCateId: [],
 				networkType: "",
@@ -174,6 +179,29 @@ export default {
 				logo: "",
 				linkImg: "",
 				checkValue: false
+			},
+			addProductRules: {
+				deviceName: [
+					{ required: true, message: "请输入产品名称", trigger: "blur" }
+				],
+				deviceCateId: [
+					{ required: true, message: "请选择产品类型", trigger: "change" }
+				],
+				networkType: [
+					{ required: true, message: "请选择联网类型", trigger: "change" }
+				],
+				introduce: [
+					{ required: true, message: "请输入产品描述", trigger: "blur" }
+				],
+				agreement: [
+					{ required: true, message: "请上传产品协议", trigger: "change" }
+				],
+				logo: [
+					{ required: true, message: "请上传产品LOGO", trigger: "change" }
+				],
+				linkImg: [
+					{ required: true, message: "请上传产品连接示意图", trigger: "change" }
+				]
 			}
 		};
 	},
@@ -185,6 +213,7 @@ export default {
 					name: file.name,
 					url: res.data
 				});
+				this.addProduct.agreement = this.fileList;
 				this.$message({
 					message: "上传成功！",
 					type: "success"
@@ -274,36 +303,42 @@ export default {
 				this.addProduct.linkImg = "";
 			}
 		},
-		addProductOfThings() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				deviceName: this.addProduct.deviceName,
-				deviceCateId: this.addProduct.deviceCateId[
-					this.addProduct.deviceCateId.length - 1
-				],
-				networkType: this.addProduct.networkType,
-				introduce: this.addProduct.introduce,
-				agreement: JSON.stringify(this.fileList),
-				logo: this.addProduct.logo,
-				linkImg: this.addProduct.linkImg
-			});
-			this.Axios(
-				{
-					params: data,
-					url: "/api-enterprise/device/add",
-					type: "post",
-					option: {
-						successMsg: "添加成功"
-					}
-				},
-				this
-			).then(result => {
-				console.log(result);
-				if (result.data.code === 200) {
-					this.$router.back(-1);
-					this.reload();
+		addProductOfThings(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					let qs = require("qs");
+					let data = qs.stringify({
+						deviceName: this.addProduct.deviceName,
+						deviceCateId: this.addProduct.deviceCateId[
+							this.addProduct.deviceCateId.length - 1
+						],
+						networkType: this.addProduct.networkType,
+						introduce: this.addProduct.introduce,
+						agreement: JSON.stringify(this.fileList),
+						logo: this.addProduct.logo,
+						linkImg: this.addProduct.linkImg
+					});
+					this.Axios(
+						{
+							params: data,
+							url: "/api-enterprise/device/add",
+							type: "post",
+							option: {
+								successMsg: "添加成功"
+							}
+						},
+						this
+					).then(result => {
+						console.log(result);
+						if (result.data.code === 200) {
+							this.$router.back(-1);
+							this.reload();
+						} else {
+							this.$message.error("添加失败,请重新尝试");
+						}
+					});
 				} else {
-					this.$message.error("添加失败,请重新尝试");
+					return false;
 				}
 			});
 		}
