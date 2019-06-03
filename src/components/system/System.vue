@@ -306,27 +306,27 @@
 							style="width:143px"
 						></el-time-picker>
 					</el-form-item>-->
-					<el-form-item label="用户积分：" prop="payType">
+					<el-form-item label="用户积分：" prop="scoreopen">
 						<el-radio-group v-model="systemMsg.scoreopen">
-							<el-radio :label="0">开启</el-radio>
-							<el-radio :label="1">关闭</el-radio>
+							<el-radio label="0">开启</el-radio>
+							<el-radio label="1">关闭</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="积分比例：">
+					<el-form-item label="积分比例：" prop="score">
 						1元=
 						<el-input style="width:60px;" v-model="systemMsg.score"></el-input>&nbsp;积分&nbsp;&nbsp;&nbsp;&nbsp;签到赠送
 						<el-input style="width:60px;" v-model="systemMsg.register"></el-input>&nbsp;积分
 					</el-form-item>
-					<el-form-item label="评论功能：" prop="payType">
+					<el-form-item label="评论功能：" prop="comment">
 						<el-radio-group v-model="systemMsg.comment">
-							<el-radio :label="0">开启</el-radio>
-							<el-radio :label="1">关闭</el-radio>
+							<el-radio label="0">开启</el-radio>
+							<el-radio label="1">关闭</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="评论审核：" prop="payType">
-						<el-radio-group v-model="systemMsg.commentAudit">
-							<el-radio :label="0">需要</el-radio>
-							<el-radio :label="1">不需要</el-radio>
+					<el-form-item label="评论审核：" prop="commentaudit">
+						<el-radio-group v-model="systemMsg.commentaudit">
+							<el-radio label="0">需要</el-radio>
+							<el-radio label="1">不需要</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item>
@@ -381,6 +381,49 @@ export default {
 				allMoney: ""
 			},
 			systemRules: {
+				commentaudit: [
+					{
+						required: true,
+						message: "请选择评论审核开启或关闭",
+						trigger: "change"
+					}
+				],
+				comment: [
+					{
+						required: true,
+						message: "请选择评论功能开启或关闭",
+						trigger: "change"
+					}
+				],
+				scoreopen: [
+					{
+						required: true,
+						message: "请选择用户积分开启或关闭",
+						trigger: "change"
+					}
+				],
+				score: [
+					{
+						required: true,
+						message: "请输入积分比例",
+						trigger: ["blur", "change"]
+					},
+					{
+						validator: (rule, value, callback) => {
+							if (this.systemMsg.score == "" || this.systemMsg.score == null) {
+								callback(new Error("请输入积分比例"));
+							} else if (
+								this.systemMsg.register == "" ||
+								this.systemMsg.register == null
+							) {
+								callback(new Error("请输入签到赠送积分"));
+							} else {
+								callback();
+							}
+						},
+						trigger: ["blur", "change"]
+					}
+				],
 				phone: [
 					{ required: true, message: "请设置客服热线", trigger: "blur" },
 					{
@@ -789,7 +832,7 @@ export default {
 				score: this.systemMsg.score,
 				register: this.systemMsg.register,
 				comment: this.systemMsg.comment,
-				commentAudit: this.systemMsg.commentAudit,
+				commentAudit: this.systemMsg.commentaudit,
 				scoreopen: this.systemMsg.scoreopen
 			});
 			this.Axios(
