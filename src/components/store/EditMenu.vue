@@ -228,14 +228,14 @@ export default {
 			return this.global.imgPath + data.replace("img:", "");
 		},
 		submitForm(formName) {
-			// this.$refs[formName].validate(valid => {
-			// 	if (valid) {
-			this.savespu();
-			// } else {
-			// 	this.$message.warning("请填写完整信息！");
-			// 	return false;
-			// }
-			// });
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					this.savespu();
+				} else {
+					this.$message.warning("请填写完整信息！");
+					return false;
+				}
+			});
 		},
 		// handleInput(row) {
 		//   row.target.value = row.target.value.match(/^\d*(\.?\d{0,2})/g)[0] || null;
@@ -448,6 +448,7 @@ export default {
 .edit_menu {
 	font-size: 14px;
 	color: @font-normal;
+	
 	.top_list {
 		background-color: white;
 		padding: 10px;

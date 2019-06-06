@@ -193,7 +193,12 @@ export default [{
         routeReg: /^\/Information\/DetailsInformation\/\d{1,}$/i,
         visible: true,
         permissionCode: 'message_active_detai_lookup'
-      }
+      },
+      {
+        menu: '评论管理',
+        route: '/Comment',
+        permissionCode: 'message_active_lookup'
+      },
     ]
   },
   {
@@ -311,6 +316,12 @@ export default [{
         routeReg: /^\/RoleManagement\/EditRole\/\d{1,}$/i,
         visible: true,
         permissionCode: 'system_role_update_lookup'
+      },
+      {
+        menu: '用户协议',
+        route: '/Agreement',
+        defaultDock: true,
+        permissionCode: 'system_log_lookup'
       },
       {
         menu: '系统日志',

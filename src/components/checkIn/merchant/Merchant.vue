@@ -41,10 +41,31 @@
 						</el-table-column>
 						<el-table-column label="状态" min-width="100">
 							<template slot-scope="scope">
-								<span>{{ scope.row.auditState==1?'待审核':scope.row.auditState==2?"已通过":"已驳回" }}</span>
+								<span
+									:style="{color:scope.row.auditState==1?'#ff6600':scope.row.auditState==2?'#999999':'#A54D5E'}"
+								>{{ scope.row.auditState==1?'待审核':scope.row.auditState==2?"已通过":"已驳回" }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="操作" width="140">
+						<el-table-column label="启用状态" min-width="80">
+							<template slot-scope="scope">
+								<el-button
+									type="text"
+									size="mini"
+									@click="changeStateEnable(scope.$index, scope.row)"
+									v-if="scope.row.state==1"
+									style="color:#ff6600"
+									:disabled="scope.row.auditState!=2"
+								>已禁用</el-button>
+								<el-button
+									type="text"
+									size="mini"
+									@click="changeStateDown(scope.$index, scope.row)"
+									v-if="scope.row.state==2"
+									:disabled="scope.row.auditState!=2"
+								>已启用</el-button>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="80">
 							<template slot-scope="scope">
 								<el-button
 									type="text"
@@ -52,19 +73,6 @@
 									v-if="scope.row.auditState==1"
 									@click="toAudit(scope.$index, scope.row)"
 								>审核</el-button>
-								<el-button
-									type="text"
-									size="mini"
-									v-if="scope.row.state==1&&scope.row.auditState==2"
-									@click="changeStateEnable(scope.$index, scope.row)"
-									style="color:#ff6600"
-								>已禁用</el-button>
-								<el-button
-									type="text"
-									size="mini"
-									v-if="scope.row.state==2&&scope.row.auditState==2"
-									@click="changeStateDown(scope.$index, scope.row)"
-								>已启用</el-button>
 								<el-button
 									type="text"
 									size="mini"

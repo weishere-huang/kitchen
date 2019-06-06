@@ -23,7 +23,7 @@
 						<span v-if="oneProductMsg.auditOpinion!=''||null">（{{oneProductMsg.auditOpinion}}）</span>
 					</el-form-item>
 					<el-form-item label="审核时间：" prop>
-						<span>{{oneProductMsg.deviceName}}</span>
+						<span>{{oneProductMsg.auditCreate}}</span>
 					</el-form-item>
 					<el-form-item label="ProductKey：" prop>
 						<span>{{oneProductMsg.deviceKey}}</span>

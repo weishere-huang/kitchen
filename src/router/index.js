@@ -14,6 +14,7 @@ import AddMenu from '@/components/store/AddMenu'
 import EditMenu from '@/components/store/EditMenu'
 import Service from '@/components/message/Service'
 import Problems from '@/components/message/Problems'
+import Comment from '@/components/message/Comment'
 import Advertising from '@/components/message/Advertising'
 import AdvertisingAdd from '@/components/message/advertisingAdd/AddAdvertising'
 import AdvertisingEdit from '@/components/message/advertisingAdd/EditAdvertising'
@@ -24,6 +25,7 @@ import Administrator from '@/components/system/Administrator'
 import RoleManagement from '@/components/system/RoleManagement'
 import SystemLog from '@/components/system/SystemLog'
 import System from '@/components/system/System'
+import Agreement from '@/components/system/Agreement'
 import MerchantSystem from '@/components/system/MerchantSystem'
 import Security from '@/components/system/Security'
 import AddRole from '@/components/system/addOrEditRole/AddRole'
@@ -731,6 +733,17 @@ const router = new Router({
       },
     },
     {
+      path: '/Agreement',
+      name: 'Agreement',
+      component: Agreement,
+      props: {
+        pageName: '用户协议'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
       path: '/RoleManagement',
       name: 'RoleManagement',
       component: RoleManagement,
@@ -891,6 +904,17 @@ const router = new Router({
       component: GuestBook,
       props: {
         pageName: '留言与反馈'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/Comment',
+      name: 'Comment',
+      component: Comment,
+      props: {
+        pageName: '评论管理'
       },
       meta: {
         requireAuth: true,

@@ -36,7 +36,7 @@
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="dialogAdd = false" plain size="small">取 消</el-button>
+					<el-button @click="resetForm('classify')" plain size="small">取 消</el-button>
 					<el-button type="primary" @click="addClassify('classify')" size="small">确 定</el-button>
 				</span>
 			</el-dialog>
@@ -113,7 +113,7 @@
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="dialogEdit = false" plain size="small">取 消</el-button>
+				<el-button @click="dialogEdit=false" plain size="small">取 消</el-button>
 				<el-button type="primary" @click="handeditClassify('editClassify')" size="small">确 定</el-button>
 			</span>
 		</el-dialog>
@@ -182,6 +182,10 @@ export default {
 		};
 	},
 	methods: {
+		resetForm(formName) {
+			this.$refs[formName].resetFields();
+			this.dialogAdd = false;
+		},
 		handleChange(value) {
 			console.log(value);
 		},

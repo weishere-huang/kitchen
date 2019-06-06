@@ -6,7 +6,7 @@
 			</el-form-item>
 			<el-form-item label="分类：" prop="faqType">
 				<el-select
-					v-model="sstype"
+					v-model="addMsg.faqType"
 					placeholder="请选择"
 					style="width:49%"
 					size="small"
@@ -64,7 +64,7 @@ export default {
 	},
 	methods: {
 		editchange() {
-			this.addMsg.faqType = this.sstype;
+			// this.addMsg.faqType = this.sstype;
 		},
 		handleCancel(formName) {
 			let params = { type: "cancel", isHide: false };

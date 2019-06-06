@@ -112,6 +112,7 @@
 								>
 									<i class="el-icon-plus"></i>
 								</el-upload>
+								<br>
 								<div class="el-upload__tip tip_style">上传三证合一营业执照副本扫描件，小于2MB的jpg或png图片</div>
 								<el-dialog :visible.sync="dialogVisible" class="showPic">
 									<img width="100%" :src="dialogImageUrl" alt>
@@ -229,7 +230,29 @@ export default {
 				legalPersonIdCardNegative: ""
 			},
 			registerMsgRules: {
-				name: [{ required: true, message: "请输入企业名称", trigger: "blur" }],
+				name: [
+					{ required: true, message: "请输入企业名称", trigger: "blur" },
+					{
+						validator: (rule, value, callback) => {
+							this.Axios({
+								params: { enterpriseName: value },
+								url: "/api-enterprise/enterprise/verifyEnterpriseName",
+								type: "get",
+								option: { enableMsg: false, enableLoad: false }
+							}).then(
+								res => {
+									console.log(res);
+									callback();
+								},
+								({ type, info }) => {
+									console.log(info);
+									callback(new Error("企业名称已存在"));
+								}
+							);
+						},
+						trigger: "blur"
+					}
+				],
 				creditCode: [
 					{
 						required: true,
@@ -247,6 +270,26 @@ export default {
 							}
 						},
 						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							this.Axios({
+								params: { creditCode: value },
+								url: "/api-enterprise/enterprise/verifyCreditCode",
+								type: "get",
+								option: { enableMsg: false, enableLoad: false }
+							}).then(
+								res => {
+									console.log(res);
+									callback();
+								},
+								({ type, info }) => {
+									console.log(info);
+									callback(new Error("该信用代码已存在"));
+								}
+							);
+						},
+						trigger: "blur"
 					}
 				],
 				legalPerson: [
@@ -261,6 +304,26 @@ export default {
 							} else {
 								callback();
 							}
+						},
+						trigger: "blur"
+					},
+					{
+						validator: (rule, value, callback) => {
+							this.Axios({
+								params: { phone: value },
+								url: "/api-enterprise/enterprise/verifyPhone",
+								type: "get",
+								option: { enableMsg: false, enableLoad: false }
+							}).then(
+								res => {
+									console.log(res);
+									callback();
+								},
+								({ type, info }) => {
+									console.log(info);
+									callback(new Error("该手机号已经注册"));
+								}
+							);
 						},
 						trigger: "blur"
 					}

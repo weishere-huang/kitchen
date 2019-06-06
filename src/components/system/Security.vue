@@ -120,18 +120,21 @@ export default {
 			newPassword = this.encryptByDES(newPassword, key);
 			let qs = require("qs");
 			let data = qs.stringify({
-				oldPassword: oldPassword,
-				newPassword: newPassword,
-				account: this.editPassword.account
+				oldPwd: oldPassword,
+				newPwd: newPassword,
+				id: JSON.parse(sessionStorage.getItem("user")).userId
 			});
 			this.Axios(
 				{
 					params: data,
 					option: {
-						enableMsg: false
+						successMsg: "修改成功，请重新登录！"
 					},
 					type: "post",
-					url: "/api-platform/employee/resetpsw"
+					url: "/api-sso/user/updatePwd",
+					loadingConfig: {
+						target: document.querySelector(".login")
+					}
 				},
 				this
 			).then(

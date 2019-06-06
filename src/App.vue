@@ -8,7 +8,7 @@
 					<!-- <div style="width:50px;float:left;padding-left:10px">
 						<i class="iconfont" v-show="isCollapse === true" v-on:click="TroggleHandle">&#xe62b;</i>
 						<i class="iconfont" v-show="isCollapse === false" v-on:click="TroggleHandle">&#xe62c;</i>
-					</div> -->
+					</div>-->
 				</div>
 				<el-menu
 					:router="true"
@@ -72,7 +72,7 @@
 						<ul>
 							<!-- <li>
 								<a style="color:white;" @click="outOne">切换用户</a>
-							</li> -->
+							</li>-->
 							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
 							<!-- <li>
 								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">
@@ -135,8 +135,12 @@
 				ref="editPassword"
 				:rules="editPasswordRules"
 			>
-				<el-form-item label="账号：">
+				<el-form-item label="账号：" v-if="employeeType==3">
 					<span>{{editPassword.account}}</span>
+				</el-form-item>
+				<el-form-item label="手机号：">
+					<span>{{editPassword.phone}}</span>（
+					<span style="color:#1cc09f;cursor: pointer;" @click="innerVisible=true">更改</span>）
 				</el-form-item>
 				<el-form-item label="原密码：" prop="oldPassword">
 					<el-input type="password" maxlength="25" style="width:99%;" v-model="editPassword.oldPassword"></el-input>
@@ -153,8 +157,54 @@
 					></el-input>
 				</el-form-item>
 			</el-form>
+			<el-dialog
+				:close-on-click-modal="false"
+				width="400px"
+				title="更改手机号"
+				:visible.sync="innerVisible"
+				append-to-body
+			>
+				<el-form
+					label-width="120px"
+					size="small"
+					style="margin-top:20px;padding-bottom:1px;"
+					v-show="oldPhoneShow"
+				>
+					<el-form-item label="当前手机号：">
+						<span>{{editPassword.phone}}</span>
+					</el-form-item>
+					<el-form-item label="短信验证码：">
+						<el-input type="number" style="width:73%;"></el-input>
+						<el-button plain>获取</el-button>
+					</el-form-item>
+					<el-form-item style="text-align:right">
+						<el-button type="primary" @click="oldPhoneShow=false;newPhoneShow=true">下一步</el-button>
+					</el-form-item>
+				</el-form>
+				<el-form
+					label-width="120px"
+					size="small"
+					style="margin-top:20px;padding-bottom:1px;"
+					v-show="newPhoneShow"
+				>
+					<el-form-item label="新手机号：">
+						<el-input type="number"></el-input>
+					</el-form-item>
+					<el-form-item label="短信验证码：">
+						<el-input type="number" style="width:73%;"></el-input>
+						<el-button plain>获取</el-button>
+					</el-form-item>
+					<el-form-item style="text-align:right">
+						<el-button type="primary" @click="innerVisible=false;oldPhoneShow=true;newPhoneShow=false;">修改</el-button>
+					</el-form-item>
+				</el-form>
+			</el-dialog>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="dialogFormVisible = false" size="small" plain>取 消</el-button>
+				<el-button
+					@click="dialogFormVisible = false;$refs['editPassword'].resetFields();"
+					size="small"
+					plain
+				>取 消</el-button>
 				<el-button type="primary" @click="setEditPassword('editPassword')" size="small">确 定</el-button>
 			</span>
 		</el-dialog>
@@ -202,6 +252,9 @@ export default {
 	name: "App",
 	data() {
 		return {
+			oldPhoneShow: true,
+			newPhoneShow: false,
+			innerVisible: false,
 			itemMenu: [],
 			dialogPhoneVisible: false,
 			employeeType: JSON.parse(sessionStorage.getItem("user")).employeeType,
@@ -209,7 +262,8 @@ export default {
 				oldPassword: "",
 				newPassword: "",
 				account: "",
-				repetitionPassword: ""
+				repetitionPassword: "",
+				phone: ""
 			},
 			editPasswordRules: {
 				oldPassword: [
@@ -370,9 +424,9 @@ export default {
 			newPassword = this.encryptByDES(newPassword, key);
 			let qs = require("qs");
 			let data = qs.stringify({
-				oldPassword: oldPassword,
-				newPassword: newPassword,
-				account: this.editPassword.account
+				oldPwd: oldPassword,
+				newPwd: newPassword,
+				id: JSON.parse(sessionStorage.getItem("user")).userId
 			});
 			this.Axios(
 				{
@@ -381,7 +435,7 @@ export default {
 						successMsg: "修改成功，请重新登录！"
 					},
 					type: "post",
-					url: "/api-platform/employee/resetpsw",
+					url: "/api-sso/user/updatePwd",
 					loadingConfig: {
 						target: document.querySelector(".login")
 					}
@@ -394,7 +448,15 @@ export default {
 						sessionStorage.removeItem("token");
 						sessionStorage.removeItem("user");
 						sessionStorage.removeItem("permissionUrl");
-						window.location.href = "/login.html";
+						sessionStorage.removeItem("imgPath");
+						sessionStorage.removeItem("area");
+						sessionStorage.removeItem("activeIndex");
+						sessionStorage.removeItem("itemMenu");
+						sessionStorage.removeItem("orderIds");
+						this.$message.success("密码修改成功，即将跳转至登录页面！");
+						setTimeout(() => {
+							window.location.href = "/login.html";
+						}, 3000);
 					}
 				},
 				({ type, info }) => {}
@@ -598,6 +660,7 @@ export default {
 		this.editPassword.account = JSON.parse(
 			sessionStorage.getItem("user")
 		).account;
+		this.editPassword.phone = JSON.parse(sessionStorage.getItem("user")).phone;
 		if (JSON.parse(sessionStorage.getItem("itemMenu")) != null) {
 			this.itemMenu = JSON.parse(sessionStorage.getItem("itemMenu"));
 		} else {

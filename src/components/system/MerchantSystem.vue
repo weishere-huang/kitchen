@@ -228,7 +228,9 @@ export default {
 		getSystemMsg() {
 			this.Axios(
 				{
-					params: {},
+					params: {
+						enterpriseId:JSON.parse(sessionStorage.getItem("user")).salesTerritoryId
+					},
 					option: {
 						enableMsg: false
 					},

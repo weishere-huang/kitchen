@@ -24,7 +24,7 @@
 						</el-form-item>
 					</el-form>
 					<p style="text-align:center;">
-						<!-- <el-button type="primary" size="small" style="margin-top:20px;" @click="toEdit">立即修改</el-button> -->
+						<el-button type="primary" size="small" style="margin-top:20px;" @click="toEdit">立即修改</el-button>
 					</p>
 				</div>
 			</div>
@@ -43,9 +43,12 @@ export default {
 	methods: {
 		toEdit() {
 			this.$router.push({
-				path: "/EnterpriseAuditedIndex/EnterpriseAuditedEdit/" + 121
+				path:
+					"/EnterpriseAuditedIndex/EnterpriseAuditedEdit/" +
+					JSON.parse(sessionStorage.getItem("user")).salesTerritoryId
 			});
-		}
+		},
+	
 	},
 	created() {
 		this.userMsg = JSON.parse(sessionStorage.getItem("user")).state;

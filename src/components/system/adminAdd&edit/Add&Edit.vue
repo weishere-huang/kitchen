@@ -56,7 +56,7 @@
 			v-if="addInfo.id!==''&&addInfo.id!==null&&addInfo.id!==undefined"
 		>密码为空，表示不修改密码！</span>
 		<div style="text-align: right;width:99%;padding:10px 0 20px 0;">
-			<el-button @click="handleCancel" size="small" plain>取 消</el-button>
+			<el-button @click="handleCancel('ruleForm')" size="small" plain>取 消</el-button>
 			<el-button type="primary" @click="handleAffirm('ruleForm')" size="small">确 定</el-button>
 		</div>
 	</div>
@@ -158,8 +158,9 @@ export default {
 				return true;
 			}
 		},
-		handleCancel(value) {
+		handleCancel(formName) {
 			let params = { type: "cancel", isHide: false };
+			this.$refs[formName].resetFields();
 			this.$emit("beforeadd", params);
 		},
 		handleAffirm(formName) {

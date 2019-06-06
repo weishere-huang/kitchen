@@ -37,7 +37,7 @@
 				</span>
 				<span slot="footer" class="dialog-footer">
 					<el-button size="small" @click="dialogSend = false" plain>取 消</el-button>
-					<el-button size="small" type="primary" @click="shipments">确 定</el-button>
+					<el-button size="small" type="primary" @click>确 定</el-button>
 				</span>
 			</el-dialog>
 			<el-dialog title="付款" :visible.sync="dialogPay" width="500px" :close-on-click-modal="false">
@@ -99,25 +99,29 @@
 				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="收货人：">
-							<!-- <span>{{orderDetails.address.consignee+(orderDetails.address.gender==1?"先生":"女士")}}</span> -->
-							<span>庄先生</span>
+							<span>{{orderDetails.address.consignee+(orderDetails.address.gender==1?"先生":"女士")}}</span>
+							<!-- <span>庄先生</span> -->
 						</el-form-item>
 						<el-form-item label="收货人手机号：">
-							<!-- <span>{{orderDetails.address.phone}}</span> -->
-							<span>13608253396</span>
+							<span>{{orderDetails.address.phone}}</span>
+							<!-- <span>13608253396</span> -->
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="16" class="form_case">
 					<el-form label-width="30%">
 						<el-form-item label="收货地址：">
-							<!-- <span>{{orderDetails.address.area+orderDetails.address.address}}</span> -->
-							<span>四川省 遂宁市 大英县 蓬莱镇 蓬乐街246号</span>
+							<span>{{orderDetails.address.area+orderDetails.address.address}}</span>
+							<!-- <span>四川省 遂宁市 大英县 蓬莱镇 蓬乐街246号</span> -->
 						</el-form-item>
 						<el-form-item label="快递运单号：">
-							<!-- <span>{{sendTime}}</span> -->
-							<span>15553431289502</span>
-							<!-- <span style="color:#1cc09f">状态跟踪</span> -->
+							<span>{{orderDetails.waybillNo==''||orderDetails.waybillNo==null?'--':orderDetails.waybillNo}}</span>
+							<a
+								v-if="orderDetails.waybillNo!=''&&orderDetails.waybillNo!=null"
+								:href="url()"
+								style="color:#1cc09f;cursor: pointer;"
+								target="_back"
+							>状态跟踪></a>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -131,57 +135,64 @@
 				<el-col :span="8" class="form_case">
 					<el-form label-width="200px">
 						<el-form-item label="订单编号：">
-							<!-- <span>{{orderDetails.orderNo}}</span> -->
-							<span>1888238410129</span>
+							<span>{{orderDetails.orderNo}}</span>
+							<!-- <span>1888238410129</span> -->
 						</el-form-item>
 						<el-form-item label="下单用户：">
-							<!-- <span>{{orderDetails.phone}}</span> -->
-							<span>13608253396</span>
+							<span>{{orderDetails.userPhone}}</span>
+							<!-- <span>13608253396</span> -->
 						</el-form-item>
 						<el-form-item label="商品总金额：">
-							<!-- <span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span> -->
-							<span style="font-weight: 600;">¥ 158</span>
-							<!-- <span>（含配送费 {{orderDetails.postFee/100}}元）</span> -->
-							<span>（含配送费 12元）</span>
+							<span style="font-weight: 600;">¥ {{orderDetails.itemAmount/100}}</span>
+							<!-- <span style="font-weight: 600;">¥ 158</span> -->
+							<span>（含配送费 {{orderDetails.postFee/100}}元）</span>
+							<!-- <span>（含配送费 12元）</span> -->
 						</el-form-item>
 						<el-form-item label="- 优惠：">
-							<span>¥ 28.00</span>(
-							<span>
-								<span>红包￥10.00</span>&nbsp;
-								<span>优惠券￥18.00</span>)
+							<span>¥ {{orderDetails.redPackageAmount/100+orderDetails.couponAmount/100==0?"--":orderDetails.redPackageAmount/100+orderDetails.couponAmount/100}}</span>
+							（
+							<span
+								v-if="(orderDetails.redPackageAmount!=null&&orderDetails.redPackageAmount!='')||(orderDetails.couponAmount!=null&&orderDetails.couponAmount!='')"
+							>
+								<span
+									v-if="orderDetails.redPackageAmount!=null&&orderDetails.redPackageAmount!=''"
+								>红包￥{{orderDetails.redPackageAmount/100}}</span>
+								<span
+									v-if="orderDetails.couponAmount!=null&&orderDetails.couponAmount!=''"
+								>优惠券￥{{orderDetails.couponAmount/100}}</span> ）
 							</span>
 						</el-form-item>
 						<el-form-item label="实付：">
-							<!-- <span style="font-weight: 600;">¥ {{orderDetails.orderMoney/100}}</span> -->
-							<span style="font-weight: 600;">¥ 130</span>
+							<span style="font-weight: 600;">¥ {{orderDetails.realAmount/100}}</span>
+							<!-- <span style="font-weight: 600;">¥ 130</span> -->
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="16" class="form_case">
 					<el-form label-width="30%">
 						<el-form-item label="订单状态：">
-							<span style="color:#FF6600" v-if="orderDetails.platformState==0">待付款</span>
-							<span style="color:#008000" v-if="orderDetails.platformState==2">待发货</span>
-							<span style="color:#3399FF" v-if="orderDetails.platformState==1">待收货</span>
-							<span style="color:#333333" v-if="orderDetails.platformState==3">已完成</span>
-							<span style="color:#999999" v-if="orderDetails.platformState==9">已关闭</span>
-							<span style="color:#3399FF">待收货</span>
+							<span style="color:#FF6600" v-if="orderDetails.state==0">待付款</span>
+							<span style="color:#008000" v-if="orderDetails.state==1">待发货</span>
+							<span style="color:#3399FF" v-if="orderDetails.state==2">待收货</span>
+							<span style="color:#333333" v-if="orderDetails.state==4">已完成</span>
+							<span style="color:#999999" v-if="orderDetails.state==3">已关闭</span>
+							<!-- <span style="color:#3399FF">待收货</span> -->
 						</el-form-item>
 						<el-form-item label="支付方式：">
-							<!-- <span>{{orderDetails.payType}}</span> -->
-							<span>支付宝</span>
+							<span>{{orderDetails.payType==null||""?'--':orderDetails.payType}}</span>
+							<!-- <span>支付宝</span> -->
 						</el-form-item>
 						<el-form-item label="下单时间：">
-							<!-- <span>{{orderDetails.gmtCreate==null||""?'--':orderDetails.gmtCreate}}</span> -->
-							<span>2019-5-20 16:30:45</span>
+							<span>{{orderDetails.gmtCreate==null||""?'--':orderDetails.gmtCreate}}</span>
+							<!-- <span>2019-5-20 16:30:45</span> -->
 						</el-form-item>
 						<el-form-item label="付款时间：">
-							<!-- <span>{{orderDetails.payTime==null||""?"--":orderDetails.payTime}}</span> -->
-							<span>2019-5-20 16:34:25</span>
+							<span>{{orderDetails.payTime==null||""?"--":orderDetails.payTime}}</span>
+							<!-- <span>2019-5-20 16:34:25</span> -->
 						</el-form-item>
 						<el-form-item label="发货时间：">
-							<!-- <span>{{orderDetails.sendGoodTime==null||""?"--":orderDetails.sendGoodTime}}</span> -->
-							<span>2019-5-20 17:23:20</span>
+							<span>{{orderDetails.shipTime==null||""?"--":orderDetails.shipTime}}</span>
+							<!-- <span>2019-5-20 17:23:20</span> -->
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -195,13 +206,13 @@
 				<table-list
 					:selectShow="false"
 					:column="items"
-					:data="orderDetails.items"
+					:data="orderDetails.productDOS"
 					:rowDblclick="getRow"
 					:handleSelectionChange="handleSelectionChange"
 				></table-list>
 				<div class="total">
 					<span style=" font-weight: 700;font-size:16px;">
-						合计：￥{{orderDetails.orderMoney/100}}
+						合计：￥{{orderDetails.itemAmount/100}}
 						<span
 							style=" font-weight:0;font-size:14px;"
 						>（含运费{{orderDetails.postFee/100}}元）</span>
@@ -273,20 +284,20 @@ export default {
 			items: [
 				{
 					label: "商品名称",
-					prop: "itemName",
+					prop: "productName",
 					width: 100
 				},
 				{
 					label: "价格",
-					prop: "itemPrice",
+					prop: "amount",
 					width: 90,
 					formatter: function(row, column) {
-						return "￥" + row.itemPrice / 100;
+						return "￥" + row.amount / 100;
 					}
 				},
 				{
 					label: "数量",
-					prop: "number",
+					prop: "num",
 					width: 140
 				},
 				{
@@ -294,7 +305,7 @@ export default {
 					prop: "subtotal",
 					width: 120,
 					formatter: function(row, column) {
-						return (row.subtotal = (row.itemPrice / 100) * row.number);
+						return (row.subtotal = (row.amount / 100) * row.num);
 					}
 				}
 			],
@@ -302,27 +313,22 @@ export default {
 			column: [
 				{
 					label: "操作时间",
-					prop: "time",
+					prop: "gmtCreate",
 					width: 140
 				},
 				{
 					label: "操作者",
-					prop: "person",
+					prop: "employeeName",
 					width: 100
 				},
 				{
 					label: "事件",
-					prop: "things",
-					width: 100
-				},
-				{
-					label: "内容",
-					prop: "content",
+					prop: "opera",
 					width: 100
 				},
 				{
 					label: "原因",
-					prop: "cause",
+					prop: "reason",
 					width: 220
 				}
 			],
@@ -338,31 +344,13 @@ export default {
 		};
 	},
 	methods: {
-		shipments() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				orderId: this.$route.params.id
-			});
-			this.Axios(
-				{
-					params: data,
-					option: {
-						successMsg: "发货成功"
-					},
-					type: "post",
-					url: "/api-order/order/sendGood"
-				},
-				this
-			).then(
-				result => {
-					console.log(result);
-					if (result.data.code === 200) {
-						this.reload();
-						this.dialogSend = false;
-					}
-				},
-				({ type, info }) => {}
-			);
+		url() {
+			let url =
+				"https://www.kuaidi100.com/chaxun?com=" +
+				this.orderDetails.expressPinyin +
+				"&nu=" +
+				this.orderDetails.waybillNo;
+			return url;
 		},
 		payOrder() {
 			if (this.payOI == "") {
@@ -443,24 +431,25 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/getOneOrder"
+					url: "/api-order/order/findOne"
 				},
 				this
 			).then(
 				result => {
-					// console.log(result.data);
+					console.log(result.data);
 					if (result.data.code === 200) {
-						result.data.data.address = JSON.parse(result.data.data.address);
+						// result.data.data.address = JSON.parse(result.data.data.address);
 						this.orderDetails = result.data.data;
-						this.sendTime =
-							this.orderDetails.startTime.substring(
-								0,
-								this.orderDetails.startTime.lastIndexOf(":")
-							) +
-							"-" +
-							this.orderDetails.endTime
-								.substring(this.orderDetails.endTime.lastIndexOf(" ") + 1)
-								.substring(0, 5);
+						this.tableData1 = result.data.data.orderLogs;
+						// this.sendTime =
+						// 	this.orderDetails.startTime.substring(
+						// 		0,
+						// 		this.orderDetails.startTime.lastIndexOf(":")
+						// 	) +
+						// 	"-" +
+						// 	this.orderDetails.endTime
+						// 		.substring(this.orderDetails.endTime.lastIndexOf(" ") + 1)
+						// 		.substring(0, 5);
 					}
 				},
 				({ type, info }) => {}
@@ -468,7 +457,7 @@ export default {
 		}
 	},
 	created() {
-		// this.getDetails(this.$route.params.id);
+		this.getDetails(this.$route.params.id);
 	},
 	components: {
 		tableList

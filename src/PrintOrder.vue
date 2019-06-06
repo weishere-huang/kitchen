@@ -6,49 +6,49 @@
 			<el-col :span="24">
 				<el-col :span="8">
 					<el-col :span="24">
-						<!-- <span>购买用户：{{item.phone}}</span> -->
-						<span>购买用户：13608253396</span>
+						<span>购买用户：{{item.userPhone}}</span>
+						<!-- <span>购买用户：13608253396</span> -->
 					</el-col>
 					<el-col :span="24">
-						<span>订单编号：1888238410129</span>
-						<!-- <span>订单编号：{{item.orderNo}}</span> -->
+						<!-- <span>订单编号：1888238410129</span> -->
+						<span>订单编号：{{item.orderNo}}</span>
 					</el-col>
 					<el-col :span="24">
-						<span>发货单号：15553431289502</span>
-					</el-col>
-				</el-col>
-				<el-col :span="8">
-					<el-col :span="24">
-						<span>下单时间：2019-5-20 16:30:45</span>
-						<!-- <span>下单时间：{{item.gmtCreate}}</span> -->
-					</el-col>
-					<el-col :span="24">
-						<!-- <span>付款时间：{{item.payTime}}</span> -->
-						<span>付款时间：2019-5-20 16:34:25</span>
-					</el-col>
-					<el-col :span="24">
-						<!-- <span>发货时间：{{item.sendGoodTime}}</span> -->
-						<span>发货时间：2019-5-20 17:23:20</span>
+						<span>发货单号：{{item.waybillNo}}</span>
 					</el-col>
 				</el-col>
 				<el-col :span="8">
 					<el-col :span="24">
-						<!-- <span>支付方式：{{item.payType}}</span> -->
-						<span>支付方式：支付宝</span>
+						<!-- <span>下单时间：2019-5-20 16:30:45</span> -->
+						<span>下单时间：{{item.gmtCreate}}</span>
+					</el-col>
+					<el-col :span="24">
+						<span>付款时间：{{item.payTime}}</span>
+						<!-- <span>付款时间：2019-5-20 16:34:25</span> -->
+					</el-col>
+					<el-col :span="24">
+						<span>发货时间：{{item.shipTime}}</span>
+						<!-- <span>发货时间：2019-5-20 17:23:20</span> -->
+					</el-col>
+				</el-col>
+				<el-col :span="8">
+					<el-col :span="24">
+						<span>支付方式：{{item.payType}}</span>
+						<!-- <span>支付方式：支付宝</span> -->
 					</el-col>
 					<el-col :span="24">
 						<!-- <span>配送时间：{{item.sendTime}}</span> -->
-						<span>配送时间：-</span>
+						<span>快递公司：{{item.expressName}}</span>
 					</el-col>
 				</el-col>
 				<!-- <el-col :span="6"></el-col> -->
 				<el-col :span="24" class="consignee_case">
-					<!-- <span>收货地址：{{item.address.area+item.address.address}}</span>
+					<span>收货地址：{{item.address.area+item.address.address}}</span>
 					<span>收货人：{{item.address.consignee+(item.address.gender==1?"先生":"女士")}}</span>
-					<span>电话：{{item.address.phone}}</span>-->
-					<span>收货地址：四川省 遂宁市 大英县 蓬莱镇 蓬乐街246号</span>
+					<span>电话：{{item.address.phone}}</span>
+					<!-- <span>收货地址：四川省 遂宁市 大英县 蓬莱镇 蓬乐街246号</span>
 					<span>收货人：庄先生</span>
-					<span>电话：13608253396</span>
+					<span>电话：13608253396</span>-->
 				</el-col>
 			</el-col>
 			<el-col :span="24" style="margin-top:10px;">
@@ -59,18 +59,23 @@
 						<td>数量</td>
 						<td>小计</td>
 					</tr>
-					<tr v-for="(item1, index) in item.items" :key="index">
-						<td>{{item1.itemName}}</td>
-						<td>￥{{item1.itemPrice/100}}元</td>
-						<td>{{item1.number}}</td>
-						<td>￥{{item1.itemPrice/100*item1.number}}元</td>
+					<tr v-for="(item1, index) in item.productDOS" :key="index">
+						<td>{{item1.productName}}</td>
+						<td>￥{{item1.amount/100}}元</td>
+						<td>{{item1.num}}</td>
+						<td>￥{{item1.amount/100*item1.num}}元</td>
 					</tr>
 				</table>
 			</el-col>
 			<el-col :span="24">
-				<span style="float:right;">
-					<h5 style="display:inline-block;font-size:14px;">合计：¥ {{item.orderMoney/100}}</h5>
+				<span style="float:right;line-height:24px;">
+					<h5 style="display:inline;font-size:14px;">合计：¥ {{item.itemAmount/100}}</h5>
 					（含运费{{item.postFee/100}}元）
+					<h5 style="display:inline;font-size:14px;">-优惠：</h5>
+					<span v-if="item.couponAmount/100>0">优惠券￥{{item.couponAmount/100}}</span> &nbsp;
+					<span v-if="item.redPackageAmount/100>0">红包￥{{item.redPackageAmount}}</span>
+
+					<h5 style="display:inline;font-size:14px;">实际支付：￥{{item.realAmount/100}}</h5>
 				</span>
 			</el-col>
 			<el-col :span="24">
@@ -172,46 +177,31 @@ export default {
 		instance.defaults.headers.common["token"] = isLogin;
 		this.user = JSON.parse(sessionStorage.getItem("user")).account;
 
-		// this.Axios(
-		// 	{
-		// 		params: {
-		// 			orderIds: sessionStorage.getItem("orderIds")
-		// 		},
-		// 		option: {
-		// 			enableMsg: false
-		// 		},
-		// 		type: "get",
-		// 		url: "/api-order/order/printOrder"
-		// 	},
-		// 	this
-		// ).then(
-		// 	result => {
-		// 		if (result.data.code === 200) {
-		// 			// sessionStorage.setItem("printData", JSON.stringify(result.data.data));
-		// 			let ordersMsg = result.data.data;
-		// 			for (let i = 0; i < ordersMsg.length; i++) {
-		// 				ordersMsg[i].address = JSON.parse(ordersMsg[i].address);
-		// 				ordersMsg[i].sendTime =
-		// 					ordersMsg[i].startTime.substring(
-		// 						0,
-		// 						ordersMsg[i].startTime.lastIndexOf(":")
-		// 					) +
-		// 					"-" +
-		// 					ordersMsg[i].endTime
-		// 						.substring(ordersMsg[i].endTime.lastIndexOf(" ") + 1)
-		// 						.substring(0, 5);
-		// 			}
-		// 			this.printData = Object.assign([], ordersMsg);
-		// 			console.log(this.printData);
-		// 		}
-		// 	},
-		// 	({ type, info }) => {}
-		// );
+		this.Axios(
+			{
+				params: {
+					orderIds: sessionStorage.getItem("orderIds")
+				},
+				option: {
+					enableMsg: false
+				},
+				type: "get",
+				url: "/api-order/order/orderPrint"
+			},
+			this
+		).then(
+			result => {
+				if (result.data.code === 200) {
+					console.log(result.data.data);
+					this.printData = result.data.data;
+				}
+			},
+			({ type, info }) => {}
+		);
 	},
 	updated() {
-		this.preview(1);
-	},
-	beforeDestroy() {}
+		// this.preview(1);
+	}
 };
 </script>
 

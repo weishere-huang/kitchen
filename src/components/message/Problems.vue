@@ -175,12 +175,12 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getServiceList();
+			this.getfaqList();
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
-			this.getServiceList();
+			this.getfaqList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
@@ -228,7 +228,7 @@ export default {
 		},
 		search() {
 			this.pageIndex = 1;
-			this.pageSize = 15;
+			// this.pageSize = 10;
 			this.getfaqList();
 		},
 		beforeadd1() {
