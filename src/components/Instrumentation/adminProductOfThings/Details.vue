@@ -20,7 +20,7 @@
 					</el-form-item>
 					<el-form-item label="审核状态：" prop>
 						<span>{{oneProductMsg.state==0?'待审核':oneProductMsg.state==1?'已通过':'已驳回'}}</span>
-						<span v-if="oneProductMsg.auditOpinion!=''||null">（{{oneProductMsg.auditOpinion}}）</span>
+						<span v-if="oneProductMsg.auditOpinion!=''&&null">（{{oneProductMsg.auditOpinion}}）</span>
 					</el-form-item>
 					<el-form-item label="审核时间：" prop>
 						<span>{{oneProductMsg.auditCreate}}</span>

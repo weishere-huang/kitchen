@@ -73,7 +73,7 @@
 							<!-- <li>
 								<a style="color:white;" @click="outOne">切换用户</a>
 							</li>-->
-							<li>&nbsp;欢迎您：{{editPassword.account}}</li>
+							<li>&nbsp;欢迎您：{{editPassword.account}}{{employeeType==1?'（厂商）':employeeType==2?'（商家）':employeeType==3?'（管理员）':''}}</li>
 							<!-- <li>
 								<el-tooltip class="item" effect="light" content="订单" placement="bottom-end">
 									<el-badge is-dot class="item">
@@ -100,11 +100,11 @@
 									<i class="iconfont" @click="pathto(3)">&#xe62a;</i>
 								</el-tooltip>
 							</li>
-							<li>
+							<!-- <li>
 								<el-tooltip class="item" effect="light" content="服务热线" placement="bottom-end">
 									<i class="iconfont" @click="pathto(4)">&#xe608;</i>
 								</el-tooltip>
-							</li>
+							</li>-->
 							<li>
 								<el-tooltip class="item" effect="light" content="退出登录" placement="bottom-end">
 									<i class="iconfont" @click="out">&#xe639;</i>
@@ -174,11 +174,15 @@
 						<span>{{editPassword.phone}}</span>
 					</el-form-item>
 					<el-form-item label="短信验证码：">
-						<el-input type="number" style="width:73%;"></el-input>
-						<el-button plain>获取</el-button>
+						<el-input type="number" v-model="updatePhone.code1" style="width:73%;"></el-input>
+						<el-button plain @click="getVerificationCode(editPassword.phone)">获取</el-button>
 					</el-form-item>
 					<el-form-item style="text-align:right">
-						<el-button type="primary" @click="oldPhoneShow=false;newPhoneShow=true">下一步</el-button>
+						<el-button
+							type="primary"
+							@click="sendVerificationCode()"
+							:disabled="updatePhone.code1==''"
+						>下一步</el-button>
 					</el-form-item>
 				</el-form>
 				<el-form
@@ -188,14 +192,22 @@
 					v-show="newPhoneShow"
 				>
 					<el-form-item label="新手机号：">
-						<el-input type="number"></el-input>
+						<el-input type="number" v-model="updatePhone.newPhone"></el-input>
 					</el-form-item>
 					<el-form-item label="短信验证码：">
-						<el-input type="number" style="width:73%;"></el-input>
-						<el-button plain>获取</el-button>
+						<el-input type="number" v-model="updatePhone.code2" style="width:73%;"></el-input>
+						<el-button
+							plain
+							:disabled="updatePhone.newPhone==''||updatePhone.newPhone==null"
+							@click="getVerificationCode(updatePhone.newPhone)"
+						>获取</el-button>
 					</el-form-item>
 					<el-form-item style="text-align:right">
-						<el-button type="primary" @click="innerVisible=false;oldPhoneShow=true;newPhoneShow=false;">修改</el-button>
+						<el-button
+							type="primary"
+							:disabled="updatePhone.newPhone==''||updatePhone.code2==''"
+							@click="modificationPhone"
+						>修改</el-button>
 					</el-form-item>
 				</el-form>
 			</el-dialog>
@@ -252,6 +264,11 @@ export default {
 	name: "App",
 	data() {
 		return {
+			updatePhone: {
+				code1: "",
+				code2: "",
+				newPhone: ""
+			},
 			oldPhoneShow: true,
 			newPhoneShow: false,
 			innerVisible: false,
@@ -329,6 +346,107 @@ export default {
 	},
 	computed: {},
 	methods: {
+		modificationPhone() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				oldPhone: this.editPassword.phone,
+				newPhone: this.updatePhone.newPhone,
+				oldCode: this.updatePhone.code1,
+				newCode: this.updatePhone.code2
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "手机号码修改成功，即将跳转至登录界面！"
+					},
+					type: "post",
+					url: "/api-enterprise/enterprise/updatePhone",
+					loadingConfig: {
+						target: document.querySelector("#app")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+						// this.innerVisible = false;
+						// this.oldPhoneShow = true;
+						// this.newPhoneShow = false;
+						sessionStorage.removeItem("token");
+						sessionStorage.removeItem("user");
+						sessionStorage.removeItem("permissionUrl");
+						sessionStorage.removeItem("imgPath");
+						sessionStorage.removeItem("area");
+						sessionStorage.removeItem("activeIndex");
+						sessionStorage.removeItem("itemMenu");
+						sessionStorage.removeItem("orderIds");
+						setTimeout(() => {
+							window.location.href = "/login.html";
+						}, 2000);
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		sendVerificationCode() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				phone: this.editPassword.phone,
+				code: this.updatePhone.code1
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						enableMsg: false
+					},
+					type: "post",
+					url: "/api-enterprise/enterprise/verification",
+					loadingConfig: {
+						target: document.querySelector("#app")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+						this.oldPhoneShow = false;
+						this.newPhoneShow = true;
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		getVerificationCode(phone) {
+			let qs = require("qs");
+			let data = qs.stringify({
+				phone: phone
+			});
+			this.Axios(
+				{
+					params: data,
+					option: {
+						successMsg: "短信已发送至您手机，请注意查收！"
+					},
+					type: "post",
+					url: "/api-sso/user/getVerifyCode",
+					loadingConfig: {
+						target: document.querySelector("#app")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
 		getSubMenu(item, index) {
 			this.activeIndex = index;
 			sessionStorage.activeIndex = index;
@@ -437,7 +555,7 @@ export default {
 					type: "post",
 					url: "/api-sso/user/updatePwd",
 					loadingConfig: {
-						target: document.querySelector(".login")
+						target: document.querySelector("#login")
 					}
 				},
 				this

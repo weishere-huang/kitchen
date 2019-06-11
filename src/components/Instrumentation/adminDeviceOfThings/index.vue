@@ -192,6 +192,7 @@ export default {
 			);
 		}
 	},
+	mounted() {},
 	created() {
 		this.getProductlist();
 		this.getlist();

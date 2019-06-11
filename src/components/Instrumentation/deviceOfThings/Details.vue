@@ -81,17 +81,17 @@
 				>
 					<el-table-column label="记录时间" min-width="200" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span>{{ scope.row.nickName }}</span>
+							<span>{{ scope.row.gmtCreate }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="状态" min-width="200" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span>{{ scope.row.phone }}</span>
+							<span>{{ scope.row.deviceAction }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="运行时长" min-width="100">
 						<template slot-scope="scope">
-							<span>{{ scope.row.order }}</span>
+							<span>{{ scope.row.time }}</span>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -148,10 +148,12 @@ export default {
 			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
+			this.deviceRecord(this.$route.params.id);
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
+			this.deviceRecord(this.$route.params.id);
 		},
 		findOne(id) {
 			this.Axios(
@@ -170,10 +172,34 @@ export default {
 					this.deviceDetails = result.data.data;
 				}
 			});
+		},
+		deviceRecord(id) {
+			this.Axios(
+				{
+					params: {
+						id: id,
+						page: this.pageIndex,
+						size: this.pageSize
+					},
+					url: "/api-enterprise/deviceRecord/list",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				console.log(result);
+				if (result.data.code === 200) {
+					this.tableData = result.data.data.content;
+					this.total = result.data.data.totalElement;
+				}
+			});
 		}
 	},
 	created() {
 		this.findOne(this.$route.params.id);
+		this.deviceRecord(this.$route.params.id);
 	}
 };
 </script>

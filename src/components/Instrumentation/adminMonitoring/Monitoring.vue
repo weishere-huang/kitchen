@@ -118,19 +118,43 @@ export default {
 							data: date
 						},
 						yAxis: {
-							type: "value"
+							type: "value",
+							max:
+								Math.max.apply(null, online) +
+								Math.floor(Math.max.apply(null, online) / 4) +
+								1
 						},
 						series: [
 							{
 								name: "在线",
 								type: "line",
+								data: online,
+								label: {
+									normal: {
+										show: true,
+										position: "top"
+									}
+								},
+								areaStyle: {
+									normal: {
+										color: "#1cc09f"
+									}
+								},
+								itemStyle: {
+									normal: {
+										color: "#1cc09f",
+										lineStyle: {
+											color: "#1cc09f"
+										}
+									}
+								},
 								data: online
-							},
-							{
-								name: "离线",
-								type: "line",
-								data: offline
 							}
+							// {
+							// 	name: "离线",
+							// 	type: "line",
+							// 	data: offline
+							// }
 						]
 					};
 					myChart.setOption(Option);

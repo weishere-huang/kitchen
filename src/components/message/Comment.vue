@@ -1,102 +1,187 @@
 <template>
 	<div class="comment_list">
 		<div class="bottom_list">
-			<div class="top_title">
-				<h4>评价管理</h4>
-				<div class="top_search">
-					<el-col :span="21" style="padding:0 5px;">
-						<el-input
-							clearable
-							size="small"
-							style="width:100%;"
-							placeholder="用户名/昵称/IP地址/评论内容关键字"
-							v-model="keyword"
-						></el-input>
-					</el-col>
-					<el-col :span="3" style="padding:0 5px;">
-						<el-button size="small" plain @click>搜索</el-button>
-					</el-col>
-				</div>
+			<!-- <div class="top_title">
+			<h4>评论管理</h4>-->
+			<div class="top_search">
+				<el-col :span="20" style="padding:0 5px;">
+					<el-input
+						clearable
+						size="small"
+						style="width:100%;"
+						placeholder="用户名/昵称/IP地址/评论内容关键字"
+						v-model="keyword"
+					></el-input>
+				</el-col>
+				<el-col :span="4" style="padding:0 5px;">
+					<el-button size="small" plain @click>搜索</el-button>
+				</el-col>
 			</div>
-			<div class="table_list">
-				<el-table
-					:data="tableData"
-					style="width: 100%"
-					size="mini"
-					tooltip-effect="light"
-					@selection-change="handleSelectionChange"
-					:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
-				>
-					<el-table-column type="selection" width="30"></el-table-column>
-					<el-table-column label="昵称" min-width="120" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<span>{{ scope.row.name }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="类型" min-width="100" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<span>{{ scope.row.type }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="评论对象" min-width="100">
-						<template slot-scope="scope">
-							<span>{{ scope.row.cateName }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="评论时间" min-width="110" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<span>{{ scope.row.cateName }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="当前状态" min-width="60">
-						<template slot-scope="scope">
-							<span>{{ scope.row.cateName }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作" width="180">
-						<template slot-scope="scope">
-							<el-button type="text" size="mini" @click.stop.prevent>设为显示</el-button>
-							<!-- <el-button type="text" size="mini" @click.stop.prevent>设为隐藏</el-button> -->
-							<el-button type="text" size="mini" @click.stop.prevent>详情</el-button>
-							<el-popover placement="top" width="180" v-model="scope.row.visible">
-								<p style="line-height:32px;text-align:center;">
-									<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
-								</p>
-								<div style="text-align: center; margin: 0">
-									<el-button size="small" plain @click="scope.row.visible = false">取消</el-button>
-									<el-button type="primary" size="small" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
-								</div>
-								<el-button slot="reference" type="text">删除</el-button>
-							</el-popover>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
-			<div class="block" style="margin-top:10px;float:right">
-				<el-pagination
-					background
-					@size-change="handleSizeChange"
-					@current-change="handleCurrentChange"
-					:current-page.sync="pageIndex"
-					:page-sizes="[10, 20,40, 100]"
-					:page-size="pageSize"
-					layout="sizes, prev, pager, next"
-					:total="total"
-				></el-pagination>
-			</div>
-			<div style="margin-top:10px;line-height:32px;padding-left:10px;color:#999999">
-				<el-dropdown size="small" trigger="click" @command="handle">
-					<el-button type="primary">
-						批量操作
-						<i class="el-icon-arrow-down el-icon--right"></i>
-					</el-button>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item command="1">批量显示</el-dropdown-item>
-						<el-dropdown-item command="2">批量隐藏</el-dropdown-item>
-						<el-dropdown-item command="3">批量删除</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</div>
+			<!-- </div> -->
+			<el-tabs v-model="activeName">
+				<el-tab-pane label="评论管理" name="first">
+					<div class="table_list">
+						<el-table
+							:data="tableData"
+							style="width: 100%"
+							size="mini"
+							tooltip-effect="light"
+							@selection-change="handleSelectionChange"
+							:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+						>
+							<el-table-column type="selection" width="30"></el-table-column>
+							<el-table-column label="昵称" min-width="120" show-overflow-tooltip>
+								<template slot-scope="scope">
+									<span>{{ scope.row.name }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="类型" min-width="100" show-overflow-tooltip>
+								<template slot-scope="scope">
+									<span>{{ scope.row.type }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="评论对象" min-width="100">
+								<template slot-scope="scope">
+									<span>{{ scope.row.cateName }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="评论时间" min-width="110" show-overflow-tooltip>
+								<template slot-scope="scope">
+									<span>{{ scope.row.cateName }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="当前状态" min-width="60">
+								<template slot-scope="scope">
+									<span>{{ scope.row.cateName }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="操作" width="180">
+								<template slot-scope="scope">
+									<el-button type="text" size="mini" @click.stop.prevent>设为显示</el-button>
+									<!-- <el-button type="text" size="mini" @click.stop.prevent>设为隐藏</el-button> -->
+									<el-button type="text" size="mini" @click.stop.prevent>详情</el-button>
+									<el-popover placement="top" width="180" v-model="scope.row.visible">
+										<p style="line-height:32px;text-align:center;">
+											<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
+										</p>
+										<div style="text-align: center; margin: 0">
+											<el-button size="small" plain @click="scope.row.visible = false">取消</el-button>
+											<el-button type="primary" size="small" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
+										</div>
+										<el-button slot="reference" type="text">删除</el-button>
+									</el-popover>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
+					<div class="block" style="margin-top:10px;float:right">
+						<el-pagination
+							background
+							@size-change="handleSizeChange"
+							@current-change="handleCurrentChange"
+							:current-page.sync="pageIndex"
+							:page-sizes="[10, 20,40, 100]"
+							:page-size="pageSize"
+							layout="sizes, prev, pager, next"
+							:total="total"
+						></el-pagination>
+					</div>
+					<div style="margin-top:10px;line-height:32px;padding-left:10px;color:#999999">
+						<el-dropdown size="small" trigger="click" @command="handle">
+							<el-button type="primary">
+								批量操作
+								<i class="el-icon-arrow-down el-icon--right"></i>
+							</el-button>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item command="1">批量显示</el-dropdown-item>
+								<el-dropdown-item command="2">批量隐藏</el-dropdown-item>
+								<el-dropdown-item command="3">批量删除</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</div>
+				</el-tab-pane>
+				<el-tab-pane label="回复管理" name="second">
+					<div class="table_list">
+						<el-table
+							:data="tableData"
+							style="width: 100%"
+							size="mini"
+							tooltip-effect="light"
+							@selection-change="handleSelectionChange"
+							:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+						>
+							<el-table-column type="selection" width="30"></el-table-column>
+							<el-table-column label="昵称" min-width="120" show-overflow-tooltip>
+								<template slot-scope="scope">
+									<span>{{ scope.row.name }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="类型" min-width="100" show-overflow-tooltip>
+								<template slot-scope="scope">
+									<span>{{ scope.row.type }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="评论对象" min-width="100">
+								<template slot-scope="scope">
+									<span>{{ scope.row.cateName }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="评论时间" min-width="110" show-overflow-tooltip>
+								<template slot-scope="scope">
+									<span>{{ scope.row.cateName }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="当前状态" min-width="60">
+								<template slot-scope="scope">
+									<span>{{ scope.row.cateName }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="操作" width="180">
+								<template slot-scope="scope">
+									<el-button type="text" size="mini" @click.stop.prevent>设为显示</el-button>
+									<!-- <el-button type="text" size="mini" @click.stop.prevent>设为隐藏</el-button> -->
+									<el-button type="text" size="mini" @click.stop.prevent>详情</el-button>
+									<el-popover placement="top" width="180" v-model="scope.row.visible">
+										<p style="line-height:32px;text-align:center;">
+											<i class="el-icon-warning" style="color:#e6a23c;font-size:18px;margin-right:8px;"></i>确定删除吗？
+										</p>
+										<div style="text-align: center; margin: 0">
+											<el-button size="small" plain @click="scope.row.visible = false">取消</el-button>
+											<el-button type="primary" size="small" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
+										</div>
+										<el-button slot="reference" type="text">删除</el-button>
+									</el-popover>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
+					<div class="block" style="margin-top:10px;float:right">
+						<el-pagination
+							background
+							@size-change="handleSizeChange"
+							@current-change="handleCurrentChange"
+							:current-page.sync="pageIndex"
+							:page-sizes="[10, 20,40, 100]"
+							:page-size="pageSize"
+							layout="sizes, prev, pager, next"
+							:total="total"
+						></el-pagination>
+					</div>
+					<div style="margin-top:10px;line-height:32px;padding-left:10px;color:#999999">
+						<el-dropdown size="small" trigger="click" @command="handle">
+							<el-button type="primary">
+								批量操作
+								<i class="el-icon-arrow-down el-icon--right"></i>
+							</el-button>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item command="1">批量显示</el-dropdown-item>
+								<el-dropdown-item command="2">批量隐藏</el-dropdown-item>
+								<el-dropdown-item command="3">批量删除</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</div>
+				</el-tab-pane>
+			</el-tabs>
 		</div>
 		<el-dialog :close-on-click-modal="false" title="评论详情" :visible.sync="dialogVisible" width="600px">
 			<el-form label-width="120px" size="small" style="margin-top:20px;">
@@ -140,6 +225,7 @@
 export default {
 	data() {
 		return {
+			activeName: "first",
 			dialogVisible: false,
 			tableData: [
 				{
@@ -221,6 +307,15 @@ export default {
 	font-size: 14px;
 	color: @font-normal;
 	.bottom_list {
+		.top_search {
+			width: 500px;
+			// float: right;
+			position: absolute;
+			top: 104px;
+			right: 0px;
+			z-index: 100000;
+			overflow: hidden;
+		}
 		background-color: white;
 		margin-top: 10px;
 		padding-bottom: 10px;
@@ -232,10 +327,6 @@ export default {
 			border-bottom: @border;
 			h4 {
 				float: left;
-			}
-			.top_search {
-				width: 500px;
-				float: right;
 			}
 		}
 		.table_list {
@@ -249,6 +340,13 @@ export default {
 				}
 			}
 		}
+	}
+	.el-tabs__nav-wrap {
+		padding: 0 12px;
+	}
+	.el-tabs__item {
+		height: 60px;
+		line-height: 60px;
 	}
 }
 .el-dropdown-menu__item:focus,

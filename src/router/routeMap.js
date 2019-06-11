@@ -290,11 +290,11 @@ export default [{
         defaultDock: true,
         permissionCode: 'system_set_lookup'
       },
-      {
-        menu: '安全设置',
-        route: '/Security',
-        permissionCode: 'system_safeset_lookup'
-      },
+      // {
+      //   menu: '安全设置',
+      //   route: '/Security',
+      //   permissionCode: 'system_safeset_lookup'
+      // },
       {
         menu: '管理员列表',
         route: '/Administrator',
