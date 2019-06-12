@@ -240,7 +240,8 @@ export default {
 						this
 					).then(result => {
 						if (result.data.code === 200) {
-							this.getClassifyList();
+							// this.getClassifyList();
+							this.reload()
 						}
 					});
 				} else {

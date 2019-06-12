@@ -9,7 +9,7 @@
 					<p class="content_style">Hi,{{supplierName}},祝你开心每一天！</p>
 					<p style="color:#999999">{{roleName}}</p>
 				</el-col>
-				<el-col :span="7">
+				<!-- <el-col :span="7">
 					<div class="recommend">
 						<span style="margin-right:8px;" class="case">
 							<p>发布菜谱</p>
@@ -27,73 +27,73 @@
 							</p>
 						</span>
 					</div>
-				</el-col>
+				</el-col>-->
 			</el-col>
 			<el-col :span="24">
 				<ul class="list_style">
 					<li>
 						<div class="list_box">
-							<span style="background-color: #00BDF1;">
-								<i class="iconfont" style="color:white;">&#xe63b;</i>
+							<span>
+								<i class="iconfont" style="color:#00BDF1;font-size:32px">&#xe6db;</i>
 							</span>
 							<span>
 								<p>{{allMsg.orderDaySum.orderSum>0?allMsg.orderDaySum.orderSum:'0'}}</p>
-								<p>今日订单</p>
+								<p>物联产品</p>
 							</span>
 						</div>
 					</li>
 					<li>
 						<div class="list_box">
-							<span style="background-color: #80D6AC;">
-								<i class="iconfont" style="color:white;">&#xe666;</i>
+							<span style>
+								<i class="iconfont" style="color:#B1B42D;font-size:32px">&#xe752;</i>
 							</span>
 							<span>
 								<p>{{allMsg.orderDaySum.orderMoney>0?allMsg.orderDaySum.orderMoney:'0'}}</p>
-								<p>今日销售额</p>
+								<p>设备厂商</p>
 							</span>
 						</div>
 					</li>
 					<li>
 						<div class="list_box">
-							<span style="background-color: #FF834D;">
-								<i class="iconfont" style="color:white;">&#xe653;</i>
+							<span>
+								<i class="iconfont" style="color: #FF834D;font-size:28px">&#xe604;</i>
 							</span>
 							<span>
 								<p>{{allMsg.userNum.sumDay>0?allMsg.userNum.sumDay:'0'}}</p>
-								<p>今日注册用户</p>
+								<p>注册用户</p>
 							</span>
 						</div>
 					</li>
 					<li>
 						<div class="list_box">
-							<span style="background-color: #A72F95;">
-								<i class="iconfont" style="color:white;">&#xe8d7;</i>
+							<span>
+								<i class="iconfont" style="color:#648B99;font-size:32px">&#xe64d;</i>
 							</span>
 							<span>
 								<p>{{allMsg.orderSum.orderSum>0?allMsg.orderSum.orderSum:'0'}}</p>
-								<p>订单总数</p>
+								<p>物联设备</p>
 							</span>
 						</div>
 					</li>
 					<li>
 						<div class="list_box">
-							<span style="background-color: #6366CB;">
-								<i class="iconfont" style="color:white;">&#xe69f;</i>
+							<span>
+								<i class="iconfont" style="color:#6666CA;font-size:32px">&#xe615;</i>
 							</span>
 							<span>
-								<p>￥{{allMsg.orderSum.orderMoney>0?allMsg.orderSum.orderMoney:'0'}}</p>
-								<p>销售总额</p>
+								<p>{{allMsg.orderSum.orderMoney>0?allMsg.orderSum.orderMoney:'0'}}</p>
+								<p>入驻商家</p>
 							</span>
 						</div>
 					</li>
 					<li>
 						<div class="list_box">
-							<span style="background-color: #22CE9C;">
-								<i class="iconfont" style="color:white;">&#xe684;</i>
+							<span>
+								<i class="iconfont" style="color:#65CB99;font-size:32px">&#xe62e;</i>
 							</span>
 							<span>
 								<p>{{allMsg.userNum.countUser>0?allMsg.userNum.countUser:'0'}}</p>
-								<p>用户总数</p>
+								<p>留言反馈</p>
 							</span>
 						</div>
 					</li>
@@ -101,7 +101,7 @@
 			</el-col>
 			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
-					<h4>销售额趋势</h4>
+					<h4>设备接入</h4>
 					<el-button-group class="data_style">
 						<el-button
 							plain
@@ -127,10 +127,25 @@
 			</el-col>
 			<el-col :span="24" class="feedback">
 				<div class="top_style">
-					<h4>意见反馈</h4>
+					<h4>销售额</h4>
+					<el-button-group class="data_style">
+						<el-button
+							plain
+							size="small"
+							:class="btnStyleShow==0?'btn_style':''"
+							@click="getSaleMoney(0)"
+						>最近7天</el-button>
+						<el-button
+							plain
+							size="small"
+							:class="btnStyleShow==1?'btn_style':''"
+							@click="getSaleMoney(1)"
+						>最近30天</el-button>
+						<!-- <el-button plain size="small" @click="getSaleMoney(2)">最近一年</el-button> -->
+					</el-button-group>
 				</div>
 				<el-col :span="24" class="content_case">
-					<el-col :span="6" class="left_case">
+					<!-- <el-col :span="6" class="left_case">
 						<el-col
 							:span="24"
 							class="item_case"
@@ -183,14 +198,14 @@
 								:disabled="reply!=''&&messageReply!=''?false:true"
 							>快速回复</el-button>
 						</el-col>
-					</el-col>
+					</el-col> -->
 				</el-col>
 			</el-col>
 		</el-col>
 		<el-col :span="6" style="padding:0 0 0 8px;">
 			<el-col :span="24" style="background-color: white;margin-top: 12px;">
 				<el-col :span="24" class="top_lists">
-					<h4>本月销售TOP榜</h4>
+					<h4>热门物联产品</h4>
 					<span>
 						<i class="iconfont" @click="showTop5(1)">&#xe6b6;</i>
 						<i class="iconfont" @click="showTop10(1)">&#xe6b7;</i>
@@ -230,7 +245,7 @@
 			</el-col>
 			<el-col :span="24" style="background-color: white;margin-top: 17px;">
 				<el-col :span="24" class="top_lists">
-					<h4>本月热销商品</h4>
+					<h4>本月销售排行</h4>
 					<span>
 						<i class="iconfont" @click="showTop5(2)">&#xe6b6;</i>
 						<i class="iconfont" @click="showTop10(2)">&#xe6b7;</i>
@@ -672,9 +687,9 @@ export default {
 				display: inline-block;
 			}
 			span:nth-child(1) {
-				width: 32px;
-				height: 32px;
-				line-height: 32px;
+				width: 36px;
+				height: 36px;
+				line-height: 36px;
 				text-align: center;
 				border-radius: 5px;
 				margin-left: 20px;
@@ -688,6 +703,11 @@ export default {
 					font-size: 20px;
 					text-align: right;
 					font-family: Roboto;
+					cursor: pointer;
+					&:hover {
+						color: #1cc09f;
+						text-decoration: underline;
+					}
 				}
 				p:nth-child(2) {
 					color: #999999;
@@ -740,6 +760,18 @@ export default {
 			line-height: 60px;
 			overflow: hidden;
 			border-bottom: @border;
+			h4 {
+				display: inline-block;
+			}
+			.data_style {
+				margin-top: 15px;
+				float: right;
+				.el-button.is-plain:focus,
+				.el-button.is-plain:hover {
+					background-color: @main-color;
+					color: white;
+				}
+			}
 		}
 		.content_case {
 			margin: 8px 12px;

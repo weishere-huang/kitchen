@@ -21,7 +21,7 @@
 						></editor>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" :disabled="content==''" @click>保 存</el-button>
+						<el-button type="primary" :disabled="content==''" @click="save">保 存</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -31,6 +31,7 @@
 <script>
 import editor from "../public/kindeditor";
 export default {
+	inject: ["reload"],
 	data() {
 		return {
 			content: ""
@@ -47,7 +48,53 @@ export default {
 		},
 		afterUpload(data) {
 			return this.global.imgPath + data.replace("img:", "");
+		},
+		getAgreement() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/protocol/find"
+				},
+				this
+			).then(
+				result => {
+					console.log(result.data);
+					if (result.data.code === 200) {
+						this.content = result.data.data[0].content;
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		save() {
+			let qs = require("qs");
+			let data = qs.stringify({
+				content: this.content
+			});
+			this.Axios(
+				{
+					params: data,
+					url: "/api-platform/protocol/add",
+					type: "post",
+					option: {
+						successMsg: "用户协议保存成功"
+					}
+				},
+				this
+			).then(result => {
+				console.log(result.data);
+				if (result.data.code === 200) {
+					this.getAgreement();
+				}
+			});
 		}
+	},
+	created() {
+		this.getAgreement();
 	},
 	components: {
 		editor

@@ -91,13 +91,15 @@ export default {
 					params: data,
 					url: "/api-platform/role/update",
 					type: "post",
-					option: {}
+					option: {
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {
 				if (result.data.code === 200) {
 					this.$router.back(-1);
-					this.reload();
+					// this.reload();
 				}
 			});
 		},

@@ -436,6 +436,7 @@ export default {
 	},
 	watch: {
 		$route() {
+			this.foodlist();
 			let a = this.$route.matched.find(item => item.name === "AddMenu")
 				? true
 				: false;

@@ -9,7 +9,7 @@
 					<p class="content_style">Hi,{{supplierName}},祝你开心每一天！</p>
 					<p style="color:#999999">{{storeName}}</p>
 				</el-col>
-				<el-col :span="9">
+				<!-- <el-col :span="9">
 					<div class="recommend">
 						<span style="background-color:#FF0000;margin-right:8px;padding:0 8px;">
 							热销&nbsp;
@@ -24,7 +24,7 @@
 							>{{allMsg.upperLowerShelfAndTotal.newMenuTotal>0?allMsg.upperLowerShelfAndTotal.newMenuTotal:0}}</span>
 						</span>
 					</div>
-				</el-col>
+				</el-col>-->
 			</el-col>
 			<el-col :span="24">
 				<ul class="list_style">
@@ -131,7 +131,7 @@
 		<el-col :span="6" style="padding:0 0 0 8px;">
 			<el-col :span="24" style="background-color: white;margin-top: 12px;">
 				<el-col :span="24" class="top_lists">
-					<h4>热销TOP榜</h4>
+					<h4>月销TOP榜</h4>
 					<span>
 						<i class="iconfont" @click="showTop5">&#xe6b6;</i>
 						<i class="iconfont" @click="showTop10">&#xe6b7;</i>

@@ -126,8 +126,8 @@ export default {
 						size: this.pageSize
 					},
 					option: {
-					  enableMsg: false
-          },
+						enableMsg: false
+					},
 					type: "get",
 					url: "/api-platform/role/listAllRole"
 				},
@@ -179,6 +179,7 @@ export default {
 	},
 	watch: {
 		$route() {
+			this.getRoleList();
 			let a = this.$route.matched.find(item => item.name === "AddRole")
 				? true
 				: false;

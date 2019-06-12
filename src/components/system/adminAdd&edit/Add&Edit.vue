@@ -121,7 +121,7 @@ export default {
 					{ required: true, message: "请输入电话", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^1[34578]\d{9}$/.test(value) == false) {
+							if (/^1[23456789]\d{9}$/.test(value) == false) {
 								callback(new Error("请输入正确的电话号码"));
 							} else {
 								callback();

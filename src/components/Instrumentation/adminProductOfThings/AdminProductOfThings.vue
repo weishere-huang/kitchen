@@ -273,6 +273,7 @@ export default {
 	},
 	watch: {
 		$route() {
+			this.getlist();
 			let a = this.$route.matched.find(
 				item => item.name === "ProductOfThingsAdd"
 			)

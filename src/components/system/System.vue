@@ -417,6 +417,14 @@ export default {
 								this.systemMsg.register == null
 							) {
 								callback(new Error("请输入签到赠送积分"));
+							} else if (
+								/^\d*(\.?\d{0,0})$/g.test(this.systemMsg.score) == false
+							) {
+								callback(new Error("积分比例不能小于0"));
+							} else if (
+								/^\d*(\.?\d{0,0})$/g.test(this.systemMsg.register) == false
+							) {
+								callback(new Error("签到赠送积分不能小于0"));
 							} else {
 								callback();
 							}

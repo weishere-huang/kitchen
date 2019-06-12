@@ -201,6 +201,7 @@ export default {
 	},
 	updated() {
 		// this.preview(1);
+		window.print();
 	}
 };
 </script>

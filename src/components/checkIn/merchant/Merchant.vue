@@ -223,7 +223,7 @@ export default {
 				: false;
 			let b = this.$route.params.id !== undefined ? true : false;
 			this.isHideList = a || b ? true : false;
-			this.reload();
+			this.getList();
 		}
 	}
 };

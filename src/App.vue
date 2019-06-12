@@ -163,17 +163,20 @@
 				title="更改手机号"
 				:visible.sync="innerVisible"
 				append-to-body
+				:before-close="handleClose"
 			>
 				<el-form
 					label-width="120px"
 					size="small"
 					style="margin-top:20px;padding-bottom:1px;"
 					v-show="oldPhoneShow"
+					ref="oldPhoneForm"
+					:model="updatePhone"
 				>
 					<el-form-item label="当前手机号：">
 						<span>{{editPassword.phone}}</span>
 					</el-form-item>
-					<el-form-item label="短信验证码：">
+					<el-form-item label="短信验证码：" prop="code1">
 						<el-input type="number" v-model="updatePhone.code1" style="width:73%;"></el-input>
 						<el-button plain @click="getVerificationCode(editPassword.phone)">获取</el-button>
 					</el-form-item>
@@ -190,11 +193,13 @@
 					size="small"
 					style="margin-top:20px;padding-bottom:1px;"
 					v-show="newPhoneShow"
+					ref="newPhoneForm"
+					:model="updatePhone"
 				>
-					<el-form-item label="新手机号：">
+					<el-form-item label="新手机号：" prop="newPhone">
 						<el-input type="number" v-model="updatePhone.newPhone"></el-input>
 					</el-form-item>
-					<el-form-item label="短信验证码：">
+					<el-form-item label="短信验证码：" prop="code2">
 						<el-input type="number" v-model="updatePhone.code2" style="width:73%;"></el-input>
 						<el-button
 							plain
@@ -346,6 +351,13 @@ export default {
 	},
 	computed: {},
 	methods: {
+		handleClose(done) {
+			done();
+			this.oldPhoneShow = true;
+			this.newPhoneShow = false;
+			this.$refs.oldPhoneForm.resetFields();
+			this.$refs.newPhoneForm.resetFields();
+		},
 		modificationPhone() {
 			let qs = require("qs");
 			let data = qs.stringify({
@@ -644,9 +656,6 @@ export default {
 			});
 		},
 		handleOpen(key, keyPath) {
-			console.log(key, keyPath);
-		},
-		handleClose(key, keyPath) {
 			console.log(key, keyPath);
 		},
 		reload() {

@@ -1,4 +1,21 @@
 export default [{
+    menu: '默认工作台',
+    permissionCode: 'things',
+    defaultDock: false,
+    icon: '&#xe606;',
+    subMenu: [{
+        menu: '默认工作台',
+        route: '/AdminSimpleHome',
+        permissionCode: 'iot_product_check_lookup'
+      },
+      {
+        menu: '默认工作台',
+        route: '/AdminHome',
+        permissionCode: 'platform_homepage_lookup'
+      },
+    ]
+  },
+  {
     menu: '智慧物联',
     permissionCode: 'things',
     defaultDock: false,
@@ -48,11 +65,12 @@ export default [{
     permissionCode: 'Ebusiness',
     defaultDock: false,
     icon: '&#xe627;',
-    subMenu: [{
-        menu: '首页',
-        route: '/AdminHome',
-        permissionCode: 'platform_homepage_lookup'
-      },
+    subMenu: [
+      // {
+      //   menu: '首页',
+      //   route: '/AdminHome',
+      //   permissionCode: 'platform_homepage_lookup'
+      // },
       {
         menu: '订单列表',
         route: '/AdminOrder',
@@ -195,7 +213,7 @@ export default [{
         permissionCode: 'message_active_detai_lookup'
       },
       {
-        menu: '评论管理',
+        menu: '评论/回复',
         route: '/Comment',
         permissionCode: 'message_active_lookup'
       },
@@ -340,6 +358,11 @@ export default [{
         menu: '审核查询',
         route: '/EnterpriseAuditedIndex',
         permissionCode: 'manufacturer_audit_lookup'
+      },
+      {
+        menu: '默认工作台',
+        route: '/Home',
+        permissionCode: 'manufacturer_product_lookup'
       },
       {
         menu: '修改注册',

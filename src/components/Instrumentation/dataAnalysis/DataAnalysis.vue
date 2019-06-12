@@ -43,7 +43,7 @@
 					<el-table-column label="排序" type="index" width="50" show-overflow-tooltip></el-table-column>
 					<el-table-column label="城市" min-width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span>{{ scope.row.cityName }}</span>
+							<span>{{ scope.row.cityName==""||scope.row.cityName==null?'未知':scope.row.cityName }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="设备数" min-width="50">

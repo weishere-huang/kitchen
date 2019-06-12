@@ -203,12 +203,15 @@ export default {
 					params: data,
 					url: "/api-platform/advise/reply",
 					type: "post",
-					option: {}
+					option: {
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.reload();
+					this.dialogReplay = false;
+					this.getlist();
 				}
 			});
 		}

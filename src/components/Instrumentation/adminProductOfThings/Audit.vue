@@ -84,13 +84,18 @@
 		<el-dialog :visible.sync="dialogVisible" class="showPic">
 			<img width="100%" :src="dialogImageUrl" alt>
 		</el-dialog>
+		<el-dialog width="900px" :visible.sync="dialogVisiblePdf">
+			<pdf :src="dialogImageUrl"></pdf>
+		</el-dialog>
 	</div>
 </template>
 <script>
+import pdf from "../../public/pdf";
 export default {
 	inject: ["reload"],
 	data() {
 		return {
+			dialogVisiblePdf: false,
 			dialogVisible: false,
 			dialogImageUrl: "",
 			oneProductMsg: {},
@@ -107,7 +112,11 @@ export default {
 	methods: {
 		look(a) {
 			this.dialogImageUrl = a;
-			this.dialogVisible = true;
+			if (a.substring(a.lastIndexOf(".") + 1) == "pdf") {
+				this.dialogVisiblePdf = true;
+			} else {
+				this.dialogVisible = true;
+			}
 		},
 		findOne(id) {
 			this.Axios(
@@ -164,7 +173,7 @@ export default {
 						console.log(result);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
-							this.reload();
+							// this.reload();
 						} else {
 							this.$message.error("审核失败");
 						}
@@ -177,6 +186,9 @@ export default {
 	},
 	created() {
 		this.findOne(this.$route.params.id);
+	},
+	components: {
+		pdf
 	},
 	watch: {
 		auditProduct: {

@@ -47,7 +47,10 @@ Vue.prototype.$cookieStore = {
 }
 Vue.use(base)
 Vue.use(VueRippler)
-
+import {
+  Message,
+  Loading
+} from 'element-ui';
 Vue.use(ElementUI)
 Vue.component(VTable.name, VTable)
 Vue.component(VPagination.name, VPagination)
@@ -113,9 +116,7 @@ router.beforeEach((to, from, next) => {
       if (isHasPermission) {
         next()
       } else {
-        next({
-          path: '/Home'
-        })
+        Message.error("抱歉，您无权访问该页面！")
       }
     } else { // 没登录则跳转到登录界面
       window.location.href = "login.html"

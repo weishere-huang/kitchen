@@ -368,7 +368,7 @@ export default {
 				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
-					this.reload();
+					// this.reload();
 				} else {
 					this.$message.error("出库失败,请重新尝试");
 				}

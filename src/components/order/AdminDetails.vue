@@ -150,10 +150,11 @@
 						</el-form-item>
 						<el-form-item label="- 优惠：">
 							<span>¥ {{orderDetails.redPackageAmount/100+orderDetails.couponAmount/100==0?"--":orderDetails.redPackageAmount/100+orderDetails.couponAmount/100}}</span>
-							（
+
 							<span
 								v-if="(orderDetails.redPackageAmount!=null&&orderDetails.redPackageAmount!='')||(orderDetails.couponAmount!=null&&orderDetails.couponAmount!='')"
 							>
+								（
 								<span
 									v-if="orderDetails.redPackageAmount!=null&&orderDetails.redPackageAmount!=''"
 								>红包￥{{orderDetails.redPackageAmount/100}}</span>

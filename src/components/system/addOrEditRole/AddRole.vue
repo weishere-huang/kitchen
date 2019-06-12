@@ -32,7 +32,7 @@
 					ref="tree"
 					highlight-current
 					:props="defaultProps"
-          :default-expanded-keys="[0,1]"
+					:default-expanded-keys="[0,1]"
 				>
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span :title="data.name" class="listcontent">{{ data.name +" ("+data.dataUrl+")"}}</span>
@@ -88,7 +88,9 @@ export default {
 					params: data,
 					url: "/api-platform/role/add",
 					type: "post",
-					option: {}
+					option: {
+						enableMsg: false
+					}
 				},
 				this
 			).then(result => {
@@ -103,7 +105,7 @@ export default {
 			this.Axios(
 				{
 					params: {},
-					option: {enableMsg: false},
+					option: { enableMsg: false },
 					type: "get",
 					url: "/api-platform/permission/listAllPermission"
 				},

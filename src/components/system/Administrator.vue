@@ -123,9 +123,9 @@ export default {
 				console.log(params);
 				// (this.userMsg = {}),
 				// 	(this.editUserMsg = {}),
-					// Object.assign(this.editUserMsg,params.rowData);
-					// this.editUserMsg.confirmPassword=this.editUserMsg.password;
-					this.findOne(params.rowData.id);
+				// Object.assign(this.editUserMsg,params.rowData);
+				// this.editUserMsg.confirmPassword=this.editUserMsg.password;
+				this.findOne(params.rowData.id);
 
 				this.edit = true;
 			}
@@ -159,8 +159,8 @@ export default {
 					},
 					type: "get",
 					url: "/api-platform/employee/findAll",
-          option:{
-					  enableMsg: false
+					option: {
+						enableMsg: false
 					}
 				},
 				this
@@ -260,7 +260,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.reload();
+					this.getlist();
 				}
 			});
 		},
@@ -333,7 +333,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.reload();
+					this.getlist();
 				}
 			});
 		},
@@ -365,7 +365,8 @@ export default {
 	components: {
 		tableList,
 		Add
-	}
+	},
+	watch: {}
 };
 </script>
 
