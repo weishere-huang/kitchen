@@ -269,7 +269,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.reload();
+					this.getfaqList();
 				} else {
 					this.$message.warning("出错啦,请重新添加~");
 				}
@@ -328,7 +328,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.reload();
+					this.getfaqList();
 				}
 			});
 		},
@@ -349,7 +349,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.reload();
+					this.getfaqList();
 				}
 			});
 		}

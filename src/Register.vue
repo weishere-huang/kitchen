@@ -68,14 +68,14 @@
 							<el-form-item label="注册地址" prop="address">
 								<el-input v-model="registerMsg.address" placeholder="填写营业执照住所地址" type="text" maxlength="30"></el-input>
 							</el-form-item>
-							<el-form-item label="营业范围" prop="businessScope">
+							<el-form-item label="经营范围" prop="businessScope">
 								<el-input
 									v-model="registerMsg.businessScope"
 									type="textarea"
 									rows="4"
 									resize="none"
 									maxlength="300"
-									placeholder="填写营业执经营范围"
+									placeholder="填写营业执经营范围（少于300字）"
 								></el-input>
 							</el-form-item>
 							<el-form-item label="申请人姓名" prop="applicant">

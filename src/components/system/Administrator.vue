@@ -192,7 +192,7 @@ export default {
 			).then(result => {
 				console.log(result.data);
 				if (result.data.code === 200) {
-					this.reload();
+					this.getlist();
 				}
 			});
 		},

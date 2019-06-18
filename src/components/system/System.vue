@@ -314,8 +314,19 @@
 					</el-form-item>
 					<el-form-item label="积分比例：" prop="score">
 						1元=
-						<el-input style="width:60px;" v-model="systemMsg.score"></el-input>&nbsp;积分&nbsp;&nbsp;&nbsp;&nbsp;签到赠送
-						<el-input style="width:60px;" v-model="systemMsg.register"></el-input>&nbsp;积分
+						<el-input
+							type="number"
+							oninput="if(value.length>5)value=value.slice(0,5)"
+							style="width:60px;"
+							v-model.number="systemMsg.score"
+						></el-input>&nbsp;积分&nbsp;&nbsp;&nbsp;&nbsp;签到赠送
+						<el-input
+							type="number"
+							step="0.01"
+							oninput="if(value.length>5)value=value.slice(0,5)"
+							style="width:60px;"
+							v-model.number="systemMsg.register"
+						></el-input>&nbsp;积分
 					</el-form-item>
 					<el-form-item label="评论功能：" prop="comment">
 						<el-radio-group v-model="systemMsg.comment">
@@ -410,21 +421,14 @@ export default {
 					},
 					{
 						validator: (rule, value, callback) => {
-							if (this.systemMsg.score == "" || this.systemMsg.score == null) {
-								callback(new Error("请输入积分比例"));
-							} else if (
-								this.systemMsg.register == "" ||
-								this.systemMsg.register == null
-							) {
-								callback(new Error("请输入签到赠送积分"));
-							} else if (
+							if (
 								/^\d*(\.?\d{0,0})$/g.test(this.systemMsg.score) == false
 							) {
-								callback(new Error("积分比例不能小于0"));
+								callback(new Error("积分比例必须是整数"));
 							} else if (
 								/^\d*(\.?\d{0,0})$/g.test(this.systemMsg.register) == false
 							) {
-								callback(new Error("签到赠送积分不能小于0"));
+								callback(new Error("签到赠送积分必须是整数"));
 							} else {
 								callback();
 							}

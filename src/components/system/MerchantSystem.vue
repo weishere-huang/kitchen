@@ -74,11 +74,11 @@
 					<el-form-item label="公告：" prop="announcement">
 						<el-input
 							type="textarea"
-							maxlength="300"
+							maxlength="100"
 							rows="4"
 							resize="none"
 							style="width:500px;"
-							placeholder
+							placeholder="(不超过100字)"
 							v-model="systemMsg.announcement"
 						></el-input>
 					</el-form-item>
@@ -124,13 +124,19 @@ export default {
 				],
 				logo: [{ required: true, message: "请设置店铺LOGO", trigger: "blur" }],
 				shipping: [
-					{ required: true, message: "请设置满减条件", trigger: "blur" },
+					{
+						required: true,
+						message: "请设置满减运费条件",
+						trigger: ["blur", "change"]
+					},
 					{
 						validator: (rule, value, callback) => {
-							if (this.systemMsg.shipping == "" || null) {
-								callback(new Error("请设置满减条件"));
-							} else if (this.systemMsg.fare == "" || null) {
-								callback(new Error("请设置运费"));
+							if (/^\d*(\.?\d{0,0})$/g.test(this.systemMsg.shipping) == false) {
+								callback(new Error("满减条件必须是整数"));
+							} else if (
+								/^\d*(\.?\d{0,0})$/g.test(this.systemMsg.fare) == false
+							) {
+								callback(new Error("运费必须是整数"));
 							} else {
 								callback();
 							}
@@ -229,7 +235,8 @@ export default {
 			this.Axios(
 				{
 					params: {
-						enterpriseId:JSON.parse(sessionStorage.getItem("user")).salesTerritoryId
+						enterpriseId: JSON.parse(sessionStorage.getItem("user"))
+							.salesTerritoryId
 					},
 					option: {
 						enableMsg: false

@@ -85,7 +85,13 @@ export default {
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				if (params.rowData.id === 1 || params.rowData.id === 2) {
+				if (
+					params.rowData.id === 1 ||
+					params.rowData.id === 2 ||
+					params.rowData.id === 3 ||
+					params.rowData.id === 4 ||
+					params.rowData.id === 5
+				) {
 					this.$message.warning("特殊角色禁止修改权限!");
 					return;
 				} else {
@@ -95,7 +101,13 @@ export default {
 			}
 			if (params.type === "delete") {
 				console.log(params);
-				if (params.rowData.id === 1 || params.rowData.id === 2) {
+				if (
+					params.rowData.id === 1 ||
+					params.rowData.id === 2 ||
+					params.rowData.id === 3 ||
+					params.rowData.id === 4 ||
+					params.rowData.id === 5
+				) {
 					this.$message.warning("特殊角色禁止删除!");
 					return;
 				}
@@ -161,7 +173,7 @@ export default {
 			).then(result => {
 				console.log(result.data);
 				if (result.data.code === 200) {
-					this.reload();
+					this.getRoleList();
 				}
 			});
 		}

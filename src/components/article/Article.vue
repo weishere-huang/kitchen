@@ -115,33 +115,33 @@ export default {
 			this.$router.push({ path: "/Article/ArticleAdd" });
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
+			// console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getArticleList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
+			// console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getArticleList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				console.log(params);
+				// console.log(params);
 				this.$router.push({
 					path: "/Article/ArticleEdit/" + params.rowData.id
 				});
 			}
 			if (params.type === "delete") {
-				console.log(params);
+				// console.log(params);
 				this.deleteArticle(params.rowData.id);
 			}
 		},
 		handleSelectionChange(selection) {
-			console.log(selection);
+			// console.log(selection);
 		},
 		getRow(row, event) {
-			console.log(row);
+			// console.log(row);
 		},
 		getArticleList() {
 			this.Axios(
@@ -161,7 +161,7 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
+					// console.log(result.data);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},
@@ -208,6 +208,7 @@ export default {
 	},
 	watch: {
 		$route() {
+			this.getArticleList();
 			let a = this.$route.matched.find(item => item.name === "ArticleAdd")
 				? true
 				: false;

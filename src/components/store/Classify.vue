@@ -64,7 +64,15 @@
 						<span>{{ node.label }}</span>
 						<span style="display:inline-block;width:385px;" @click.stop>
 							<span style="margin-right:90px;">
+								<el-popover
+									popper-class="color_text"
+									ref="popover2"
+									placement="right"
+									trigger="focus"
+									content="数值越小排序越靠前"
+								></el-popover>
 								<el-input
+									v-popover:popover2
 									size="small"
 									type="number"
 									@focus="getFocusData(data)"
@@ -98,6 +106,8 @@
 						</span>
 					</span>
 				</el-tree>
+				<br>
+				<span style="color:#999999">*温馨提示：分类最多支持3级，且商家只能在3级分类发布商品。</span>
 			</div>
 		</div>
 		<el-dialog title="修改分类" :visible.sync="dialogEdit" width="500px" :close-on-click-modal="false">
@@ -241,7 +251,7 @@ export default {
 					).then(result => {
 						if (result.data.code === 200) {
 							// this.getClassifyList();
-							this.reload()
+							this.reload();
 						}
 					});
 				} else {

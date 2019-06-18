@@ -184,17 +184,29 @@ export default {
 									"loginPassword",
 									this.encryptByDES(this.userMsg.password, key)
 								);
-								// window.location.href = "/Cookbook";
 								if (result.data.data.state == 0) {
-									window.location.href = "/AdminProductOfThings";
+									if (
+										result.data.data.permissionUrl.findIndex(item => {
+											return item.module == "homework_easy_lookup";
+										}) != -1
+									) {
+										window.location.href = "/AdminSimpleHome";
+									}
+									if (
+										result.data.data.permissionUrl.findIndex(item => {
+											return item.module == "homework_data_lookup";
+										}) != -1
+									) {
+										window.location.href = "/AdminHome";
+									}
 								} else if (result.data.data.state == 1) {
 									window.location.href = "/EnterpriseAuditedIndex";
 								} else if (result.data.data.state == 2) {
 									if (result.data.data.employeeType == 1) {
-										window.location.href = "/ProductOfThings";
+										window.location.href = "/Home";
 									}
 									if (result.data.data.employeeType == 2) {
-										window.location.href = "/Order";
+										window.location.href = "/Home";
 									}
 								} else if (result.data.data.state == 3) {
 									window.location.href = "/EnterpriseAuditedIndex";

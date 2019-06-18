@@ -149,52 +149,72 @@ export default {
 			gender: {}
 		};
 	},
-	mounted() {
-		let consumption = echarts.init(document.getElementById("consumption"));
-		let consumption0ption = {
-			color: ["#1cc09f"],
-			tooltip: {
-				trigger: "axis",
-				axisPointer: {
-					// 坐标轴指示器，坐标轴触发有效
-					type: "line" // 默认为直线，可选为：'line' | 'shadow'
-				}
-			},
-			grid: {
-				left: "3%",
-				right: "4%",
-				bottom: "3%",
-				containLabel: true
-			},
-			xAxis: [
-				{
-					type: "value"
-				}
-			],
-			yAxis: [
-				{
-					type: "category",
-					data: ["智能厨房电器", "蔬菜", "瓜果", "其他"],
-					axisTick: {
-						alignWithLabel: true
-					}
-				}
-			],
-			series: [
-				{
-					name: "销售数量",
-					type: "bar",
-					barMaxWidth: 50,
-					data: [614, 520, 132, 143]
-				}
-			]
-		};
-		consumption.setOption(consumption0ption);
-		window.onresize = function() {
-			consumption.resize();
-		};
-	},
+	mounted() {},
 	methods: {
+		getConsumptionMsg() {
+			this.Axios(
+				{
+					params: {},
+					url: "/api-order/order/statistics",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				// console.log(result);
+				if (result.data.code === 200) {
+					let dataMsg = result.data.data.map(item => item.cateName);
+					let sumMsg = result.data.data.map(item => item.sum);
+					let consumption = echarts.init(
+						document.getElementById("consumption")
+					);
+					let consumption0ption = {
+						color: ["#1cc09f"],
+						tooltip: {
+							trigger: "axis",
+							axisPointer: {
+								// 坐标轴指示器，坐标轴触发有效
+								type: "line" // 默认为直线，可选为：'line' | 'shadow'
+							}
+						},
+						grid: {
+							left: "3%",
+							right: "4%",
+							bottom: "3%",
+							containLabel: true
+						},
+						xAxis: [
+							{
+								type: "value"
+							}
+						],
+						yAxis: [
+							{
+								type: "category",
+								data: dataMsg,
+								axisTick: {
+									alignWithLabel: true
+								}
+							}
+						],
+						series: [
+							{
+								name: "销售数量",
+								type: "bar",
+								barMaxWidth: 50,
+								data: sumMsg
+							}
+						]
+					};
+					consumption.setOption(consumption0ption);
+					window.onresize = function() {
+						consumption.resize();
+					};
+				}
+			});
+		},
 		getGenderList() {
 			this.Axios(
 				{
@@ -330,6 +350,7 @@ export default {
 		// this.getBar();
 		this.getGenderList();
 		this.getPie();
+		this.getConsumptionMsg();
 	},
 	watch: {},
 	components: {

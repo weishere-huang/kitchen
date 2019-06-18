@@ -86,7 +86,8 @@
 						resize="none"
 						style="width:700px;"
 						v-model="addMenu.description"
-						maxlength="300"
+						placeholder="（不超过100字）"
+						maxlength="100"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品详情：" prop="info">

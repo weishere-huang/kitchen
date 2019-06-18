@@ -79,6 +79,7 @@
 							multiple
 							:limit="5"
 							:on-exceed="handleExceed"
+							:before-upload="beforeAvatarUpload2"
 							:file-list="fileList"
 							accept="image/png, image/jpeg, .PDF"
 						>
@@ -145,8 +146,7 @@
 			<dir style="padding-top:20px;font-size:16px;">{{classifyLable[classifyLable.length-1]}}</dir>
 			<div style="padding-top:12px;color:#999999;padding-bottom:12px;">
 				该产品类型包含了{{tableData.length}}项预置功能，预置功能分为必填和选填。
-				<br/>
-				注：带*表示必填。
+				<br>注：带*表示必填。
 			</div>
 			<el-table :data="tableData" style="width: 100%" border size="mini">
 				<el-table-column prop="function" label="功能"></el-table-column>
@@ -332,6 +332,22 @@ export default {
 				return isSize;
 			}
 		},
+		beforeAvatarUpload2(file) {
+			// console.log(file.type);
+			debugger;
+			const isPicSize = file.size / 1024 / 1024 <= 10;
+			const isPDF = file.type === "application/pdf";
+			const isPNG = file.type === "image/png";
+			const isJpg = file.type === "image/jpeg";
+			if (!isPDF && !isPNG && !isJpg) {
+				this.$message.error("上传格式错误，请上传png,jpg,pdf格式的文件", 3000);
+			}
+			if (isPicSize == false) {
+				this.$message.error("上传图片不能大于10M");
+				return false;
+			}
+			return isPicSize && (isPDF || isPNG || isJpg);
+		},
 		handleAvatarSuccess1(res, file, a) {
 			if (res.code === 200) {
 				if (a == 1) {
@@ -388,7 +404,6 @@ export default {
 						console.log(result);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
-							this.reload();
 						} else {
 							this.$message.error("添加失败,请重新尝试");
 						}

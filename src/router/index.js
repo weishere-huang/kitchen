@@ -559,7 +559,7 @@ const router = new Router({
       name: 'Store',
       component: Store,
       props: {
-        pageName: '商城列表'
+        pageName: '商品列表'
       },
       meta: {
         requireAuth: true,
@@ -593,7 +593,7 @@ const router = new Router({
       name: 'AdminStore',
       component: AdminStore,
       props: {
-        pageName: '商城列表'
+        pageName: '商品列表'
       },
       meta: {
         requireAuth: true,

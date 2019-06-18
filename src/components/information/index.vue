@@ -153,6 +153,7 @@ export default {
 	},
 	watch: {
 		$route() {
+			this.list();
 			let a = this.$route.matched.find(item => item.name === "NewInformation")
 				? true
 				: false;

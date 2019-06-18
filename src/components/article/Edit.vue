@@ -185,10 +185,10 @@ export default {
 						},
 						this
 					).then(result => {
-						console.log(result.data);
+						// console.log(result.data);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
-							this.reload();
+							
 						}
 					});
 				} else {
@@ -212,7 +212,7 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
-						console.log(result.data);
+						// console.log(result.data);
 						this.articleMsg = result.data.data;
 						this.fileList = [
 							{

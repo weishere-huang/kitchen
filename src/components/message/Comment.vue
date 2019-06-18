@@ -378,43 +378,6 @@ export default {
 			this.pageIndex1 = val;
 			this.getReplyList();
 		},
-		handleDelete(index, rowData) {
-			// rowData.visible = false;
-			// let qs = require("qs");
-			// let datas = qs.stringify({
-			// 	id: rowData.id
-			// });
-			// this.Axios(
-			// 	{
-			// 		params: datas,
-			// 		option: {
-			// 			enableMsg: false
-			// 		},
-			// 		type: "post",
-			// 		url: "/api-mall/product/del",
-			// 		loadingConfig: {
-			// 			target: document.querySelector(".store_list")
-			// 		}
-			// 	},
-			// 	this
-			// ).then(
-			// 	result => {
-			// 		if (result.data.code === 200) {
-			// 			this.$message({
-			// 				message: "删除成功！",
-			// 				type: "success"
-			// 			});
-			// 			this.foodlist();
-			// 		} else {
-			// 			this.$message({
-			// 				message: result.data.msg,
-			// 				type: "error"
-			// 			});
-			// 		}
-			// 	},
-			// 	({ type, info }) => {}
-			// );
-		},
 		getCommentList() {
 			this.Axios(
 				{

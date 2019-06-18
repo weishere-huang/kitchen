@@ -161,7 +161,7 @@ export default {
 			});
 		},
 		changeState(row, index) {
-			console.log(this.tableData[index].state);
+			// console.log(this.tableData[index].state);
 			let qs = require("qs");
 			let data = qs.stringify({
 				userInfoId: this.tableData[index].id
@@ -178,7 +178,7 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
+					// console.log(result);
 					if (result.data.code === 200) {
 						this.getlist();
 					}
@@ -191,17 +191,17 @@ export default {
 		handleDelete(index, rowData) {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
-			console.log(params);
+			// console.log(params);
 			this.deleteProduct(rowData.id);
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
+			// console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getlist();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
+			// console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getlist();
 		},
@@ -226,7 +226,7 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data.content);
+					// console.log(result.data.data.content);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 					// for (let i = 0; i < this.tableData.length; i++) {
@@ -254,7 +254,7 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
+				// console.log(result);
 				if (result.data.code === 200) {
 					this.getlist();
 				} else {

@@ -223,7 +223,7 @@ export default {
 			).then(result => {
 				console.log(result.data);
 				if (result.data.code === 200) {
-					this.reload();
+					this.getAdvertisingList();
 				}
 			});
 		},
@@ -293,6 +293,7 @@ export default {
 			}
 		},
 		$route() {
+			this.getAdvertisingList();
 			let a = this.$route.matched.find(item => item.name === "AdvertisingAdd")
 				? true
 				: false;

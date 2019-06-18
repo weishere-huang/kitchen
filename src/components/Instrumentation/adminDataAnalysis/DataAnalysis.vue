@@ -184,7 +184,7 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
+				console.log(result);
 				let dateVal = JSON.parse(JSON.stringify(result.data.data.date));
 				let bindCount = JSON.parse(JSON.stringify(result.data.data.bindCount));
 				if (result.data.code === 200) {

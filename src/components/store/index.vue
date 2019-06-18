@@ -138,7 +138,7 @@
 									ref="popover2"
 									placement="right"
 									trigger="focus"
-									content="数值越大排序越靠前"
+									content="数值越小排序越靠前"
 								></el-popover>
 								<el-input
 									@change="handleSortLevel(scope.row,scope.$index)"
@@ -442,7 +442,6 @@ export default {
 				: false;
 			let b = this.$route.params.id !== undefined ? true : false;
 			this.isHideList = a || b ? true : false;
-			this.foodlist();
 		}
 	}
 };

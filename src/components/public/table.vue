@@ -43,7 +43,7 @@
 							<el-button size="mini" plain @click="scope.row.visible = false">取消</el-button>
 							<el-button type="primary" size="mini" @click="handleDelete(scope.$index, scope.row)">确定</el-button>
 						</div>
-						<el-button slot="reference" type="text" v-if="deleteShow">删除</el-button>
+						<el-button slot="reference" type="text" size="small" v-if="deleteShow">删除</el-button>
 					</el-popover>
 					<!-- <el-button
             v-if="deleteShow"
@@ -64,6 +64,9 @@ export default {
 		};
 	},
 	props: {
+		disabled: {
+			default: false
+		},
 		permissionDetails: {},
 		permissionuUpdate: {},
 		permissionDetele: {},

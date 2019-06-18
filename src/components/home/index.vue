@@ -34,7 +34,7 @@
 								<i class="iconfont" style="color:white;">&#xe63b;</i>
 							</span>
 							<span>
-								<p>{{allMsg.supplierSellSum.todayOrderTotal>0?allMsg.supplierSellSum.todayOrderTotal:0}}</p>
+								<p>{{allMsg.supplierSellSum.orderSumToday>0?allMsg.supplierSellSum.orderSumToday:0}}</p>
 								<p>今日订单</p>
 							</span>
 						</div>
@@ -45,7 +45,7 @@
 								<i class="iconfont" style="color:white;">&#xe666;</i>
 							</span>
 							<span>
-								<p>{{allMsg.supplierSellSum.todayOrderSellSum>0?allMsg.supplierSellSum.todayOrderSellSum:0}}</p>
+								<p>￥{{allMsg.supplierSellSum.orderSalesToday/100>0?allMsg.supplierSellSum.orderSalesToday/100:0}}</p>
 								<p>今日销售额</p>
 							</span>
 						</div>
@@ -57,10 +57,10 @@
 							</span>
 							<span>
 								<p>
-									{{allMsg.upperLowerShelfAndTotal.upperTotal>0?allMsg.upperLowerShelfAndTotal.upperTotal:0}}/
+									{{allMsg.supplierSellSum.countProduct[0].obtainedNum>0?allMsg.supplierSellSum.countProduct[0].obtainedNum:0}}/
 									<i
 										style="color:#999999;font-style:normal;"
-									>{{allMsg.upperLowerShelfAndTotal.lowerTotal>0?allMsg.upperLowerShelfAndTotal.lowerTotal:0}}</i>
+									>{{allMsg.supplierSellSum.countProduct[0].shelfNum>0?allMsg.supplierSellSum.countProduct[0].shelfNum:0}}</i>
 								</p>
 								<p>上/下架商品数</p>
 							</span>
@@ -72,7 +72,7 @@
 								<i class="iconfont" style="color:white;">&#xe8d7;</i>
 							</span>
 							<span>
-								<p>{{allMsg.supplierSellSum.orderTotal>0?allMsg.supplierSellSum.orderTotal:0}}</p>
+								<p>{{allMsg.supplierSellSum.orderSum>0?allMsg.supplierSellSum.orderSum:0}}</p>
 								<p>订单总数</p>
 							</span>
 						</div>
@@ -83,7 +83,7 @@
 								<i class="iconfont" style="color:white;">&#xe69f;</i>
 							</span>
 							<span>
-								<p>￥{{allMsg.supplierSellSum.orderSellTotalSum>0?allMsg.supplierSellSum.orderSellTotalSum:0}}</p>
+								<p>￥{{allMsg.supplierSellSum.totalSales/100>0?allMsg.supplierSellSum.totalSales/100:0}}</p>
 								<p>销售总额</p>
 							</span>
 						</div>
@@ -94,7 +94,7 @@
 								<i class="iconfont" style="color:white;">&#xe696;</i>
 							</span>
 							<span>
-								<p>{{allMsg.upperLowerShelfAndTotal.total>0?allMsg.upperLowerShelfAndTotal.total:0}}</p>
+								<p>{{allMsg.supplierSellSum.productNum>0?allMsg.supplierSellSum.productNum:0}}</p>
 								<p>商品总数</p>
 							</span>
 						</div>
@@ -148,15 +148,15 @@
 							<el-col :span="5" style="text-align:center;">
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
-							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.orderMoney}}</el-col>
+							<el-col :span="12">{{item.productName}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.money/100}}</el-col>
 						</el-col>
 						<el-col :span="24" v-for="(item, index) in item2" :key="item.index" v-show="top10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
-							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.orderMoney}}</el-col>
+							<el-col :span="12">{{item.productName}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.money/100}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -174,7 +174,7 @@
 							<el-col
 								:span="24"
 								style="font-family: Roboto;"
-							>{{allMsg.supplierOrderInfo.unpaid>0?allMsg.supplierOrderInfo.unpaid:0}}</el-col>
+							>{{allMsg.supplierOrderInfo.unpaid>0?allMsg.supplierOrderInfo.unpaid:'0'}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
@@ -183,7 +183,7 @@
 							<el-col
 								:span="24"
 								style="font-family: Roboto;"
-							>{{allMsg.supplierOrderInfo.delivered>0?allMsg.supplierOrderInfo.delivered:0}}</el-col>
+							>{{allMsg.supplierOrderInfo.delivered>=0?allMsg.supplierOrderInfo.delivered:0}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
@@ -215,24 +215,18 @@ export default {
 			item1: [],
 			item2: [],
 			allMsg: {
-				supplierSellSum: {},
+				supplierSellSum: { countProduct: [{ obtainedNum: "", shelfNum: "" }] },
 				upperLowerShelfAndTotal: {},
 				supplierOrderSell: [],
 				supplierOrderInfo: {}
 			},
 			searchValue: "",
 			supplierName: JSON.parse(sessionStorage.getItem("user")).account,
-			storeName: JSON.parse(sessionStorage.getItem("user")).account
+			storeName: JSON.parse(sessionStorage.getItem("user")).account,
+			orderStare: {}
 		};
 	},
-	mounted() {
-		let me = this;
-		echarts
-			.init(document.getElementById("order_pie"))
-			.on("click", function(params) {
-				me.$router.push({ path: "/Order" });
-			});
-	},
+	mounted() {},
 	methods: {
 		showTop5() {
 			this.top5 = true;
@@ -245,16 +239,44 @@ export default {
 		getMsg() {
 			this.Axios(
 				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-order/Workbench/getData",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					// console.log(result);
+					if (result.data.code === 200) {
+						// this.allMsg = result.data.data;
+						this.allMsg.supplierSellSum = result.data.data;
+						// console.log(this.allMsg.supplierSellSum);
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
+		},
+		getSaleMoney(i) {
+			this.btnStyleShow = i;
+			let condition = i == 0 ? "week" : "month";
+			this.Axios(
+				{
 					params: {
-						state: "0,1,2",
-						supplierId: JSON.parse(sessionStorage.getItem("user"))
-							.salesTerritoryId
+						condition: condition
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/getSupplierOrderInfo",
+					url: "/api-order/Workbench/productNumTrend",
 					loadingConfig: {
 						target: document.querySelector(".admin_home")
 					}
@@ -264,9 +286,121 @@ export default {
 				result => {
 					console.log(result);
 					if (result.data.code === 200) {
-						this.allMsg = JSON.parse(JSON.stringify(result.data.data));
-						this.item1 = this.allMsg.supplierOrderSell.slice(0, 5);
-						this.item2 = this.allMsg.supplierOrderSell.slice(5);
+						let time = result.data.data.map(item => {
+							return item.time;
+						});
+						let count = result.data.data.map(item => {
+							return item.count;
+						});
+						let todayAmount = result.data.data.map(item => {
+							return item.todayAmount / 100;
+						});
+						this.searchValue =
+							JSON.parse(JSON.stringify(result.data.data[0])).time +
+							"至" +
+							JSON.parse(
+								JSON.stringify(result.data.data[result.data.data.length - 1])
+							).time;
+						let data = result.data.data;
+						let myChart = echarts.init(document.getElementById("main"));
+						let a = "";
+						if (i == 0 || i == 1) {
+							a = "日";
+						} else {
+							a = "月";
+						}
+						let option = {
+							title: {
+								text: ""
+							},
+							tooltip: {
+								trigger: "axis",
+								formatter: function(params) {
+									let name = params[0].name.replace("日", "");
+									let item = data
+										.map(i => {
+											return i.time;
+										})
+										.map(j => {
+											return j.slice(j.lastIndexOf("-") + 1);
+										});
+									let index;
+									for (let i = 0; i < item.length; i++) {
+										if (item[i] == name) {
+											index = i;
+										}
+									}
+									let topTip =
+										"<div style='padding:0 8px;'>" +
+										data[index].time +
+										"<br/>" +
+										"订单数量：" +
+										data[index].count +
+										"<br/>" +
+										"销售额：" +
+										data[index].todayAmount / 100 +
+										"</div>";
+									return topTip;
+								}
+							},
+							legend: {
+								data: []
+							},
+							xAxis: {
+								data: time.map(item => {
+									return item.slice(item.lastIndexOf("-") + 1) + a;
+								})
+							},
+							yAxis: {},
+							series: [
+								{
+									name: "销售额",
+									type: "bar",
+									data: todayAmount,
+									barMaxWidth: 50,
+									itemStyle: {
+										normal: {
+											color: "#1cc09f"
+										}
+									}
+								}
+							]
+						};
+						myChart.setOption(option);
+						window.onresize = function() {
+							myChart.resize();
+						};
+					}
+
+					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
+		},
+		getOrderStates() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-order/Workbench/orderStates",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					console.log(result);
+					if (result.data.code === 200) {
+						this.allMsg.supplierOrderInfo.waitGood =
+							result.data.data[0].waitReceiptExpression;
+						this.allMsg.supplierOrderInfo.unpaid =
+							result.data.data[0].waitPayExpression;
+						this.allMsg.supplierOrderInfo.delivered =
+							result.data.data[0].watShipExpression;
 						echarts.init(document.getElementById("order_pie")).setOption({
 							tooltip: {
 								trigger: "item",
@@ -300,6 +434,12 @@ export default {
 								]
 							}
 						});
+						let me = this;
+						echarts
+							.init(document.getElementById("order_pie"))
+							.on("click", function(params) {
+								me.$router.push({ path: "/Order" });
+							});
 					}
 
 					// console.log(this.orderDetails);
@@ -307,20 +447,15 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		getSaleMoney(i) {
-			this.btnStyleShow = i;
+		getProductNum() {
 			this.Axios(
 				{
-					params: {
-						state: i,
-						supplierId: JSON.parse(sessionStorage.getItem("user"))
-							.salesTerritoryId
-					},
+					params: {},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/getSupplierOrderPrice",
+					url: "/api-order/Workbench/productNum",
 					loadingConfig: {
 						target: document.querySelector(".admin_home")
 					}
@@ -328,88 +463,10 @@ export default {
 				this
 			).then(
 				result => {
+					console.log(result);
 					if (result.data.code === 200) {
-						this.searchValue =
-							JSON.parse(JSON.stringify(result.data.data[0])).gmtCreate +
-							"至" +
-							JSON.parse(
-								JSON.stringify(result.data.data[result.data.data.length - 1])
-							).gmtCreate;
-						let time = result.data.data.map(item => {
-							return item.gmtCreate;
-						});
-						let value = result.data.data.map(item => {
-							return item.orderMoney;
-						});
-						let data = result.data.data;
-						let myChart = echarts.init(document.getElementById("main"));
-						let a = "";
-						// if (i == 0 || i == 1) {
-						// 	a = "日";
-						// } else {
-						// 	a = "月";
-						// }
-						let option = {
-							title: {
-								text: ""
-							},
-							tooltip: {
-								trigger: "axis",
-								formatter: function(params) {
-									let name = params[0].name.replace("日", "");
-									let item = data
-										.map(i => {
-											return i.gmtCreate;
-										})
-										.map(j => {
-											return j.slice(j.lastIndexOf("-") + 1);
-										});
-									let index;
-									for (let i = 0; i < item.length; i++) {
-										if (item[i] == name) {
-											index = i;
-										}
-									}
-									let topTip =
-										"<div style='padding:0 8px;'>" +
-										data[index].gmtCreate +
-										"<br/>" +
-										"订单数量：" +
-										data[index].sellSum +
-										"<br/>" +
-										"销售额：" +
-										data[index].orderMoney +
-										"</div>";
-									return topTip;
-								}
-							},
-							legend: {
-								data: []
-							},
-							xAxis: {
-								data: time.map(item => {
-									return item.slice(item.lastIndexOf("-") + 1) + a;
-								})
-							},
-							yAxis: {},
-							series: [
-								{
-									name: "销售额",
-									type: "bar",
-									data: value,
-									barMaxWidth: 50,
-									itemStyle: {
-										normal: {
-											color: "#1cc09f"
-										}
-									}
-								}
-							]
-						};
-						myChart.setOption(option);
-						window.onresize = function() {
-							myChart.resize();
-						};
+						this.item1 = result.data.data.slice(0, 5);
+						this.item2 = result.data.data.slice(5);
 					}
 
 					// console.log(this.orderDetails);
@@ -419,8 +476,10 @@ export default {
 		}
 	},
 	created() {
+		this.getOrderStates();
 		this.getMsg();
 		this.getSaleMoney(0);
+		this.getProductNum();
 	}
 };
 </script>
@@ -504,6 +563,11 @@ export default {
 					font-size: 20px;
 					text-align: right;
 					font-family: Roboto;
+					// cursor: pointer;
+					// &:hover {
+					// 	color: #1cc09f;
+					// 	text-decoration: underline;
+					// }
 				}
 				p:nth-child(2) {
 					color: #999999;

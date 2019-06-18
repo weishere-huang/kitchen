@@ -86,7 +86,8 @@
 						resize="none"
 						style="width:700px;"
 						v-model="addMenu.description"
-						maxlength="300"
+						maxlength="100"
+						placeholder="（不超过100字）"
 					></el-input>
 				</el-form-item>
 				<el-form-item label="商品详情：" prop="info">
@@ -448,7 +449,7 @@ export default {
 .edit_menu {
 	font-size: 14px;
 	color: @font-normal;
-	
+
 	.top_list {
 		background-color: white;
 		padding: 10px;

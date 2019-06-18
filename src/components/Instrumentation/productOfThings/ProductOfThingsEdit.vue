@@ -400,7 +400,6 @@ export default {
 						console.log(result);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
-							this.reload();
 						} else {
 							this.$message.error("添加失败,请重新尝试");
 						}

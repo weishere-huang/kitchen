@@ -124,13 +124,13 @@ export default {
 			});
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
+			// console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
+			// console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getList();
 		},
@@ -150,7 +150,7 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
+					// console.log(result);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},
@@ -173,7 +173,7 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
+				// console.log(result);
 				if (result.data.code === 200) {
 					this.getList();
 				} else {
@@ -197,7 +197,7 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
+				// console.log(result);
 				if (result.data.code === 200) {
 					this.getList();
 				} else {

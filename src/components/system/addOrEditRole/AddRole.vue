@@ -68,6 +68,15 @@ export default {
 			}
 			let arr = [];
 			arr = arr.concat(this.$refs.tree.getCheckedKeys());
+			if (
+				arr.indexOf(10039) == -1 &&
+				arr.indexOf(10040) == -1
+				// &&
+				// arr.indexOf(10026) == -1
+			) {
+				this.$message.warning("请选择一个工作台权限！");
+				return;
+			}
 			if (arr.length === 0) {
 				this.$message.warning("请设置权限 !");
 				return;
@@ -97,7 +106,6 @@ export default {
 				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
-					this.reload();
 				}
 			});
 		},

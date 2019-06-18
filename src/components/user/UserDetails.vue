@@ -45,7 +45,8 @@
 						v-for="(item, index) in tagValue"
 						:key="index"
 						:style="{'background-color':BgColor[numberIndex[index]],'top':topValue[numberIndex[index]],'left':leftValue[numberIndex[index]]}"
-					>{{item}}</span>
+						:title="item.labelInfo"
+					>{{item.labelName}}</span>
 					<div class="user_photo_case" v-if="userMsg.userInfo.headImg==null||''">
 						<img src="../../assets/image/userPic.png" alt>
 					</div>

@@ -7,6 +7,15 @@
 		</div>
 	</div>
 </template>
+<script>
+export default {
+	data() {
+		return {};
+	},
+	created() {}
+};
+</script>
+
 <style lang="less">
 @main-color: #1cc09f;
 @bgColor: #f0f2f5;
@@ -20,13 +29,13 @@
 	background: url("../../assets/image/gztbg.jpg") no-repeat center center;
 	position: relative;
 	.msg_case {
-        position: absolute;
-        right: 5%;
-        bottom: 15%;
-        text-align: right;
-        p{
-           padding: 20px 0;
-        }
+		position: absolute;
+		right: 5%;
+		bottom: 15%;
+		text-align: right;
+		p {
+			padding: 20px 0;
+		}
 	}
 }
 </style>

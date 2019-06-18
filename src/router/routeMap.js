@@ -6,12 +6,12 @@ export default [{
     subMenu: [{
         menu: '默认工作台',
         route: '/AdminSimpleHome',
-        permissionCode: 'iot_product_check_lookup'
+        permissionCode: 'homework_easy_lookup'
       },
       {
         menu: '默认工作台',
         route: '/AdminHome',
-        permissionCode: 'platform_homepage_lookup'
+        permissionCode: 'homework_data_lookup'
       },
     ]
   },
@@ -362,7 +362,7 @@ export default [{
       {
         menu: '默认工作台',
         route: '/Home',
-        permissionCode: 'manufacturer_product_lookup'
+        permissionCode: 'manufacturer_homepage_lookup'
       },
       {
         menu: '修改注册',
