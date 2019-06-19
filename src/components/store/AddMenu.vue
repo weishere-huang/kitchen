@@ -68,8 +68,8 @@
 						:on-remove="handleRemove1"
 						:on-success="handleAvatarSuccess1"
 						:before-upload="beforeAvatarUpload1"
-						:limit="1"
-						class="upload_show"
+						:limit="5"
+						class="upload_show1"
 						accept="image/png, image/jpeg"
 					>
 						<i class="el-icon-plus"></i>
@@ -143,7 +143,7 @@ export default {
 				stockNow: "",
 				isRecommend: 3,
 				isShelf: 0,
-				img: "",
+				img: [],
 				info: ""
 			},
 			addMenuRules: {
@@ -290,8 +290,9 @@ export default {
 			return url;
 		},
 		handleRemove1(file, fileList) {
-			// this.cookbook.recipeImg = null;
-			this.addMenu.img = null;
+			this.addMenu.img = fileList.map(item => {
+				return item.response.data;
+			});
 		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
@@ -327,7 +328,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addMenu.img = res.data;
+				this.addMenu.img.push(res.data);
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -349,7 +350,7 @@ export default {
 				stockNow: this.addMenu.stockNow,
 				isRecommend: this.addMenu.isRecommend,
 				isShelf: this.addMenu.isShelf,
-				img: this.addMenu.img,
+				img: this.addMenu.img.join(','),
 				info: this.addMenu.info
 			});
 			this.Axios(
@@ -510,6 +511,12 @@ export default {
 		textarea {
 			height: 80px;
 		}
+	}
+	.upload_show1 {
+		height: 80px;
+		max-width: 450px;
+		overflow: hidden;
+		display: inline-block;
 	}
 }
 .el_show {

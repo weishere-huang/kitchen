@@ -340,7 +340,12 @@ export default {
 			const isPNG = file.type === "image/png";
 			const isJpg = file.type === "image/jpeg";
 			if (!isPDF && !isPNG && !isJpg) {
-				this.$message.error("上传格式错误，请上传png,jpg,pdf格式的文件", 3000);
+				this.$message({
+					showClose: true,
+					message: "上传格式错误，请上传png,jpg,pdf格式的文件",
+					type: "error",
+					duration: 5000
+				});
 			}
 			if (isPicSize == false) {
 				this.$message.error("上传图片不能大于10M");

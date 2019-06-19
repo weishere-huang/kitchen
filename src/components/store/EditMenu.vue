@@ -67,8 +67,8 @@
 						:on-remove="handleRemove1"
 						:on-success="handleAvatarSuccess1"
 						:before-upload="beforeAvatarUpload1"
-						:limit="1"
-						class="upload_show"
+						:limit="5"
+						class="upload_show1"
 						:file-list="fileList"
 						accept="image/png, image/jpeg"
 					>
@@ -142,7 +142,7 @@ export default {
 				stockNow: "",
 				isRecommend: "",
 				isShelf: "",
-				img: "",
+				img: [],
 				info: ""
 			},
 			addMenuRules: {
@@ -285,7 +285,12 @@ export default {
 			return url;
 		},
 		handleRemove1(file, fileList) {
-			this.addMenu.img = null;
+			this.addMenu.img.splice(
+				this.addMenu.img.findIndex(item => {
+					return item.substr(item.lastIndexOf("/") + 1) == file.name;
+				}),
+				1
+			);
 		},
 		handlePictureCardPreview1(file) {
 			this.dialogImageUrl = file.url;
@@ -321,7 +326,7 @@ export default {
 		},
 		handleAvatarSuccess1(res, file) {
 			if (res.code === 200) {
-				this.addMenu.img = res.data;
+				this.addMenu.img.push(res.data);
 				this.$message({
 					message: "图片上传成功！",
 					type: "success"
@@ -344,7 +349,7 @@ export default {
 				stockNow: this.addMenu.stockNow,
 				isRecommend: this.addMenu.isRecommend,
 				isShelf: this.addMenu.isShelf,
-				img: this.addMenu.img,
+				img: this.addMenu.img.join(","),
 				info: this.addMenu.info
 			});
 			this.Axios(
@@ -412,14 +417,13 @@ export default {
 					console.log(result.data.data.product);
 					this.addMenu = result.data.data.product;
 					this.addMenu.price = this.addMenu.price / 100;
-					this.fileList = [
-						{
-							name: this.addMenu.img.substring(
-								this.addMenu.img.lastIndexOf("/") + 1
-							),
-							url: this.global.imgPath + this.addMenu.img.replace("img:", "")
-						}
-					];
+					this.addMenu.img = this.addMenu.img.split(",");
+					this.fileList = this.addMenu.img.map(item => {
+						return {
+							name: item.substring(item.lastIndexOf("/") + 1),
+							url: this.global.imgPath + item.replace("img:", "")
+						};
+					});
 					this.getnode(this.classify, result.data.data.product.cateId);
 				},
 				({ type, info }) => {}
@@ -561,6 +565,12 @@ export default {
 		textarea {
 			height: 80px;
 		}
+	}
+	.upload_show1 {
+		height: 80px;
+		max-width: 450px;
+		overflow: hidden;
+		display: inline-block;
 	}
 }
 .el_show {

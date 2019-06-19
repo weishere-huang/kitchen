@@ -37,7 +37,7 @@
 								<i class="iconfont" style="color:#00BDF1;font-size:32px">&#xe6db;</i>
 							</span>
 							<span>
-								<p>{{allMsg.orderDaySum.orderSum>0?allMsg.orderDaySum.orderSum:'0'}}</p>
+								<p>{{allMsg.iotProductsNum>0?allMsg.iotProductsNum:'0'}}</p>
 								<p>物联产品</p>
 							</span>
 						</div>
@@ -48,7 +48,7 @@
 								<i class="iconfont" style="color:#B1B42D;font-size:32px">&#xe752;</i>
 							</span>
 							<span>
-								<p>{{allMsg.orderDaySum.orderMoney>0?allMsg.orderDaySum.orderMoney:'0'}}</p>
+								<p>{{allMsg.merchantNum>0?allMsg.merchantNum:'0'}}</p>
 								<p>设备厂商</p>
 							</span>
 						</div>
@@ -59,7 +59,7 @@
 								<i class="iconfont" style="color: #FF834D;font-size:28px">&#xe604;</i>
 							</span>
 							<span>
-								<p>{{allMsg.userNum.sumDay>0?allMsg.userNum.sumDay:'0'}}</p>
+								<p>{{userCount>0?userCount:'0'}}</p>
 								<p>注册用户</p>
 							</span>
 						</div>
@@ -70,7 +70,7 @@
 								<i class="iconfont" style="color:#648B99;font-size:32px">&#xe64d;</i>
 							</span>
 							<span>
-								<p>{{allMsg.orderSum.orderSum>0?allMsg.orderSum.orderSum:'0'}}</p>
+								<p>{{allMsg.iotDeviceNum>0?allMsg.iotDeviceNum:'0'}}</p>
 								<p>物联设备</p>
 							</span>
 						</div>
@@ -81,7 +81,7 @@
 								<i class="iconfont" style="color:#6666CA;font-size:32px">&#xe615;</i>
 							</span>
 							<span>
-								<p>{{allMsg.orderSum.orderMoney>0?allMsg.orderSum.orderMoney:'0'}}</p>
+								<p>{{allMsg.vendorNum>0?allMsg.vendorNum:'0'}}</p>
 								<p>入驻商家</p>
 							</span>
 						</div>
@@ -92,7 +92,7 @@
 								<i class="iconfont" style="color:#65CB99;font-size:32px">&#xe62e;</i>
 							</span>
 							<span>
-								<p>{{allMsg.userNum.countUser>0?allMsg.userNum.countUser:'0'}}</p>
+								<p>{{countAdvice>0?countAdvice:'0'}}</p>
 								<p>留言反馈</p>
 							</span>
 						</div>
@@ -106,26 +106,25 @@
 						<el-button
 							plain
 							size="small"
-							:class="btnStyleShow==0?'btn_style':''"
-							@click="getSaleMoney(0)"
+							:class="btnAccessDevice==0?'btn_style':''"
+							@click="getAccessDevice(0)"
 						>最近7天</el-button>
 						<el-button
 							plain
 							size="small"
-							:class="btnStyleShow==1?'btn_style':''"
-							@click="getSaleMoney(1)"
+							:class="btnAccessDevice==1?'btn_style':''"
+							@click="getAccessDevice(1)"
 						>最近30天</el-button>
-						<!-- <el-button plain size="small" @click="getSaleMoney(2)">最近一年</el-button> -->
 					</el-button-group>
 				</div>
 				<div class="histogram_style">
 					<h4 style="text-align: center;line-height:52px;">
 						<span style="font-size:12px;color:#999999;" v-if="searchValue!=''">（{{searchValue}}）</span>
 					</h4>
-					<div id="sale_money" style="width:100%;height:284px;"></div>
+					<div id="access_device" style="width:100%;height:284px;"></div>
 				</div>
 			</el-col>
-			<el-col :span="24" class="feedback">
+			<el-col :span="24" class="sales_amount">
 				<div class="top_style">
 					<h4>销售额</h4>
 					<el-button-group class="data_style">
@@ -141,65 +140,14 @@
 							:class="btnStyleShow==1?'btn_style':''"
 							@click="getSaleMoney(1)"
 						>最近30天</el-button>
-						<!-- <el-button plain size="small" @click="getSaleMoney(2)">最近一年</el-button> -->
 					</el-button-group>
 				</div>
-				<el-col :span="24" class="content_case">
-					<!-- <el-col :span="6" class="left_case">
-						<el-col
-							:span="24"
-							class="item_case"
-							:class="index==activeStyle?'is_active':''"
-							v-for="(item, index) in userLeaveMessage"
-							:key="index"
-							@click.native="handleStyle(index,item)"
-						>
-							<el-col :span="1" class="style_case">&nbsp;</el-col>
-							<el-col :span="4">
-								<div class="img_case">
-									<img :src="item.img" alt>
-								</div>
-							</el-col>
-							<el-col :span="18" class="msg_case">
-								<el-col
-									:span="24"
-									style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
-									:title="item.userName"
-								>{{item.userName}}</el-col>
-								<el-col :span="24" style="color:#999999;font-size:12px;margin-top:4px;">{{item.gmtCreate}}</el-col>
-							</el-col>
-						</el-col>
-					</el-col>
-					<el-col :span="18" class="right_case">
-						<el-col
-							:span="24"
-							style="line-height:100px;height:100px;width:95%;border-bottom: 1px solid #dde2eb;overflow: scroll;"
-						>
-							<span class="head_portrait" v-if="messageReply!=''">
-								<img width="100%" :src="messageReply.img" alt>
-							</span>
-							<div class="answer" v-if="messageReply!=''">{{messageReply.opinion}}</div>
-						</el-col>
-						<el-col :span="24" style="width:95%;padding:8px 0;">
-							<textarea
-								v-model="reply"
-								class="border_style"
-								maxlength="200"
-								cols="81"
-								rows="3"
-								placeholder="请输入回复内容..."
-							></textarea>
-						</el-col>
-						<el-col :span="24" style="width:95%;text-align: right;">
-							<el-button
-								size="small"
-								type="primary"
-								@click="replyMessage"
-								:disabled="reply!=''&&messageReply!=''?false:true"
-							>快速回复</el-button>
-						</el-col>
-					</el-col> -->
-				</el-col>
+				<div class="histogram_style">
+					<h4 style="text-align: center;line-height:52px;">
+						<span>销售额趋势</span>
+					</h4>
+					<div id="sale_money" style="width:100%;height:284px;"></div>
+				</div>
 			</el-col>
 		</el-col>
 		<el-col :span="6" style="padding:0 0 0 8px;">
@@ -214,8 +162,8 @@
 				<el-col :span="24" class="table_case">
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
-						<el-col :span="12">代理商</el-col>
-						<el-col :span="7">销售额(元)</el-col>
+						<el-col :span="12">名称</el-col>
+						<el-col :span="7">绑定数</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
 						<el-col :span="24" v-for="(item, index) in saleTOP5" :key="index" v-show="top5">
@@ -225,9 +173,9 @@
 							<el-col
 								:span="12"
 								style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
-								:title="item.supplierName"
-							>{{item.supplierName}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.orderMoney}}</el-col>
+								:title="item.deviceName"
+							>{{item.deviceName}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.count}}</el-col>
 						</el-col>
 						<el-col :span="24" v-for="(item, index) in saleTOP10" :key="item.index" v-show="top10">
 							<el-col :span="5" style="text-align:center;">
@@ -236,9 +184,9 @@
 							<el-col
 								:span="12"
 								style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"
-								:title="item.supplierName"
-							>{{item.name}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.money}}</el-col>
+								:title="item.deviceName"
+							>{{item.deviceName}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.count}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -255,22 +203,22 @@
 					<el-col :span="24" class="table_title">
 						<el-col :span="5" style="text-align:center;">排名</el-col>
 						<el-col :span="12">商品</el-col>
-						<el-col :span="7">销量</el-col>
+						<el-col :span="7">销售额</el-col>
 					</el-col>
 					<el-col :span="24" class="table_content">
 						<el-col :span="24" v-for="(item, index) in menuTop5" :key="index" v-show="hotMenutop5">
 							<el-col :span="5" style="text-align:center;">
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
-							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.sellNum}}</el-col>
+							<el-col :span="12">{{item.enterpriseName}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.sumAmount/100}}</el-col>
 						</el-col>
 						<el-col :span="24" v-for="(item, index) in menuTop10" :key="item.index" v-show="hotMenutop10">
 							<el-col :span="5" style="text-align:center;">
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
-							<el-col :span="12">{{item.itemName}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.sellNum}}</el-col>
+							<el-col :span="12">{{item.enterpriseName}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.sumAmount/100}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -300,7 +248,7 @@
 								<span :class="index<3?'sort_style2':'sort_style1'">{{index+1}}</span>
 							</el-col>
 							<el-col :span="12">{{item.recipeName}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.recipeSum}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.num}}</el-col>
 						</el-col>
 						<el-col
 							:span="24"
@@ -312,7 +260,7 @@
 								<span class="sort_style1">{{index+6}}</span>
 							</el-col>
 							<el-col :span="12">{{item.recipeName}}</el-col>
-							<el-col :span="7" style="font-family: Roboto;">{{item.recipeSum}}</el-col>
+							<el-col :span="7" style="font-family: Roboto;">{{item.num}}</el-col>
 						</el-col>
 					</el-col>
 				</el-col>
@@ -328,22 +276,14 @@ export default {
 			supplierName: JSON.parse(sessionStorage.getItem("user")).account,
 			roleName: JSON.parse(sessionStorage.getItem("user")).roleName,
 			btnStyleShow: 0,
+			btnAccessDevice: 0,
 			saleTOP5: [],
 			saleTOP10: [],
 			menuTop5: [],
 			menuTop10: [],
 			saleCookbooktop5: [],
 			saleCookbooktop10: [],
-			allMsg: {
-				itemSellNum: [],
-				orderDaySum: {},
-				orderSum: {},
-				supperSaleSum: [],
-				userNum: {},
-				itemSellNum: [],
-				recipeMonthSell: [],
-				recipeCountAndSellSum: {}
-			},
+			allMsg: {},
 			activeStyle: 0,
 			top5: true,
 			top10: false,
@@ -355,43 +295,13 @@ export default {
 			searchValue: "",
 			userLeaveMessage: [],
 			messageReply: "",
-			reply: ""
+			reply: "",
+			userCount: "",
+			countAdvice: ""
 		};
 	},
 	mounted() {},
 	methods: {
-		getLeaveMessage() {
-			this.Axios(
-				{
-					params: {},
-					option: {
-						enableMsg: false
-					},
-					type: "get",
-					url: "/api-user/userInfo/adviseIfUserInfo",
-					loadingConfig: {
-						target: document.querySelector(".admin_home")
-					}
-				},
-				this
-			).then(
-				result => {
-					if (result.data.code === 200) {
-						this.userLeaveMessage = JSON.parse(
-							JSON.stringify(result.data.data)
-						);
-						for (let i = 0; i < this.userLeaveMessage.length; i++) {
-							this.userLeaveMessage[i].img =
-								this.global.imgPath +
-								this.userLeaveMessage[i].img.replace("img:", "");
-						}
-					}
-
-					// console.log(this.orderDetails);
-				},
-				({ type, info }) => {}
-			);
-		},
 		getMsg() {
 			// let me = this;
 			this.Axios(
@@ -401,7 +311,7 @@ export default {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/getOrderMoneyAndSum",
+					url: "/api-enterprise/workbench/getData",
 					loadingConfig: {
 						target: document.querySelector(".admin_home")
 					}
@@ -409,34 +319,26 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					if (result.data.code === 200) {
-						this.allMsg = JSON.parse(JSON.stringify(result.data.data));
-						this.saleTOP5 = this.allMsg.supperSellSum.slice(0, 5);
-						this.saleTOP10 = this.allMsg.supperSellSum.slice(5);
-						this.menuTop5 = this.allMsg.itemSellNum.slice(0, 5);
-						this.menuTop10 = this.allMsg.itemSellNum.slice(5);
-						this.saleCookbooktop5 = this.allMsg.recipeMonthSell.slice(0, 5);
-						this.saleCookbooktop10 = this.allMsg.recipeMonthSell.slice(5);
+						this.allMsg = result.data.data;
 					}
-
-					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);
 		},
 		getSaleMoney(i) {
 			this.btnStyleShow = i;
+			let condition = i == 0 ? "week" : "month";
 			this.Axios(
 				{
 					params: {
-						state: i
+						condition: condition
 					},
 					option: {
 						enableMsg: false
 					},
 					type: "get",
-					url: "/api-order/order/getOrderPrice",
+					url: "/api-order/Workbench/productNumTrend",
 					loadingConfig: {
 						target: document.querySelector(".admin_home")
 					}
@@ -445,27 +347,25 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
-						console.log(result.data);
-						this.searchValue =
-							JSON.parse(JSON.stringify(result.data.data[0])).gmtCreate +
-							"至" +
-							JSON.parse(
-								JSON.stringify(result.data.data[result.data.data.length - 1])
-							).gmtCreate;
+						let time = result.data.data.map(item => {
+							return item.time;
+						});
+						let count = result.data.data.map(item => {
+							return item.count;
+						});
+						let todayAmount = result.data.data.map(item => {
+							return item.todayAmount / 100;
+						});
+
 						let data = result.data.data;
-						// let time = result.data.data.map(item => {
-						// 	return item.gmtCreate;
-						// });
-						// let value = result.data.data.map(item => {
-						// 	return item.orderMoney;
-						// });
+
 						let myChart = echarts.init(document.getElementById("sale_money"));
 						let a = "";
-						// if (i == 0 || i == 1) {
-						// 	a = "日";
-						// } else {
-						// 	a = "月";
-						// }
+						if (i == 0 || i == 1) {
+							a = "日";
+						} else {
+							a = "月";
+						}
 						let option = {
 							title: {
 								text: ""
@@ -476,10 +376,10 @@ export default {
 									let name = params[0].name.replace("日", "");
 									let item = data
 										.map(i => {
-											return i.gmtCreate;
+											return i.time;
 										})
 										.map(j => {
-											return j.slice(j.lastIndexOf("-") + 1);
+											return j.slice(j.indexOf("-") + 1);
 										});
 									let index;
 									for (let i = 0; i < item.length; i++) {
@@ -489,13 +389,13 @@ export default {
 									}
 									let topTip =
 										"<div style='padding:0 8px;'>" +
-										data[index].gmtCreate +
+										data[index].time +
 										"<br/>" +
 										"订单数量：" +
-										data[index].sellSum +
+										data[index].count +
 										"<br/>" +
 										"销售额：" +
-										data[index].orderMoney +
+										data[index].todayAmount / 100 +
 										"</div>";
 									return topTip;
 								}
@@ -504,22 +404,16 @@ export default {
 								data: []
 							},
 							xAxis: {
-								data: data
-									.map(item => {
-										return item.gmtCreate;
-									})
-									.map(item => {
-										return item.slice(item.lastIndexOf("-") + 1) + a;
-									})
+								data: time.map(item => {
+									return item.slice(item.indexOf("-") + 1);
+								})
 							},
 							yAxis: {},
 							series: [
 								{
 									name: "销售额",
 									type: "bar",
-									data: data.map(item => {
-										return item.orderMoney;
-									}),
+									data: todayAmount,
 									barMaxWidth: 50,
 									itemStyle: {
 										normal: {
@@ -534,8 +428,6 @@ export default {
 							myChart.resize();
 						};
 					}
-
-					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);
@@ -543,7 +435,6 @@ export default {
 		handleStyle(index, item) {
 			this.activeStyle = index;
 			this.messageReply = item;
-			console.log(this.messageReply);
 		},
 		showTop5(index) {
 			if (index == 1) {
@@ -573,20 +464,197 @@ export default {
 				this.cookbookTop10 = true;
 			}
 		},
-		replyMessage() {
-			let qs = require("qs");
-			let data = qs.stringify({
-				id: this.messageReply.id,
-				reply: this.reply
-			});
+		//销售排行
+		getSaleTrend() {
 			this.Axios(
 				{
-					params: data,
+					params: {},
 					option: {
 						enableMsg: false
 					},
-					type: "post",
-					url: "/api-platform/advise/reply",
+					type: "get",
+					url: "/api-order/Workbench/enterpriseSalesTrend",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.menuTop5 = result.data.data.slice(0, 5);
+						this.menuTop10 = result.data.data.slice(5);
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		getHotDevice() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-enterprise/workbench/hotDevice",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.saleTOP5 = result.data.data.slice(0, 5);
+						this.saleTOP10 = result.data.data.slice(5);
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		getAccessDevice(i) {
+			this.btnAccessDevice = i;
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-enterprise/workbench/deviceAccessTrend",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.searchValue =
+							JSON.parse(JSON.stringify(result.data.data[0])).time +
+							"至" +
+							JSON.parse(
+								JSON.stringify(result.data.data[result.data.data.length - 1])
+							).time;
+						let xAxisData = result.data.data.map(item => {
+							return item.time;
+						});
+						let yAxisData = result.data.data.map(item => {
+							return item.count;
+						});
+						let allData = result.data.data.map(item => {
+							return item.countAll;
+						});
+						let myChart = echarts.init(
+							document.getElementById("access_device")
+						);
+						let data = result.data.data;
+						let option = {
+							tooltip: {
+								trigger: "axis",
+								formatter: function(params) {
+									let name = params[0].name;
+									let item = data
+										.map(i => {
+											return i.time;
+										})
+										.map(j => {
+											return j.slice(j.indexOf("-") + 1);
+										});
+									let index;
+									for (let i = 0; i < item.length; i++) {
+										if (item[i] == name) {
+											index = i;
+										}
+									}
+									let topTip =
+										"<div style='padding:0 8px;'>" +
+										data[index].time +
+										"<br/>" +
+										"今日接入数量：" +
+										data[index].count +
+										"<br/>" +
+										"总接入数量：" +
+										data[index].countAll +
+										"</div>";
+									return topTip;
+								}
+							},
+							xAxis: {
+								type: "category",
+								data: xAxisData.map(item => {
+									return item.slice(item.indexOf("-") + 1);
+								})
+							},
+							yAxis: {
+								type: "value",
+								max:
+									Math.max.apply(null, yAxisData) +
+									Math.floor(Math.max.apply(null, yAxisData) / 4) +
+									1
+							},
+							series: [
+								{
+									data: yAxisData,
+									type: "line",
+									smooth: true,
+									label: {
+										normal: {
+											show: true,
+											position: "top"
+										}
+									},
+									itemStyle: {
+										normal: {
+											color: "#1cc09f"
+										}
+									}
+								}
+							]
+						};
+						myChart.setOption(option);
+						window.onresize = function() {
+							myChart.resize();
+						};
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		getMyRecipe() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-recipe/myRecipe/hotRecipe",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.saleCookbooktop5 = result.data.data.content.slice(0, 5);
+						this.saleCookbooktop10 = result.data.data.content.slice(5);
+					}
+				},
+				({ type, info }) => {}
+			);
+		},
+		getCountAdvice() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-platform/advise/countAdvise",
 					loadingConfig: {
 						target: document.querySelector(".admin_home")
 					}
@@ -596,22 +664,45 @@ export default {
 				result => {
 					console.log(result);
 					if (result.data.code === 200) {
-						this.reply = "";
-						this.messageReply = "";
-						this.$message.success("回复成功！");
-						this.getLeaveMessage();
+						this.countAdvice = result.data.data;
 					}
-
-					// console.log(this.orderDetails);
+				},
+				({ type, info }) => {}
+			);
+		},
+		getCountUser() {
+			this.Axios(
+				{
+					params: {},
+					option: {
+						enableMsg: false
+					},
+					type: "get",
+					url: "/api-user/userInfo/countUser",
+					loadingConfig: {
+						target: document.querySelector(".admin_home")
+					}
+				},
+				this
+			).then(
+				result => {
+					if (result.data.code === 200) {
+						this.userCount = result.data.data;
+					}
 				},
 				({ type, info }) => {}
 			);
 		}
 	},
 	created() {
-		// this.getMsg();
-		// this.getSaleMoney(0);
-		this.getLeaveMessage();
+		this.getMsg();
+		this.getSaleMoney(0);
+		this.getSaleTrend();
+		this.getHotDevice();
+		this.getAccessDevice(0);
+		this.getCountAdvice();
+		this.getCountUser();
+		this.getMyRecipe();
 	},
 	mounted() {}
 };

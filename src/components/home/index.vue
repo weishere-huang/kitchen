@@ -322,7 +322,7 @@ export default {
 											return i.time;
 										})
 										.map(j => {
-											return j.slice(j.lastIndexOf("-") + 1);
+											return j.slice(j.indexOf("-") + 1);
 										});
 									let index;
 									for (let i = 0; i < item.length; i++) {
@@ -348,7 +348,7 @@ export default {
 							},
 							xAxis: {
 								data: time.map(item => {
-									return item.slice(item.lastIndexOf("-") + 1) + a;
+									return item.slice(item.indexOf("-") + 1);
 								})
 							},
 							yAxis: {},
@@ -473,7 +473,8 @@ export default {
 				},
 				({ type, info }) => {}
 			);
-		}
+		},
+		
 	},
 	created() {
 		this.getOrderStates();
