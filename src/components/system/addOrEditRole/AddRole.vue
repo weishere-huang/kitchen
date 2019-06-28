@@ -103,7 +103,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
 				}
@@ -120,7 +119,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					let code = Math.min.apply(
 						null,
 						result.data.data.map(item => {
@@ -128,7 +126,6 @@ export default {
 						})
 					);
 					this.role = this.filterArray(result.data.data, code);
-					console.log(this.role);
 				},
 				({ type, info }) => {}
 			);

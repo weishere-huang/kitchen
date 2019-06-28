@@ -99,7 +99,8 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			currentPage: 1,
-			total: 0
+			total: 0,
+			password: ""
 		};
 	},
 	methods: {
@@ -115,12 +116,9 @@ export default {
 			(this.userMsg = {}), (this.editUserMsg = {}), (this.dialogVisible = true);
 		},
 		handleSelectionChange() {},
-		getRow(row, event) {
-			console.log(row);
-		},
+		getRow(row, event) {},
 		handlechange(params) {
 			if (params.type === "edit") {
-				console.log(params);
 				// (this.userMsg = {}),
 				// 	(this.editUserMsg = {}),
 				// Object.assign(this.editUserMsg,params.rowData);
@@ -130,23 +128,19 @@ export default {
 				this.edit = true;
 			}
 			if (params.type === "delete") {
-				console.log(params);
 				this.deleteEMP(params.rowData.id);
 			}
 			if (params.type === "detalis") {
-				console.log(params);
 				this.userIds = params.rowData.order;
 				// this.$router.push({ path: "/Order/Details/" + this.userIds });
 			}
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getlist();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getlist();
 		},
@@ -166,7 +160,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},
@@ -190,7 +183,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.getlist();
 				}
@@ -199,24 +191,21 @@ export default {
 		//添加管理员
 		beforeadd(params) {
 			if (params.type == "cancel") {
-				console.log(params);
 				this.dialogVisible = params.isHide;
 			}
 			if (params.type == "affirm") {
-				console.log(params);
 				this.addMsg = params.value;
 				if (this.addMsg.password === "" || this.addMsg.password == null) {
 					this.$message.warning("添加管理员时密码不能为空!");
 					return;
 				}
-				console.log(this.addMsg);
 				// this.addService();
-				this.dialogVisible = params.isHide;
+
 				let pass = this.addMsg.password;
 				pass = md5(pass);
 				let key = "*chang_hong_device_cloud";
-				this.addMsg.password = this.encryptByDES(pass, key);
-				this.addAdmin();
+				this.password = this.encryptByDES(pass, key);
+				this.addAdmin(params.isHide);
 			}
 			// if (this.userMsg.confirmPassword !== this.userMsg.password) {
 			// 	this.$message.warning("两次密码输入不一致,请重新输入!!!");
@@ -231,7 +220,6 @@ export default {
 			// 	this.$message.warning("请完善信息!");
 			// 	return;
 			// }
-			// console.log(this.userMsg);
 			// if (
 			// 	this.userMsg.password != null &&
 			// 	this.userMsg.password !== "" &&
@@ -240,11 +228,11 @@ export default {
 
 			// }
 		},
-		addAdmin() {
+		addAdmin(params) {
 			let qs = require("qs");
 			let data = qs.stringify({
 				account: this.addMsg.account,
-				password: this.addMsg.password,
+				password: this.password,
 				phone: this.addMsg.phone,
 				roleId: this.addMsg.roleId
 			});
@@ -260,20 +248,18 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.getlist();
+					this.reload();
+					this.dialogVisible = params;
 				}
 			});
 		},
 		//修改管理员
 		beforeupdate(params) {
 			if (params.type == "cancel") {
-				console.log(params);
 				this.edit = params.isHide;
 			}
 			if (params.type == "affirm") {
-				console.log(params);
 				this.editUserMsg = params.value;
-				console.log(this.addMsg);
 				// this.updateService();
 				this.edit = params.isHide;
 				if (
@@ -352,7 +338,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.editUserMsg = result.data.data;
 				},
 				({ type, info }) => {}

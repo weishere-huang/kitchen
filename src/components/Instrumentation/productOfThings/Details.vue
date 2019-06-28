@@ -94,7 +94,6 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					console.log(result.data.data);
 					this.oneProductMsg = result.data.data;
 					// this.oneProductMsg.deviceCateName = JSON.parse(
 					// 	this.oneProductMsg.deviceCateName

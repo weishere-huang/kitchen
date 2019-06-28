@@ -12,7 +12,7 @@
 			<a :href="src" target="_back">下载</a>
 		</p>
 		<pdf
-			:src="src"
+			:src="src1"
 			:page="currentPage"
 			@num-pages="pageCount=$event"
 			@page-loaded="currentPage=$event"
@@ -29,9 +29,8 @@ export default {
 		return {
 			currentPage: 0, // pdf文件页码
 			pageCount: 0, // pdf文件总页数
-			fileType: "pdf" // 文件类型
-			// src:
-			// 	"http://192.168.1.104:8080/kitchenimg/2019/06/12/605f48bf3874474d9c5b87ed8b22010d.pdf",
+			fileType: "pdf", // 文件类型
+			src1: ""
 		};
 	},
 	props: {
@@ -39,19 +38,16 @@ export default {
 	},
 	created() {
 		// 有时PDF文件地址会出现跨域的情况,这里最好处理一下
-		// this.src = pdf.createLoadingTask(this.src);
+		this.src1 = pdf.createLoadingTask(this.src);
 	},
 	methods: {
 		// 改变PDF页码,val传过来区分上一页下一页的值,0上一页,1下一页
 		changePdfPage(val) {
-			// console.log(val)
 			if (val === 0 && this.currentPage > 1) {
 				this.currentPage--;
-				// console.log(this.currentPage)
 			}
 			if (val === 1 && this.currentPage < this.pageCount) {
 				this.currentPage++;
-				// console.log(this.currentPage)
 			}
 		},
 

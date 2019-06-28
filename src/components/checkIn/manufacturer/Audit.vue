@@ -163,7 +163,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					this.manufacturerMsg = result.data.data;
 					this.manufacturerMsg.businessLicenseImg =
@@ -204,7 +203,6 @@ export default {
 						},
 						this
 					).then(result => {
-						// console.log(result);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
 						} else {

@@ -145,21 +145,17 @@ export default {
 	},
 	methods: {
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getSystemLogList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getSystemLogList();
 		},
 		handleSelectionChange() {},
 		handlechange(params) {},
-		getRow(row, event) {
-			console.log(row);
-		},
+		getRow(row, event) {},
 		getSystemLogList() {
 			this.Axios(
 				{
@@ -181,7 +177,6 @@ export default {
 			).then(
 				result => {
 					// result.data.data.allMoney = JSON.parse(result.data.data.allMoney);
-					console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.tableData = JSON.parse(
 							JSON.stringify(result.data.data.content)
@@ -198,7 +193,6 @@ export default {
 	},
 	created() {
 		this.getSystemLogList();
-		console.log(returnCitySN["cip"] + "," + returnCitySN["cname"]);
 	}
 };
 </script>

@@ -547,7 +547,6 @@ export default {
 						this
 					).then(
 						result => {
-							console.log(result);
 							if (result.data.code === 200) {
 								this.getDetails(this.$route.params.id);
 								this.dialogSend = false;
@@ -584,7 +583,6 @@ export default {
 					this
 				).then(
 					result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.reload();
 							this.dialogPay = false;
@@ -618,7 +616,6 @@ export default {
 					this
 				).then(
 					result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.reload();
 							this.dialogClose = false;
@@ -629,9 +626,7 @@ export default {
 			}
 		},
 		handleSelectionChange(select) {},
-		getRow(row, event) {
-			console.log(row);
-		},
+		getRow(row, event) {},
 		toPrintOrder() {
 			sessionStorage.setItem("orderIds", this.$route.params.id);
 			window.open("/printorder.html", "_blank");
@@ -655,7 +650,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						// result.data.data.address = JSON.parse(result.data.data.address);
 						this.orderDetails = result.data.data;
@@ -670,8 +664,6 @@ export default {
 						// 		.substring(this.orderDetails.endTime.lastIndexOf(" ") + 1)
 						// 		.substring(0, 5);
 					}
-
-					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);

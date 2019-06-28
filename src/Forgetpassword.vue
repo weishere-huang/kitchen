@@ -180,7 +180,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.$message.success("验证码已发送至绑定手机，请注意查收！");
 						this.userPhone = result.data.data;
@@ -266,7 +265,6 @@ export default {
 					this
 				).then(
 					result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.newPasswordShow = false;
 							this.isHide = false;

@@ -42,7 +42,7 @@
 							<!-- <span
 								@click="$router.push({path:'/AdminOrder'})"
 								style="cursor: pointer;"
-							>{{ scope.row.order }}</span> -->
+							>{{ scope.row.order }}</span>-->
 						</template>
 					</el-table-column>
 					<el-table-column label="积分" min-width="80">
@@ -136,7 +136,6 @@ export default {
 			});
 		},
 		changeState(row, index) {
-			console.log(this.tableData[index].state);
 			let qs = require("qs");
 			let data = qs.stringify({
 				userInfoId: this.tableData[index].id
@@ -153,7 +152,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.getlist();
 					}
@@ -166,23 +164,19 @@ export default {
 		resetPasswords(index, rowData) {
 			rowData.resetvisible = false;
 			let params = { type: "edit", index: index, rowData: rowData };
-			console.log(params);
 			this.resetpsw(rowData.userId);
 		},
 		handleDelete(index, rowData) {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
-			console.log(params);
 			this.deleteuser(rowData.userId);
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getlist();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getlist();
 		},
@@ -208,7 +202,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					this.tableData = result.data.data.content;
 					for (let i = 0; i < this.tableData.length; i++) {
 						if (this.tableData[i].state == 0) {
@@ -243,7 +236,6 @@ export default {
 				if (result.data.code === 200) {
 					this.reload();
 				}
-				console.log(result.data);
 			});
 		},
 		resetpsw(userId) {

@@ -139,32 +139,25 @@ export default {
 	methods: {
 		beforeadd(params) {
 			if (params.type == "cancel") {
-				console.log(params);
 				this.dialogAdd = params.isHide;
 			}
 			if (params.type == "affirm") {
-				console.log(params);
 				this.addMsg = params.value;
-				console.log(this.addMsg);
 				this.beforeadd1();
 				this.dialogAdd = params.isHide;
 			}
 		},
 		beforeupdate(params) {
 			if (params.type == "cancel") {
-				console.log(params);
 				this.dialogEdit = params.isHide;
 			}
 			if (params.type == "affirm") {
-				console.log(params);
 				this.editMsg = params.value;
-				// console.log(this.addMsg);
 				this.beforeupdate1();
 				this.dialogEdit = params.isHide;
 			}
 		},
 		handlechange(data) {
-			console.log(data);
 		},
 		toadd() {
 			this.dialogAdd = true;
@@ -172,34 +165,28 @@ export default {
 			this.editMsg = {};
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getfaqList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getfaqList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				console.log(params);
 				this.addMsg = {};
 				this.editMsg = {};
 				Object.assign(this.editMsg, params.rowData);
 				this.dialogEdit = true;
 			}
 			if (params.type === "delete") {
-				console.log(params);
 				this.deletefaq(params.rowData.id);
 			}
 		},
 		handleSelectionChange(selection) {
-			console.log(selection);
 		},
 		getRow(row, event) {
-			console.log(row);
 		},
 		getfaqList() {
 			this.Axios(
@@ -219,7 +206,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},
@@ -270,6 +256,7 @@ export default {
 			).then(result => {
 				if (result.data.code === 200) {
 					this.getfaqList();
+					this.reload();
 				} else {
 					this.$message.warning("出错啦,请重新添加~");
 				}

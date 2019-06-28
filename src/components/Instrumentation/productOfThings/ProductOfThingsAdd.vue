@@ -110,7 +110,7 @@
 							:on-preview="(file)=>{ return handlePictureCardPreview1(file,2)}"
 							:on-remove="(res,file)=>{ return handleRemove1(res,file,2)}"
 							:on-success="(res,file)=>{ return handleAvatarSuccess1(res,file,2)}"
-							:before-upload="beforeAvatarUpload1"
+							:before-upload="beforeAvatarUpload3"
 							:limit="1"
 							class="upload_show"
 							accept="image/png, image/jpeg"
@@ -256,7 +256,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
 				if (result.data.code === 200) {
 					this.tableData = result.data.data;
 				}
@@ -264,7 +263,6 @@ export default {
 		},
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
-				console.log(file);
 				this.fileList.push({
 					name: file.name,
 					url: res.data
@@ -288,7 +286,6 @@ export default {
 			);
 		},
 		handlePreview(file) {
-			console.log(file);
 		},
 		handleExceed(files, fileList) {
 			this.$message.warning("只能上传5个文件");
@@ -305,6 +302,34 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
+			const isPicSize = file.size / 1024 <= 200;
+			if (isPicSize == false) {
+				this.$message.error("上传图片不能大于200KB");
+				return false;
+			} else {
+				const isSize = new Promise(function(resolve, reject) {
+					let width = 600000;
+					let height = 600000;
+					let _URL = window.URL || window.webkitURL;
+					let img = new Image();
+					img.onload = function() {
+						let valid = img.width <= width && img.height <= height;
+						valid ? resolve() : reject();
+					};
+					img.src = _URL.createObjectURL(file);
+				}).then(
+					() => {
+						return file;
+					},
+					() => {
+						this.$message.error("上传的图片必须是等于或小于600*600!");
+						return Promise.reject();
+					}
+				);
+				return isSize;
+			}
+		},
+		beforeAvatarUpload3(file) {
 			const isPicSize = file.size / 1024 / 1024 <= 1;
 			if (isPicSize == false) {
 				this.$message.error("上传图片不能大于1M");
@@ -333,8 +358,6 @@ export default {
 			}
 		},
 		beforeAvatarUpload2(file) {
-			// console.log(file.type);
-			debugger;
 			const isPicSize = file.size / 1024 / 1024 <= 10;
 			const isPDF = file.type === "application/pdf";
 			const isPNG = file.type === "image/png";
@@ -406,7 +429,6 @@ export default {
 						},
 						this
 					).then(result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
 						} else {

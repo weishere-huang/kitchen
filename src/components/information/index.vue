@@ -95,27 +95,23 @@ export default {
 	},
 	methods: {
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.list();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.list();
 		},
 		handleSelectionChange() {},
 		handlechange(params) {
 			if (params.type === "detalis") {
-				console.log(params);
 				this.$router.push(
 					"/Information/DetailsInformation/" + params.rowData.id
 				);
 			}
 		},
 		getRow(row, event) {
-			console.log(row);
 		},
 		list() {
 			this.Axios(
@@ -133,7 +129,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.tableData = result.data.data.content;
 				},
 				({ type, info }) => {}

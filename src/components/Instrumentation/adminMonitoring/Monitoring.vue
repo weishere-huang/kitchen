@@ -53,7 +53,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
 				if (result.data.code === 200) {
 					this.deviceCountMsg.sum = result.data.data.find(item => {
 						return item.title == "设备总数";
@@ -79,7 +78,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					let date = result.data.data.date;
 					let offline = result.data.data.offline;
@@ -90,7 +88,6 @@ export default {
 					date = date.map(item => {
 						return item.split(" ")[1].substring(0, 5);
 					});
-					console.log(date);
 					let Option = {
 						title: {
 							text: "设备运行折线图"

@@ -53,7 +53,6 @@ function hoc(component) {
             hasPermission: true
           };
         } else {
-          console.log('XXX');
           return {
             hasPermission: false
           };

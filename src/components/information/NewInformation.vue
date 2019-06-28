@@ -54,7 +54,7 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">建议尺寸：宽1000px，高不限，≤2MB的jpg或png（图片可为空）。</div>
+						<div class="el-upload__tip tip_style">要求：750*250像素，小于1MB的jpg或png</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
@@ -134,7 +134,6 @@ export default {
 			return url;
 		},
 		handleRemove1(file, fileList) {
-			console.log(file, fileList);
 			this.cookbook.recipeImg = null;
 			this.addInfo.img = null;
 		},
@@ -143,9 +142,9 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 / 1024 <= 2;
+			const isPicSize = file.size / 1024 / 1024 <= 1;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于2M");
+				this.$message.error("上传图片不能大于1M");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
@@ -177,7 +176,6 @@ export default {
 					message: "图片上传成功！",
 					type: "success"
 				});
-				// console.log(this.cookbook.recipeImg);
 			} else {
 				this.$message({
 					message: "图片上传不成功！",
@@ -203,7 +201,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
 				}

@@ -44,7 +44,6 @@ export default {
 	methods: {
 		getMsg(index, item) {
 			this.activeIndex = index;
-			console.log(index, item);
 		}
 	}
 };

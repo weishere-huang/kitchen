@@ -47,18 +47,15 @@ export default {
 	},
 	methods: {
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getCookbookList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getCookbookList();
 		},
 		getValue(val) {
-			// console.log(val);
 			let params = { value: val, isHide: false };
 			this.$emit("dialogCoobookHide", params);
 		},
@@ -87,7 +84,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.scriptData = result.data.data.content;
 						this.total = result.data.data.totalElement;

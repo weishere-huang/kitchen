@@ -180,13 +180,11 @@ export default {
 			this.dialogAdd = true;
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getServiceList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getServiceList();
 		},
@@ -195,24 +193,19 @@ export default {
 				this.editMsg = {};
 				this.addMsg = {};
 				Object.assign(this.editMsg, params.rowData);
-				console.log(params);
 				this.dialogEdit = true;
 			}
 			if (params.type === "delete") {
-				console.log(params);
 				this.deleteService(params.rowData.id);
 			}
 			if (params.type === "detalis") {
-				console.log(params);
 				this.userIds = params.rowData.order;
 				// this.$router.push({ path: "/Order/Details/" + this.userIds });
 			}
 		},
 		handleSelectionChange(selection) {
-			console.log(selection);
 		},
 		getRow(row, event) {
-			console.log(row);
 		},
 		beforeSearch() {
 			if (this.cname != null) {
@@ -221,7 +214,6 @@ export default {
 				this.areaName = this.pname;
 			}
 			this.pageIndex = 1;
-			console.log(this.areaName);
 			this.getServiceList();
 		},
 		//获取所有网点
@@ -242,7 +234,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},
@@ -281,7 +272,6 @@ export default {
 			let p = this.province.find(item => {
 				return this.provinceCode === item.adcode;
 			});
-			console.log(p);
 			if (p != null) {
 				this.pname = p.areaName;
 				this.cities = p.children;
@@ -292,13 +282,10 @@ export default {
 		//添加
 		beforeadd(params) {
 			if (params.type == "cancel") {
-				console.log(params);
 				this.dialogAdd = params.isHide;
 			}
 			if (params.type == "affirm") {
-				console.log(params);
 				this.addMsg = params.value;
-				console.log(this.addMsg);
 				this.addService();
 				this.dialogAdd = params.isHide;
 			}
@@ -335,13 +322,10 @@ export default {
 		//修改
 		beforeupdate(params) {
 			if (params.type == "cancel") {
-				console.log(params);
 				this.dialogEdit = params.isHide;
 			}
 			if (params.type == "affirm") {
-				console.log(params);
 				this.editMsg = params.value;
-				console.log(this.addMsg);
 				this.updateService();
 				this.dialogEdit = params.isHide;
 			}

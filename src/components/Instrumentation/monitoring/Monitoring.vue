@@ -53,7 +53,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
 				if (result.data.code === 200) {
 					this.deviceCountMsg.sum = result.data.data.find(item => {
 						return item.title == "设备总数";
@@ -83,13 +82,10 @@ export default {
 					let date = result.data.data.date;
 					let offline = result.data.data.offline;
 					let online = result.data.data.online;
-					console.log(offline);
-					console.log(online);
 					let myChart = echarts.init(document.getElementById("monitoring"));
 					date = date.map(item => {
 						return item.split(" ")[1].substring(0, 5);
 					});
-					console.log(date);
 					let Option = {
 						title: {
 							text: "设备运行折线图"
@@ -120,7 +116,8 @@ export default {
 							type: "value",
 							max:
 								Math.max.apply(null, online) +
-								Math.floor(Math.max.apply(null, online) / 4)+1
+								Math.floor(Math.max.apply(null, online) / 4) +
+								1
 						},
 						series: [
 							{

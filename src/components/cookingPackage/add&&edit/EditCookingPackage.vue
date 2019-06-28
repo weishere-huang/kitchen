@@ -231,8 +231,6 @@ export default {
 							return parseInt(item);
 						}
 					);
-					console.log(result.data.data.recipeIds.split(","));
-					console.log(this.cookingPackge.recipeIds);
 				},
 				({ type, info }) => {}
 			);

@@ -17,15 +17,15 @@
 								></el-option>
 							</el-select>
 						</el-col>
-						<el-col :span="6">
+						<el-col :span="5">
 							状态：
-							<el-select size="small" v-model="state" placeholder style="width:150px;">
+							<el-select size="small" v-model="state" placeholder style="width:110px;">
 								<el-option label="全部" value="-1"></el-option>
 								<el-option label="在线" value="0"></el-option>
 								<el-option label="离线" value="1"></el-option>
 							</el-select>
 						</el-col>
-						<el-col :span="6" style="padding:0 5px;">
+						<el-col :span="7" style="padding:0 5px;">
 							<el-input
 								size="small"
 								style="width:100%;"
@@ -128,17 +128,14 @@ export default {
 		handleDelete(index, rowData) {
 			rowData.visible = false;
 			let params = { type: "delete", index: index, rowData: rowData };
-			console.log(params);
 			this.deleteuser(rowData.userId);
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getlist();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getlist();
 		},
@@ -165,7 +162,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},
@@ -185,7 +181,6 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result);
 					this.productList = result.data.data;
 				},
 				({ type, info }) => {}

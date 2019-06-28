@@ -165,11 +165,8 @@ export default {
 		},
 		handleAffirm(formName) {
 			let params = { type: "affirm", value: this.addInfo, isHide: false };
-			// console.log(params);
 			this.$refs[formName].validate(valid => {
-				console.log(valid);
 				if (valid) {
-					console.log(params);
 					this.$emit("beforeadd", params);
 				} else {
 					return false;
@@ -192,7 +189,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.options = result.data.data.filter(item => item.id !== 2);
 				},
 				({ type, info }) => {}
@@ -201,8 +197,6 @@ export default {
 	},
 	created() {
 		this.getRoleList();
-		console.log("this.addInfo");
-		console.log(this.addInfo);
 		if (this.editInfo != null) {
 			// this.addInfo = this.editInfo;
 			Object.assign(this.addInfo, this.editInfo);

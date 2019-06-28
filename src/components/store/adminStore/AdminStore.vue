@@ -207,7 +207,6 @@ export default {
 			});
 		},
 		handleInput(row, index) {
-			console.log(row);
 			if (/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){0,2})?$/.test(row.itemPrice)) {
 				this.editfood(row);
 			} else {

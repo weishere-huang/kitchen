@@ -252,14 +252,10 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result);
 					if (result.data.code === 200) {
 						// this.allMsg = result.data.data;
 						this.allMsg.supplierSellSum = result.data.data;
-						// console.log(this.allMsg.supplierSellSum);
 					}
-
-					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);
@@ -284,7 +280,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						let time = result.data.data.map(item => {
 							return item.time;
@@ -372,7 +367,6 @@ export default {
 						};
 					}
 
-					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);
@@ -393,7 +387,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.allMsg.supplierOrderInfo.waitGood =
 							result.data.data[0].waitReceiptExpression;
@@ -441,8 +434,6 @@ export default {
 								me.$router.push({ path: "/Order" });
 							});
 					}
-
-					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);
@@ -463,18 +454,14 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.item1 = result.data.data.slice(0, 5);
 						this.item2 = result.data.data.slice(5);
 					}
-
-					// console.log(this.orderDetails);
 				},
 				({ type, info }) => {}
 			);
-		},
-		
+		}
 	},
 	created() {
 		this.getOrderStates();

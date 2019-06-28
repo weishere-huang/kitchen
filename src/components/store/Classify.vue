@@ -196,9 +196,7 @@ export default {
 			this.$refs[formName].resetFields();
 			this.dialogAdd = false;
 		},
-		handleChange(value) {
-			console.log(value);
-		},
+		handleChange(value) {},
 		handeditClassify(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {
@@ -282,7 +280,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.getClassifyList();
+					this.reload();
 				}
 			});
 		},
@@ -297,7 +295,6 @@ export default {
 			Object.assign(this.editClassify, data);
 		},
 		remove(node, val) {
-			console.log(val);
 			if (val.child) {
 				this.$message.error("不能删除含有子类的分类");
 				val.visible = false;
@@ -319,7 +316,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.getClassifyList();
+					this.reload();
 				}
 			});
 		},
@@ -342,14 +339,12 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data[0]);
 					// for (let i = 0; i < result.data.data.length; i++) {
 					// 	result.data.data[i].visible = false;
 					// }
 					if (result.data.code === 200) {
 						this.classifyData = result.data.data[0];
 						this.data = this.data.concat(result.data.data[0]);
-						console.log(this.data);
 					}
 				},
 				({ type, info }) => {}

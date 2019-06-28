@@ -241,11 +241,9 @@ export default {
 								option: { enableMsg: false, enableLoad: false }
 							}).then(
 								res => {
-									console.log(res);
 									callback();
 								},
 								({ type, info }) => {
-									console.log(info);
 									callback(new Error("企业名称已存在"));
 								}
 							);
@@ -280,11 +278,9 @@ export default {
 								option: { enableMsg: false, enableLoad: false }
 							}).then(
 								res => {
-									console.log(res);
 									callback();
 								},
 								({ type, info }) => {
-									console.log(info);
 									callback(new Error("该信用代码已存在"));
 								}
 							);
@@ -316,11 +312,9 @@ export default {
 								option: { enableMsg: false, enableLoad: false }
 							}).then(
 								res => {
-									console.log(res);
 									callback();
 								},
 								({ type, info }) => {
-									console.log(info);
 									callback(new Error("该手机号已经注册"));
 								}
 							);
@@ -436,7 +430,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.active = 3;
 						this.secondCase = false;
@@ -470,12 +463,10 @@ export default {
 			if (a == 5) {
 				this.registerMsg.legalPersonIdCardNegative = "";
 			}
-			console.log("handleRemove1:" + a);
 		},
 		handlePictureCardPreview1(file, a) {
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;
-			console.log("handlePictureCardPreview1:" + a);
 		},
 		beforeAvatarUpload1(file) {
 			const isPicSize = file.size / 1024 / 1024 <= 1;

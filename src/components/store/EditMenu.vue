@@ -74,7 +74,7 @@
 					>
 						<i class="el-icon-plus"></i>
 					</el-upload>
-					<div class="el-upload__tip tip_style">要求：750*460像素，小于1MB的jpg或png</div>
+					<div class="el-upload__tip tip_style">要求：750*750像素，单张不超过500KB，封面默认第1张，最多可上传5张。</div>
 					<el-dialog :visible.sync="dialogVisible" class="showPic">
 						<img width="100%" :src="dialogImageUrl" alt>
 					</el-dialog>
@@ -261,7 +261,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data[0]);
 					// result.data.data.splice(0,0,{cateName:"全部类别",id:-2})
 					this.classify = result.data.data[0];
 					this.findOne(this.$route.params.id);
@@ -297,9 +296,9 @@ export default {
 			this.dialogVisible = true;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 / 1024 <= 1;
+			const isPicSize = file.size / 1024 <= 500;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于1M");
+				this.$message.error("上传图片不能大于500KB");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
@@ -366,7 +365,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
 					// this.reload();
@@ -414,7 +412,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data.product);
 					this.addMenu = result.data.data.product;
 					this.addMenu.price = this.addMenu.price / 100;
 					this.addMenu.img = this.addMenu.img.split(",");

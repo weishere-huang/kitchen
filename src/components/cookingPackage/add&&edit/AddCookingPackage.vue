@@ -245,7 +245,6 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
-						console.log(result.data.data);
 						result.data.data.forEach((item, index) => {
 							this.cookbookData.push({
 								key: item.id,

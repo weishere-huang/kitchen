@@ -210,7 +210,6 @@ export default {
 	methods: {
 		handleAvatarSuccess(res, file) {
 			if (res.code === 200) {
-				console.log(file);
 				this.fileList.push({
 					name: file.name,
 					url: res.data
@@ -233,7 +232,6 @@ export default {
 			);
 		},
 		handlePreview(file) {
-			console.log(file);
 		},
 		handleExceed(files, fileList) {
 			this.$message.warning("只能上传5个文件");
@@ -325,7 +323,6 @@ export default {
 
 			walker(array, label);
 			this.editProduct.deviceCateId = stack;
-			console.log(this.editProduct.deviceCateId);
 			return stack.join("-");
 		},
 		findOne(id) {
@@ -340,10 +337,8 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
 				if (result.data.code === 200) {
 					Object.assign(this.editProduct, result.data.data);
-					console.log(result.data.data.deviceCateId);
 					this.editProduct.agreement = JSON.parse(this.editProduct.agreement);
 					this.editProduct.networkType = this.editProduct.networkType.toString();
 					this.fileList = this.editProduct.agreement;
@@ -397,7 +392,6 @@ export default {
 						},
 						this
 					).then(result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
 						} else {

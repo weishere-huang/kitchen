@@ -192,7 +192,6 @@ export default {
 		).then(
 			result => {
 				if (result.data.code === 200) {
-					console.log(result.data.data);
 					this.printData = result.data.data;
 				}
 			},

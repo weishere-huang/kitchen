@@ -662,7 +662,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.countAdvice = result.data.data;
 					}

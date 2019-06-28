@@ -20,7 +20,7 @@
 					</el-form-item>
 					<el-form-item label="广告位置：" prop="position">
 						<el-select v-model="addMsg.position" style="width:400px">
-							<el-option v-if="employeeType==3" label="APP主页-顶部图片 750*450" :value="0"></el-option>
+							<el-option v-if="employeeType==3" label="APP主页-顶部图片(仅展示) 750*450" :value="0"></el-option>
 							<el-option v-if="employeeType==3" label="APP主页-广告图 750*250" :value="1"></el-option>
 							<el-option v-if="employeeType==3" label="APP商城-轮播图 750*250" :value="2"></el-option>
 							<el-option v-if="employeeType==3" label="APP发现-轮播图 750*250" :value="3"></el-option>
@@ -79,7 +79,7 @@
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">宽高750 × 290像素，＜500KB的jpg图片</div>
+						<div class="el-upload__tip tip_style">＜200KB的jpg图片</div>
 						<el-dialog :visible.sync="dialogVisible" append-to-body>
 							<img width="100%" :src="dialogImageUrl" alt class="showPic">
 						</el-dialog>
@@ -204,7 +204,6 @@ export default {
 			return this.global.imgPath + data.replace("img:", "");
 		},
 		look(a) {
-			console.log(a);
 			let url = this.global.imgPath;
 			return url;
 		},
@@ -214,7 +213,6 @@ export default {
 		},
 		onContentChange(val) {
 			this.editorTextCopy = val;
-			console.log(this.editorTextCopy);
 		},
 		afterChange() {},
 		imgApi() {
@@ -222,9 +220,9 @@ export default {
 			return url;
 		},
 		beforeAvatarUpload1(file) {
-			const isPicSize = file.size / 1024 / 1024 <= 2;
+			const isPicSize = file.size / 1024 <= 200;
 			if (isPicSize == false) {
-				this.$message.error("上传图片不能大于2M");
+				this.$message.error("上传图片不能大于200KB");
 				return false;
 			} else {
 				const isSize = new Promise(function(resolve, reject) {
@@ -272,7 +270,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.$router.back(-1);
 					this.reload();
@@ -296,11 +293,9 @@ export default {
 		handleRemove(file, fileList) {
 			this.addMsg.img = null;
 			this.uploadShow1 = 0;
-			console.log(file, fileList);
 		},
 
 		handlePictureCardPreview(file) {
-			console.log(file);
 			this.dialogImageUrl = file.url;
 			this.dialogVisible = true;
 		},
@@ -312,8 +307,6 @@ export default {
 			} else {
 				this.$message.error("上传图片失败,请再次尝试");
 			}
-			console.log(res);
-			console.log(file);
 		}
 	},
 	mounted() {},

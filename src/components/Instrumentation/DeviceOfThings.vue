@@ -30,7 +30,6 @@ export default {
 	mounted() {},
 	methods: {
 		look(a) {
-			console.log(a);
 			let url = this.global.imgPath;
 			return url;
 		},
@@ -40,7 +39,6 @@ export default {
 		},
 		onContentChange(val) {
 			this.editorTextCopy = val;
-			console.log(this.editorTextCopy);
 		},
 		afterChange() {}
 	},

@@ -373,7 +373,6 @@ export default {
 					this
 				).then(
 					result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.reload();
 							this.dialogPay = false;
@@ -403,7 +402,6 @@ export default {
 					this
 				).then(
 					result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.reload();
 							this.dialogClose = false;
@@ -415,7 +413,6 @@ export default {
 		},
 		handleSelectionChange(select) {},
 		getRow(row, event) {
-			console.log(row);
 		},
 		toPrintOrder() {
 			sessionStorage.setItem("orderIds", this.$route.params.id);
@@ -437,7 +434,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						// result.data.data.address = JSON.parse(result.data.data.address);
 						this.orderDetails = result.data.data;

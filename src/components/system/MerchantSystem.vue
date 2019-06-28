@@ -170,9 +170,7 @@ export default {
 							}
 						},
 						this
-					).then(result => {
-						// console.log(result);
-					});
+					).then(result => {});
 				} else {
 					return false;
 				}
@@ -246,10 +244,8 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result.data);
 				if (result.data.code === 200) {
 					this.systemMsg = result.data.data;
-					console.log(this.systemMsg);
 					if (this.systemMsg.logo != null && this.systemMsg.logo != "") {
 						this.fileList = [
 							{

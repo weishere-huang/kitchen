@@ -148,13 +148,11 @@ export default {
 	},
 	methods: {
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getAdvertisingList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getAdvertisingList();
 		},
@@ -164,7 +162,6 @@ export default {
 		getPic(value) {
 			this.mainPicShow = true;
 			this.dialogShowPic = value;
-			console.log(value);
 		},
 		toadd() {
 			this.$router.push({ path: "/Advertising/AdvertisingAdd" });
@@ -194,11 +191,9 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;
-						console.log(this.tableData);
 					}
 				},
 				({ type, info }) => {}
@@ -221,7 +216,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.getAdvertisingList();
 				}
@@ -230,13 +224,10 @@ export default {
 		//修改广告
 		beforeupdate(params) {
 			if (params.type == "cancel") {
-				console.log(params);
 				this.dialogEdit = params.isHide;
 			}
 			if (params.type == "affirm") {
-				console.log(params);
 				this.editMsg = params.value;
-				console.log(this.addMsg);
 				this.updateAdvertising();
 				this.dialogEdit = params.isHide;
 			}
@@ -266,7 +257,6 @@ export default {
 		// 		},
 		// 		this
 		// 	).then(result => {
-		// 		console.log(result.data);
 		// 		if (result.data.code === 200) {
 		// 			this.reload();
 		// 		}
@@ -288,7 +278,6 @@ export default {
 		dialogEdit() {
 			if (this.dialogEdit == false) {
 				// this.getAdvertisingList();
-				// console.log("OK");
 				// this.reload();
 			}
 		},

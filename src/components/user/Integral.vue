@@ -103,13 +103,11 @@ export default {
 	},
 	methods: {
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getlist();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getlist();
 		},
@@ -135,12 +133,10 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;
 						// this.tableData[i].state = this.tableData[i].state.toString;
-						console.log(this.tableData);
 					}
 				},
 				({ type, info }) => {}

@@ -348,17 +348,14 @@ export default {
 			}
 		},
 		handleSelectionChange(selection) {
-			console.log(selection);
 			this.selectCommentId = selection.map(item => {
 				return item.id;
 			});
-			// console.log(this.selectCommentId.join(","));
 		},
 		handleSelectionChange1(selection) {
 			this.selectReplayId = selection.map(item => {
 				return item.id;
 			});
-			console.log(this.selectReplayId.join(","));
 		},
 		handleSizeChange(val) {
 			this.pageIndex = 1;
@@ -398,7 +395,6 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;
@@ -427,7 +423,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.tableData1 = result.data.data.content;
 						this.total1 = result.data.data.totalElement;
@@ -456,7 +451,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.getCommentList();
 						this.dialogVisibleComment = false;
@@ -485,7 +479,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.getReplyList();
 						this.dialogVisibleReplay = false;
@@ -515,7 +508,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.getCommentList();
 						this.dialogVisibleComment = false;
@@ -545,7 +537,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.getReplyList();
 						this.dialogVisibleReplay = false;
@@ -573,7 +564,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						if (type == 0) {
 							this.commentMsg = result.data.data;

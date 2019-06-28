@@ -300,15 +300,12 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.ruleOptions = result.data.data;
 				},
 				({ type, info }) => {}
 			);
 		},
-		handleNodeClick(data) {
-			console.log(data);
-		},
+		handleNodeClick(data) {},
 		encryptByDES(message, key) {
 			const keyHex = CryptoJS.enc.Utf8.parse(key);
 			const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
@@ -362,7 +359,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.$router.back(-1);
 						this.reload();
@@ -373,15 +369,12 @@ export default {
 		}
 	},
 	created() {
-		// console.log(this.$store.state.getArea);
-
 		// this.getarea();
 		this.getRoleList();
 		this.data = JSON.parse(sessionStorage.getItem("area"))[0].children[0];
 		this.data1 = this.data.slice(0, 12);
 		this.data2 = this.data.slice(12, 24);
 		this.data3 = this.data.slice(24, 34);
-		console.log(this.data1);
 	},
 	components: {}
 };

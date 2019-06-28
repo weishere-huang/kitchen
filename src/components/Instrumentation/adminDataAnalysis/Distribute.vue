@@ -23,8 +23,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log();
-
 				let myChartDistribute = echarts.init(
 					document.getElementById("adminDistribute")
 				);

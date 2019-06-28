@@ -148,7 +148,6 @@ export default {
 				}
 			} while (arr.length < sum && flag);
 			this.numberIndex = arr;
-			console.log(arr);
 		},
 		getDetails(id) {
 			this.Axios(
@@ -168,12 +167,10 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.userMsg = result.data.data;
 						this.tagValue = result.data.data.userLabel;
 						this.getNumber(this.tagValue.length);
-						// console.log(this.tagValue.length);
 					}
 				},
 				({ type, info }) => {}

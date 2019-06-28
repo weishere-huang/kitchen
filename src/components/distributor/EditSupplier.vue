@@ -165,7 +165,6 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result.data);
 					let that = this;
 					let data = JSON.parse(JSON.stringify(result.data.data));
 					for (var item in data) {
@@ -220,7 +219,6 @@ export default {
 						}
 					}
 					that.country[0].children.push(that.province);
-					// console.log(that.country);
 					this.data = that.country[0].children[0];
 					this.data1 = this.data.slice(0, 12);
 					this.data2 = this.data.slice(12, 24);
@@ -245,20 +243,16 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
-					console.log("getOneSupplier");
 					this.supplierMsg = result.data.data.supplierDO;
 					result.data.data.area.map(item =>
 						this.selectarea.push(item)
 					);
-					// console.log(this.selectarea);
 					this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
 				},
 				({ type, info }) => {}
 			);
 		},
 		handleNodeClick(data) {
-			console.log(data);
 		},
 		beforesave(formName) {
 			this.$refs[formName].validate(valid => {

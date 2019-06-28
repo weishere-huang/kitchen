@@ -300,7 +300,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.listOrder();
 						this.dialogSend = false;
@@ -331,7 +330,6 @@ export default {
 			}
 		},
 		toPrintOrder() {
-			console.log(this.orderIds);
 			if (this.orderIds == "") {
 				this.$message.error("请勾选要打印的订单！");
 			} else {
@@ -340,38 +338,30 @@ export default {
 			}
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.listOrder();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.listOrder();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				console.log(params);
 			}
 			if (params.type === "delete") {
-				console.log(params);
 			}
 			if (params.type === "detalis") {
-				console.log(params);
 				this.$router.push("/AdminOrder/AdminDetails/" + params.rowData.id);
 				// this.$router.push({ path: "/Order/Details/" + this.userIds });
 			}
 		},
 		handleSelectionChange(selection) {
-			console.log(selection);
 			this.orderIds = selection.map(item => {
 				return item.id;
 			});
-			console.log(this.orderIds.join(","));
 		},
 		getRow(row, event) {
-			console.log(row);
 		},
 		listOrder() {
 			this.Axios(
@@ -393,7 +383,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data.content);
 					// for (let i = 0; i < result.data.data.content.length; i++) {
 					// 	result.data.data.content[i].address = JSON.parse(
 					// 		result.data.data.content[i].address

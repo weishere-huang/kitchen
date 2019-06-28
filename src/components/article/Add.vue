@@ -182,7 +182,6 @@ export default {
 						},
 						this
 					).then(result => {
-						// console.log(result.data);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
 						}

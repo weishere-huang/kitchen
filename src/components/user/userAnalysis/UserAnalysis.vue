@@ -163,7 +163,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					let dataMsg = result.data.data.map(item => item.cateName);
 					let sumMsg = result.data.data.map(item => item.sum);
@@ -227,7 +226,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					this.gender = result.data.data;
 					document.getElementsByClassName("man")[0].style.width =
@@ -295,13 +293,11 @@ export default {
 			});
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getTableList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getTableList();
 		},
@@ -318,8 +314,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
-
 				if (result.data.code === 200) {
 				}
 			});
@@ -336,11 +330,9 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
-					// console.log(this.tableData);
 				}
 			});
 		}

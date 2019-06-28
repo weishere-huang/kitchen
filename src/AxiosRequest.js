@@ -2,7 +2,7 @@
  * @Author: weisheres.huang
  * @Date: 2018-11-28 15:31:51
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-06-03 17:49:15
+ * @Last Modified time: 2019-06-28 14:57:18
  */
 import axios from 'axios';
 import global from './components/global/Global';
@@ -150,7 +150,6 @@ export default ({
           }, 1000);
         } else {
           //faild && faild(res.data);
-          console.log(res.data.msg);
           Message.error({
             message: `${res.data.msg}(${res.data.code})`,
             customClass: 'e-message',

@@ -304,17 +304,11 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.supplierMsg = result.data.data;
 						this.selectarea = result.data.data.areaDOS.map(item => {
 							return item.areaCode;
 						});
-						console.log(
-							result.data.data.areaDOS.map(item => {
-								return item.areaCode;
-							})
-						);
 						this.fileList = [
 							{
 								name: this.supplierMsg.logo.substring(
@@ -328,15 +322,12 @@ export default {
 					}
 
 					// result.data.data.area.map(item => this.selectarea.push(item));
-					// console.log(this.selectarea);
 					// this.selectarea = JSON.parse(JSON.stringify(this.selectarea));
 				},
 				({ type, info }) => {}
 			);
 		},
-		handleNodeClick(data) {
-			console.log(data);
-		},
+		handleNodeClick(data) {},
 		beforesave(formName) {
 			this.$refs[formName].validate(valid => {
 				if (valid) {

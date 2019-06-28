@@ -381,7 +381,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						// this.innerVisible = false;
 						// this.oldPhoneShow = true;
@@ -423,7 +422,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.oldPhoneShow = false;
 						this.newPhoneShow = true;
@@ -452,7 +450,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 					}
 				},
@@ -519,7 +516,6 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.hotLine.hotLine = result.data.data.phone;
 					}
@@ -652,12 +648,9 @@ export default {
 
 				sessionStorage.setItem("area", JSON.stringify(that.country));
 				// this.$store.commit("getArea", Object.assign({},that.country));
-				// console.log(this.$store.state.getArea.area);
 			});
 		},
-		handleOpen(key, keyPath) {
-			console.log(key, keyPath);
-		},
+		handleOpen(key, keyPath) {},
 		reload() {
 			this.isRouterAlive = false;
 			this.$nextTick(function() {
@@ -665,7 +658,6 @@ export default {
 			});
 		},
 		TroggleHandle(key, keyPath) {
-			// console.log(key, keyPath);
 			this.isCollapse = !this.isCollapse;
 			EventBus.$emit("sideBarTroggleHandle", this.isCollapse);
 		},

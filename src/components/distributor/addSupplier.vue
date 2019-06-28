@@ -286,15 +286,12 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.ruleOptions = result.data.data;
 				},
 				({ type, info }) => {}
 			);
 		},
-		handleNodeClick(data) {
-			console.log(data);
-		},
+		handleNodeClick(data) {},
 		getarea() {
 			this.Axios(
 				{
@@ -308,11 +305,9 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(typeof JSON.parse(JSON.stringify(result.data.data)));
 					let that = this;
 					let data = JSON.parse(JSON.stringify(result.data.data));
 
-					console.log(data);
 					for (var item in data) {
 						if (data[item].adCode.match(/100000$/)) {
 							that.country.push({
@@ -365,7 +360,6 @@ export default {
 						}
 					}
 					that.country[0].children.push(that.province);
-					// console.log(that.country);
 					this.data = that.country[0].children[0];
 					this.data1 = this.data.slice(0, 12);
 					this.data2 = this.data.slice(12, 24);
@@ -394,17 +388,17 @@ export default {
 			});
 		},
 		addSupplier() {
-      let arr = [];
-      arr = arr.concat(
-        this.$refs.tree1.getCheckedKeys(),
-        this.$refs.tree2.getCheckedKeys(),
-        this.$refs.tree3.getCheckedKeys()
-      );
-      if (arr.length === 0) {
-        this.$message.error("请选择销售区域");
-        return
-      }
-      this.supplierMsg.areaCode = arr;
+			let arr = [];
+			arr = arr.concat(
+				this.$refs.tree1.getCheckedKeys(),
+				this.$refs.tree2.getCheckedKeys(),
+				this.$refs.tree3.getCheckedKeys()
+			);
+			if (arr.length === 0) {
+				this.$message.error("请选择销售区域");
+				return;
+			}
+			this.supplierMsg.areaCode = arr;
 
 			let pass = this.supplierMsg.supplierPassword;
 			pass = md5(pass);
@@ -435,7 +429,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.$router.back(-1);
 						this.reload();
@@ -446,8 +439,6 @@ export default {
 		}
 	},
 	created() {
-		// console.log(this.$store.state.getArea);
-
 		this.getarea();
 		this.getRoleList();
 	},

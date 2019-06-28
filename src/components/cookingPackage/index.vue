@@ -138,7 +138,6 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
-					  console.log(result.data);
 						this.getCookbookList();
 					}
 				},
@@ -192,7 +191,6 @@ export default {
 				this
 			).then(
 				result => {
-				  console.log(result.data);
 					if (result.data.code === 200) {
 						this.total = result.data.data.totalElement;
 						this.tableData = result.data.data.content;

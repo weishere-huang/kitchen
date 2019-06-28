@@ -113,7 +113,6 @@ export default {
 					this.randomNum(0, this.identifyCodes.length)
 				];
 			}
-			console.log(this.identifyCode);
 		},
 		makeCode(o, l) {
 			for (let i = 0; i < l; i++) {
@@ -121,7 +120,6 @@ export default {
 					this.randomNum(0, this.identifyCodes.length)
 				];
 			}
-			console.log(this.identifyCode);
 		},
 		decryptByDES(ciphertext, key) {
 			let keyHex = CryptoJS.enc.Utf8.parse(key);
@@ -239,7 +237,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						sessionStorage.imgPath = result.data.data.imgPath;
 					}

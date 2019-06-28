@@ -100,27 +100,22 @@ export default {
 			this.$router.push({ path: "/Distributor/AddDistributor" });
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getSupplierList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getSupplierList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				console.log(params);
 				this.$router.push("/Distributor/EditDistributor/" + params.rowData.id);
 			}
 			if (params.type === "delete") {
-				console.log(params.rowData.id);
 				this.deleteSupplier(params.rowData.id);
 			}
 			if (params.type === "detalis") {
-				console.log(params);
 			}
 		},
 		deleteSupplier(id) {
@@ -140,7 +135,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.getSupplierList();
 					}
@@ -151,10 +145,8 @@ export default {
 			);
 		},
 		handleSelectionChange(selection) {
-			console.log(selection);
 		},
 		getRow(row, event) {
-			console.log(row);
 		},
 		beforeSearch() {
 			this.pageIndex = 1;
@@ -178,7 +170,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;

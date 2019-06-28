@@ -62,7 +62,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					if (result.data.code === 200) {
 						this.content = result.data.data[0].content;
 					}
@@ -86,7 +85,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.getAgreement();
 				}

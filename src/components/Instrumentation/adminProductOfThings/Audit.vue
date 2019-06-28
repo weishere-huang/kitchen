@@ -30,7 +30,7 @@
 							v-for="(item, index) in oneProductMsg.agreement"
 							:key="index"
 							@click="look(global.imgPath + item.url.replace('img:', ''))"
-						>{{item.name}}</span>
+						>{{item.name}}&nbsp;</span>
 					</el-form-item>
 					<el-form-item label="产品连接示意图：" prop>
 						<span class="pic_style" @click="look(oneProductMsg.linkImg)">{{oneProductMsg.linkName}}</span>
@@ -130,12 +130,8 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result);
 				if (result.data.code === 200) {
 					this.oneProductMsg = result.data.data;
-					// this.oneProductMsg.deviceCateName = JSON.parse(
-					// 	this.oneProductMsg.deviceCateName
-					// ).join("--");
 					this.oneProductMsg.agreement = JSON.parse(
 						this.oneProductMsg.agreement
 					);
@@ -170,7 +166,6 @@ export default {
 						},
 						this
 					).then(result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.$router.back(-1);
 							// this.reload();

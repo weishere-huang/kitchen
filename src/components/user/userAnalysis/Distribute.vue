@@ -23,7 +23,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(eval("(" + result.data.data + ")"));
 
 				let myChartDistribute = echarts.init(document.getElementById("user"));
 				var data = eval("(" + result.data.data + ")");

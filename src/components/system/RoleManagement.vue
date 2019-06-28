@@ -80,9 +80,7 @@ export default {
 	},
 	methods: {
 		handleSelectionChange() {},
-		getRow(row, event) {
-			console.log(row);
-		},
+		getRow(row, event) {},
 		handlechange(params) {
 			if (params.type === "edit") {
 				if (
@@ -97,10 +95,8 @@ export default {
 				} else {
 					this.$router.push("/RoleManagement/EditRole/" + params.rowData.id);
 				}
-				console.log(params);
 			}
 			if (params.type === "delete") {
-				console.log(params);
 				if (
 					params.rowData.id === 1 ||
 					params.rowData.id === 2 ||
@@ -114,19 +110,16 @@ export default {
 				this.deleteRole(params.rowData.id);
 			}
 			if (params.type === "detalis") {
-				console.log(params);
 				this.userIds = params.rowData.order;
 				// this.$router.push({ path: "/Order/Details/" + this.userIds });
 			}
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getRoleList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getRoleList();
 		},
@@ -146,7 +139,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;
@@ -171,7 +163,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data);
 				if (result.data.code === 200) {
 					this.getRoleList();
 				}

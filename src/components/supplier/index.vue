@@ -156,7 +156,6 @@ export default {
 	},
 	methods: {
 		changeState(row, index) {
-			console.log(row.state);
 			if (row.state == true) {
 				let qs = require("qs");
 				let data = qs.stringify({
@@ -174,7 +173,6 @@ export default {
 					this
 				).then(
 					result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.getSupplierList();
 						} else {
@@ -202,7 +200,6 @@ export default {
 					this
 				).then(
 					result => {
-						console.log(result);
 						if (result.data.code === 200) {
 							this.getSupplierList();
 						} else {
@@ -222,27 +219,22 @@ export default {
 			this.$router.push({ path: "/Supplier/AddSupplier" });
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getSupplierList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getSupplierList();
 		},
 		handlechange(params) {
 			if (params.type === "edit") {
-				console.log(params);
 				this.$router.push("/Supplier/EditSupplier/" + params.rowData.id);
 			}
 			if (params.type === "delete") {
-				console.log(params.rowData.id);
 				this.deleteSupplier(params.rowData.id);
 			}
 			if (params.type === "detalis") {
-				console.log(params);
 			}
 		},
 		deleteSupplier(row, index) {
@@ -262,7 +254,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.getSupplierList();
 						this.tableData[index].visible = false;
@@ -275,12 +266,8 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		handleSelectionChange(selection) {
-			console.log(selection);
-		},
-		getRow(row, event) {
-			console.log(row);
-		},
+		handleSelectionChange(selection) {},
+		getRow(row, event) {},
 		beforeSearch() {
 			this.pageIndex = 1;
 			this.getSupplierList();
@@ -303,7 +290,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;

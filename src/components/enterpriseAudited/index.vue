@@ -20,7 +20,7 @@
 					<p style="text-align:center;font-weight: 600;font-size:16px;">抱歉，您的申请已被驳回！</p>
 					<el-form label-width="200px">
 						<el-form-item label="驳回原因：" style="margin-bottom: 0px;">
-							<div style="width:300px;">啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</div>
+							<div style="width:300px;color:red;">{{auditOpinion}}</div>
 						</el-form-item>
 					</el-form>
 					<p style="text-align:center;">
@@ -37,7 +37,8 @@ export default {
 	data() {
 		return {
 			isHideList: this.$route.params.id !== undefined ? true : false,
-			userMsg: ""
+			userMsg: "",
+			auditOpinion: ""
 		};
 	},
 	methods: {
@@ -48,9 +49,27 @@ export default {
 					JSON.parse(sessionStorage.getItem("user")).salesTerritoryId
 			});
 		},
-	
+		findOne(id) {
+			this.Axios(
+				{
+					params: { enterpriseId: id },
+					url: "/api-enterprise/enterprise/findOne",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				if (result.data.code === 200) {
+					this.auditOpinion =
+						result.data.data.enterpriseAuditRecordDOS[0].auditOpinion;
+				}
+			});
+		}
 	},
 	created() {
+		this.findOne(JSON.parse(sessionStorage.getItem("user")).salesTerritoryId);
 		this.userMsg = JSON.parse(sessionStorage.getItem("user")).state;
 		let a = this.$route.matched.find(item => item.name === "AddCookbook")
 			? true

@@ -77,7 +77,6 @@ export default {
 			return url;
 		},
 		handleRemove1(file, fileList) {
-			console.log(file, fileList);
 			this.cookbook.recipeImg = null;
 		},
 		handlePictureCardPreview1(file) {
@@ -120,7 +119,6 @@ export default {
 					message: "图片上传成功！",
 					type: "success"
 				});
-				// console.log(this.cookbook.recipeImg);
 			} else {
 				this.$message({
 					message: "图片上传不成功！",
@@ -143,13 +141,11 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data);
 					this.addInfo = result.data.data;
 					if (this.addInfo.img !== "" || this.addInfo != null) {
 						this.addInfo.img =
 							this.global.imgPath + this.addInfo.img.replace("img:", "");
 					}
-					console.log(this.addInfo);
 				},
 				({ type, info }) => {}
 			);

@@ -24,17 +24,17 @@
 								<span>{{ scope.row.applicant }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="申请人手机号" min-width="80">
+						<el-table-column label="申请人手机号" min-width="80" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.phone }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="申请时间" min-width="120">
+						<el-table-column label="申请时间" min-width="120" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{ scope.row.gmtCreate }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="审核时间" min-width="120">
+						<el-table-column label="审核时间" min-width="120" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<span>{{scope.row.auditState==1?"-": scope.row.enterpriseAuditRecordDOS[scope.row.enterpriseAuditRecordDOS.length-1].gmtCreate }}</span>
 							</template>
@@ -124,13 +124,11 @@ export default {
 			});
 		},
 		handleSizeChange(val) {
-			// console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getList();
 		},
 		handleCurrentChange(val) {
-			// console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getList();
 		},
@@ -150,7 +148,6 @@ export default {
 				this
 			).then(
 				result => {
-					// console.log(result);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},
@@ -173,7 +170,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					this.getList();
 				} else {
@@ -197,7 +193,6 @@ export default {
 				},
 				this
 			).then(result => {
-				// console.log(result);
 				if (result.data.code === 200) {
 					this.getList();
 				} else {

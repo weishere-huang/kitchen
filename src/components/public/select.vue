@@ -37,8 +37,6 @@ export default {
 		handleChange(value) {
 			// let labels = this.$refs["recipeCate"].currentLabels;
 			// this.cookbook.cateName = labels[labels.length - 1];
-			// console.log(this.cookbook.cateName);
-			console.log(value);
 			this.$emit("handlechange", value.join(""));
 		},
 		handleNodeClick(data) {
@@ -71,7 +69,6 @@ export default {
 							cateNo: 0
 						});
 						// }
-						console.log(this.data);
 					}
 				},
 				({ type, info }) => {}

@@ -197,7 +197,6 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
-						console.log(result.data);
 						this.total = result.data.data.totalElement;
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;

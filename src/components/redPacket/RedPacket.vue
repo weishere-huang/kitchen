@@ -265,10 +265,10 @@ export default {
 					{
 						validator: (rule, value, callback) => {
 							if (
-								dateTime.replace(/\//g, "") - value[0].replace(/\//g, "") >=
+								dateTime.replace(/\//g, "") - value[0].replace(/\//g, "") >
 								0
 							) {
-								callback(new Error("开始时间不能小于或等于今天！"));
+								callback(new Error("开始时间不能小于今天！"));
 							} else {
 								callback();
 							}
@@ -313,13 +313,11 @@ export default {
 			this.dialogVisible = false;
 		},
 		handleSizeChange(val) {
-			console.log(`每页 ${val} 条`);
 			this.pageIndex = 1;
 			this.pageSize = val;
 			this.getRedPacketList();
 		},
 		handleCurrentChange(val) {
-			console.log(`当前页: ${val}`);
 			this.pageIndex = val;
 			this.getRedPacketList();
 		},
@@ -347,7 +345,6 @@ export default {
 						this
 					).then(
 						result => {
-							console.log(result);
 							if (result.data.code === 200) {
 								this.dialogVisible = false;
 								this.getRedPacketList();
@@ -416,7 +413,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result);
 					if (result.data.code === 200) {
 						this.tableData[index].visible = false;
 						this.getRedPacketList();
@@ -445,7 +441,6 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data);
 					if (result.data.code === 200) {
 						this.tableData = result.data.data.content;
 						this.total = result.data.data.totalElement;

@@ -85,9 +85,7 @@ export default {
 				this
 			).then(
 				result => {
-					console.log(result.data.data.product);
 					this.addMenu = result.data.data.product;
-
 					// this.getParent(this.classify, result.data.data.product.cateId);
 				},
 				({ type, info }) => {}

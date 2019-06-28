@@ -94,7 +94,6 @@ export default {
 				},
 				this
 			).then(result => {
-				console.log(result.data.data);
 				if (result.data.code === 200) {
 					this.oneProductMsg = result.data.data;
 					// this.oneProductMsg.deviceCateName = JSON.parse(
@@ -109,7 +108,6 @@ export default {
 					this.oneProductMsg.linkImg =
 						this.global.imgPath +
 						this.oneProductMsg.linkImg.replace("img:", "");
-					console.log(this.oneProductMsg);
 				}
 			});
 		}
