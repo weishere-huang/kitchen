@@ -97,7 +97,7 @@
 							:current-page.sync="pageIndex"
 							:page-sizes="[10, 20,40, 100]"
 							:page-size="pageSize"
-							layout="sizes, prev, pager, next"
+							layout="total, sizes, prev, pager, next, jumper"
 							:total="total"
 						></el-pagination>
 					</div>
@@ -184,7 +184,7 @@
 							:current-page.sync="pageIndex1"
 							:page-sizes="[10, 20,40, 100]"
 							:page-size="pageSize1"
-							layout="sizes, prev, pager, next"
+							layout="total, sizes, prev, pager, next, jumper"
 							:total="total1"
 						></el-pagination>
 					</div>

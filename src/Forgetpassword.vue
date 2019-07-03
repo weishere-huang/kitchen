@@ -89,7 +89,12 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item style>
-					<el-button type="primary" round style="width:100%;" @click="setNewPassword">提交</el-button>
+					<el-button
+						type="primary"
+						round
+						style="width:100%;"
+						@click="setNewPassword('newPasswordMsg')"
+					>提交</el-button>
 				</el-form-item>
 			</el-form>
 			<div v-show="succeed">
@@ -231,49 +236,55 @@ export default {
 				({ type, info }) => {}
 			);
 		},
-		setNewPassword() {
-			if (
-				this.newPasswordMsg.newPassword !==
-				this.newPasswordMsg.repetitionPassword
-			) {
-				this.$message.error("两次输入的密码不相同");
-			} else if (this.newPasswordMsg.newPassword == "") {
-				this.$message.error("密码不能为空");
-			} else {
-				let pass = this.newPasswordMsg.newPassword;
-				pass = md5(pass);
-				let key = "*chang_hong_device_cloud";
-				let a = pass;
-				pass = this.encryptByDES(a, key);
-				let qs = require("qs");
-				let data = qs.stringify({
-					phone: this.userPhone,
-					newPassword: pass
-				});
-				this.Axios(
-					{
-						params: data,
-						option: {
-							enableMsg: false
-						},
-						type: "post",
-						url: "/api-platform/employee/forgetPwd",
-						loadingConfig: {
-							target: document.querySelector(".forgetpassword")
-						}
-					},
-					this
-				).then(
-					result => {
-						if (result.data.code === 200) {
-							this.newPasswordShow = false;
-							this.isHide = false;
-							this.succeed = true;
-						}
-					},
-					({ type, info }) => {}
-				);
-			}
+		setNewPassword(formName) {
+			this.$refs[formName].validate(valid => {
+				if (valid) {
+					if (
+						this.newPasswordMsg.newPassword !==
+						this.newPasswordMsg.repetitionPassword
+					) {
+						this.$message.error("两次输入的密码不相同");
+					} else if (this.newPasswordMsg.newPassword == "") {
+						this.$message.error("密码不能为空");
+					} else {
+						let pass = this.newPasswordMsg.newPassword;
+						pass = md5(pass);
+						let key = "*chang_hong_device_cloud";
+						let a = pass;
+						pass = this.encryptByDES(a, key);
+						let qs = require("qs");
+						let data = qs.stringify({
+							phone: this.userPhone,
+							newPassword: pass
+						});
+						this.Axios(
+							{
+								params: data,
+								option: {
+									enableMsg: false
+								},
+								type: "post",
+								url: "/api-platform/employee/forgetPwd",
+								loadingConfig: {
+									target: document.querySelector(".forgetpassword")
+								}
+							},
+							this
+						).then(
+							result => {
+								if (result.data.code === 200) {
+									this.newPasswordShow = false;
+									this.isHide = false;
+									this.succeed = true;
+								}
+							},
+							({ type, info }) => {}
+						);
+					}
+				} else {
+					return false;
+				}
+			});
 		},
 		toLogin() {
 			window.location.href = "login.html";

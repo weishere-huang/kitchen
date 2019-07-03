@@ -105,11 +105,11 @@ export default {
 		handleSizeChange(val) {
 			this.pageIndex = 1;
 			this.pageSize = val;
-			this.getlist();
+			this.getTableList();
 		},
 		handleCurrentChange(val) {
 			this.pageIndex = val;
-			this.getlist();
+			this.getTableList();
 		},
 		getBar() {
 			this.Axios(

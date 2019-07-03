@@ -79,6 +79,7 @@ import ArticleAdd from '@/components/article/Add'
 import ArticleEdit from '@/components/article/Edit'
 import EnterpriseAuditedIndex from '@/components/enterpriseAudited/index'
 import EnterpriseAuditedEdit from '@/components/enterpriseAudited/Edit'
+import Temporary from '@/components/temporary/index'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
@@ -965,6 +966,17 @@ const router = new Router({
           },
         }
       ]
+    },
+    {
+      path: '/Temporary',
+      name: 'Temporary',
+      component: Temporary,
+      props: {
+        pageName: '数据采集'
+      },
+      meta: {
+        requireAuth: true,
+      },
     },
   ]
 })

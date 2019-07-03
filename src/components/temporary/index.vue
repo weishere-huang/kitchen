@@ -1,8 +1,8 @@
 <template>
-	<div class="admin_devide_things_details">
-		<div class="top_list">
+	<div class="data_collection">
+		<!-- <div class="top_list">
 			<el-button size="small" type="primary" class="el-icon-arrow-left" @click="$router.back(-1)">返回</el-button>
-		</div>
+		</div>-->
 		<div class="bottom_list">
 			<div class="top_title">
 				<h4>设备详情</h4>
@@ -11,46 +11,40 @@
 				<el-col :span="8">
 					<el-form label-width="200px" size="small">
 						<el-form-item label="设备名称/自定义：" prop>
-							<span>{{deviceDetails.name}}</span>
+							<span>光照温湿度变送器</span>
 						</el-form-item>
 						<el-form-item label="所属产品：" prop>
-							<span>{{deviceDetails.deviceName}}</span>
+							<span>IoT采集设备</span>
 						</el-form-item>
 						<el-form-item label="设备型号：" prop>
-							<span>{{deviceDetails.deviceModel}}</span>
+							<span>VF-SB-270</span>
 						</el-form-item>
 						<el-form-item label="设备序号：" prop>
-							<span>{{deviceDetails.deviceNumber}}</span>
+							<span>SN298432442391</span>
 						</el-form-item>
-						<el-form-item label="软件版本：" prop>
-							<span>{{deviceDetails.softwareVersion}}</span>
-						</el-form-item>
-						<el-form-item label="固件版本：" prop>
-							<span>{{deviceDetails.hardwareVersion}}</span>
+						<el-form-item label="最近在线时间:">
+							<span>{{myDate}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="140px" size="small">
-						<el-form-item label="用户昵称：">
-							<span>{{deviceDetails.userName}}</span>
-						</el-form-item>
-						<el-form-item label="账号（手机号）：">
-							<span>{{deviceDetails.phone}}</span>
-						</el-form-item>
 						<el-form-item label="接入时间：">
-							<span>{{deviceDetails.gmtCreate}}</span>
+							<span>2019-06-21 14:13:31</span>
 						</el-form-item>
-						<el-form-item label="接入IP:">
-							<span>{{deviceDetails.interIp}}</span>
+						<el-form-item label="接入IP：">
+							<span>202.98.96.69</span>
 						</el-form-item>
-						<el-form-item label="最近在线时间:">
-							<span>{{deviceDetails.name}}</span>
+						<el-form-item label="软件版本：" prop>
+							<span>1.0.7.1368</span>
+						</el-form-item>
+						<el-form-item label="固件版本：" prop>
+							<span>1.0.0.2701</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8" class="on_off">
-					<div class="icon_case">
+					<!-- <div class="icon_case">
 						<i
 							class="iconfont"
 							v-if="deviceDetails.isOnline==0"
@@ -68,13 +62,16 @@
 					<div style="text-align: center;margin-top:20px;">
 						<span style="padding:0 40px;">{{deviceDetails.isOnline==0?"在线":"离线"}}</span>
 						<span style="padding:0 40px;">{{deviceDetails.state==0?"开机":"关机"}}</span>
+					</div>-->
+					<div style="text-align:center;">
+						<img style="width:220px;" src="../../assets/image/20190628162807.png" alt>
 					</div>
 				</el-col>
 			</div>
 		</div>
 		<div class="bottom_list" style="margin-top:10px;">
 			<div class="top_title">
-				<h4>设备运行记录</h4>
+				<h4>运行记录</h4>
 			</div>
 			<div class="table_list">
 				<el-table
@@ -90,14 +87,19 @@
 							<span>{{ scope.row.gmtCreate }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="状态" min-width="200" show-overflow-tooltip>
+					<el-table-column label="温度（℃）" min-width="200" show-overflow-tooltip>
 						<template slot-scope="scope">
-							<span>{{ scope.row.deviceAction }}</span>
+							<span>{{ scope.row.temp }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="运行时长" min-width="100">
+					<el-table-column label="光照（Lx）" min-width="100">
 						<template slot-scope="scope">
-							<span>{{ scope.row.time }}</span>
+							<span>{{ scope.row.illumination }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="湿度（%）" min-width="100">
+						<template slot-scope="scope">
+							<span>{{ scope.row.humi }}</span>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -120,6 +122,9 @@
 <script>
 export default {
 	data() {
+		let myDate = new Date();
+		myDate.setMinutes(myDate.getMinutes() - 5);
+		myDate = myDate.toLocaleString("chinese", { hour12: false });
 		return {
 			total: 0,
 			pageIndex: 1,
@@ -146,16 +151,22 @@ export default {
 					order: "3`45"
 				}
 			],
-			deviceDetails: {}
+			deviceDetails: {
+				isOnline: "0",
+				state: "0"
+			},
+			myDate
 		};
 	},
 	methods: {
 		handleSizeChange(val) {
 			this.pageIndex = 1;
 			this.pageSize = val;
+			this.deviceRecord();
 		},
 		handleCurrentChange(val) {
 			this.pageIndex = val;
+			this.deviceRecord();
 		},
 		findOne(id) {
 			this.Axios(
@@ -174,15 +185,15 @@ export default {
 				}
 			});
 		},
-		deviceRecord(id) {
+		deviceRecord() {
 			this.Axios(
 				{
 					params: {
-						id: id,
+						deviceId: "test",
 						page: this.pageIndex,
 						size: this.pageSize
 					},
-					url: "/api-enterprise/deviceRecord/list",
+					url: "/api-enterprise/data/list",
 					type: "get",
 					option: {
 						enableMsg: false
@@ -190,6 +201,7 @@ export default {
 				},
 				this
 			).then(result => {
+				console.log(result);
 				if (result.data.code === 200) {
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
@@ -198,8 +210,8 @@ export default {
 		}
 	},
 	created() {
-		this.findOne(this.$route.params.id);
-		this.deviceRecord(this.$route.params.id);
+		// this.findOne(this.$route.params.id);
+		this.deviceRecord();
 	}
 };
 </script>
@@ -211,7 +223,7 @@ export default {
 @font-subsidiary: #999999;
 @font-special: #1cc09f;
 @border: 1px solid #dde2eb;
-.admin_devide_things_details {
+.data_collection {
 	font-size: 14px;
 	color: @font-normal;
 	.top_list {
@@ -242,8 +254,8 @@ export default {
 		}
 	}
 	.on_off {
-		padding: 40px 0;
-		margin-top: 40px;
+		padding: 26px 0;
+		// margin-top: 40px;
 		border-left: @border;
 	}
 	.icon_case {

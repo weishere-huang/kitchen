@@ -20,16 +20,16 @@
 							<span>{{userMsg.userInfo.state==0?"正常":"禁用"}}</span>
 						</el-form-item>
 						<el-form-item label="生日：" prop>
-							<span>{{userMsg.userInfo.brithday}}</span>
+							<span>{{userMsg.userInfo.brithday!=null?userMsg.userInfo.brithday:'--'}}</span>
 						</el-form-item>
 						<el-form-item label="性别：" prop>
-							<span>{{userMsg.userInfo.gender==0?"女":"男"}}</span>
+							<span>{{userMsg.userInfo.gender==0?"女":userMsg.userInfo.gender==1?'男':"--"}}</span>
 						</el-form-item>
 						<el-form-item label="设备数量：" prop>
 							<span>{{userMsg.deviceCount}}</span>
 						</el-form-item>
 						<el-form-item label="订单数：" prop>
-							<span>{{userMsg.userInfo.niceName}}</span>
+							<span>{{userMsg.orderCount}}</span>
 						</el-form-item>
 						<el-form-item label="注册时间：" prop>
 							<span>{{userMsg.userInfo.gmtCreate}}</span>

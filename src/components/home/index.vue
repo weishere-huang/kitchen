@@ -34,7 +34,9 @@
 								<i class="iconfont" style="color:white;">&#xe63b;</i>
 							</span>
 							<span>
-								<p>{{allMsg.supplierSellSum.orderSumToday>0?allMsg.supplierSellSum.orderSumToday:0}}</p>
+								<p
+									@click="$router.push({path:'/Order'})"
+								>{{allMsg.supplierSellSum.orderSumToday>0?allMsg.supplierSellSum.orderSumToday:0}}</p>
 								<p>今日订单</p>
 							</span>
 						</div>
@@ -45,7 +47,9 @@
 								<i class="iconfont" style="color:white;">&#xe666;</i>
 							</span>
 							<span>
-								<p>￥{{allMsg.supplierSellSum.orderSalesToday/100>0?allMsg.supplierSellSum.orderSalesToday/100:0}}</p>
+								<p
+									@click="$router.push({path:'/Order'})"
+								>￥{{allMsg.supplierSellSum.orderSalesToday/100>0?allMsg.supplierSellSum.orderSalesToday/100:0}}</p>
 								<p>今日销售额</p>
 							</span>
 						</div>
@@ -56,7 +60,7 @@
 								<i class="iconfont" style="color:white;">&#xe66a;</i>
 							</span>
 							<span>
-								<p>
+								<p @click="$router.push({path:'/Store'})">
 									{{allMsg.supplierSellSum.countProduct[0].obtainedNum>0?allMsg.supplierSellSum.countProduct[0].obtainedNum:0}}/
 									<i
 										style="color:#999999;font-style:normal;"
@@ -72,7 +76,9 @@
 								<i class="iconfont" style="color:white;">&#xe8d7;</i>
 							</span>
 							<span>
-								<p>{{allMsg.supplierSellSum.orderSum>0?allMsg.supplierSellSum.orderSum:0}}</p>
+								<p
+									@click="$router.push({path:'/Order'})"
+								>{{allMsg.supplierSellSum.orderSum>0?allMsg.supplierSellSum.orderSum:0}}</p>
 								<p>订单总数</p>
 							</span>
 						</div>
@@ -83,7 +89,9 @@
 								<i class="iconfont" style="color:white;">&#xe69f;</i>
 							</span>
 							<span>
-								<p>￥{{allMsg.supplierSellSum.totalSales/100>0?allMsg.supplierSellSum.totalSales/100:0}}</p>
+								<p
+									@click="$router.push({path:'/Order'})"
+								>￥{{allMsg.supplierSellSum.totalSales/100>0?allMsg.supplierSellSum.totalSales/100:0}}</p>
 								<p>销售总额</p>
 							</span>
 						</div>
@@ -94,7 +102,9 @@
 								<i class="iconfont" style="color:white;">&#xe696;</i>
 							</span>
 							<span>
-								<p>{{allMsg.supplierSellSum.productNum>0?allMsg.supplierSellSum.productNum:0}}</p>
+								<p
+									@click="$router.push({path:'/Store'})"
+								>{{allMsg.supplierSellSum.productNum>0?allMsg.supplierSellSum.productNum:0}}</p>
 								<p>商品总数</p>
 							</span>
 						</div>
@@ -183,7 +193,7 @@
 							<el-col
 								:span="24"
 								style="font-family: Roboto;"
-							>{{allMsg.supplierOrderInfo.delivered>=0?allMsg.supplierOrderInfo.delivered:0}}</el-col>
+							>{{allMsg.supplierOrderInfo.delivered>=0?allMsg.supplierOrderInfo.delivered:'0'}}</el-col>
 						</el-col>
 						<el-col :span="8" class="list_case">
 							<el-col :span="24">
@@ -366,7 +376,6 @@ export default {
 							myChart.resize();
 						};
 					}
-
 				},
 				({ type, info }) => {}
 			);
@@ -551,11 +560,11 @@ export default {
 					font-size: 20px;
 					text-align: right;
 					font-family: Roboto;
-					// cursor: pointer;
-					// &:hover {
-					// 	color: #1cc09f;
-					// 	text-decoration: underline;
-					// }
+					cursor: pointer;
+					&:hover {
+						color: #1cc09f;
+						text-decoration: underline;
+					}
 				}
 				p:nth-child(2) {
 					color: #999999;

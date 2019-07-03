@@ -132,11 +132,11 @@ export default {
 										position: "top"
 									}
 								},
-								areaStyle: {
-									normal: {
-										color: "#1cc09f"
-									}
-								},
+								// areaStyle: {
+								// 	normal: {
+								// 		// color: "#1cc09f"
+								// 	}
+								// },
 								itemStyle: {
 									normal: {
 										color: "#1cc09f",

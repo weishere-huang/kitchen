@@ -37,7 +37,9 @@
 								<i class="iconfont" style="color:#00BDF1;font-size:32px">&#xe6db;</i>
 							</span>
 							<span>
-								<p>{{allMsg.iotProductsNum>0?allMsg.iotProductsNum:'0'}}</p>
+								<p
+									@click="$router.push({path:'/AdminProductOfThings'})"
+								>{{allMsg.iotProductsNum>0?allMsg.iotProductsNum:'0'}}</p>
 								<p>物联产品</p>
 							</span>
 						</div>
@@ -48,7 +50,9 @@
 								<i class="iconfont" style="color:#B1B42D;font-size:32px">&#xe752;</i>
 							</span>
 							<span>
-								<p>{{allMsg.merchantNum>0?allMsg.merchantNum:'0'}}</p>
+								<p
+									@click="$router.push({path:'/Manufacturer'})"
+								>{{allMsg.merchantNum>0?allMsg.merchantNum:'0'}}</p>
 								<p>设备厂商</p>
 							</span>
 						</div>
@@ -59,7 +63,7 @@
 								<i class="iconfont" style="color: #FF834D;font-size:28px">&#xe604;</i>
 							</span>
 							<span>
-								<p>{{userCount>0?userCount:'0'}}</p>
+								<p @click="$router.push({path:'/User'})">{{userCount>0?userCount:'0'}}</p>
 								<p>注册用户</p>
 							</span>
 						</div>
@@ -70,7 +74,9 @@
 								<i class="iconfont" style="color:#648B99;font-size:32px">&#xe64d;</i>
 							</span>
 							<span>
-								<p>{{allMsg.iotDeviceNum>0?allMsg.iotDeviceNum:'0'}}</p>
+								<p
+									@click="$router.push({path:'/AdminDeviceOfThings'})"
+								>{{allMsg.iotDeviceNum>0?allMsg.iotDeviceNum:'0'}}</p>
 								<p>物联设备</p>
 							</span>
 						</div>
@@ -81,7 +87,7 @@
 								<i class="iconfont" style="color:#6666CA;font-size:32px">&#xe615;</i>
 							</span>
 							<span>
-								<p>{{allMsg.vendorNum>0?allMsg.vendorNum:'0'}}</p>
+								<p @click="$router.push({path:'/Merchant'})">{{allMsg.vendorNum>0?allMsg.vendorNum:'0'}}</p>
 								<p>入驻商家</p>
 							</span>
 						</div>
@@ -92,7 +98,7 @@
 								<i class="iconfont" style="color:#65CB99;font-size:32px">&#xe62e;</i>
 							</span>
 							<span>
-								<p>{{countAdvice>0?countAdvice:'0'}}</p>
+								<p @click="$router.push({path:'/GuestBook'})">{{countAdvice>0?countAdvice:'0'}}</p>
 								<p>留言反馈</p>
 							</span>
 						</div>

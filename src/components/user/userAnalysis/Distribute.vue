@@ -23,7 +23,7 @@ export default {
 				},
 				this
 			).then(result => {
-
+				console.log(result);
 				let myChartDistribute = echarts.init(document.getElementById("user"));
 				var data = eval("(" + result.data.data + ")");
 				var geoCoordMap = {
@@ -323,7 +323,7 @@ export default {
 									.slice(0, 6)
 							),
 							symbolSize: function(val) {
-								return val[2] / 10;
+								return val[2];
 							},
 							showEffectOn: "emphasis",
 							rippleEffect: {

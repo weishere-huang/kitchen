@@ -23,6 +23,7 @@
 								<el-option label="全部" value="-1"></el-option>
 								<el-option label="在线" value="0"></el-option>
 								<el-option label="离线" value="1"></el-option>
+								<el-option label="故障" value="2"></el-option>
 							</el-select>
 						</el-col>
 						<el-col :span="7" style="padding:0 5px;">
@@ -98,7 +99,7 @@
 							:current-page.sync="pageIndex"
 							:page-sizes="[10, 20,40, 100]"
 							:page-size="pageSize"
-							layout="sizes, prev, pager, next"
+							layout="total, sizes, prev, pager, next, jumper"
 							:total="total"
 						></el-pagination>
 					</div>

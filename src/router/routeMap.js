@@ -375,6 +375,7 @@ export default [{
         route: '/ProductOfThings',
         permissionCode: 'manufacturer_product_lookup'
       },
+
       {
         menu: '物联产品添加',
         route: '/ProductOfThings/ProductOfThingsAdd',
@@ -397,6 +398,11 @@ export default [{
         menu: '物联设备',
         route: '/DeviceOfThings',
         permissionCode: 'manufacturer_device_lookup'
+      },
+      {
+        menu: '数据采集',
+        route: '/Temporary',
+        permissionCode: 'manufacturer_product_lookup'
       },
       {
         menu: '设备详情',

@@ -77,7 +77,7 @@
 							:current-page.sync="pageIndex"
 							:page-sizes="[10, 20,40, 100]"
 							:page-size="pageSize"
-							layout="sizes, prev, pager, next"
+							layout="total, sizes, prev, pager, next, jumper"
 							:total="total"
 						></el-pagination>
 					</div>
@@ -252,15 +252,15 @@ export default {
 	},
 	methods: {
 		cellStyle(row, column) {
-			if (row.row.platformState == 0 && row.column.label == "订单状态") {
+			if (row.row.state == 0 && row.column.label == "订单状态") {
 				return "color:#FF6600";
-			} else if (row.row.platformState == 1 && row.column.label == "订单状态") {
+			} else if (row.row.state == 1 && row.column.label == "订单状态") {
 				return "color:#3399FF";
-			} else if (row.row.platformState == 2 && row.column.label == "订单状态") {
+			} else if (row.row.state == 2 && row.column.label == "订单状态") {
 				return "color:#008000";
-			} else if (row.row.platformState == 3 && row.column.label == "订单状态") {
+			} else if (row.row.state == 3 && row.column.label == "订单状态") {
 				return "color:#333333";
-			} else if (row.row.platformState == 9 && row.column.label == "订单状态") {
+			} else if (row.row.state == 9 && row.column.label == "订单状态") {
 				return "color:#999999";
 			}
 		},

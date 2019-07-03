@@ -25,7 +25,7 @@
 					:current-page.sync="currentPage"
 					:page-sizes="[30, 60]"
 					:page-size="15"
-					layout="sizes, prev, pager, next"
+					layout="total, sizes, prev, pager, next, jumper"
 					:total="total"
 				></el-pagination>
 			</div>
