@@ -63,14 +63,16 @@ export default {
 			).then(result => {
 				if (result.data.code === 200) {
 					this.auditOpinion =
-						result.data.data.enterpriseAuditRecordDOS[0].auditOpinion;
+						result.data.data.enterpriseAuditRecordDOS[
+							result.data.data.enterpriseAuditRecordDOS.length - 1
+						].auditOpinion;
 				}
 			});
 		}
 	},
 	created() {
 		this.findOne(JSON.parse(sessionStorage.getItem("user")).salesTerritoryId);
-		this.userMsg = JSON.parse(sessionStorage.getItem("user")).state;
+		this.userMsg = JSON.parse(sessionStorage.getItem("user")).auditState;
 		let a = this.$route.matched.find(item => item.name === "AddCookbook")
 			? true
 			: false;

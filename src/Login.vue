@@ -171,6 +171,7 @@ export default {
 						this
 					).then(
 						result => {
+							console.log(result);
 							if (result.data.code === 200) {
 								sessionStorage.permissionUrl = JSON.stringify(
 									result.data.data.permissionUrl
@@ -182,7 +183,7 @@ export default {
 									"loginPassword",
 									this.encryptByDES(this.userMsg.password, key)
 								);
-								if (result.data.data.state == 0) {
+								if (result.data.data.employeeType == 3) {
 									if (
 										result.data.data.permissionUrl.findIndex(item => {
 											return item.module == "homework_easy_lookup";
@@ -197,17 +198,23 @@ export default {
 									) {
 										window.location.href = "/AdminHome";
 									}
-								} else if (result.data.data.state == 1) {
+								} else if (
+									(result.data.data.employeeType == 1 ||
+										result.data.data.employeeType == 2) &&
+									result.data.data.auditState != 2
+								) {
 									window.location.href = "/EnterpriseAuditedIndex";
-								} else if (result.data.data.state == 2) {
-									if (result.data.data.employeeType == 1) {
-										window.location.href = "/Home";
-									}
-									if (result.data.data.employeeType == 2) {
-										window.location.href = "/Home";
-									}
-								} else if (result.data.data.state == 3) {
-									window.location.href = "/EnterpriseAuditedIndex";
+								} else if (
+									result.data.data.employeeType == 1 ||
+									result.data.data.employeeType == 2
+								) {
+									window.location.href = "/Home";
+									// if (result.data.data.employeeType == 1) {
+									// 	window.location.href = "/Home";
+									// }
+									// if (result.data.data.employeeType == 2) {
+									// 	window.location.href = "/Home";
+									// }
 								}
 							}
 						},
