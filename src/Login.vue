@@ -246,6 +246,7 @@ export default {
 				result => {
 					if (result.data.code === 200) {
 						sessionStorage.imgPath = result.data.data.imgPath;
+						sessionStorage.presetRecipe = result.data.data.presetRecipe;
 					}
 				},
 				({ type, info }) => {}

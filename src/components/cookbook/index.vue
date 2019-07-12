@@ -7,9 +7,15 @@
 					banType="disable"
 					size="small"
 					type="primary"
-					class="el-icon-circle-plus-outline"
+					icon="el-icon-circle-plus-outline"
 					@click="$router.push({path:'/Cookbook/AddCookbook'})"
 				>添加菜谱</el-button>
+				<el-button
+					icon="el-icon-folder-checked"
+					size="small"
+					type="primary"
+					@click="$router.push({path:'/Cookbook/PrefabricatedRecipes'})"
+				>出厂预制菜谱</el-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -208,7 +214,10 @@ export default {
 	},
 	created() {
 		this.getCookbookList();
-		let a = this.$route.matched.find(item => item.name === "AddCookbook")
+		let a = this.$route.matched.find(
+			item =>
+				item.name === "AddCookbook" || item.name === "PrefabricatedRecipes"
+		)
 			? true
 			: false;
 		let b = this.$route.params.id !== undefined ? true : false;
@@ -219,7 +228,10 @@ export default {
 	},
 	watch: {
 		$route() {
-			let a = this.$route.matched.find(item => item.name === "AddCookbook")
+			let a = this.$route.matched.find(
+				item =>
+					item.name === "AddCookbook" || item.name === "PrefabricatedRecipes"
+			)
 				? true
 				: false;
 			let b = this.$route.params.id !== undefined ? true : false;

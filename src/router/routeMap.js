@@ -432,6 +432,12 @@ export default [{
         permissionCode: 'manufacturer_recipe_add_lookup'
       },
       {
+        menu: '出厂预制菜谱',
+        route: '/Cookbook/PrefabricatedRecipes',
+        visible: true,
+        permissionCode: 'manufacturer_recipe_add_lookup'
+      },
+      {
         menu: '修改菜谱',
         routeReg: /^\/Cookbook\/EditCookbook\/\d{1,}$/i,
         visible: true,

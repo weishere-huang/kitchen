@@ -77,7 +77,11 @@
 						</el-table-column>-->
 						<el-table-column label="状态" min-width="100">
 							<template slot-scope="scope">
-								<span>{{ scope.row.state==0?"开机":scope.row.state==1?"关机":"故障" }}</span>
+								<i
+									class="iconfont"
+									:style="{color:scope.row.isOnline==0?'green':scope.row.isOnline==1?'#999999':'orange'}"
+								>&#xe607;</i>
+								<span>{{ scope.row.isOnline==0?"在线":scope.row.isOnline==1?"离线":"故障" }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="最近上线时间" min-width="120">
@@ -198,6 +202,7 @@ export default {
 				this
 			).then(
 				result => {
+					console.log(result);
 					this.tableData = result.data.data.content;
 					this.total = result.data.data.totalElement;
 				},

@@ -71,6 +71,7 @@
 						:limit="5"
 						class="upload_show1"
 						accept="image/png, image/jpeg"
+						:data="{type : 'recipe'}"
 					>
 						<i class="el-icon-plus"></i>
 					</el-upload>

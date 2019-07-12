@@ -63,57 +63,150 @@
 							style="font-size:48px;color:#70B603"
 						>&#xe655;</i>
 						<i class="iconfont" v-if="deviceDetails.state==1" style="font-size:48px;">&#xe655;</i>
+						<span>
+							<i class="iconfont" v-if="deviceDetails.isHitch==1" style="font-size:48px;color:red">&#xe814;</i>
+							<i class="iconfont" v-else style="font-size:48px;color:#999999">&#xe814;</i>
+						</span>
 					</div>
 
-					<div style="text-align: center;margin-top:20px;">
-						<span style="padding:0 40px;">{{deviceDetails.isOnline==0?"在线":"离线"}}</span>
-						<span style="padding:0 40px;">{{deviceDetails.state==0?"开机":"关机"}}</span>
+					<div style="text-align: center;margin-top:20px;font-size:0">
+						<span
+							style="display:inline-block;width:118px;text-align: center;font-size:14px"
+						>{{deviceDetails.isOnline==0?"在线":"离线"}}</span>
+						<span
+							style="display:inline-block;width:108px;text-align: center;font-size:14px"
+						>{{deviceDetails.state==0?"开机":"关机"}}</span>
+						<span
+							style="display:inline-block;width:118px;text-align: center;font-size:14px"
+						>{{deviceDetails.isHitch==1?"发生故障":"无故障"}}</span>
 					</div>
 				</el-col>
 			</div>
 		</div>
 		<div class="bottom_list" style="margin-top:10px;">
-			<div class="top_title">
-				<h4>设备运行记录</h4>
-			</div>
-			<div class="table_list">
-				<el-table
-					:data="tableData"
-					style="width: 100%"
-					size="mini"
-					stripe
-					tooltip-effect="light"
-					:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
-				>
-					<el-table-column label="记录时间" min-width="200" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<span>{{ scope.row.gmtCreate }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="状态" min-width="200" show-overflow-tooltip>
-						<template slot-scope="scope">
-							<span>{{ scope.row.deviceAction }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="运行时长" min-width="100">
-						<template slot-scope="scope">
-							<span>{{ scope.row.time }}</span>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
-			<div class="block" style="margin-top:10px;float:right">
-				<el-pagination
-					background
-					@size-change="handleSizeChange"
-					@current-change="handleCurrentChange"
-					:current-page.sync="pageIndex"
-					:page-sizes="[10, 20,40, 100]"
-					:page-size="pageSize"
-					layout="total, sizes, prev, pager, next, jumper"
-					:total="total"
-				></el-pagination>
-			</div>
+			<!-- <div class="top_title">
+				<h4>开关机日志</h4>
+			</div>-->
+			<el-tabs v-model="activeName" style="padding: 0 12px;">
+				<el-tab-pane label="开关机日志" name="first">
+					<!-- <div class="table_list"> -->
+					<el-table
+						:data="tableData"
+						style="width: 100%"
+						size="mini"
+						stripe
+						tooltip-effect="light"
+						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+					>
+						<el-table-column label="记录时间" min-width="200" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.gmtCreate }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="状态" min-width="200" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.deviceAction }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="运行时长" min-width="100">
+							<template slot-scope="scope">
+								<span>{{ scope.row.time }}</span>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!-- </div> -->
+					<div class="block" style="margin-top:10px;float:right">
+						<el-pagination
+							background
+							@size-change="handleSizeChange"
+							@current-change="handleCurrentChange"
+							:current-page.sync="pageIndex"
+							:page-sizes="[10, 20,40, 100]"
+							:page-size="pageSize"
+							layout="total, sizes, prev, pager, next, jumper"
+							:total="total"
+						></el-pagination>
+					</div>
+				</el-tab-pane>
+				<el-tab-pane label="使用日志" name="second">
+					<el-table
+						:data="tableData1"
+						style="width: 100%"
+						size="mini"
+						stripe
+						tooltip-effect="light"
+						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+					>
+						<el-table-column label="记录时间" min-width="200" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.gmtCreate }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="状态" min-width="200" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.deviceAction }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="运行时长" min-width="100">
+							<template slot-scope="scope">
+								<span>{{ scope.row.time }}</span>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!-- </div> -->
+					<div class="block" style="margin-top:10px;float:right">
+						<el-pagination
+							background
+							@size-change="handleSizeChange1"
+							@current-change="handleCurrentChange1"
+							:current-page.sync="pageIndex1"
+							:page-sizes="[10, 20,40, 100]"
+							:page-size="pageSize1"
+							layout="total, sizes, prev, pager, next, jumper"
+							:total="total1"
+						></el-pagination>
+					</div>
+				</el-tab-pane>
+				<el-tab-pane label="故障日志" name="third">
+					<el-table
+						:data="tableData2"
+						style="width: 100%"
+						size="mini"
+						stripe
+						tooltip-effect="light"
+						:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+					>
+						<el-table-column label="记录时间" min-width="200" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.gmtCreate }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="状态" min-width="200" show-overflow-tooltip>
+							<template slot-scope="scope">
+								<span>{{ scope.row.deviceAction }}</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="运行时长" min-width="100">
+							<template slot-scope="scope">
+								<span>{{ scope.row.time }}</span>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!-- </div> -->
+					<div class="block" style="margin-top:10px;float:right">
+						<el-pagination
+							background
+							@size-change="handleSizeChange2"
+							@current-change="handleCurrentChange2"
+							:current-page.sync="pageIndex"
+							:page-sizes="[10, 20,40, 100]"
+							:page-size="pageSize2"
+							layout="total, sizes, prev, pager, next, jumper"
+							:total="total2"
+						></el-pagination>
+					</div>
+				</el-tab-pane>
+			</el-tabs>
 		</div>
 	</div>
 </template>
@@ -124,38 +217,46 @@ export default {
 			total: 0,
 			pageIndex: 1,
 			pageSize: 10,
-			tableData: [
-				{
-					nickName: "2018-09-12 12:00:00",
-					phone: "开机",
-					order: "3`45"
-				},
-				{
-					nickName: "2018-09-12 12:00:00",
-					phone: "开机",
-					order: "3`45"
-				},
-				{
-					nickName: "2018-09-12 12:00:00",
-					phone: "开机",
-					order: "3`45"
-				},
-				{
-					nickName: "2018-09-12 12:00:00",
-					phone: "开机",
-					order: "3`45"
-				}
-			],
-			deviceDetails: {}
+			tableData: [],
+			total1: 0,
+			pageIndex1: 1,
+			pageSize1: 10,
+			tableData1: [],
+			total2: 0,
+			pageIndex2: 1,
+			pageSize2: 10,
+			tableData2: [],
+			deviceDetails: {},
+			activeName: "first"
 		};
 	},
 	methods: {
 		handleSizeChange(val) {
 			this.pageIndex = 1;
 			this.pageSize = val;
+			this.deviceRecord(this.$route.params.id);
 		},
 		handleCurrentChange(val) {
 			this.pageIndex = val;
+			this.deviceRecord(this.$route.params.id);
+		},
+		handleSizeChange1(val) {
+			this.pageIndex1 = 1;
+			this.pageSize1 = val;
+			this.deviceRecord(this.$route.params.id);
+		},
+		handleCurrentChange1(val) {
+			this.pageIndex1 = val;
+			this.deviceRecord(this.$route.params.id);
+		},
+		handleSizeChange2(val) {
+			this.pageIndex2 = 1;
+			this.pageSize2 = val;
+			this.deviceRecord(this.$route.params.id);
+		},
+		handleCurrentChange2(val) {
+			this.pageIndex2 = val;
+			this.deviceRecord(this.$route.params.id);
 		},
 		findOne(id) {
 			this.Axios(

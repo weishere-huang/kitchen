@@ -80,12 +80,13 @@ import ArticleEdit from '@/components/article/Edit'
 import EnterpriseAuditedIndex from '@/components/enterpriseAudited/index'
 import EnterpriseAuditedEdit from '@/components/enterpriseAudited/Edit'
 import Temporary from '@/components/temporary/index'
+import PrefabricatedRecipes from '@/components/cookbook/PrefabricatedRecipes'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
       path: '/',
-      redirect: '/Home',
+      redirect: '/AdminSimpleHome',
     },
     {
       path: '/EnterpriseAuditedIndex',
@@ -828,6 +829,17 @@ const router = new Router({
           component: EditCookbook,
           props: {
             pageName: '修改菜谱'
+          },
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'PrefabricatedRecipes',
+          name: 'PrefabricatedRecipes',
+          component: PrefabricatedRecipes,
+          props: {
+            pageName: '出厂预制菜谱'
           },
           meta: {
             requireAuth: true,

@@ -80,7 +80,7 @@ export default {
 			).then(result => {
 				if (result.data.code === 200) {
 					let date = result.data.data.date;
-					let offline = result.data.data.offline;
+					let hitch = result.data.data.hitch;
 					let online = result.data.data.online;
 					let myChart = echarts.init(
 						document.getElementById("adminMonitoring")
@@ -96,7 +96,7 @@ export default {
 							trigger: "axis"
 						},
 						legend: {
-							data: ["在线", "离线"]
+							data: ["在线", "故障"]
 						},
 						grid: {
 							left: "3%",
@@ -146,12 +146,18 @@ export default {
 									}
 								},
 								data: online
+							},
+							{
+								name: "故障",
+								type: "line",
+								data: hitch,
+								label: {
+									normal: {
+										show: true,
+										position: "top"
+									}
+								}
 							}
-							// {
-							// 	name: "离线",
-							// 	type: "line",
-							// 	data: offline
-							// }
 						]
 					};
 					myChart.setOption(Option);

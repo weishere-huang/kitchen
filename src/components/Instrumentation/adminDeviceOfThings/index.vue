@@ -77,7 +77,13 @@
 						</el-table-column>
 						<el-table-column label="状态" min-width="100">
 							<template slot-scope="scope">
-								<span>{{ scope.row.isOnline==0?"在线":scope.row.isOnline==1?"离线":"故障" }}</span>
+								<span>
+									<i
+										class="iconfont"
+										:style="{color:scope.row.isOnline==0?'green':scope.row.isOnline==1?'#999999':'orange'}"
+									>&#xe607;</i>
+									{{ scope.row.isOnline==0?"在线":scope.row.isOnline==1?"离线":"故障" }}
+								</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="140">

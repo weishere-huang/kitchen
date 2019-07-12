@@ -127,19 +127,19 @@ export default {
 				},
 				{
 					label: "待收货",
-					value: 1
-				},
-				{
-					label: "待发货",
 					value: 2
 				},
 				{
+					label: "待发货",
+					value: 1
+				},
+				{
 					label: "已完成",
-					value: 3
+					value: 4
 				},
 				{
 					label: "已关闭",
-					value: 9
+					value: 3
 				}
 			],
 			tableData: [

@@ -104,7 +104,7 @@
 						<el-radio v-model="cookbook.state" label="0">是</el-radio>
 						<el-radio v-model="cookbook.state" label="1">否</el-radio>
 					</el-form-item>
-					<el-form-item label="菜谱配图：" prop="recipeImg">
+					<el-form-item label="菜谱封面图：" prop="recipeImg">
 						<el-upload
 							:action="imgApi()"
 							list-type="picture-card"
@@ -116,11 +116,12 @@
 							:limit="1"
 							v-model="cookbook.recipeImg"
 							class="upload_show"
-							accept="image/png, image/jpeg"
+							accept="image/png"
+							:data="{type : 'recipe'}"
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">建议图片比例1:1，小于1MB的jpg或png图片</div>
+						<div class="el-upload__tip tip_style">建议图片比例1:1，小于1MB的png图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>

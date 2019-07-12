@@ -521,9 +521,12 @@ export default {
 		},
 		getAccessDevice(i) {
 			this.btnAccessDevice = i;
+			let condition = i == 0 ? "week" : "month";
 			this.Axios(
 				{
-					params: {},
+					params: {
+						condition: condition
+					},
 					option: {
 						enableMsg: false
 					},
@@ -589,6 +592,7 @@ export default {
 							},
 							xAxis: {
 								type: "category",
+								boundaryGap: false,
 								data: xAxisData.map(item => {
 									return item.slice(item.indexOf("-") + 1);
 								})
@@ -604,7 +608,7 @@ export default {
 								{
 									data: yAxisData,
 									type: "line",
-									smooth: true,
+									// smooth: true,
 									label: {
 										normal: {
 											show: true,

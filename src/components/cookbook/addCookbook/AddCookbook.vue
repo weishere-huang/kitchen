@@ -116,11 +116,12 @@
 							:before-upload="beforeAvatarUpload1"
 							:limit="1"
 							class="upload_show"
-							accept="image/png, image/jpeg"
+							accept="image/png"
+							:data="{type : 'recipe'}"
 						>
 							<i class="el-icon-plus"></i>
 						</el-upload>
-						<div class="el-upload__tip tip_style">建议图片比例1:1，小于1MB的jpg或png图片</div>
+						<div class="el-upload__tip tip_style">建议图片比例1:1，小于1MB的png图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
 							<img width="100%" :src="dialogImageUrl" alt>
 						</el-dialog>
@@ -264,7 +265,7 @@ export default {
 				spicy: "0",
 				recipePrice: "",
 				spec: "",
-				weight:'',
+				weight: "",
 				state: "1",
 				recipeImg: "",
 				ingredient: "",
@@ -364,7 +365,7 @@ export default {
 						trigger: "blur"
 					}
 				],
-				weight:[
+				weight: [
 					{
 						required: true,
 						message: "请输入净含量",
@@ -587,7 +588,7 @@ export default {
 				ingredient: this.cookbook.ingredient,
 				accessories: this.cookbook.accessories,
 				introduce: this.cookbook.introduce,
-				weight:this.cookbook.weight,
+				weight: this.cookbook.weight,
 				step: JSON.stringify(this.cookbook.step)
 			});
 			this.Axios(
