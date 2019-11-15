@@ -161,6 +161,7 @@ export default {
 	},
 	methods: {
 		toDetails(index, row) {
+			console.log(row);
 			this.$router.push({
 				path: "/DeviceOfThings/DeviceOfThingsDetails/" + row.id
 			});

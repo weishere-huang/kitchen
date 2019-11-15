@@ -32,7 +32,7 @@
 				</el-form-item>
 				<el-form-item label="价格：" prop="price">
 					<el-input
-						v-model.number="addMenu.price"
+						v-model="addMenu.price"
 						type="number"
 						size="small"
 						style="width:300px;"

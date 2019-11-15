@@ -40,7 +40,7 @@
 								size="small"
 								style="width:100%;"
 								clearable
-								placeholder="订单编号/用户/代理商"
+								placeholder="订单编号/用户/商家"
 								v-model="keyWord"
 							></el-input>
 						</el-col>
@@ -241,7 +241,7 @@ export default {
 					}
 				},
 				{
-					label: "代理商名称",
+					label: "所属商家",
 					prop: "enterpriseName",
 					width: 100
 				}

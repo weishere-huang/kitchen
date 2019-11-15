@@ -23,7 +23,7 @@
 							<span>{{deviceDetails.deviceNumber}}</span>
 						</el-form-item>
 						<el-form-item label="最近在线时间：" prop>
-							<span>{{deviceDetails.name}}</span>
+							<span>{{deviceDetails.newLoginTime}}</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -51,7 +51,7 @@
 							style="font-size:48px;color:#2BABE3"
 						>&#xe6b5;</i>
 						<i class="iconfont" v-if="deviceDetails.isOnline==1" style="font-size:48px;">&#xe78e;</i>
-						<i
+						<!-- <i
 							class="iconfont"
 							v-if="deviceDetails.state==0"
 							style="font-size:48px;color:#70B603"
@@ -60,18 +60,18 @@
 						<span>
 							<i class="iconfont" v-if="deviceDetails.isHitch==1" style="font-size:48px;color:red">&#xe814;</i>
 							<i class="iconfont" v-else style="font-size:48px;color:#999999">&#xe814;</i>
-						</span>
+						</span>-->
 					</div>
 					<div style="text-align: center;margin-top:20px;font-size:0">
 						<span
 							style="display:inline-block;width:118px;text-align: center;font-size:14px"
 						>{{deviceDetails.isOnline==0?"在线":"离线"}}</span>
-						<span
+						<!-- <span
 							style="display:inline-block;width:108px;text-align: center;font-size:14px"
 						>{{deviceDetails.state==0?"开机":"关机"}}</span>
 						<span
 							style="display:inline-block;width:118px;text-align: center;font-size:14px"
-						>{{deviceDetails.isHitch==1?"发生故障":"无故障"}}</span>
+						>{{deviceDetails.isHitch==1?"发生故障":"无故障"}}</span>-->
 					</div>
 				</el-col>
 			</div>
@@ -81,8 +81,7 @@
 				<h4>设备运行记录</h4>
 			</div>-->
 			<el-tabs v-model="activeName" style="padding: 0 12px;">
-				<el-tab-pane label="开关机日志" name="first">
-					<!-- <div class="table_list"> -->
+				<!-- <el-tab-pane label="开关机日志" name="first">
 					<el-table
 						:data="tableData"
 						style="width: 100%"
@@ -107,7 +106,6 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<!-- </div> -->
 					<div class="block" style="margin-top:10px;float:right">
 						<el-pagination
 							background
@@ -120,8 +118,8 @@
 							:total="total"
 						></el-pagination>
 					</div>
-				</el-tab-pane>
-				<el-tab-pane label="使用日志" name="second">
+				</el-tab-pane>-->
+				<el-tab-pane label="使用记录" name="second">
 					<el-table
 						:data="tableData1"
 						style="width: 100%"
@@ -132,19 +130,19 @@
 					>
 						<el-table-column label="记录时间" min-width="200" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.gmtCreate }}</span>
+								<span>{{ scope.row.date }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="状态" min-width="200" show-overflow-tooltip>
+						<el-table-column label="菜谱名" min-width="200" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.deviceAction }}</span>
+								<span>{{ scope.row.cookbookName }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="运行时长" min-width="100">
+						<!-- <el-table-column label="运行时长" min-width="100">
 							<template slot-scope="scope">
 								<span>{{ scope.row.time }}</span>
 							</template>
-						</el-table-column>
+						</el-table-column>-->
 					</el-table>
 					<!-- </div> -->
 					<div class="block" style="margin-top:10px;float:right">
@@ -160,7 +158,7 @@
 						></el-pagination>
 					</div>
 				</el-tab-pane>
-				<el-tab-pane label="故障日志" name="third">
+				<el-tab-pane label="报警记录" name="third">
 					<el-table
 						:data="tableData2"
 						style="width: 100%"
@@ -171,19 +169,19 @@
 					>
 						<el-table-column label="记录时间" min-width="200" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.gmtCreate }}</span>
+								<span>{{ scope.row.date }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="状态" min-width="200" show-overflow-tooltip>
+						<el-table-column label="错误码" min-width="200" show-overflow-tooltip>
 							<template slot-scope="scope">
-								<span>{{ scope.row.deviceAction }}</span>
+								<span>{{ scope.row.errorCode }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="运行时长" min-width="100">
+						<!-- <el-table-column label="运行时长" min-width="100">
 							<template slot-scope="scope">
 								<span>{{ scope.row.time }}</span>
 							</template>
-						</el-table-column>
+						</el-table-column>-->
 					</el-table>
 					<!-- </div> -->
 					<div class="block" style="margin-top:10px;float:right">
@@ -220,7 +218,7 @@ export default {
 			pageSize2: 10,
 			tableData2: [],
 			deviceDetails: {},
-			activeName: "first"
+			activeName: "second"
 		};
 	},
 	methods: {
@@ -265,6 +263,8 @@ export default {
 			).then(result => {
 				if (result.data.code === 200) {
 					this.deviceDetails = result.data.data;
+					this.deviceRecord(result.data.data.deviceNumber);
+					this.deviceRecord1(result.data.data.deviceNumber);
 				}
 			});
 		},
@@ -272,7 +272,8 @@ export default {
 			this.Axios(
 				{
 					params: {
-						id: id,
+						type: 0,
+						deviceNo: id,
 						page: this.pageIndex,
 						size: this.pageSize
 					},
@@ -285,15 +286,40 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.tableData = result.data.data.content;
-					this.total = result.data.data.totalElement;
+					console.log(result);
+					this.tableData1 = result.data.data.content;
+					this.total1 = result.data.data.totalElement;
+				}
+			});
+		},
+		deviceRecord1(id) {
+			this.Axios(
+				{
+					params: {
+						type: 1,
+						deviceNo: id,
+						page: this.pageIndex,
+						size: this.pageSize
+					},
+					url: "/api-enterprise/deviceRecord/list",
+					type: "get",
+					option: {
+						enableMsg: false
+					}
+				},
+				this
+			).then(result => {
+				if (result.data.code === 200) {
+					console.log(result);
+					this.tableData2 = result.data.data.content;
+					this.total2 = result.data.data.totalElement;
 				}
 			});
 		}
 	},
 	created() {
 		this.findOne(this.$route.params.id);
-		this.deviceRecord(this.$route.params.id);
+		// this.deviceRecord(this.$route.params.id);
 	}
 };
 </script>

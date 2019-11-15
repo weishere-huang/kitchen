@@ -118,7 +118,8 @@ export default {
 	methods: {
 		reply(index, rowData) {
 			let params = { type: "edit", index: index, rowData: rowData };
-			Object.assign(this.replayContent, params.rowData);
+			this.replayContent = { ...params.rowData };
+			// Object.assign(this.replayContent, params.rowData);
 			this.dialogReplay = true;
 		},
 		handleDelete(index, rowData) {

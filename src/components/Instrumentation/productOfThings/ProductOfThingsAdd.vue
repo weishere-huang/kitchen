@@ -119,7 +119,7 @@
 						</el-upload>
 						<div class="el-upload__tip tip_style">请上传产品连接示意图，要求：600px*800px，小于1MB的jpg或png</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
-							<img width="100%" :src="dialogImageUrl" alt>
+							<img width="100%" :src="dialogImageUrl" alt />
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label prop>
@@ -146,7 +146,7 @@
 			<dir style="padding-top:20px;font-size:16px;">{{classifyLable[classifyLable.length-1]}}</dir>
 			<div style="padding-top:12px;color:#999999;padding-bottom:12px;">
 				该产品类型包含了{{tableData.length}}项预置功能，预置功能分为必填和选填。
-				<br>注：带*表示必填。
+				<br />注：带*表示必填。
 			</div>
 			<el-table :data="tableData" style="width: 100%" border size="mini">
 				<el-table-column prop="function" label="功能"></el-table-column>
@@ -235,12 +235,15 @@ export default {
 					{ required: true, message: "请上传产品连接示意图", trigger: "change" }
 				]
 			},
-			classifyLable: ""
+			classifyLable: []
 		};
 	},
 	methods: {
 		getDefinition() {
-			this.classifyLable = this.$refs["getLabe"].currentLabels;
+			// console.log(this.$refs["getLabe"].getCheckedNodes());
+			this.classifyLable = this.$refs[
+				"getLabe"
+			].getCheckedNodes()[0].pathLabels;
 			this.Axios(
 				{
 					params: {
@@ -257,7 +260,7 @@ export default {
 				this
 			).then(result => {
 				if (result.data.code === 200) {
-					this.tableData = result.data.data;
+					this.tableData = [...result.data.data];
 				}
 			});
 		},
@@ -285,8 +288,7 @@ export default {
 				1
 			);
 		},
-		handlePreview(file) {
-		},
+		handlePreview(file) {},
 		handleExceed(files, fileList) {
 			this.$message.warning("只能上传5个文件");
 		},

@@ -199,7 +199,7 @@
 						<el-form-item label="商品总金额：">
 							<!-- <span style="font-weight: 600;">¥ 158</span> -->
 							<!-- <span>（含配送费 12元）</span> -->
-							<span style="font-weight: 600;">¥ {{orderDetails.itemAmount/100}}</span>
+							<span style="font-weight: 600;">¥ {{(orderDetails.itemAmount+orderDetails.postFee)/100}}</span>
 							<span>（含配送费 {{orderDetails.postFee/100}}元）</span>
 						</el-form-item>
 						<el-form-item label="- 优惠：">
@@ -267,7 +267,7 @@
 				></table-list>
 				<div class="total">
 					<span style=" font-weight: 700;font-size:16px;">
-						合计：￥{{orderDetails.itemAmount/100}}
+						合计：￥{{(orderDetails.itemAmount+orderDetails.postFee)/100}}
 						<span
 							style=" font-weight:0;font-size:14px;"
 						>（含运费{{orderDetails.postFee/100}}元）</span>

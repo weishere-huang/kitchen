@@ -353,6 +353,9 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+						result.data.data = result.data.data.sort(function(a, b) {
+							return Date.parse(a.time) - Date.parse(b.time);
+						});
 						let time = result.data.data.map(item => {
 							return item.time;
 						});
@@ -540,6 +543,9 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+						result.data.data = result.data.data.sort(function(a, b) {
+							return Date.parse(a.time) - Date.parse(b.time);
+						});
 						this.searchValue =
 							JSON.parse(JSON.stringify(result.data.data[0])).time +
 							"至" +

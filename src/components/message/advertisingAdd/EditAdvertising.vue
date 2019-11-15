@@ -82,7 +82,7 @@
 						</el-upload>
 						<div class="el-upload__tip tip_style">＜200KB的jpg图片</div>
 						<el-dialog :visible.sync="dialogVisible" append-to-body>
-							<img width="100%" :src="dialogImageUrl" alt class="showPic">
+							<img width="100%" :src="dialogImageUrl" alt class="showPic" />
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label="广告内容：">
@@ -329,6 +329,8 @@ export default {
 					if (result.data.code === 200) {
 						this.addMsg = result.data.data;
 						this.uploadShow1 = 2;
+						this.addMsg.startTime = this.addMsg.startTime.replace(/-/g, "/");
+						this.addMsg.endTime = this.addMsg.endTime.replace(/-/g, "/");
 						this.fileList = [
 							{
 								name: this.addMsg.img.substring(

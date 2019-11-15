@@ -206,7 +206,7 @@ export default {
 					}
 				},
 				({ type, info }) => {
-					this.$message.error("账户或手机号不存在，请重新填写");
+					// this.$message.error("账户或手机号不存在，请重新填写");
 				}
 			);
 		},

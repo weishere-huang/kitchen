@@ -399,11 +399,11 @@ export default [{
         route: '/DeviceOfThings',
         permissionCode: 'manufacturer_device_lookup'
       },
-      {
-        menu: '数据采集',
-        route: '/Temporary',
-        permissionCode: 'manufacturer_product_lookup'
-      },
+      // {
+      //   menu: '数据采集',
+      //   route: '/Temporary',
+      //   permissionCode: 'manufacturer_product_lookup'
+      // },
       {
         menu: '设备详情',
         routeReg: /^\/DeviceOfThings\/DeviceOfThingsDetails\/\d{1,}$/i,

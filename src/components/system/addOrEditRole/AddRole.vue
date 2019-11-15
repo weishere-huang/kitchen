@@ -119,6 +119,7 @@ export default {
 				this
 			).then(
 				result => {
+					console.log(result.data.data);
 					let code = Math.min.apply(
 						null,
 						result.data.data.map(item => {

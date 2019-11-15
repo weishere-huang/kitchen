@@ -92,6 +92,7 @@
 </template>
 <script>
 export default {
+	inject: ["reload"],
 	data() {
 		return {
 			fileList: [],
@@ -155,9 +156,9 @@ export default {
 					let data = qs.stringify({
 						enterpriseName: this.systemMsg.enterpriseName,
 						phone: this.systemMsg.phone,
-						shipping: this.systemMsg.shipping,
+						shipping: this.systemMsg.shipping * 100,
 						logo: this.systemMsg.logo,
-						fare: this.systemMsg.fare,
+						fare: this.systemMsg.fare * 100,
 						announcement: this.systemMsg.announcement
 					});
 					this.Axios(
@@ -170,7 +171,11 @@ export default {
 							}
 						},
 						this
-					).then(result => {});
+					).then(result => {
+						if (result.data.code === 200) {
+							this.reload();
+						}
+					});
 				} else {
 					return false;
 				}
@@ -246,6 +251,8 @@ export default {
 			).then(result => {
 				if (result.data.code === 200) {
 					this.systemMsg = result.data.data;
+					this.systemMsg.shipping = this.systemMsg.shipping / 100;
+					this.systemMsg.fare = this.systemMsg.fare / 100;
 					if (this.systemMsg.logo != null && this.systemMsg.logo != "") {
 						this.fileList = [
 							{

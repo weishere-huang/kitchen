@@ -40,7 +40,7 @@
 							style="width:400px;"
 							type="number"
 							placeholder="单位：元"
-							v-model.number="cookbook.recipePrice"
+							v-model="cookbook.recipePrice"
 							oninput="if(value.length>10)value=value.slice(0,10)"
 						>
 							<template slot="append">元</template>
@@ -70,15 +70,7 @@
 							<template slot="append">克</template>
 						</el-input>
 					</el-form-item>
-					<el-form-item label="动作编码：" prop="cookScript">
-						<el-input
-							maxlength="20"
-							size="small"
-							v-model="cookbook.cookScript"
-							style="width:400px;"
-							placeholder="请填写动作编码（重要）"
-						></el-input>
-					</el-form-item>
+
 					<el-form-item label="参考辣度：" class="hot_case" prop="spicy">
 						<el-radio-group v-model="cookbook.spicy" size="small" style="width:192px;">
 							<el-radio-button label="0">
@@ -101,7 +93,77 @@
 							<span v-if="cookbook.spicy==3">特辣</span>
 						</span>
 					</el-form-item>
-
+					<el-form-item label="炒菜步骤：" prop="cookScript">
+						<el-table
+							:data="cookbook.cookScript"
+							style="width: 800px"
+							size="mini"
+							:header-cell-style="{'background-color':'#eee','color':'#333333', 'font-weight': 'normal'}"
+						>
+							<el-table-column prop="number" label="序号" width="50"></el-table-column>
+							<el-table-column prop="step" label="步骤" width="80"></el-table-column>
+							<el-table-column prop="firepower" label="火力/油量" width="120">
+								<template slot-scope="scope">
+									<el-input
+										size="mini"
+										type="number"
+										v-model.number="scope.row.firepower"
+										style="width:100%;padding:0;"
+										:placeholder="`${scope.$index!==1?'0~8':'0~1000(ml)'}`"
+										@change="handleFirepower(scope.row,scope.$index)"
+									></el-input>
+								</template>
+							</el-table-column>
+							<el-table-column prop="firepowerTime" label="加热时间" width="120">
+								<template slot-scope="scope" v-if="scope.row.number!=2">
+									<el-input
+										size="mini"
+										type="number"
+										v-model.number="scope.row.firepowerTime"
+										style="width:100%;padding:0;"
+										placeholder="0~7200（秒）"
+										@change="handleFirepowerTime(scope.row,scope.$index)"
+									></el-input>
+								</template>
+							</el-table-column>
+							<el-table-column prop="mixingSpeed" label="搅拌速度" width="120">
+								<template slot-scope="scope" v-if="scope.row.number!=2&&scope.row.number!=1">
+									<el-input
+										size="mini"
+										type="number"
+										v-model.number="scope.row.mixingSpeed"
+										style="width:100%;padding:0;"
+										placeholder="0~8"
+										@change="handleMixingSpeed(scope.row,scope.$index)"
+									></el-input>
+								</template>
+							</el-table-column>
+							<el-table-column prop="reversing" label="换向圈数" width="120">
+								<template slot-scope="scope" v-if="scope.row.number!=2&&scope.row.number!=1">
+									<el-input
+										size="mini"
+										type="number"
+										v-model.number="scope.row.reversing"
+										style="width:100%;padding:0;"
+										placeholder="0~32767"
+										@change="handleReversing(scope.row,scope.$index)"
+									></el-input>
+								</template>
+							</el-table-column>
+							<el-table-column prop="mixingTime" label="搅拌时间" width="120">
+								<template slot-scope="scope" v-if="scope.row.number!=2&&scope.row.number!=1">
+									<el-input
+										size="mini"
+										type="number"
+										v-model.number="scope.row.mixingTime"
+										style="width:100%;padding:0;"
+										placeholder="0~7200（秒）"
+										@change="handleMixingTime(scope.row,scope.$index)"
+									></el-input>
+								</template>
+							</el-table-column>
+						</el-table>
+					</el-form-item>
 					<el-form-item label="上/下架：" prop="state">
 						<el-radio v-model="cookbook.state" label="0">是</el-radio>
 						<el-radio v-model="cookbook.state" label="1">否</el-radio>
@@ -123,7 +185,7 @@
 						</el-upload>
 						<div class="el-upload__tip tip_style">建议图片比例1:1，小于1MB的png图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
-							<img width="100%" :src="dialogImageUrl" alt>
+							<img width="100%" :src="dialogImageUrl" alt />
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label="主料：" prop="ingredient">
@@ -259,7 +321,71 @@ export default {
 				processId: "",
 				recipeName: "",
 				cateName: "",
-				cookScript: "",
+				cookScript: [
+					{
+						number: 1,
+						step: "热空锅",
+						firepower: null,
+						firepowerTime: null,
+						mixingSpeed: null,
+						mixingTime: null,
+						reversing: null
+					},
+					{
+						number: 2,
+						step: "加油",
+						firepower: null,
+						firepowerTime: null,
+						mixingSpeed: null,
+						mixingTime: null,
+						reversing: null
+					},
+					{
+						number: 3,
+						step: "热油",
+						firepower: null,
+						firepowerTime: null,
+						mixingSpeed: null,
+						mixingTime: null,
+						reversing: null
+					},
+					{
+						number: 4,
+						step: "炒料1",
+						firepower: null,
+						firepowerTime: null,
+						mixingSpeed: null,
+						mixingTime: null,
+						reversing: null
+					},
+					{
+						number: 5,
+						step: "炒料2",
+						firepower: null,
+						firepowerTime: null,
+						mixingSpeed: null,
+						mixingTime: null,
+						reversing: null
+					},
+					{
+						number: 6,
+						step: "炒料3",
+						firepower: null,
+						firepowerTime: null,
+						mixingSpeed: null,
+						mixingTime: null,
+						reversing: null
+					},
+					{
+						number: 7,
+						step: "炒料4",
+						firepower: null,
+						firepowerTime: null,
+						mixingSpeed: null,
+						mixingTime: null,
+						reversing: null
+					}
+				],
 				cateId: [],
 				cookingTime: "",
 				spicy: "0",
@@ -342,7 +468,11 @@ export default {
 					},
 					{
 						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+							if (
+								/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/g.test(
+									value
+								) == false
+							) {
 								callback(new Error("支持小数点后两位，且不能为负数"));
 							} else {
 								callback();
@@ -423,14 +553,133 @@ export default {
 		};
 	},
 	methods: {
+		handleFirepower(row, index) {
+			if (
+				(/^[0-9]{1,}[\d]*$/.test(row.firepower) == false ||
+					row.firepower > 8) &&
+				index !== 1
+			) {
+				this.$message.error("请填写0~8的正整数");
+				this.cookbook.cookScript[index].firepower = null;
+			} else if (
+				index == 1 &&
+				(/^[0-9]{1,}[\d]*$/.test(row.firepower) == false ||
+					row.firepower > 1000)
+			) {
+				this.$message.error("请填写0~1000正整数");
+				this.cookbook.cookScript[index].firepower = null;
+			}
+		},
+		handleFirepowerTime(row, index) {
+			if (/^[0-9]{1,}[\d]*$/.test(row.firepowerTime) == false) {
+				this.$message.error("请填写0~7200的正整数");
+				this.cookbook.cookScript[index].firepowerTime = null;
+			} else if (row.firepowerTime > 7200) {
+				this.$message.error("请填写0~7200的正整数");
+				this.cookbook.cookScript[index].firepowerTime = null;
+			}
+		},
+		handleMixingSpeed(row, index) {
+			if (/^[0-9]{1,}[\d]*$/.test(row.mixingSpeed) == false) {
+				this.$message.error("请填写0~8的正整数");
+				this.cookbook.cookScript[index].mixingSpeed = null;
+			} else if (row.mixingSpeed > 8) {
+				this.$message.error("请填写0~8的正整数");
+				this.cookbook.cookScript[index].mixingSpeed = null;
+			}
+		},
+		handleMixingTime(row, index) {
+			if (/^[0-9]{1,}[\d]*$/.test(row.mixingTime) == false) {
+				this.$message.error("请填写0~7200的正整数");
+				this.cookbook.cookScript[index].mixingTime = null;
+			} else if (row.mixingTime > 7200) {
+				this.$message.error("请填写0~7200的正整数");
+				this.cookbook.cookScript[index].mixingTime = null;
+			}
+		},
+		handleReversing(row, index) {
+			if (/^[+]{0,1}(\d+)$/.test(row.reversing) == false) {
+				this.$message.error("请填写0~32767的正整数");
+				this.cookbook.cookScript[index].reversing = null;
+			} else if (row.reversing > 32767) {
+				this.$message.error("请填写0~32767的正整数");
+				this.cookbook.cookScript[index].reversing = null;
+			}
+		},
 		submitForm(formName) {
-			this.$refs[formName].validate(valid => {
-				if (valid) {
-					this.addRecipe();
-				} else {
-					return false;
-				}
-			});
+			if (
+				this.cookbook.cookScript
+					.map(item => {
+						return item.firepower == "" || item.firepower == null;
+					})
+					.find(item => {
+						return item == true;
+					})
+			) {
+				this.$message.error("请填写完整炒菜步骤！");
+			} else if (
+				this.cookbook.cookScript[0].firepowerTime == "" ||
+				this.cookbook.cookScript[0].firepowerTime == null ||
+				this.cookbook.cookScript[2].firepowerTime == "" ||
+				this.cookbook.cookScript[2].firepowerTime == null ||
+				this.cookbook.cookScript[3].firepowerTime == "" ||
+				this.cookbook.cookScript[3].firepowerTime == null ||
+				this.cookbook.cookScript[4].firepowerTime == "" ||
+				this.cookbook.cookScript[4].firepowerTime == null ||
+				this.cookbook.cookScript[5].firepowerTime == "" ||
+				this.cookbook.cookScript[5].firepowerTime == null ||
+				this.cookbook.cookScript[6].firepowerTime == "" ||
+				this.cookbook.cookScript[6].firepowerTime == null
+			) {
+				this.$message.error("请填写完整炒菜步骤！");
+			} else if (
+				this.cookbook.cookScript[2].mixingSpeed == "" ||
+				this.cookbook.cookScript[2].mixingSpeed == null ||
+				this.cookbook.cookScript[3].mixingSpeed == "" ||
+				this.cookbook.cookScript[3].mixingSpeed == null ||
+				this.cookbook.cookScript[4].mixingSpeed == "" ||
+				this.cookbook.cookScript[4].mixingSpeed == null ||
+				this.cookbook.cookScript[5].mixingSpeed == "" ||
+				this.cookbook.cookScript[5].mixingSpeed == null ||
+				this.cookbook.cookScript[6].mixingSpeed == "" ||
+				this.cookbook.cookScript[6].mixingSpeed == null
+			) {
+				this.$message.error("请填写完整炒菜步骤！");
+			} else if (
+				this.cookbook.cookScript[2].mixingTime == "" ||
+				this.cookbook.cookScript[2].mixingTime == null ||
+				this.cookbook.cookScript[3].mixingTime == "" ||
+				this.cookbook.cookScript[3].mixingTime == null ||
+				this.cookbook.cookScript[4].mixingTime == "" ||
+				this.cookbook.cookScript[4].mixingTime == null ||
+				this.cookbook.cookScript[5].mixingTime == "" ||
+				this.cookbook.cookScript[5].mixingTime == null ||
+				this.cookbook.cookScript[6].mixingTime == "" ||
+				this.cookbook.cookScript[6].mixingTime == null
+			) {
+				this.$message.error("请填写完整炒菜步骤！");
+			} else if (
+				this.cookbook.cookScript[2].reversing == "" ||
+				this.cookbook.cookScript[2].reversing == null ||
+				this.cookbook.cookScript[3].reversing == "" ||
+				this.cookbook.cookScript[3].reversing == null ||
+				this.cookbook.cookScript[4].reversing == "" ||
+				this.cookbook.cookScript[4].reversing == null ||
+				this.cookbook.cookScript[5].reversing == "" ||
+				this.cookbook.cookScript[5].reversing == null ||
+				this.cookbook.cookScript[6].reversing == "" ||
+				this.cookbook.cookScript[6].reversing == null
+			) {
+				this.$message.error("请填写完整炒菜步骤！");
+			} else {
+				this.$refs[formName].validate(valid => {
+					if (valid) {
+						this.addRecipe();
+					} else {
+						return false;
+					}
+				});
+			}
 		},
 		addItem(index) {
 			let obj = {
@@ -554,8 +803,10 @@ export default {
 			);
 		},
 		handleChange(value) {
-			let labels = this.$refs["recipeCate"].currentLabels;
-			this.cookbook.cateName = labels[labels.length - 1];
+			// let labels = this.$refs["recipeCate"].currentLabels;
+			// console.log(this.$refs["recipeCate"].currentLabels);
+			let labels = this.classify.find(item => item.id == value.join(","));
+			this.cookbook.cateName = labels.cateName;
 		},
 		filterArray(data, parent) {
 			let vm = this;
@@ -574,22 +825,80 @@ export default {
 			return tree;
 		},
 		addRecipe() {
+			let z = this.cookbook.cookScript;
+			let x =
+				z[0].firepower +
+				"/" +
+				z[0].firepowerTime +
+				"|" +
+				z[1].firepower +
+				"|" +
+				z[2].firepower +
+				"/" +
+				z[2].firepowerTime +
+				"/" +
+				z[2].mixingSpeed +
+				"/" +
+				z[2].reversing +
+				"/" +
+				z[2].mixingTime +
+				"|" +
+				z[3].firepower +
+				"/" +
+				z[3].firepowerTime +
+				"/" +
+				z[3].mixingSpeed +
+				"/" +
+				z[3].reversing +
+				"/" +
+				z[3].mixingTime +
+				"|" +
+				z[4].firepower +
+				"/" +
+				z[4].firepowerTime +
+				"/" +
+				z[4].mixingSpeed +
+				"/" +
+				z[4].reversing +
+				"/" +
+				z[4].mixingTime +
+				"|" +
+				z[5].firepower +
+				"/" +
+				z[5].firepowerTime +
+				"/" +
+				z[5].mixingSpeed +
+				"/" +
+				z[5].reversing +
+				"/" +
+				z[5].mixingTime +
+				"|" +
+				z[6].firepower +
+				"/" +
+				z[6].firepowerTime +
+				"/" +
+				z[6].mixingSpeed +
+				"/" +
+				z[6].reversing +
+				"/" +
+				z[6].mixingTime;
 			let qs = require("qs");
 			let data = qs.stringify({
-				cookScript: this.cookbook.cookScript,
+				cookScript: x,
 				recipeName: this.cookbook.recipeName,
 				cateName: this.cookbook.cateName,
-				cateId: JSON.stringify(this.cookbook.cateId),
+				cateId: this.cookbook.cateId.join(","),
 				cookingTime: this.cookbook.cookingTime,
 				spicy: this.cookbook.spicy,
-				recipePrice: this.cookbook.recipePrice,
+				recipePrice: this.cookbook.recipePrice * 100,
 				state: this.cookbook.state,
 				recipeImg: this.cookbook.recipeImg,
 				ingredient: this.cookbook.ingredient,
 				accessories: this.cookbook.accessories,
 				introduce: this.cookbook.introduce,
 				weight: this.cookbook.weight,
-				step: JSON.stringify(this.cookbook.step)
+				step: JSON.stringify(this.cookbook.step),
+				cookJson: JSON.stringify(this.cookbook.cookScript)
 			});
 			this.Axios(
 				{
@@ -604,7 +913,7 @@ export default {
 			).then(result => {
 				if (result.data.code === 200) {
 					this.$router.back(-1);
-					this.reload();
+					// this.reload();
 				} else {
 					this.$message.error("添加失败,请重新尝试");
 				}

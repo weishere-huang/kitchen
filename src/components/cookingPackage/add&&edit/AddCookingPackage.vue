@@ -30,7 +30,7 @@
 						<el-input
 							type="number"
 							size="small"
-							v-model.number="cookingPackge.price"
+							v-model="cookingPackge.price"
 							maxlength="20"
 							style="width:400px;"
 						>
@@ -67,7 +67,7 @@
 						</el-upload>
 						<div class="el-upload__tip tip_style">建议图片比例16:9，小于1MB的jpg或png图片</div>
 						<el-dialog :visible.sync="dialogVisible" class="showPic">
-							<img width="100%" :src="dialogImageUrl" alt>
+							<img width="100%" :src="dialogImageUrl" alt />
 						</el-dialog>
 					</el-form-item>
 					<el-form-item label="包含菜谱：" prop="recipeIds">
@@ -102,7 +102,11 @@ export default {
 					{ required: true, message: "请填写菜谱包价格", trigger: "blur" },
 					{
 						validator: (rule, value, callback) => {
-							if (/^\d*(\.?\d{0,2})$/g.test(value) == false) {
+							if (
+								/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/g.test(
+									value
+								) == false
+							) {
 								callback(new Error("支持小数点后两位，且不能为负数"));
 							} else {
 								callback();
@@ -217,7 +221,9 @@ export default {
 					params: data,
 					url: "/api-recipe/recipePackage/add",
 					type: "post",
-					option: {}
+					option: {
+						successMsg: "添加成功"
+					}
 				},
 				this
 			).then(result => {

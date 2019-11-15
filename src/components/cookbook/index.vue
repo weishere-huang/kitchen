@@ -15,7 +15,7 @@
 					size="small"
 					type="primary"
 					@click="$router.push({path:'/Cookbook/PrefabricatedRecipes'})"
-				>出厂预制菜谱</el-button>
+				>出厂预置菜谱</el-button>
 			</div>
 			<div class="bottom_list">
 				<div class="top_title">
@@ -109,6 +109,7 @@
 <script>
 import tableList from "../public/table";
 export default {
+	inject: ["reload"],
 	data() {
 		return {
 			currentPage: 1,
@@ -228,6 +229,7 @@ export default {
 	},
 	watch: {
 		$route() {
+			this.reload();
 			let a = this.$route.matched.find(
 				item =>
 					item.name === "AddCookbook" || item.name === "PrefabricatedRecipes"

@@ -291,6 +291,9 @@ export default {
 			).then(
 				result => {
 					if (result.data.code === 200) {
+						result.data.data = result.data.data.sort(function(a, b) {
+							return Date.parse(a.time) - Date.parse(b.time);
+						});
 						let time = result.data.data.map(item => {
 							return item.time;
 						});
